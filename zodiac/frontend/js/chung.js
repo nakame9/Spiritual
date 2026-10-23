@@ -27,6 +27,6 @@
     if (!Number.isInteger(h) || h < 0 || h > 23 || (mi !== null && (!Number.isInteger(mi) || mi < 0 || mi > 59))) return 'Giờ sinh cần từ 0 đến 23, phút từ 0 đến 59.';
     return { y, m, d, h, mi: mi || 0 };
   }
-  const homNay = () => { const x = root.ThienVan.ngayTai(new Date(), root.LuanGiai.VN); return { y: x.y, m: x.m, d: x.d }; };
+  const homNay = () => { const x = root.ThienVan.ngayTai(new Date(), root.ChiemTinh.VN); return { y: x.y, m: x.m, d: x.d }; };
   root.UI = { $, esc, CUNG, theoId, HANH_TINH, NGUYEN_TO, TINH_CHAT, sao, ngayNgan, chuTinh, ky, nt, nho, docNgay, homNay };
 })(window);

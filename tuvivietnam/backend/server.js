@@ -6,6 +6,8 @@ const TuVi = require('../frontend/js/tuvi.js');
 const LuanGiai = require('../frontend/js/luangiai.js');
 const ConGiap = require('../frontend/js/congiap.js');
 const Markdown = require('../frontend/js/markdown.js');
+// Trang chủ kết hợp tử vi, cung hoàng đạo (../../zodiac) và số chủ đạo (../../numerology)
+const TongHop = require('../frontend/js/tong-hop.js');
 const { moKho } = require('./lib/kho');
 const quanTri = require('./quan-tri');
 
@@ -90,6 +92,21 @@ app.get('/api/con-giap', (req, res) => {
   res.json(KY[ky](tuoi, TuVi.jdFromDate(...d), opts));
 });
 
+// Dự đoán kết hợp ba hệ (trang chủ): cùng dữ liệu vào như /api/la-so, thêm homNay=YYYY-MM-DD (không bắt buộc, mặc định hôm nay giờ Việt Nam)
+app.post('/api/tong-hop', (req, res) => {
+  const b = req.body || {};
+  let v, homNay;
+  try {
+    v = docVao(b);
+    const [y, m, d] = (b.homNay || new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date())).split('-').map(Number);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(b.homNay || '2000-01-01') || y < 1900 || y > 2100 || new Date(Date.UTC(y, m - 1, d)).getUTCDate() !== d) throw new Error('homNay cần dạng YYYY-MM-DD, năm 1900–2100.');
+    homNay = { y, m, d };
+    return res.json(TongHop.duDoan(v, homNay));
+  } catch (e) {
+    return res.status(400).json({ error: e.message });
+  }
+});
+
 // Bài viết đã xuất bản và các đoạn luận giải đã sửa, cho web công khai
 const daXuatBan = () => kho.data.baiViet.filter(b => b.trangThai === 'xuatban').sort((a, b) => b.taoLuc.localeCompare(a.taoLuc));
 app.get('/api/bai-viet', (req, res) => res.json(daXuatBan().map(({ slug, tieuDe, chuyenMuc, tomTat, phutDoc, tacGia, taoLuc }) => ({ slug, tieuDe, chuyenMuc, tomTat, phutDoc, tacGia, taoLuc }))));
@@ -105,6 +122,8 @@ app.use('/api', (req, res) => res.status(404).json({ error: 'Không có API này
 // Trang quản trị không cho nhúng vào trang khác (chống clickjacking)
 app.use('/admin', (req, res, next) => { res.set({ 'X-Frame-Options': 'DENY', 'Referrer-Policy': 'same-origin' }); next(); });
 app.use(express.static(FRONTEND));
+// Các phần khác của site nằm cạnh thư mục tuvivietnam; phục vụ luôn để trang chủ và menu chạy được khi chạy riêng máy chủ này
+for (const p of ['zodiac', 'numerology', 'Tarot']) app.use(`/${p}/frontend`, express.static(path.join(__dirname, '..', '..', p, 'frontend')));
 
 // Lỗi JSON hỏng hoặc lỗi bất ngờ: trả lời gọn, không lộ chi tiết máy chủ
 app.use((err, req, res, next) => {

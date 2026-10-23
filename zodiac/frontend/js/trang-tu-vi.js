@@ -22,7 +22,7 @@
     history.replaceState(null, '', `#${st.cung}${st.ky === 'ngay' ? '' : '/' + st.ky}`);
     let tieuDe, than;
     if (st.ky === 'ngay') {
-      const r = LuanGiai.tuViNgay(s, y, m, d), dc = r.matTrang.doiCung;
+      const r = ChiemTinh.tuViNgay(s, y, m, d), dc = r.matTrang.doiCung;
       tieuDe = `${r.thu}, ${r.ngay}`;
       than = `<p class="chu-de">${r.chuDe}${dc ? ` Mặt Trăng vào ${dc.cung} (nhà ${dc.nha} của bạn) lúc ${dc.luc}.` : ` Mặt Trăng ở ${r.matTrang.cung} cả ngày.`}</p>
         ${r.luuY ? `<p class="canh-bao">${r.luuY}</p>` : ''}${lvGrid(r.linhVuc)}
@@ -30,21 +30,21 @@
         <div class="o-nho"><h3>Màu hợp hôm nay</h3><p>${r.mau.charAt(0).toUpperCase() + r.mau.slice(1)}, theo nguyên tố của cung Mặt Trăng đang đi qua (${r.matTrang.cung}).</p></div></div>`;
       tieuDe += ` <span class="muted" style="font-family: var(--f-ui); font-size: 14px; font-weight: 500">Tổng quan</span> ${sao(Math.round(r.tong))}`;
     } else if (st.ky === 'tuan') {
-      const r = LuanGiai.tuViTuan(s, y, m, d);
+      const r = ChiemTinh.tuViTuan(s, y, m, d);
       tieuDe = `Tuần ${r.tu.slice(0, 5)} – ${r.den}`;
       than = `<p class="chu-de">${r.chuDe}</p>${lvGrid(r.linhVuc)}
         <div class="hai-cot"><div class="o-nho manh"><h3>Ngày nổi bật</h3><ul>${r.ngayTot.map(x => `<li><b>${x.ngay}:</b> ${x.ly}</li>`).join('')}</ul></div>
         <div class="o-nho yeu"><h3>Ngày nên chậm lại</h3><ul>${r.ngayCham.map(x => `<li><b>${x.ngay}:</b> ${x.ly}</li>`).join('')}</ul></div></div>
         ${suKien('Mặt Trăng đổi cung trong tuần', r.trangDiQua.map(x => [`${x.ngay} ${x.gio}`, `Mặt Trăng vào ${x.cung}, nhà ${x.nha} của bạn.`]))}${nghich(r.nghichHanh)}`;
     } else if (st.ky === 'thang') {
-      const r = LuanGiai.tuViThang(s, y, m);
+      const r = ChiemTinh.tuViThang(s, y, m);
       tieuDe = `Tháng ${r.thang}`;
       than = `${suKien('Chủ đề chính trong tháng', r.chuDe.map(x => [`Từ ${x.tu}`, x.loi]))}${lvGrid(r.linhVuc)}
         ${suKien('Trăng non và trăng tròn', r.tuanTrang.map(x => [`${x.ngay.slice(0, 5)} ${x.gio}`, x.loi]))}
         ${suKien('Hành tinh đổi cung', r.giaoCung.map(x => [x.ngay.slice(0, 5), `${x.sao} vào ${x.cung}, nhà ${x.nha} của bạn.`]))}${nghich(r.nghichHanh)}
         <div class="hai-cot"><div class="o-nho manh"><h3>Ngày thuận lợi</h3><p>${r.ngayTot.join(', ')}</p></div><div class="o-nho yeu"><h3>Ngày nên chậm lại</h3><p>${r.ngayCham.join(', ')}</p></div></div>`;
     } else {
-      const r = LuanGiai.tuViNam(s, y);
+      const r = ChiemTinh.tuViNam(s, y);
       tieuDe = `Năm ${r.nam}`;
       than = `${suKien('Sao Mộc: may mắn và mở rộng', r.moc.map(x => [`${x.tu} → ${x.den}`, `Ở ${x.cung}. ${x.loi}`]))}
         ${suKien('Sao Thổ: bài học và trách nhiệm', r.tho.map(x => [`${x.tu} → ${x.den}`, `Ở ${x.cung}. ${x.loi}`]))}${lvGrid(r.linhVuc)}

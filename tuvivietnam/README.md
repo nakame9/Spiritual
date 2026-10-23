@@ -5,7 +5,8 @@ Website lập lá số tử vi theo phái Việt, có luận giải từng cung,
 ```
 tuvivietnam/
 ├── frontend/            Trang web tĩnh, chạy được ngay trên GitHub Pages
-│   ├── index.html       Trang chủ: giới thiệu, xem tử vi nhanh, công cụ, bài viết mới
+│   ├── index.html       Trang chủ: kết hợp tử vi, cung hoàng đạo, số chủ đạo để dự đoán may mắn, tình cảm, sự nghiệp; công cụ, bài viết mới
+│   ├── xem-nhanh.html   Xem tử vi nhanh: cung Mệnh, bản mệnh, cục, đại hạn đang chạy
 │   ├── la-so.html       Lập lá số 12 cung + luận giải
 │   ├── con-giap.html    Tử vi 12 con giáp theo ngày, tuần, tháng, năm
 │   ├── bai-viet.html    Bài viết
@@ -15,6 +16,8 @@ tuvivietnam/
 │       ├── tuvi.js      Engine: lịch âm (Hồ Ngọc Đức) và an sao
 │       ├── luangiai.js  Luận giải theo cung (sửa được từ trang quản trị)
 │       ├── congiap.js   Tử vi 12 con giáp
+│       ├── tong-hop.js  Dự đoán kết hợp ba hệ cho trang chủ (dùng thêm ../../zodiac và ../../numerology)
+│       ├── trang-chu.js Giao diện trang chủ
 │       ├── markdown.js  Hiển thị bài viết viết bằng Markdown rút gọn
 │       └── api.js       Địa chỉ backend (TUVI_API) cho web công khai
 └── backend/             Máy chủ Node.js + Express
@@ -115,6 +118,27 @@ curl "http://localhost:3000/api/con-giap?tuoi=7&ky=nam&namSinh=1990&gioiTinh=nam
 ```
 
 Trả về tiêu đề, mức độ (`diem` 1–5, `nhan`), các ghi chú quan hệ can chi (`dong`), 4 mục Công việc, Tài lộc, Tình cảm, Sức khỏe (`muc`), lời khuyên, màu và số may mắn; theo ngày có thêm `gioTot`, theo tuần có `tuan` (7 ngày), theo năm có `sao`.
+
+### `POST /api/tong-hop`
+
+Dự đoán kết hợp ba hệ của trang chủ. Gửi cùng các trường như `/api/la-so`, thêm `homNay` (`YYYY-MM-DD`, không bắt buộc, mặc định hôm nay theo giờ Việt Nam).
+
+Trả về:
+
+- `hoSo`: tuổi can chi, bản mệnh, cung Mệnh (tử vi); cung hoàng đạo; số chủ đạo và năm cá nhân.
+- `ky.ngay`, `ky.thang`, `ky.nam`: mỗi mốc có `linhVuc` gồm May mắn, Tình cảm, Sự nghiệp. Mỗi mặt có:
+  - `diem`: điểm chung 1–5, là trung bình ba hệ;
+  - `tongHop`: câu nói rõ hệ nào thuận, hệ nào nghịch, kèm lời khuyên;
+  - `nguon`: điểm và lời giải của từng hệ.
+- `mayMan`: màu và số may mắn.
+
+Điểm từng hệ:
+
+- **Tử vi:** 40% nền lá số và 60% vận của tuổi theo ngày, tháng âm lịch, năm âm lịch. Nền lá số chấm từ độ sáng chính tinh, cát tinh, hung tinh, Tuần, Triệt ở các cung Tài Bạch và Phúc Đức (cho may mắn), Phu Thê (cho tình cảm), Quan Lộc (cho sự nghiệp).
+- **Cung hoàng đạo:** tử vi theo cung Mặt Trời, tính từ vị trí thật của các hành tinh.
+- **Số chủ đạo:** ngày, tháng, năm cá nhân, cộng thiên hướng của số chủ đạo.
+
+Máy chủ này cũng phục vụ `/zodiac/frontend`, `/numerology/frontend`, `/Tarot/frontend` từ các thư mục bên cạnh, để trang chủ và menu chạy đủ khi chạy riêng máy chủ tử vi.
 
 ### Nội dung từ trang quản trị
 

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Số chủ đạo · Thần số học · Lá Số Tử Vi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Tính số chủ đạo theo thần số học Pythagoras: ý nghĩa tính cách, tình yêu, sự nghiệp, các chỉ số ngày sinh, thái độ, tên, biểu đồ ngày sinh và năm cá nhân.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/so-hoc.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="site">
+    <a class="brand" href="../../tuvivietnam/frontend/index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi</a>
+    <nav aria-label="Menu chính"><a href="../../tuvivietnam/frontend/index.html">Trang chủ</a><a href="../../tuvivietnam/frontend/xem-nhanh.html">Tử vi nhanh</a><a href="../../tuvivietnam/frontend/la-so.html">Lập lá số</a><a href="../../tuvivietnam/frontend/con-giap.html">12 con giáp</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="index.html" aria-current="page">Số chủ đạo</a><a href="../../tuvivietnam/frontend/bai-viet.html">Bài viết</a></nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Thần số học Pythagoras</p>
+      <h1>Số chủ đạo</h1>
+      <p class="lede">Số chủ đạo là con số quan trọng nhất trong thần số học, tính bằng cách cộng tất cả chữ số trong ngày sinh dương lịch. Con số này nói lên tính cách, điểm mạnh, bài học và hướng đi phù hợp với bạn. Thêm họ tên để xem các chỉ số sứ mệnh, linh hồn và nhân cách.</p>
+    </div>
+    <form class="panel" id="form" novalidate>
+      <h2>Tính số chủ đạo</h2>
+      <label class="f"><span>Họ và tên (không bắt buộc)</span><input type="text" id="ten" maxlength="60" autocomplete="off" placeholder="Ví dụ: Nguyễn Thị Lan"></label>
+      <fieldset class="f"><legend>Ngày sinh dương lịch</legend><div class="date"><input type="text" inputmode="numeric" id="d" maxlength="2" placeholder="Ngày" aria-label="Ngày"><i>/</i><input type="text" inputmode="numeric" id="m" maxlength="2" placeholder="Tháng" aria-label="Tháng"><i>/</i><input type="text" inputmode="numeric" class="y" id="y" maxlength="4" placeholder="Năm" aria-label="Năm"></div></fieldset>
+      <p class="err" id="loi" role="alert" hidden></p>
+      <div class="row"><button class="go" type="submit">Tính số chủ đạo</button><span class="muted">Tính ngay trên máy bạn, không gửi đi đâu.</span></div>
+    </form>
+  </section>
+
+  <div id="kq" hidden>
+    <section class="panel" aria-labelledby="h-scd">
+      <div class="so-lon" id="so-lon"></div>
+      <p class="doan" id="tong-quan"></p>
+      <div class="hai-cot" id="manh-yeu"></div>
+      <div class="hai-cot" id="yeu-nghiep"></div>
+      <p class="ket" id="loi-khuyen"></p>
+    </section>
+    <section class="panel" aria-labelledby="h-cs" style="margin-top: 20px"><h2 id="h-cs">Các chỉ số khác</h2><div class="chi-so" id="chi-so"></div></section>
+    <section class="panel" aria-labelledby="h-bd" style="margin-top: 20px"><h2 id="h-bd">Biểu đồ ngày sinh</h2>
+      <p class="muted">Mỗi chữ số trong ngày sinh được đặt vào ô của nó. Ba ô thẳng hàng cùng có số tạo thành mũi tên sức mạnh; ba ô cùng trống là mũi tên cần khắc phục.</p>
+      <div class="bd-wrap"><div class="luoi" id="luoi" role="img"></div><ul class="mui-ten" id="mui-ten"></ul></div></section>
+    <section class="panel" aria-labelledby="h-nam" style="margin-top: 20px"><h2 id="h-nam">Năm cá nhân</h2><div id="nam-ca-nhan"></div></section>
+  </div>
+
+  <section class="block" aria-labelledby="h-y">
+    <h2 id="h-y">Ý nghĩa các số chủ đạo</h2>
+    <p class="lede" style="margin: -4px 0 0">Số chủ đạo gồm các số từ 2 đến 11 và 22/4. Bấm vào một số để đọc nhanh.</p>
+    <div class="chon-so" id="chon-so" role="group" aria-label="Chọn số"></div>
+    <div class="panel" id="y-nghia" aria-live="polite"></div>
+  </section>
+
+  <p class="note">Nội dung thần số học do Lá Số Tử Vi biên soạn theo cách tính Pythagoras phổ biến ở Việt Nam, chỉ để tham khảo và giải trí, không thay cho lời khuyên chuyên môn.</p>
+  <footer class="foot"><span>Lá Số Tử Vi · Số chủ đạo</span><span>Nội dung chỉ để tham khảo.</span></footer>
+</div>
+<script src="js/so-hoc.js"></script>
+<script src="js/trang-so-hoc.js"></script>
+</body>
+</html>

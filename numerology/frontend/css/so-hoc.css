@@ -1,0 +1,78 @@
+/* Số chủ đạo: dùng chung bảng màu tím của site. */
+:root { --vang: #B7791F; --xanh: #2E7A39; --do: #BF3328; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --vang: #F2C14E; --xanh: #74C47F; --do: #F27F72; } }
+:root[data-theme="dark"] { --vang: #F2C14E; --xanh: #74C47F; --do: #F27F72; }
+.eyebrow a { color: inherit; }
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.hero h1 { font-size: clamp(32px, 4.6vw, 48px); margin-top: 8px; }
+.hero .lede { margin-top: 12px; font-size: 16px; }
+.panel { background: var(--cell); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.panel > h2, .block > h2 { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 24px; }
+.block { display: flex; flex-direction: column; gap: 14px; padding-top: 8px; }
+.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+.muted { color: var(--soft); font-size: 13.5px; margin: 0; }
+.note { color: var(--soft); font-size: 13px; max-width: 80ch; margin: 0; }
+.doan { font-size: 15.5px; line-height: 1.75; margin: 0; max-width: 78ch; }
+.hai-cot { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.ba-cot { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.o-nho { padding: 16px 18px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); min-width: 0; }
+.o-nho h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--tu); }
+.o-nho p { margin: 0; font-size: 14.5px; line-height: 1.7; }
+.o-nho ul { margin: 0; padding-left: 18px; font-size: 14.5px; line-height: 1.75; }
+.o-nho.manh { border-left: 4px solid var(--xanh); } .o-nho.yeu { border-left: 4px solid var(--do); }
+.nghe { display: flex; flex-wrap: wrap; gap: 8px; }
+.nghe span { padding: 6px 12px; border-radius: 999px; background: var(--hl); font-size: 13.5px; font-weight: 500; }
+.ket { margin: 0; padding: 14px 18px; border-radius: 10px; background: var(--hl); font-size: 15px; line-height: 1.7; }
+
+/* Số lớn */
+.so-lon { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 22px; align-items: center; }
+.so-lon > :not(.so) { grid-column: 2; }
+.so-lon .so { grid-row: 1 / span 4; width: 112px; height: 112px; border-radius: 50%; display: grid; place-items: center; background: var(--tu); color: var(--cell); font: 700 44px/1 var(--f-display); }
+.so-lon .so.nho { font-size: 34px; }
+.so-lon h2 { margin: 0; font-family: var(--f-display); font-size: 28px; }
+.so-lon p { margin: 0; }
+.cach-tinh { font-variant-numeric: tabular-nums; font-size: 13.5px; color: var(--soft); }
+.chi-so { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.chi-so > div { padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); display: flex; flex-direction: column; gap: 4px; }
+.chi-so .nhan { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--soft); }
+.chi-so b { font: 700 28px/1.1 var(--f-display); color: var(--tu); }
+.chi-so small { font-size: 13px; color: var(--soft); }
+.chi-so p { margin: 0; font-size: 14px; line-height: 1.6; }
+
+/* Biểu đồ ngày sinh */
+.bd-wrap { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 24px; align-items: start; }
+.luoi { display: grid; grid-template-columns: repeat(3, 76px); grid-template-rows: repeat(3, 76px); border: 2px solid var(--tu); border-radius: 10px; overflow: hidden; }
+.luoi div { display: grid; place-items: center; border: 1px solid var(--line); font: 700 22px var(--f-display); color: var(--tu); position: relative; letter-spacing: 2px; }
+.luoi div.trong { color: var(--line); font-weight: 500; font-size: 16px; }
+.luoi div span { position: absolute; top: 4px; left: 6px; font: 600 10px var(--f-ui); color: var(--soft); letter-spacing: 0; }
+.mui-ten { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.mui-ten li { font-size: 14.5px; line-height: 1.6; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--paper); }
+.mui-ten li.manh { border-left: 4px solid var(--xanh); } .mui-ten li.trong { border-left: 4px solid var(--do); }
+
+/* Chu kỳ cá nhân */
+.chu-ky { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 6px; }
+.chu-ky div { text-align: center; padding: 10px 4px; border-radius: 10px; border: 1px solid var(--line); background: var(--paper); font-size: 12.5px; }
+.chu-ky div b { display: block; font: 700 22px var(--f-display); color: var(--tu); }
+.chu-ky div.nay { background: var(--tu); border-color: var(--tu); color: var(--cell); }
+.chu-ky div.nay b { color: var(--cell); }
+.lv { padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); }
+.lv-dau { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.lv p { margin: 0; font-size: 14.5px; line-height: 1.65; }
+.sao-diem { color: var(--vang); letter-spacing: 1px; white-space: nowrap; }
+.sao-diem i { color: var(--line); font-style: normal; }
+
+/* Chọn số để xem ý nghĩa */
+.chon-so { display: flex; flex-wrap: wrap; gap: 8px; }
+.chon-so button { min-width: 48px; height: 44px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--cell); color: var(--ink); font: 700 17px var(--f-display); cursor: pointer; }
+.chon-so button[aria-pressed="true"] { background: var(--tu); border-color: var(--tu); color: var(--cell); }
+
+@media (max-width: 860px) {
+  .hero, .hai-cot, .ba-cot, .bd-wrap { grid-template-columns: minmax(0, 1fr); }
+  .chu-ky { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .panel { padding: 16px; }
+}
+@media (max-width: 480px) {
+  .so-lon .so { width: 84px; height: 84px; font-size: 34px; }
+  .so-lon .so.nho { font-size: 26px; }
+  .luoi { grid-template-columns: repeat(3, 64px); grid-template-rows: repeat(3, 64px); }
+}

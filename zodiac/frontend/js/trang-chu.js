@@ -15,7 +15,7 @@
     const v = docNgay('', false);
     $('loi').hidden = typeof v !== 'string'; $('loi').textContent = typeof v === 'string' ? v : '';
     if (typeof v === 'string') return;
-    const r = LuanGiai.xacDinhCung(v), c = r.cung;
+    const r = ChiemTinh.xacDinhCung(v), c = r.cung;
     nho.dat(c.id);
     const nhanNgay = `${v.d}/${v.m}/${v.y}`;
     let ghiChu = '';

@@ -380,5 +380,5 @@
   }
 
   const LuanGiai = { VN, THU, LINH_VUC, cungTheoBang, xacDinhCung, diemNgay, tuViNgay, tuViTuan, tuViThang, tuViNam, tuongHop, banDoSao, bigThree };
-  if (node) module.exports = LuanGiai; else root.LuanGiai = LuanGiai;
+  if (node) module.exports = LuanGiai; else root.ChiemTinh = LuanGiai; // tên ChiemTinh để không trùng LuanGiai của phần tử vi
 })(typeof window !== 'undefined' ? window : globalThis);

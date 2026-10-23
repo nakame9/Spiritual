@@ -1,0 +1,17 @@
+{
+  "name": "numerology-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Máy chủ số chủ đạo (thần số học): tính các chỉ số và phục vụ frontend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.22.3"
+  }
+}

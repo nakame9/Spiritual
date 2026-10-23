@@ -31,7 +31,7 @@
     const loi = typeof ngay === 'string' ? ngay : typeof noi === 'string' ? noi : '';
     $('loi').hidden = !loi; $('loi').textContent = loi;
     if (loi) return;
-    const bd = LuanGiai.banDoSao({ ...ngay, coGio: !khongGio, tz: noi.tz, viDo: noi.viDo, kinhDo: noi.kinhDo });
+    const bd = ChiemTinh.banDoSao({ ...ngay, coGio: !khongGio, tz: noi.tz, viDo: noi.viDo, kinhDo: noi.kinhDo });
     ve(bd, ngay, noi, $('ten').value.trim(), khongGio);
     $('kq').hidden = false;
     $('kq').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });

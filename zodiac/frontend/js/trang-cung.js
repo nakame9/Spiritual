@@ -24,7 +24,7 @@
       <div class="hai-cot"><div class="o-nho manh"><h3>Điểm mạnh</h3>${ds(c.diemManh)}</div><div class="o-nho yeu"><h3>Điểm yếu</h3>${ds(c.diemYeu)}</div></div>
       <div class="hai-cot"><div class="o-nho"><h3>Xu hướng giao tiếp</h3><p>${c.giaoTiep}</p></div><div class="o-nho"><h3>Cảm xúc</h3><p>${c.camXuc}</p></div></div>`;
 
-    const hop = CUNG.filter(x => x.id !== id).map(x => ({ x, d: LuanGiai.tuongHop(s, x.so).diem.tinhYeu })).sort((a, b) => b.d - a.d);
+    const hop = CUNG.filter(x => x.id !== id).map(x => ({ x, d: ChiemTinh.tuongHop(s, x.so).diem.tinhYeu })).sort((a, b) => b.d - a.d);
     const the = ({ x, d }) => `<a class="${nt(x)}" href="tuong-hop.html#a=${id}&b=${x.id}">${ky(x)}${x.ten} <b>${d}%</b></a>`;
     $('s-tinh-yeu').innerHTML = `<h2 id="h-ty">Tình yêu và mối quan hệ</h2><p class="doan">${c.tinhYeu.phongCach}</p>
       <div class="hai-cot"><div class="o-nho"><h3>Trong tình yêu, ${c.ten} cần</h3><p>${c.tinhYeu.canGi}</p></div><div class="o-nho"><h3>Điều nên lưu ý</h3><p>${c.tinhYeu.luuY}</p></div></div>
@@ -39,7 +39,7 @@
       <p class="muted">Không chỉ cung Mặt Trời: Mặt Trăng và cung Mọc ở ${c.ten} cũng mang màu sắc của cung này. <a href="ban-do-sao.html" style="color: var(--tu)">Lập bản đồ sao</a> để biết Mặt Trăng và cung Mọc của bạn.</p>
       <div class="hai-cot"><div class="o-nho"><h3>Mặt Trăng ở ${c.ten}</h3><p>${c.matTrang}</p></div><div class="o-nho"><h3>Cung Mọc ${c.ten}</h3><p>${c.cungMoc}</p></div></div>`;
 
-    const n = homNay(), tv = LuanGiai.tuViNgay(s, n.y, n.m, n.d);
+    const n = homNay(), tv = ChiemTinh.tuViNgay(s, n.y, n.m, n.d);
     $('s-tu-vi').innerHTML = `<h2 id="h-tv">Tử vi hôm nay, ${tv.thu} ${tv.ngay}</h2><p class="chu-de">${tv.chuDe}</p>
       <div class="lv-grid">${tv.linhVuc.map(l => `<div class="lv"><div class="lv-dau"><b>${l.ten}</b>${sao(l.sao)}</div><p>${l.loi}</p></div>`).join('')}</div>
       <p class="links"><a href="tu-vi.html#${id}">Xem tử vi tuần, tháng, năm của ${c.ten} →</a></p>`;
