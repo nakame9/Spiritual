@@ -24,15 +24,17 @@ app.get('/api/la-bai/:id', (req, res) => {
   res.json(la);
 });
 app.get('/api/kieu-trai', (req, res) => res.json(Tarot.KIEU_TRAI));
+app.get('/api/chu-de', (req, res) => res.json(Object.fromEntries(Object.entries(Tarot.CHU_DE).map(([k, c]) => [k, { ten: c.ten, moTa: c.moTa }]))));
 
 // Rút bài: máy chủ xáo cả bộ rồi lấy các lá trên cùng theo kiểu trải
 app.post('/api/rut-bai', (req, res) => {
-  const b = req.body || {}, kieu = b.kieu || '3la';
+  const b = req.body || {}, kieu = b.kieu || '3la', chuDe = b.chuDe || 'tongquan';
   if (!Tarot.KIEU_TRAI[kieu]) return res.status(400).json({ error: `kieu cần là ${Object.keys(Tarot.KIEU_TRAI).join(', ')}.` });
+  if (!Object.prototype.hasOwnProperty.call(Tarot.CHU_DE, chuDe)) return res.status(400).json({ error: `chuDe cần là ${Object.keys(Tarot.CHU_DE).join(', ')}.` });
   if (b.nguoc !== undefined && typeof b.nguoc !== 'boolean') return res.status(400).json({ error: 'nguoc cần là true hoặc false.' });
   if (b.cauHoi !== undefined && (typeof b.cauHoi !== 'string' || b.cauHoi.length > 300)) return res.status(400).json({ error: 'cauHoi tối đa 300 ký tự.' });
   const n = Tarot.KIEU_TRAI[kieu].viTri.length;
-  const ketQua = Tarot.docBai(kieu, Tarot.xaoBai(b.nguoc !== false).slice(0, n));
+  const ketQua = Tarot.docBai(kieu, Tarot.xaoBai(b.nguoc !== false).slice(0, n), chuDe);
   res.json(Object.assign({ cauHoi: (b.cauHoi || '').trim() }, ketQua));
 });
 

@@ -60,3 +60,28 @@ test('API tra bài và phục vụ trang', async () => {
   assert.match(await home.text(), /Xem bài Tarot/);
   assert.strictEqual((await fetch(base + '/js/bo-bai.js')).status, 200);
 });
+
+test('chủ đề: mỗi lá có 4 chủ đề × xuôi/ngược, không trùng nhau; đọc bài theo chủ đề', () => {
+  const ds = Tarot.BO_BAI.flatMap(l => ['tinhyeu', 'sunghiep', 'taichinh', 'banthan'].flatMap(k => [l.chuDe[k].xuoi, l.chuDe[k].nguoc]));
+  assert.strictEqual(ds.length, 624);
+  assert.ok(ds.every(x => typeof x === 'string' && x.length > 10));
+  assert.strictEqual(new Set(ds).size, 624);
+  const r = Tarot.docBai('1la', [{ id: 6, nguoc: true }], 'tinhyeu');
+  assert.strictEqual(r.tenChuDe, 'Tình yêu');
+  assert.strictEqual(r.la[0].y, Tarot.BO_BAI[6].chuDe.tinhyeu.nguoc);
+  assert.strictEqual(r.la[0].yChung, Tarot.BO_BAI[6].nguoc.y);
+  assert.match(r.tongQuan[0], /bộ Cốc/);
+  const tq = Tarot.docBai('1la', [{ id: 6, nguoc: false }]);
+  assert.strictEqual(tq.la[0].y, Tarot.BO_BAI[6].xuoi.y);
+  assert.strictEqual(tq.la[0].yChung, null);
+});
+
+test('API theo chủ đề', async () => {
+  const post = body => fetch(base + '/api/rut-bai', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const r = await (await post({ kieu: '3la', chuDe: 'taichinh' })).json();
+  assert.strictEqual(r.tenChuDe, 'Tài chính');
+  r.la.forEach(l => assert.strictEqual(l.y, Tarot.BO_BAI[l.id].chuDe.taichinh[l.nguoc ? 'nguoc' : 'xuoi']));
+  assert.strictEqual((await post({ chuDe: 'suckhoe' })).status, 400);
+  assert.strictEqual((await post({ chuDe: 'toString' })).status, 400);
+  assert.deepStrictEqual(Object.keys(await (await fetch(base + '/api/chu-de')).json()), ['tongquan', 'tinhyeu', 'sunghiep', 'taichinh', 'banthan']);
+});

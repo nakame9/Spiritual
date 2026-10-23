@@ -47,7 +47,7 @@
     <div class="face${nguoc ? ' rev' : ''}">${c ? matLa(c) : ''}</div></div></div>`;
 
   // ---------- Trạng thái ----------
-  const st = { kieu: '3la', nguoc: true, cauHoi: '', xao: [], chon: [] };
+  const st = { kieu: '3la', chuDe: 'tongquan', nguoc: true, cauHoi: '', xao: [], chon: [] };
   const soLa = () => Tarot.KIEU_TRAI[st.kieu].viTri.length;
   $('fan').innerHTML = [19, 17, 36].map(id => theLa(Tarot.BO_BAI[id], false, 'static')).join('');
 
@@ -70,6 +70,7 @@
 
   function batDau() {
     st.kieu = document.querySelector('input[name="kieu"]:checked').value;
+    st.chuDe = document.querySelector('input[name="chude"]:checked').value;
     st.nguoc = $('nguoc').checked;
     st.cauHoi = $('cau-hoi').value.trim();
     st.xao = Tarot.xaoBai(st.nguoc); st.chon = [];
@@ -94,13 +95,13 @@
   }
 
   function docKetQua() {
-    const r = Tarot.docBai(st.kieu, st.chon);
-    $('kq-tieu-de').textContent = r.tenKieu;
+    const r = Tarot.docBai(st.kieu, st.chon, st.chuDe);
+    $('kq-tieu-de').textContent = `${r.tenKieu} · ${r.tenChuDe}`;
     $('reading').innerHTML = `${st.cauHoi ? `<p class="q"><b>Câu hỏi:</b> ${esc(st.cauHoi)}</p>` : ''}
       ${r.la.map(l => `<div class="item">${theLa(Tarot.BO_BAI[l.id], l.nguoc, 'static')}
         <div><span class="step">${l.viTri}</span><h3>${l.ten}</h3>
         <div class="meta"><span>${l.tenEn}</span><span class="chip ${l.nguoc ? 'n' : 'x'}">${l.nguoc ? 'Ngược' : 'Xuôi'}</span></div>
-        <p class="kw">${l.tuKhoa.charAt(0).toUpperCase() + l.tuKhoa.slice(1)}</p><p>${l.y}</p>
+        <p class="kw">${l.tuKhoa.charAt(0).toUpperCase() + l.tuKhoa.slice(1)}</p><p>${l.y}</p>${l.yChung ? `<p class="hint">Ý nghĩa chung: ${l.yChung}</p>` : ''}
         <p class="hint">Vị trí "${l.viTri}": ${l.yViTri.toLowerCase()}.</p></div></div>`).join('')}
       <div class="sum"><h3>Tổng quan</h3><ul>${r.tongQuan.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
     $('ket-qua').hidden = false;

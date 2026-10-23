@@ -2,6 +2,7 @@
  * và cách rút bài. Nội dung tự biên soạn. Dùng chung cho trình duyệt và backend. */
 (function (root) {
   'use strict';
+  const Y = (typeof module !== 'undefined' && module.exports) ? require('./y-nghia-chu-de.js') : root.TarotChuDe;
 
   // [tên tiếng Anh, tên tiếng Việt, từ khóa xuôi, ý nghĩa xuôi, từ khóa ngược, ý nghĩa ngược]
   const AN_CHINH = [
@@ -109,6 +110,15 @@
       nhom: 'anPhu', bo: b.ma, so: h < 10 ? HANG_VI[h].replace('Át', 'A') : HANG_VI[h], hang: h + 1,
       xuoi: { tuKhoa: kx, y: yx }, nguoc: { tuKhoa: kn, y: yn } }))),
   ];
+  // Chủ đề: chỉ số trong y-nghia-chu-de.js và bộ bài khớp với chủ đề (để nhận xét tổng quan)
+  const CHU_DE = {
+    tongquan: { ten: 'Tổng quan', moTa: 'Cái nhìn chung về tình hình của bạn' },
+    tinhyeu: { ten: 'Tình yêu', moTa: 'Tình cảm, hẹn hò, hôn nhân', i: 0, bo: 'coc' },
+    sunghiep: { ten: 'Sự nghiệp', moTa: 'Công việc, học hành, thăng tiến', i: 2, bo: 'gay' },
+    taichinh: { ten: 'Tài chính', moTa: 'Tiền bạc, đầu tư, chi tiêu', i: 4, bo: 'tien' },
+    banthan: { ten: 'Bản thân', moTa: 'Cảm xúc, sức khỏe tinh thần, phát triển cá nhân', i: 6 },
+  };
+  BO_BAI.forEach(l => { l.chuDe = Object.fromEntries(Object.entries(CHU_DE).filter(([, c]) => c.i !== undefined).map(([k, c]) => [k, { xuoi: Y[l.id][c.i], nguoc: Y[l.id][c.i + 1] }])); });
   const THONG_TIN_BO = Object.fromEntries(BO.map(b => [b.ma, { ten: b.ten, en: b.en, nguyenTo: b.nguyenTo, chuDe: b.chuDe }]));
 
   const KIEU_TRAI = {
@@ -132,18 +142,23 @@
   }
 
   /** Ghép kết quả cho các lá đã chọn: chon = [{ id, nguoc }] theo thứ tự vị trí */
-  function docBai(kieu, chon) {
-    const k = KIEU_TRAI[kieu];
+  function docBai(kieu, chon, chuDe = 'tongquan') {
+    const k = KIEU_TRAI[kieu], rieng = chuDe !== 'tongquan';
     const la = chon.map((c, i) => {
-      const card = BO_BAI[c.id], m = c.nguoc ? card.nguoc : card.xuoi;
+      const card = BO_BAI[c.id], chieu = c.nguoc ? 'nguoc' : 'xuoi', m = card[chieu];
       return { viTri: k.viTri[i][0], yViTri: k.viTri[i][1], id: card.id, ten: card.ten, tenEn: card.tenEn, so: card.so, nhom: card.nhom, bo: card.bo,
-        nguoc: !!c.nguoc, tuKhoa: m.tuKhoa, y: m.y };
+        nguoc: !!c.nguoc, tuKhoa: m.tuKhoa, y: rieng ? card.chuDe[chuDe][chieu] : m.y, yChung: rieng ? m.y : null };
     });
-    return { kieu, tenKieu: k.ten, la, tongQuan: tongQuan(la) };
+    return { kieu, tenKieu: k.ten, chuDe, tenChuDe: CHU_DE[chuDe].ten, la, tongQuan: tongQuan(la, chuDe) };
   }
 
-  function tongQuan(la) {
-    const out = [], n = la.length;
+  function tongQuan(la, chuDe) {
+    const out = [], n = la.length, cd = CHU_DE[chuDe];
+    if (cd && cd.bo) {
+      const so = la.filter(l => l.bo === cd.bo).length, b = THONG_TIN_BO[cd.bo];
+      out.push(so ? `Có ${so} lá bộ ${b.ten}, bộ gắn với chuyện ${cd.ten.toLowerCase()}: câu trả lời cho câu hỏi của bạn khá rõ ràng.`
+        : `Không có lá bộ ${b.ten} (bộ gắn với ${cd.ten.toLowerCase()}): chuyện ${cd.ten.toLowerCase()} lúc này chịu ảnh hưởng nhiều từ các mặt khác trong cuộc sống.`);
+    }
     if (n === 1) {
       const l = la[0];
       out.push(l.nhom === 'anChinh' ? `${l.ten} là lá Ẩn Chính: thông điệp hôm nay mang tính bước ngoặt, đáng để bạn dừng lại suy ngẫm.`
@@ -164,6 +179,6 @@
     return out;
   }
 
-  const Tarot = { BO_BAI, KIEU_TRAI, THONG_TIN_BO, xaoBai, docBai, ngauNhien };
+  const Tarot = { BO_BAI, KIEU_TRAI, CHU_DE, THONG_TIN_BO, xaoBai, docBai, ngauNhien };
   if (typeof module !== 'undefined' && module.exports) module.exports = Tarot; else root.Tarot = Tarot;
 })(typeof window !== 'undefined' ? window : globalThis);
