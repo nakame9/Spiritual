@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bản đồ sao và Big Three · Lá Số Tử Vi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Lập bản đồ sao (birth chart): vị trí 10 hành tinh, cung Mọc, cung Mặt Trăng, góc chiếu, cân bằng nguyên tố và phân tích Big Three.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/zodiac.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="site">
+    <a class="brand" href="../../tuvivietnam/frontend/index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi</a>
+    <nav aria-label="Menu chính"><a href="../../tuvivietnam/frontend/index.html">Trang chủ</a><a href="../../tuvivietnam/frontend/la-so.html">Lập lá số</a><a href="../../tuvivietnam/frontend/con-giap.html">12 con giáp</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="index.html" aria-current="page">Hoàng đạo</a><a href="../../tuvivietnam/frontend/bai-viet.html">Bài viết</a></nav>
+  </header>
+  <nav class="subnav" aria-label="Cung hoàng đạo"><a href="index.html">Tổng quan 12 cung</a><a href="tu-vi.html">Tử vi</a><a href="tuong-hop.html">Độ tương hợp</a><a href="ban-do-sao.html" aria-current="page">Bản đồ sao & Big Three</a></nav>
+  <section>
+    <p class="eyebrow"><a href="index.html">Cung hoàng đạo</a> · Bản đồ sao</p>
+    <h1>Bản đồ sao và Big Three</h1>
+    <p class="lede">Bản đồ sao (birth chart) là bức ảnh bầu trời đúng lúc bạn chào đời: Mặt Trời, Mặt Trăng và tám hành tinh nằm ở cung nào, cung nào đang mọc ở chân trời phía đông. Bộ ba Mặt Trời, Mặt Trăng và cung Mọc (Big Three) cho biết bản chất, cảm xúc và ấn tượng bạn tạo ra.</p>
+  </section>
+  <form class="panel" id="form" novalidate>
+    <h2>Thông tin lúc sinh</h2>
+    <div class="form-bd">
+      <label class="f rong"><span>Họ tên (không bắt buộc)</span><input type="text" id="ten" maxlength="60" autocomplete="off"></label>
+      <fieldset class="f"><legend>Ngày sinh (dương lịch)</legend><div class="date"><input type="text" inputmode="numeric" id="d" maxlength="2" placeholder="Ngày" aria-label="Ngày"><i>/</i><input type="text" inputmode="numeric" id="m" maxlength="2" placeholder="Tháng" aria-label="Tháng"><i>/</i><input type="text" inputmode="numeric" class="y" id="y" maxlength="4" placeholder="Năm" aria-label="Năm"></div></fieldset>
+      <fieldset class="f"><legend>Giờ sinh</legend><div class="date"><input type="text" inputmode="numeric" id="h" maxlength="2" placeholder="Giờ" aria-label="Giờ"><i>:</i><input type="text" inputmode="numeric" id="mi" maxlength="2" placeholder="Phút" aria-label="Phút"></div></fieldset>
+      <label class="f rong"><span>Nơi sinh</span><select id="noi"></select></label>
+      <label class="check rong"><input type="checkbox" id="khong-gio">Tôi không rõ giờ sinh</label>
+      <div class="tu-nhap" id="tu-nhap" hidden>
+        <label class="f"><span>Vĩ độ (bắc dương, nam âm)</span><input type="text" inputmode="decimal" id="vi-do" placeholder="21.03"></label>
+        <label class="f"><span>Kinh độ (đông dương, tây âm)</span><input type="text" inputmode="decimal" id="kinh-do" placeholder="105.85"></label>
+        <label class="f"><span>Múi giờ</span><select id="mui-gio"></select></label>
+      </div>
+    </div>
+    <p class="err" id="loi" role="alert" hidden></p>
+    <div class="row"><button class="go" type="submit">Lập bản đồ sao</button><span class="muted">Thông tin chỉ dùng để tính trên máy bạn, không gửi đi đâu.</span></div>
+  </form>
+  <div id="kq" hidden>
+    <section class="panel" aria-labelledby="h-b3"><h2 id="h-b3">Big Three</h2><p class="muted" id="tom-tat"></p><div class="big3" id="big3"></div><div class="ket-hop" id="ket-hop"></div></section>
+    <section class="panel" aria-labelledby="h-bd" style="margin-top: 20px"><h2 id="h-bd">Bản đồ sao</h2><div class="bd-luoi"><div id="vong"></div><div style="min-width: 0"><div style="overflow-x: auto"><table class="bang-sao" id="bang-sao"></table></div><p class="muted" id="ghi-chu-nha" style="margin-top: 10px"></p></div></div></section>
+    <section class="panel" aria-labelledby="h-hn" style="margin-top: 20px"><h2 id="h-hn">Các hành tinh trong bản đồ của bạn</h2><ul class="giai" id="giai-sao"></ul></section>
+    <section class="panel" aria-labelledby="h-gc" style="margin-top: 20px"><h2 id="h-gc">Góc chiếu chính</h2><p class="muted">Góc giữa hai hành tinh cho biết hai mặt trong con người bạn phối hợp với nhau ra sao. Màu xanh là hài hòa, màu đỏ là căng thẳng thúc đẩy.</p><ul class="giai" id="giai-goc"></ul></section>
+    <section class="panel" aria-labelledby="h-cb" style="margin-top: 20px"><h2 id="h-cb">Cân bằng nguyên tố và tính chất</h2><div class="can-bang" id="can-bang"></div><div class="ket-hop" id="cb-loi"></div></section>
+  </div>
+  <p class="note">Nội dung cung hoàng đạo do Lá Số Tử Vi biên soạn theo chiêm tinh phương Tây truyền thống, chỉ để tham khảo và giải trí, không thay cho lời khuyên chuyên môn. Vị trí các hành tinh được tính bằng Astronomy Engine (giấy phép MIT).</p>
+  <footer class="foot"><span>Lá Số Tử Vi · Cung hoàng đạo</span><span>Nội dung chỉ để tham khảo.</span></footer>
+</div>
+<script src="js/vendor/astronomy.browser.min.js"></script>
+<script src="js/thien-van.js"></script>
+<script src="js/cung-hoang-dao.js"></script>
+<script src="js/luan-giai.js"></script>
+<script src="js/chung.js"></script>
+<script src="js/dia-diem.js"></script>
+<script src="js/ve-ban-do.js"></script>
+<script src="js/trang-ban-do.js"></script>
+</body>
+</html>

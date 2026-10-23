@@ -1,0 +1,17 @@
+{
+  "name": "zodiac-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Máy chủ cung hoàng đạo: xác định cung, tử vi theo cung, tương hợp, bản đồ sao và phục vụ frontend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.22.3"
+  }
+}

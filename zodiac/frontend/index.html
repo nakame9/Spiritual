@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cung hoàng đạo · Lá Số Tử Vi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Xác định cung hoàng đạo theo ngày sinh, tổng quan 12 cung, tính cách, tình yêu, sự nghiệp, tử vi hằng ngày, độ tương hợp và bản đồ sao.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/zodiac.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="site">
+    <a class="brand" href="../../tuvivietnam/frontend/index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi</a>
+    <nav aria-label="Menu chính"><a href="../../tuvivietnam/frontend/index.html">Trang chủ</a><a href="../../tuvivietnam/frontend/la-so.html">Lập lá số</a><a href="../../tuvivietnam/frontend/con-giap.html">12 con giáp</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="index.html" aria-current="page">Hoàng đạo</a><a href="../../tuvivietnam/frontend/bai-viet.html">Bài viết</a></nav>
+  </header>
+  <nav class="subnav" aria-label="Cung hoàng đạo"><a href="index.html" aria-current="page">Tổng quan 12 cung</a><a href="tu-vi.html">Tử vi</a><a href="tuong-hop.html">Độ tương hợp</a><a href="ban-do-sao.html">Bản đồ sao & Big Three</a></nav>
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Chiêm tinh phương Tây</p>
+      <h1>Cung hoàng đạo của bạn</h1>
+      <p class="lede">Mười hai cung hoàng đạo là mười hai đoạn đường Mặt Trời đi qua trong năm. Cung của bạn là nơi Mặt Trời đứng lúc bạn chào đời, nói lên bản chất và cách bạn tỏa sáng. Nhập ngày sinh để biết mình thuộc cung nào, rồi khám phá tính cách, tình yêu, sự nghiệp, tử vi và bản đồ sao của riêng bạn.</p>
+    </div>
+    <form class="panel" id="form" novalidate>
+      <h2>Xác định cung Mặt Trời</h2>
+      <div class="row"><fieldset class="f"><legend>Ngày sinh</legend><div class="date"><input type="text" inputmode="numeric" id="d" maxlength="2" placeholder="Ngày" aria-label="Ngày"><i>/</i><input type="text" inputmode="numeric" id="m" maxlength="2" placeholder="Tháng" aria-label="Tháng"><i>/</i><input type="text" inputmode="numeric" class="y" id="y" maxlength="4" placeholder="Năm" aria-label="Năm"></div></fieldset><fieldset class="f"><legend>Giờ sinh (không bắt buộc)</legend><div class="date"><input type="text" inputmode="numeric" id="h" maxlength="2" placeholder="Giờ" aria-label="Giờ"><i>:</i><input type="text" inputmode="numeric" id="mi" maxlength="2" placeholder="Phút" aria-label="Phút"></div></fieldset></div>
+      <p class="err" id="loi" role="alert" hidden></p>
+      <div class="row"><button class="go" type="submit">Xác định cung</button><span class="muted">Tính theo vị trí thật của Mặt Trời, giờ Việt Nam.</span></div>
+      <div id="kq" aria-live="polite"></div>
+    </form>
+  </section>
+
+  <section class="block" aria-labelledby="h-12">
+    <h2 id="h-12">12 cung hoàng đạo</h2>
+    <p class="lede">Bấm vào một cung để xem biểu tượng, nguyên tố, hành tinh chủ quản, tính cách, tình yêu và sự nghiệp.</p>
+    <div class="cung-grid" id="luoi"></div>
+  </section>
+
+  <section class="block" aria-labelledby="h-nt">
+    <h2 id="h-nt">Bốn nguyên tố và ba tính chất</h2>
+    <p class="lede">Mỗi cung mang một trong bốn nguyên tố (Lửa, Đất, Khí, Nước) và một trong ba tính chất (Tiên phong, Kiên định, Linh hoạt). Hai điều này giải thích vì sao có những cung dễ hợp nhau, có những cung hay va chạm.</p>
+    <div class="nt-list" id="nguyen-to"></div>
+    <div class="nt-list" id="tinh-chat" style="grid-template-columns: repeat(3, minmax(0, 1fr))"></div>
+  </section>
+
+  <section class="block" aria-labelledby="h-tool">
+    <h2 id="h-tool">Khám phá thêm</h2>
+    <div class="tools">
+      <a class="tool" href="tu-vi.html"><span class="ky" aria-hidden="true">☉&#xFE0E;</span><h3>Tử vi theo cung</h3><p>Tình yêu, công việc, tài chính, sức khỏe theo ngày, tuần, tháng, năm, tính từ vị trí thật của các hành tinh.</p><span class="more">Xem tử vi →</span></a>
+      <a class="tool" href="tuong-hop.html"><span class="ky" aria-hidden="true">♀&#xFE0E;</span><h3>Độ tương hợp</h3><p>So sánh hai cung về tình yêu, tình bạn và công việc, kèm phong cách yêu của mỗi người.</p><span class="more">So sánh →</span></a>
+      <a class="tool" href="ban-do-sao.html"><span class="ky" aria-hidden="true">☽&#xFE0E;</span><h3>Bản đồ sao và Big Three</h3><p>Vị trí 10 hành tinh lúc bạn sinh ra, cung Mọc, cung Mặt Trăng và phân tích bộ ba Mặt Trời, Mặt Trăng, cung Mọc.</p><span class="more">Lập bản đồ sao →</span></a>
+    </div>
+  </section>
+  <p class="note">Nội dung cung hoàng đạo do Lá Số Tử Vi biên soạn theo chiêm tinh phương Tây truyền thống, chỉ để tham khảo và giải trí, không thay cho lời khuyên chuyên môn. Vị trí các hành tinh được tính bằng Astronomy Engine (giấy phép MIT).</p>
+  <footer class="foot"><span>Lá Số Tử Vi · Cung hoàng đạo</span><span>Nội dung chỉ để tham khảo.</span></footer>
+</div>
+<script src="js/vendor/astronomy.browser.min.js"></script>
+<script src="js/thien-van.js"></script>
+<script src="js/cung-hoang-dao.js"></script>
+<script src="js/luan-giai.js"></script>
+<script src="js/chung.js"></script>
+<script src="js/trang-chu.js"></script>
+</body>
+</html>
