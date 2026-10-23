@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Xem bài Tarot · Lá Số Tử Vi</title>
+<title>Tarot · Lá Số Tử Vi</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Xem bài Tarot online: đặt câu hỏi, tự chọn lá từ bộ 78 lá, đọc ý nghĩa xuôi ngược bằng tiếng Việt cho từng vị trí.">
+<meta name="description" content="Xem bài Tarot online bằng tiếng Việt: tự xáo bài, tự chọn lá, ba kiểu trải bài, năm chủ đề Tình yêu, Sự nghiệp, Tài chính, Bản thân, Tổng quan.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
@@ -13,25 +13,6 @@
 <link rel="stylesheet" href="css/tarot.css">
 </head>
 <body>
-<!-- Biểu tượng dùng chung cho các lá bài -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="sao4" viewBox="0 0 24 24"><path d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z" fill="currentColor"/></symbol>
-  <symbol id="g-gay" viewBox="0 0 24 24"><g fill="currentColor"><rect x="10.8" y="1.5" width="2.4" height="21" rx="1.2"/><path d="M13 7c2.6-1.6 5.2-1.2 6.6.8-2.6 1.6-5.2 1.2-6.6-.8zM11 12.5c-2.6-1.6-5.2-1.2-6.6.8 2.6 1.6 5.2 1.2 6.6-.8z"/></g></symbol>
-  <symbol id="g-coc" viewBox="0 0 24 24"><path fill="currentColor" d="M5 2.5h14c0 5.2-2.9 8.4-5.8 9.1V18h3.8v2.5H7V18h3.8v-6.4C7.9 10.9 5 7.7 5 2.5z"/></symbol>
-  <symbol id="g-kiem" viewBox="0 0 24 24"><g fill="currentColor"><path d="M12 .8l2 3.2v11.2h-4V4z"/><rect x="6.5" y="15" width="11" height="2.2" rx="1.1"/><rect x="11" y="17" width="2" height="4"/><circle cx="12" cy="22" r="1.5"/></g></symbol>
-  <symbol id="g-tien" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><polygon fill="currentColor" points="12,5 13.65,9.73 18.66,9.84 14.66,12.87 16.11,17.66 12,14.8 7.89,17.66 9.34,12.87 5.34,9.84 10.35,9.73"/></symbol>
-  <symbol id="mat-sau" viewBox="0 0 120 200">
-    <rect x=".75" y=".75" width="118.5" height="198.5" rx="9" style="fill: var(--back); stroke: var(--back-2)"/>
-    <rect x="7" y="7" width="106" height="186" rx="6" fill="none" style="stroke: var(--back-star)" stroke-opacity=".5"/>
-    <g style="stroke: var(--back-2)" stroke-width="1" fill="none">
-      <path d="M7 40 L60 7 L113 40 M7 80 L60 47 L113 80 M7 120 L60 87 L113 120 M7 160 L60 127 L113 160 M7 193 L60 167 L113 193"/>
-      <path d="M7 60 L60 93 L113 60 M7 20 L60 53 L113 20 M7 100 L60 133 L113 100 M7 140 L60 173 L113 140"/>
-    </g>
-    <circle cx="60" cy="100" r="26" style="fill: var(--back); stroke: var(--back-star)" stroke-opacity=".7"/>
-    <path transform="translate(42 82) scale(1.5)" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z" style="fill: var(--back-star)"/>
-  </symbol>
-</svg>
-
 <div class="wrap">
   <header class="site">
     <a class="brand" href="../../tuvivietnam/frontend/index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi</a>
@@ -42,56 +23,71 @@
     <div>
       <p class="eyebrow">Tarot · 78 lá</p>
       <h1>Xem bài Tarot</h1>
-      <p class="lede">Đặt một câu hỏi, chọn kiểu trải bài, rồi tự tay chọn lá từ bộ bài đã xáo. Mỗi lá có ý nghĩa xuôi và ngược, đọc theo chủ đề bạn chọn và theo vị trí của nó trong trải bài.</p>
+      <p class="lede">Tarot là bộ 78 lá bài, mỗi lá mang một hình ảnh và một bài học. Khi rút bài cho một câu hỏi, các lá giúp bạn nhìn vấn đề từ nhiều phía. Ở đây bạn tự xáo bài, tự chọn lá và đọc ý nghĩa bằng tiếng Việt theo đúng chủ đề mình hỏi.</p>
+      <div class="cta">
+        <a class="btn primary" href="xem-bai.html">Bắt đầu xem bài</a>
+        <a class="btn ghost" href="xem-bai.html#1la">Rút lá bài hôm nay</a>
+      </div>
     </div>
     <div class="fan" id="fan" aria-hidden="true"></div>
   </section>
 
-  <form class="panel" id="form" novalidate>
-    <h2><span class="step">Bước 1</span>Đặt câu hỏi</h2>
-    <label class="f"><span>Câu hỏi của bạn (không bắt buộc)</span>
-      <textarea id="cau-hoi" rows="2" maxlength="300" placeholder="Ví dụ: Tôi nên làm gì để công việc tháng tới thuận lợi hơn?"></textarea></label>
-    <fieldset class="f" style="border:0;margin:0;padding:0"><legend>Chủ đề</legend>
-      <div class="topics">
-        <label><input type="radio" name="chude" value="tongquan" checked><span>Tổng quan</span></label>
-        <label><input type="radio" name="chude" value="tinhyeu"><span>Tình yêu</span></label>
-        <label><input type="radio" name="chude" value="sunghiep"><span>Sự nghiệp</span></label>
-        <label><input type="radio" name="chude" value="taichinh"><span>Tài chính</span></label>
-        <label><input type="radio" name="chude" value="banthan"><span>Bản thân</span></label>
-      </div>
-    </fieldset>
-    <fieldset class="f" style="border:0;margin:0;padding:0"><legend>Kiểu trải bài</legend>
-      <div class="spreads">
-        <label><input type="radio" name="kieu" id="kieu-1la" value="1la"><span><i><em></em></i><b>Lá bài hôm nay</b><small>1 lá · thông điệp cho lúc này</small></span></label>
-        <label><input type="radio" name="kieu" id="kieu-3la" value="3la" checked><span><i><em></em><em></em><em></em></i><b>Quá khứ, Hiện tại, Tương lai</b><small>3 lá · dòng chảy của một vấn đề</small></span></label>
-        <label><input type="radio" name="kieu" id="kieu-tinhcam" value="tinhcam"><span><i><em></em><em></em><em></em></i><b>Tình cảm</b><small>3 lá · bạn, người ấy, mối quan hệ</small></span></label>
-      </div>
-    </fieldset>
-    <div class="opts">
-      <label class="check"><input type="checkbox" id="nguoc" checked>Dùng lá ngược</label>
-      <button class="go" type="submit">Xáo bài</button>
-    </div>
-  </form>
-
-  <section class="panel" id="buoc2" hidden aria-labelledby="h-buoc2">
-    <h2 id="h-buoc2"><span class="step">Bước 2</span>Chọn lá</h2>
-    <div class="pick-head"><p id="chon-moTa"></p><div class="actions"><span>Đã chọn <span class="count" id="count">0/3</span></span><button class="btn2" type="button" id="ngau-nhien">Chọn ngẫu nhiên giúp tôi</button></div></div>
-    <div class="deck" id="deck" role="group" aria-label="Bộ bài đã xáo, úp mặt"></div>
-    <div class="slots" id="slots" aria-live="polite"></div>
+  <section class="block" aria-labelledby="h-cach">
+    <h2 id="h-cach">Xem bài thế nào</h2>
+    <ol class="steps">
+      <li><b>Đặt câu hỏi</b><span>Viết điều bạn đang băn khoăn và chọn chủ đề: tình yêu, sự nghiệp, tài chính, bản thân hay tổng quan.</span></li>
+      <li><b>Xáo bài</b><span>Bộ bài được trộn ngẫu nhiên ngay trên máy bạn, lá nào cũng có cơ hội như nhau, có thể xuôi hoặc ngược.</span></li>
+      <li><b>Chọn lá</b><span>Tĩnh tâm nghĩ về câu hỏi rồi tự tay chọn lá trong 78 lá đang úp.</span></li>
+      <li><b>Đọc ý nghĩa</b><span>Các lá lật lên, mỗi lá được giải theo vị trí trong trải bài và theo chủ đề bạn chọn.</span></li>
+    </ol>
   </section>
 
-  <section class="panel" id="ket-qua" hidden aria-labelledby="kq-tieu-de">
-    <h2><span class="step">Bước 3</span><span id="kq-tieu-de">Kết quả</span></h2>
-    <div class="reading" id="reading"></div>
-    <div class="actions"><button class="go" type="button" id="rut-lai">Rút lại với câu hỏi này</button><button class="btn2" type="button" id="lam-lai">Đặt câu hỏi khác</button></div>
+  <section class="block" aria-labelledby="h-trai">
+    <h2 id="h-trai">Các kiểu trải bài</h2>
+    <div class="spread-list" id="spreads"></div>
   </section>
 
-  <p class="note">Bộ bài được xáo ngẫu nhiên ngay trên máy bạn. Ý nghĩa các lá do Lá Số Tử Vi biên soạn theo cách hiểu phổ biến của Tarot, dùng để suy ngẫm và tham khảo, không thay cho lời khuyên chuyên môn về sức khỏe, pháp lý hay tài chính.</p>
+  <section class="block" aria-labelledby="h-chude">
+    <h2 id="h-chude">Bạn muốn hỏi về điều gì</h2>
+    <div class="topic-list" id="topics"></div>
+  </section>
+
+  <section class="block" aria-labelledby="h-bo">
+    <h2 id="h-bo">Bộ bài 78 lá</h2>
+    <p class="lede">Gồm 22 lá Ẩn Chính nói về những bước ngoặt lớn của đời người, và 56 lá Ẩn Phụ chia thành bốn bộ ứng với bốn nguyên tố, nói về những chuyện hằng ngày.</p>
+    <div class="suit-list" id="suits"></div>
+  </section>
+
+  <p class="note">Ý nghĩa các lá do Lá Số Tử Vi biên soạn theo cách hiểu phổ biến của Tarot, dùng để suy ngẫm và tham khảo, không thay cho lời khuyên chuyên môn về sức khỏe, pháp lý hay tài chính.</p>
   <footer class="foot"><span>Lá Số Tử Vi · Tarot</span><span>Nội dung chỉ để tham khảo.</span></footer>
 </div>
 
 <script src="js/y-nghia-chu-de.js"></script>
 <script src="js/bo-bai.js"></script>
-<script src="js/app.js"></script>
+<script src="js/la-bai.js"></script>
+<script>
+(function () {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const { theLa } = LaBai, B = Tarot.BO_BAI;
+  $('fan').innerHTML = [19, 17, 36].map(id => theLa(B[id], false, 'static')).join('');
+
+  // Kiểu trải bài: sơ đồ vị trí bằng lá úp, bấm để trải ngay
+  $('spreads').innerHTML = Object.entries(Tarot.KIEU_TRAI).map(([k, t]) => `<article class="spread">
+    <div class="layout" style="--n:${t.viTri.length}">${t.viTri.map(([ten]) => `<div class="pos-card">${theLa(null)}<span>${ten}</span></div>`).join('')}</div>
+    <div><h3>${t.ten}</h3><p class="muted">${t.viTri.length} lá · ${t.moTa}</p>
+    <ul>${t.viTri.map(([ten, y]) => `<li><b>${ten}:</b> ${y.charAt(0).toLowerCase() + y.slice(1)}</li>`).join('')}</ul></div>
+    <a class="btn primary" href="xem-bai.html#${k}">Trải bài này</a></article>`).join('');
+
+  $('topics').innerHTML = Object.entries(Tarot.CHU_DE).map(([k, c]) => `<a class="topic" href="xem-bai.html#${k}"><b>${c.ten}</b><span>${c.moTa}</span></a>`).join('');
+
+  // Bộ bài: Ẩn Chính và 4 bộ Ẩn Phụ, mỗi nhóm một lá mẫu
+  const NHOM = [
+    [0, 'Ẩn Chính', '22 lá', 'Những bước ngoặt, bài học lớn và hành trình trưởng thành, từ Kẻ Khờ đến Thế Giới.'],
+    ...Object.entries(Tarot.THONG_TIN_BO).map(([ma, b], i) => [22 + i * 14, `Bộ ${b.ten}`, `14 lá · ${b.nguyenTo}`, `${b.en}: ${b.chuDe.charAt(0).toUpperCase() + b.chuDe.slice(1)}.`]),
+  ];
+  $('suits').innerHTML = NHOM.map(([id, ten, so, y]) => `<div class="suit">${theLa(B[id], false, 'static')}<div><h3>${ten}</h3><p class="muted">${so}</p><p>${y}</p></div></div>`).join('');
+})();
+</script>
 </body>
 </html>

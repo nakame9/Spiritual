@@ -60,6 +60,11 @@ textarea:focus-visible, .spreads input:focus-visible + span, .deck button:focus-
 .deck button:hover, .deck button:focus-visible { transform: translateY(-10px); }
 .deck button:disabled { visibility: hidden; }
 
+.dang-xao { margin: 0; text-align: center; font-weight: 600; color: var(--tu); min-height: 1.5em; }
+.stage { position: relative; height: 230px; }
+.stage .sc { position: absolute; width: 104px; left: calc(50% - 52px); top: 22px; transform: translateY(calc(var(--i) * -0.7px)); }
+.stage .sc .card { box-shadow: 0 2px 6px rgba(30, 10, 50, .18); border-radius: 9px; }
+.eyebrow a { color: inherit; }
 .slots { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 170px)); justify-content: center; gap: 18px; }
 .slot { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; min-width: 0; }
 .slot .pos { font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); }
@@ -103,3 +108,50 @@ textarea:focus-visible, .spreads input:focus-visible + span, .deck button:focus-
   .item { grid-template-columns: 72px minmax(0, 1fr); gap: 12px; }
 }
 @media (prefers-reduced-motion: reduce) { .card .in, .deck button { transition: none; } }
+
+/* ---------- Trang chủ Tarot: các bước, kiểu trải bài, chủ đề, bộ bài ---------- */
+.cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.block { display: flex; flex-direction: column; gap: 14px; padding-top: 8px; }
+.block > h2 { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 27px; }
+.block > .lede { margin: -4px 0 0; font-size: 15px; }
+.muted { color: var(--soft); font-size: 13.5px; margin: 0; }
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; counter-reset: buoc; }
+.steps li { counter-increment: buoc; display: flex; flex-direction: column; gap: 6px; padding: 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--cell); }
+.steps li::before { content: counter(buoc); font-family: var(--f-display); font-weight: 700; font-size: 22px; color: var(--tu); line-height: 1; }
+.steps b { font-size: 15.5px; }
+.steps span { color: var(--soft); font-size: 14px; }
+
+.spread-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.spread { display: flex; flex-direction: column; gap: 14px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--cell); min-width: 0; }
+.spread h3 { margin: 0 0 2px; font-family: var(--f-display); font-size: 19px; }
+.spread ul { margin: 10px 0 0; padding-left: 18px; font-size: 14px; display: flex; flex-direction: column; gap: 4px; }
+.spread .btn { align-self: flex-start; margin-top: auto; }
+.layout { display: grid; grid-template-columns: repeat(var(--n), 64px); justify-content: center; gap: 10px; padding: 14px 0 6px; background: var(--hl); border-radius: 10px; }
+.pos-card { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pos-card span { font-size: 11px; font-weight: 600; color: var(--soft); text-align: center; line-height: 1.25; min-height: 2.5em; }
+
+.topic-list { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.topic { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--cell); color: var(--ink); text-decoration: none; min-width: 0; }
+.topic:hover { border-color: var(--tu); }
+.topic b { font-size: 15.5px; }
+.topic span { color: var(--soft); font-size: 13.5px; }
+
+.suit-list { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.suit { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.suit .card { width: 100px; }
+.suit h3 { margin: 0; font-family: var(--f-display); font-size: 18px; }
+.suit p { margin: 2px 0 0; font-size: 14px; }
+
+@media (max-width: 1000px) {
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .spread-list { grid-template-columns: minmax(0, 1fr); }
+  .topic-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .suit-list { grid-template-columns: minmax(0, 1fr); }
+  .suit { flex-direction: row; align-items: flex-start; gap: 14px; }
+  .suit .card { width: 72px; flex: none; }
+}
+@media (max-width: 560px) {
+  .steps, .topic-list { grid-template-columns: minmax(0, 1fr); }
+  .layout { grid-template-columns: repeat(var(--n), 56px); }
+}

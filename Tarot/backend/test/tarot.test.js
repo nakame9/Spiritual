@@ -57,8 +57,11 @@ test('API tra bài và phục vụ trang', async () => {
   assert.deepStrictEqual(Object.keys(await (await fetch(base + '/api/kieu-trai')).json()), ['1la', '3la', 'tinhcam']);
   const home = await fetch(base + '/');
   assert.strictEqual(home.status, 200);
-  assert.match(await home.text(), /Xem bài Tarot/);
-  assert.strictEqual((await fetch(base + '/js/bo-bai.js')).status, 200);
+  assert.match(await home.text(), /Các kiểu trải bài/);
+  const xem = await fetch(base + '/xem-bai.html');
+  assert.strictEqual(xem.status, 200);
+  assert.match(await xem.text(), /Xáo bài và chọn lá/);
+  for (const f of ['bo-bai.js', 'la-bai.js', 'app.js', 'y-nghia-chu-de.js']) assert.strictEqual((await fetch(base + '/js/' + f)).status, 200, f);
 });
 
 test('chủ đề: mỗi lá có 4 chủ đề × xuôi/ngược, không trùng nhau; đọc bài theo chủ đề', () => {

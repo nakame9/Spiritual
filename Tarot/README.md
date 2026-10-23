@@ -5,18 +5,24 @@ Chức năng xem bài Tarot của website Lá Số Tử Vi: đặt câu hỏi, c
 ```
 Tarot/
 ├── frontend/               Trang web tĩnh, chạy được ngay trên GitHub Pages
-│   ├── index.html          Trang xem bài
+│   ├── index.html          Trang chủ Tarot: giới thiệu, cách xem, các kiểu trải bài, chủ đề, bộ 78 lá
+│   ├── xem-bai.html        Trang xem bài: câu hỏi → xáo bài (có hiệu ứng) → chọn lá → đọc ý nghĩa
 │   ├── css/site.css        Màu, chữ, menu (giống phần tử vi)
 │   ├── css/tarot.css       Giao diện lá bài, bộ bài, kết quả
 │   └── js/
 │       ├── bo-bai.js       78 lá, ý nghĩa chung, chủ đề, kiểu trải bài, xáo bài, đọc bài
 │       ├── y-nghia-chu-de.js  Ý nghĩa từng lá theo Tình yêu, Sự nghiệp, Tài chính, Bản thân (xuôi/ngược)
-│       └── app.js          Vẽ lá bài bằng SVG và các bước trên trang
+│       ├── la-bai.js       Vẽ lá bài bằng SVG (dùng chung hai trang)
+│       └── app.js          Các bước trên trang xem bài, hiệu ứng xáo và chia bài
 └── backend/                Máy chủ Node.js + Express
     ├── server.js           API và phục vụ thư mục frontend
     ├── package.json
     └── test/               Kiểm tra bộ bài và API
 ```
+
+Trang xem bài nhận `#1la`, `#3la`, `#tinhcam` hoặc `#tinhyeu`, `#sunghiep`, `#taichinh`, `#banthan`, `#tongquan` trên đường dẫn để chọn sẵn kiểu trải hoặc chủ đề (trang chủ dùng cách này).
+
+Khi xáo, bộ bài tách đôi rồi trộn xen kẽ 3 lượt, sau đó các lá được chia ra thành hàng. Người dùng bật chế độ giảm chuyển động trên máy thì bỏ qua hiệu ứng. Hiệu ứng chỉ để trình diễn; thứ tự lá đã được xáo ngẫu nhiên trước đó.
 
 Frontend tự xáo bài trên trình duyệt (dùng `crypto.getRandomValues`, mọi lá có xác suất như nhau), nên trang trên GitHub Pages chạy không cần máy chủ.
 Backend dùng chung `frontend/js/bo-bai.js`, nên API ra cùng nội dung với trang web.

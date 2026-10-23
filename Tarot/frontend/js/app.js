@@ -1,62 +1,26 @@
-/* Giao diện xem bài Tarot: vẽ lá bài bằng SVG, chọn lá từ bộ bài úp, lật bài và đọc ý nghĩa. Cần bo-bai.js. */
+/* Trang xem bài Tarot: đặt câu hỏi → xáo bài (có hiệu ứng) → chọn lá → lật bài và đọc. Cần bo-bai.js và la-bai.js. */
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
-  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const { theLa, esc } = LaBai;
   const giam = matchMedia('(prefers-reduced-motion: reduce)');
+  const co = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 
-  // ---------- Vẽ lá bài (viewBox 120 × 200) ----------
-  const PIP = {
-    2: [[60, 56], [60, 128]], 3: [[60, 52], [60, 92], [60, 132]],
-    4: [[42, 56], [78, 56], [42, 128], [78, 128]], 5: [[42, 56], [78, 56], [60, 92], [42, 128], [78, 128]],
-    6: [[42, 52], [78, 52], [42, 92], [78, 92], [42, 132], [78, 132]], 7: [[42, 52], [78, 52], [60, 72], [42, 92], [78, 92], [42, 132], [78, 132]],
-    8: [[42, 52], [78, 52], [60, 72], [42, 92], [78, 92], [60, 112], [42, 132], [78, 132]],
-    9: [[42, 50], [78, 50], [42, 77], [78, 77], [60, 92], [42, 107], [78, 107], [42, 134], [78, 134]],
-    10: [[42, 50], [78, 50], [60, 63], [42, 77], [78, 77], [42, 107], [78, 107], [60, 121], [42, 134], [78, 134]],
-  };
-  const dung = (id, x, y, s) => `<use href="#${id}" x="${x - s / 2}" y="${y - s / 2}" width="${s}" height="${s}"/>`;
-  function tachDong(t) { // tên dài thì xuống 2 dòng
-    if (t.length <= 13) return [t];
-    const w = t.split(' '), i = Math.ceil(w.length / 2);
-    return [w.slice(0, i).join(' '), w.slice(i).join(' ')];
-  }
-  function matLa(c) {
-    const mau = c.nhom === 'anChinh' ? 'anChinh' : c.bo;
-    let giua;
-    if (c.nhom === 'anChinh') {
-      const vach = [...Array(12).keys()].map(i => { const a = i * Math.PI / 6, x1 = 60 + 30 * Math.cos(a), y1 = 92 + 30 * Math.sin(a), x2 = 60 + 36 * Math.cos(a), y2 = 92 + 36 * Math.sin(a); return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`; }).join('');
-      giua = `<g stroke="currentColor" stroke-width="1.2" fill="none"><circle cx="60" cy="92" r="40"/>${vach}</g>
-        ${dung('sao4', 60, 44, 14)}<text x="60" y="${c.so.length > 4 ? 99 : 101}" text-anchor="middle" style="font: 700 ${c.so.length > 4 ? 19 : 26}px var(--f-display); fill: currentColor">${c.so}</text>`;
-    } else if (c.hang === 1) giua = dung('g-' + c.bo, 60, 92, 46);
-    else if (c.hang <= 10) giua = PIP[c.hang].map(([x, y]) => dung('g-' + c.bo, x, y, 20)).join('');
-    else giua = `${dung('g-' + c.bo, 60, 84, 50)}<text x="60" y="138" text-anchor="middle" style="font: 600 10px var(--f-ui); letter-spacing: .12em; fill: currentColor">${c.so.toUpperCase()}</text>`;
-    const nhan = c.nhom === 'anChinh' ? c.so : (c.hang <= 10 ? c.so : c.so.split(' ').map(w => w[0]).join(''));
-    const dong = tachDong(c.ten);
-    return `<svg viewBox="0 0 120 200" role="img" aria-label="${esc(c.ten)}" style="color: var(--s-${mau})">
-      <rect x=".75" y=".75" width="118.5" height="198.5" rx="9" style="fill: var(--face); stroke: var(--face-line)"/>
-      <rect x="6" y="6" width="108" height="188" rx="6" fill="none" stroke="currentColor" stroke-opacity=".55"/>
-      <g fill="currentColor"><text x="13" y="22" style="font: 700 11px var(--f-ui)">${nhan}</text>
-      <text x="107" y="178" transform="rotate(180 107 174)" style="font: 700 11px var(--f-ui)">${nhan}</text>${giua}</g>
-      <line x1="22" y1="152" x2="98" y2="152" stroke="currentColor" stroke-opacity=".4"/>
-      ${dong.map((t, i) => `<text x="60" y="${dong.length > 1 ? 166 + i * 13 : 172}" text-anchor="middle" style="font: 600 11px var(--f-ui); fill: var(--ink)">${esc(t)}</text>`).join('')}
-    </svg>`;
-  }
-  const lungLa = '<svg viewBox="0 0 120 200" aria-hidden="true"><use href="#mat-sau"/></svg>';
-  /** Một lá bài: úp (mặc định) hoặc ngửa (up), ngửa sẵn không hiệu ứng (static) */
-  const theLa = (c, nguoc, lop) => `<div class="card ${lop || ''}"><div class="in"><div class="back">${lungLa}</div>
-    <div class="face${nguoc ? ' rev' : ''}">${c ? matLa(c) : ''}</div></div></div>`;
+  // Mở từ trang chủ với #3la, #tinhcam, #tinhyeu… thì chọn sẵn kiểu trải hoặc chủ đề
+  const h = decodeURIComponent(location.hash.slice(1));
+  if (co(Tarot.KIEU_TRAI, h)) $('kieu-' + h).checked = true;
+  if (co(Tarot.CHU_DE, h)) document.querySelector(`input[name="chude"][value="${h}"]`).checked = true;
 
-  // ---------- Trạng thái ----------
-  const st = { kieu: '3la', chuDe: 'tongquan', nguoc: true, cauHoi: '', xao: [], chon: [] };
+  const st = { kieu: '3la', chuDe: 'tongquan', nguoc: true, cauHoi: '', xao: [], chon: [], dangXao: false };
   const soLa = () => Tarot.KIEU_TRAI[st.kieu].viTri.length;
-  $('fan').innerHTML = [19, 17, 36].map(id => theLa(Tarot.BO_BAI[id], false, 'static')).join('');
+  const cuon = el => el.scrollIntoView({ behavior: giam.matches ? 'auto' : 'smooth', block: 'start' });
 
   function veDeck() {
     const moiHang = matchMedia('(max-width: 760px)').matches ? 13 : 26, daChon = new Set(st.chon.map(c => c.i));
     const nut = st.xao.map((x, i) => `<button type="button" data-i="${i}" aria-label="Lá úp thứ ${i + 1}"${daChon.has(i) ? ' disabled' : ''}>${theLa(null, false)}</button>`);
     $('deck').innerHTML = [...Array(Math.ceil(nut.length / moiHang)).keys()].map(r => `<div class="row">${nut.slice(r * moiHang, (r + 1) * moiHang).join('')}</div>`).join('');
   }
-  matchMedia('(max-width: 760px)').addEventListener('change', () => { if (st.xao.length) veDeck(); });
+  matchMedia('(max-width: 760px)').addEventListener('change', () => { if (st.xao.length && !st.dangXao) veDeck(); });
 
   function veSlots() {
     const k = Tarot.KIEU_TRAI[st.kieu];
@@ -67,25 +31,69 @@
     }).join('');
     $('count').textContent = `${st.chon.length}/${k.viTri.length}`;
   }
+  function capNhatNut() {
+    $('ngau-nhien').disabled = st.dangXao || st.chon.length >= soLa();
+    $('xao-lai').disabled = st.dangXao || st.chon.length >= soLa();
+  }
+
+  // ---------- Xáo bài: tách đôi bộ bài, trộn xen kẽ 3 lượt, rồi chia ra thành hàng ----------
+  const SO_LA_XAO = 16, VONG = 3, MOI_VONG = 700;
+  function xaoBai() {
+    st.xao = Tarot.xaoBai(st.nguoc); st.chon = []; st.dangXao = true;
+    veSlots(); capNhatNut();
+    $('deck').hidden = true; $('stage').hidden = false; $('dang-xao').textContent = 'Đang xáo bài…';
+    $('stage').innerHTML = Array.from({ length: SO_LA_XAO }, (_, i) => `<div class="sc" style="--i:${i}">${theLa(null)}</div>`).join('');
+    if (giam.matches) return xongXao();
+    const nua = SO_LA_XAO / 2, xep = r => `translate(0, ${(-r * 0.7).toFixed(1)}px)`;
+    const anims = [...$('stage').children].map((el, i) => {
+      const trai = i < nua, k = i % nua, dx = trai ? -1 : 1;
+      const thuTu = 2 * k + (trai ? 0 : 1); // xen kẽ trái, phải như khi trộn bài thật
+      const kf = [];
+      for (let v = 0; v < VONG; v++) {
+        const o = v / VONG, b = 1 / VONG;
+        kf.push({ offset: o, transform: `${xep(v ? thuTu : i)} rotate(0deg)` });
+        kf.push({ offset: o + b * 0.32, transform: `translate(${dx * (64 + k * 4)}px, ${-k * 1.5}px) rotate(${dx * (8 + k * 1.5)}deg)`, easing: 'cubic-bezier(.3,.6,.3,1)' });
+        kf.push({ offset: o + b * (0.5 + thuTu / SO_LA_XAO * 0.4), transform: `${xep(thuTu)} rotate(0deg)` });
+      }
+      kf.push({ offset: 1, transform: `${xep(thuTu)} rotate(0deg)` });
+      return el.animate(kf, { duration: VONG * MOI_VONG, easing: 'ease-in-out', fill: 'forwards' });
+    });
+    Promise.all(anims.map(a => a.finished)).then(xongXao, xongXao);
+  }
+  function xongXao() {
+    $('stage').hidden = true; $('deck').hidden = false;
+    veDeck();
+    const xong = () => { st.dangXao = false; capNhatNut(); $('dang-xao').textContent = `Đã xáo xong. Hãy chọn ${soLa()} lá.`; };
+    if (giam.matches) return xong();
+    // Chia bài: từng lá bay từ giữa bộ bài ra đúng chỗ của nó
+    const khung = $('deck').getBoundingClientRect(), cx = khung.left + khung.width / 2, cy = khung.top + 60;
+    const anims = [...$('deck').querySelectorAll('button')].map((b, i) => {
+      const r = b.getBoundingClientRect();
+      return b.animate([
+        { transform: `translate(${(cx - r.left - r.width / 2).toFixed(0)}px, ${(cy - r.top - r.height / 2).toFixed(0)}px) scale(.9)`, opacity: 0 },
+        { transform: 'none', opacity: 1 },
+      ], { duration: 420, delay: i * 9, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards' });
+    });
+    Promise.all(anims.map(a => a.finished)).then(xong, xong);
+  }
 
   function batDau() {
     st.kieu = document.querySelector('input[name="kieu"]:checked').value;
     st.chuDe = document.querySelector('input[name="chude"]:checked').value;
     st.nguoc = $('nguoc').checked;
     st.cauHoi = $('cau-hoi').value.trim();
-    st.xao = Tarot.xaoBai(st.nguoc); st.chon = [];
     $('chon-moTa').textContent = `Nghĩ về câu hỏi của bạn rồi chọn ${soLa()} lá trong bộ bài.`;
-    $('ket-qua').hidden = true; $('buoc2').hidden = false; $('ngau-nhien').disabled = false;
-    veDeck(); veSlots();
-    $('buoc2').scrollIntoView({ behavior: giam.matches ? 'auto' : 'smooth', block: 'start' });
+    $('ket-qua').hidden = true; $('buoc2').hidden = false;
+    cuon($('buoc2'));
+    xaoBai();
   }
 
   function chon(i) {
-    if (st.chon.length >= soLa() || st.chon.some(c => c.i === i)) return;
+    if (st.dangXao || st.chon.length >= soLa() || st.chon.some(c => c.i === i)) return;
     st.chon.push(Object.assign({ i }, st.xao[i]));
     const nut = $('deck').querySelector(`[data-i="${i}"]`); if (nut) nut.disabled = true;
-    veSlots();
-    if (st.chon.length === soLa()) { $('ngau-nhien').disabled = true; lat(); }
+    veSlots(); capNhatNut();
+    if (st.chon.length === soLa()) lat();
   }
 
   function lat() {
@@ -105,13 +113,14 @@
         <p class="hint">Vị trí "${l.viTri}": ${l.yViTri.toLowerCase()}.</p></div></div>`).join('')}
       <div class="sum"><h3>Tổng quan</h3><ul>${r.tongQuan.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
     $('ket-qua').hidden = false;
-    $('ket-qua').scrollIntoView({ behavior: giam.matches ? 'auto' : 'smooth', block: 'start' });
+    cuon($('ket-qua'));
   }
 
   $('form').addEventListener('submit', e => { e.preventDefault(); batDau(); });
   $('deck').addEventListener('click', e => { const b = e.target.closest('button'); if (b) chon(Number(b.dataset.i)); });
+  $('xao-lai').addEventListener('click', xaoBai);
   $('ngau-nhien').addEventListener('click', () => {
-    while (st.chon.length < soLa()) {
+    while (!st.dangXao && st.chon.length < soLa()) {
       const con = st.xao.map((x, i) => i).filter(i => !st.chon.some(c => c.i === i));
       chon(con[Tarot.ngauNhien(con.length)]);
     }
@@ -119,6 +128,6 @@
   $('rut-lai').addEventListener('click', batDau);
   $('lam-lai').addEventListener('click', () => {
     $('buoc2').hidden = true; $('ket-qua').hidden = true; st.xao = []; st.chon = [];
-    $('form').scrollIntoView({ behavior: giam.matches ? 'auto' : 'smooth', block: 'start' }); $('cau-hoi').focus({ preventScroll: true });
+    cuon($('form')); $('cau-hoi').focus({ preventScroll: true });
   });
 })();
