@@ -7,11 +7,13 @@ tuvivietnam/
 ├── frontend/            Trang web tĩnh, chạy được ngay trên GitHub Pages
 │   ├── index.html       Trang chủ: giới thiệu, xem tử vi nhanh, công cụ, bài viết mới
 │   ├── la-so.html       Lập lá số 12 cung + luận giải
+│   ├── con-giap.html    Tử vi 12 con giáp theo ngày, tuần, tháng, năm
 │   ├── bai-viet.html    Bài viết
 │   ├── css/site.css     Màu, chữ, menu dùng chung
 │   └── js/
 │       ├── tuvi.js      Engine: lịch âm (Hồ Ngọc Đức) và an sao
-│       └── luangiai.js  Luận giải theo cung
+│       ├── luangiai.js  Luận giải theo cung
+│       └── congiap.js   Tử vi 12 con giáp
 └── backend/             Máy chủ Node.js + Express
     ├── server.js        API và phục vụ thư mục frontend
     ├── package.json
@@ -63,6 +65,16 @@ Trả về `{ laSo, luanGiai }`:
 - `luanGiai`: 12 phần tử theo thứ tự Mệnh, Tài Bạch, Quan Lộc, Phu Thê…, mỗi phần tử có `cung`, `chi` và `html` là đoạn luận giải.
 
 Dữ liệu sai trả mã 400 kèm `{ "error": "..." }` bằng tiếng Việt.
+
+### `GET /api/con-giap`
+
+Tử vi theo tuổi. Tham số: `tuoi` (1 = Tý … 12 = Hợi, bắt buộc), `ky` (`ngay`, `tuan`, `thang`, `nam`; mặc định `ngay`), `ngay` (dạng `YYYY-MM-DD`, mặc định hôm nay), và tùy chọn `namSinh`, `gioiTinh` (`nam`/`nu`) để xem sao chiếu mệnh khi `ky=nam`.
+
+```bash
+curl "http://localhost:3000/api/con-giap?tuoi=7&ky=nam&namSinh=1990&gioiTinh=nam"
+```
+
+Trả về tiêu đề, mức độ (`diem` 1–5, `nhan`), các ghi chú quan hệ can chi (`dong`), 4 mục Công việc, Tài lộc, Tình cảm, Sức khỏe (`muc`), lời khuyên, màu và số may mắn; theo ngày có thêm `gioTot`, theo tuần có `tuan` (7 ngày), theo năm có `sao`.
 
 ### `GET /api/health`
 

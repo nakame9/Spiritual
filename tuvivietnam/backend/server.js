@@ -4,6 +4,7 @@ const express = require('express');
 // Dùng chung engine với frontend để trình duyệt và máy chủ luôn ra cùng một kết quả
 const TuVi = require('../frontend/js/tuvi.js');
 const LuanGiai = require('../frontend/js/luangiai.js');
+const ConGiap = require('../frontend/js/congiap.js');
 
 const FRONTEND = path.join(__dirname, '..', 'frontend');
 const app = express();
@@ -45,6 +46,29 @@ app.post('/api/la-so', (req, res) => {
     return { cung: ten, so: c.so, chi: c.chi, html: LuanGiai.luanGiai(laSo, c.so) };
   });
   res.json({ laSo, luanGiai });
+});
+
+// Tử vi 12 con giáp: /api/con-giap?tuoi=1..12&ky=ngay|tuan|thang|nam&ngay=YYYY-MM-DD[&namSinh=1990&gioiTinh=nam]
+const KY = { ngay: ConGiap.tuViNgay, tuan: ConGiap.tuViTuan, thang: ConGiap.tuViThang, nam: ConGiap.tuViNam };
+app.get('/api/con-giap', (req, res) => {
+  const q = req.query, tuoi = Number(q.tuoi), ky = q.ky || 'ngay';
+  if (!Number.isInteger(tuoi) || tuoi < 1 || tuoi > 12) return res.status(400).json({ error: 'tuoi cần từ 1 (Tý) đến 12 (Hợi).' });
+  if (!KY[ky]) return res.status(400).json({ error: 'ky cần là ngay, tuan, thang hoặc nam.' });
+  let d = new Date();
+  d = [d.getDate(), d.getMonth() + 1, d.getFullYear()];
+  if (q.ngay) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(q.ngay);
+    const t = m && new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    if (!m || t.getMonth() !== Number(m[2]) - 1 || m[1] < 1901 || m[1] > 2199) return res.status(400).json({ error: 'ngay cần dạng YYYY-MM-DD, năm từ 1901 đến 2199.' });
+    d = [Number(m[3]), Number(m[2]), Number(m[1])];
+  }
+  let opts = null;
+  if (q.namSinh) {
+    const y = Number(q.namSinh);
+    if (!Number.isInteger(y) || y < 1900 || y > 2100) return res.status(400).json({ error: 'namSinh cần từ 1900 đến 2100.' });
+    opts = { namSinh: y, gioiTinh: q.gioiTinh === 'nu' ? 'nu' : 'nam' };
+  }
+  res.json(KY[ky](tuoi, TuVi.jdFromDate(...d), opts));
 });
 
 app.use('/api', (req, res) => res.status(404).json({ error: 'Không có API này.' }));

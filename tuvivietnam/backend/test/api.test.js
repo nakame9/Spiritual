@@ -38,6 +38,17 @@ test('thiếu hoặc sai dữ liệu trả lỗi 400 bằng tiếng Việt', asy
   assert.strictEqual(hong.status, 400);
 });
 
+test('API 12 con giáp: đúng kỳ, sao chiếu mệnh và từ chối dữ liệu sai', async () => {
+  const get = q => fetch(base + '/api/con-giap?' + q);
+  const ngay = await (await get('tuoi=1&ky=ngay&ngay=2026-10-23')).json();
+  assert.match(ngay.tieuDe, /tuổi Tý ngày 23\/10\/2026/);
+  assert.strictEqual((await (await get('tuoi=1&ky=tuan&ngay=2026-10-23')).json()).tuan.length, 7);
+  const nam = await (await get('tuoi=7&ky=nam&ngay=2026-10-23&namSinh=1990&gioiTinh=nam')).json();
+  assert.strictEqual(nam.sao.ten, 'La Hầu');
+  for (const q of ['tuoi=13', 'tuoi=1&ky=gio', 'tuoi=1&ngay=2026-02-30', 'tuoi=1&namSinh=abc'])
+    assert.strictEqual((await get(q)).status, 400, q);
+});
+
 test('phục vụ frontend và API không tồn tại', async () => {
   const home = await fetch(base + '/');
   assert.strictEqual(home.status, 200);

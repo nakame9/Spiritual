@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tử vi 12 con giáp · Lá Số Tử Vi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Tử vi 12 con giáp hôm nay, tuần này, tháng này và năm nay theo tuổi: công việc, tài lộc, tình cảm, sức khỏe, giờ hoàng đạo, sao chiếu mệnh.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
+<link rel="stylesheet" href="css/site.css">
+<style>
+/* Chọn con giáp (lưới 12 ô) → chọn kỳ (ngày/tuần/tháng/năm) → một thẻ kết quả */
+.picker { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.picker button { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 10px; align-items: center; text-align: left; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--cell); color: var(--ink); cursor: pointer; font-family: var(--f-ui); min-width: 0; }
+.picker button:hover { border-color: var(--tu); }
+.picker button:focus-visible { outline: 2px solid var(--tu); outline-offset: 2px; }
+.picker .g { grid-row: 1 / span 2; font-family: 'Noto Serif SC', 'Noto Serif CJK SC', 'Songti SC', 'SimSun', serif; font-size: 26px; line-height: 1; color: var(--tu); }
+.picker b { font-size: 15px; font-weight: 700; }
+.picker small { color: var(--soft); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.picker button[aria-pressed="true"] { background: var(--tu); border-color: var(--tu); color: var(--cell); }
+.picker button[aria-pressed="true"] .g, .picker button[aria-pressed="true"] small { color: var(--cell); }
+
+.bar { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: flex-end; }
+.bar .seg span { padding: 0 16px; }
+.f-date input { width: 170px; height: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); font: 500 15px var(--f-ui); padding: 0 10px; }
+.bar .today { height: 40px; padding: 0 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--cell); color: var(--ink); font: 500 14px var(--f-ui); cursor: pointer; }
+
+.card { background: var(--cell); border: 1px solid var(--line); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px 24px; }
+.card-head h2 { font-family: var(--f-display); font-weight: 700; font-size: clamp(22px, 3vw, 28px); line-height: 1.25; margin: 0; text-wrap: balance; }
+.card-head p { margin: 4px 0 0; color: var(--soft); font-size: 14px; }
+.rate { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.pips { display: flex; gap: 4px; }
+.pips i { width: 22px; height: 8px; border-radius: 4px; background: var(--line); }
+.pips i.on { background: currentColor; }
+.lv { font-weight: 700; font-size: 14px; }
+.lv-5, .lv-4 { color: var(--moc); } .lv-3 { color: var(--soft); } .lv-2 { color: var(--tho); } .lv-1 { color: var(--hoa); }
+.notes { margin: 0; padding: 14px 16px; background: var(--hl); border-radius: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 15px; line-height: 1.6; }
+.notes p { margin: 0; }
+.aspects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 28px; }
+.aspects h3 { margin: 0 0 4px; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); }
+.aspects p { margin: 0; font-size: 15px; line-height: 1.65; }
+.advice { margin: 0; font-size: 15px; border-left: 3px solid var(--tu); padding: 2px 0 2px 12px; }
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; padding-top: 16px; border-top: 1px dashed var(--line); font-size: 14px; }
+.facts dt { font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); margin-bottom: 2px; }
+.facts dd { margin: 0; }
+.facts .full { grid-column: 1 / -1; }
+
+.week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.day { border: 1px solid var(--line); border-radius: 8px; padding: 8px 6px; text-align: center; display: flex; flex-direction: column; gap: 3px; font-size: 12.5px; min-width: 0; }
+.day b { font-size: 13px; }
+.day .d { font-variant-numeric: tabular-nums; color: var(--soft); }
+.day .bar5 { height: 6px; border-radius: 3px; background: currentColor; opacity: .85; }
+.day.now { border-color: var(--tu); box-shadow: inset 0 0 0 1px var(--tu); }
+.day .t { font-size: 11px; color: var(--soft); overflow-wrap: anywhere; }
+
+.note { color: var(--soft); font-size: 13px; max-width: 75ch; margin: 0; }
+.sao { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: flex-end; padding: 14px 16px; border: 1px dashed var(--line); border-radius: 10px; }
+.sao p { margin: 0; flex: 1 1 100%; font-size: 14px; color: var(--soft); }
+.sao input { width: 96px; }
+.sao button { height: 40px; padding: 0 16px; border-radius: 8px; border: 0; background: var(--tu); color: var(--cell); font: 600 14px var(--f-ui); cursor: pointer; }
+
+@media (max-width: 900px) { .picker { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 640px) {
+  .picker { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .picker button { grid-template-columns: 1fr; text-align: center; justify-items: center; padding: 10px 6px; }
+  .picker .g { grid-row: auto; margin-bottom: 4px; }
+  .card { padding: 16px; }
+  .aspects { grid-template-columns: minmax(0, 1fr); }
+  .facts { grid-template-columns: minmax(0, 1fr); }
+  .rate { align-items: flex-start; }
+  .day { padding: 6px 2px; font-size: 11.5px; }
+  .day .t { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="site">
+    <a class="brand" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi</a>
+    <nav aria-label="Menu chính"><a href="index.html">Trang chủ</a><a href="la-so.html">Lập lá số</a><a href="la-so.html#luan-giai">Luận giải</a><a href="con-giap.html" aria-current="page">12 con giáp</a><a href="bai-viet.html">Bài viết</a></nav>
+  </header>
+
+  <header>
+    <p class="eyebrow">Tử vi theo tuổi</p>
+    <h1>Tử vi 12 con giáp</h1>
+    <p class="lede">Chọn tuổi của bạn để xem tử vi hôm nay, tuần này, tháng này và năm nay: công việc, tài lộc, tình cảm, sức khỏe, giờ hoàng đạo và sao chiếu mệnh.</p>
+  </header>
+
+  <div class="picker" id="picker" role="group" aria-label="Chọn con giáp"></div>
+
+  <div class="bar">
+    <fieldset class="f"><legend>Xem theo</legend>
+      <div class="seg" id="ky">
+        <label><input type="radio" name="ky" value="ngay" id="ky-ngay" checked><span>Hôm nay</span></label>
+        <label><input type="radio" name="ky" value="tuan" id="ky-tuan"><span>Tuần</span></label>
+        <label><input type="radio" name="ky" value="thang" id="ky-thang"><span>Tháng</span></label>
+        <label><input type="radio" name="ky" value="nam" id="ky-nam"><span>Năm</span></label>
+      </div>
+    </fieldset>
+    <label class="f f-date"><span id="date-label">Ngày xem</span><input type="date" id="ngay" min="1901-01-01" max="2199-12-31"></label>
+    <button type="button" class="today" id="today">Về hôm nay</button>
+  </div>
+
+  <article class="card" id="out" aria-live="polite"></article>
+
+  <p class="note">Nội dung được tạo tự động từ quan hệ can chi giữa tuổi của bạn với ngày, tháng, năm (tam hợp, lục hợp, xung, hình, hại, phá), cùng ngày giờ hoàng đạo, Thái Tuế, Tam tai và sao chiếu mệnh theo quan niệm dân gian. Chỉ để tham khảo.</p>
+  <footer class="foot"><span>Lá Số Tử Vi · an sao phái Việt, lịch âm theo thuật toán Hồ Ngọc Đức</span><span>Nội dung chỉ để tham khảo.</span></footer>
+</div>
+
+<script src="js/tuvi.js"></script>
+<script src="js/congiap.js"></script>
+<script>
+(function () {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const CHI = TuVi.CHI;
+  const KEY = 'congiap-chon', LASO = 'laso-tuvi-input';
+  const pad = n => String(n).padStart(2, '0');
+  const homNay = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+  const chiNam = y => (y + 8) % 12 + 1;
+  const load = k => { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } };
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { /* bỏ qua */ } };
+
+  // Mặc định: tuổi đã chọn lần trước, hoặc tuổi theo năm sinh đã nhập ở trang lá số
+  const laSo = load(LASO);
+  const st = Object.assign({ tuoi: laSo && laSo.namSinh ? chiNam(laSo.namSinh) : 1, ky: 'ngay', namSinh: laSo && laSo.namSinh || '', gioiTinh: laSo && laSo.nam === false ? 'nu' : 'nam' }, load(KEY) || {});
+  $('ky-' + st.ky).checked = true;
+  $('ngay').value = homNay();
+
+  const now = new Date().getFullYear();
+  const namGan = t => { const out = []; for (let y = now - 1; out.length < 2; y--) if (chiNam(y) === t) out.unshift(y); return out.join(' · '); };
+  $('picker').innerHTML = [...Array(12).keys()].map(i => {
+    const c = ConGiap.conGiap(i + 1);
+    return `<button type="button" data-t="${i + 1}" aria-label="Tuổi ${c.chi}, con ${c.con}"><span class="g" aria-hidden="true">${c.han}</span><b>${c.chi} · ${c.con}</b><small>${namGan(i + 1)}</small></button>`;
+  }).join('');
+
+  const THU = { 'Thứ Hai': 'T2', 'Thứ Ba': 'T3', 'Thứ Tư': 'T4', 'Thứ Năm': 'T5', 'Thứ Sáu': 'T6', 'Thứ Bảy': 'T7', 'Chủ nhật': 'CN' };
+  const pips = n => `<span class="pips" aria-hidden="true">${[1, 2, 3, 4, 5].map(i => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</span>`;
+
+  function render() {
+    document.querySelectorAll('#picker button').forEach(b => b.setAttribute('aria-pressed', Number(b.dataset.t) === st.tuoi));
+    $('date-label').textContent = { ngay: 'Ngày xem', tuan: 'Tuần có ngày', thang: 'Tháng có ngày', nam: 'Năm có ngày' }[st.ky];
+    const [y, m, d] = ($('ngay').value || homNay()).split('-').map(Number);
+    const jd = TuVi.jdFromDate(d, m, y);
+    const opts = st.namSinh ? { namSinh: Number(st.namSinh), gioiTinh: st.gioiTinh } : null;
+    const r = { ngay: ConGiap.tuViNgay, tuan: ConGiap.tuViTuan, thang: ConGiap.tuViThang, nam: ConGiap.tuViNam }[st.ky](st.tuoi, jd, opts);
+    const h = [];
+    h.push(`<div class="card-head"><div><h2>${r.tieuDe}</h2><p>${r.phu}</p></div>
+      <div class="rate lv-${r.diem}">${pips(r.diem)}<span class="lv">${r.nhan}</span></div></div>`);
+    if (r.tuan) h.push(`<div class="week">${r.tuan.map(x => `<div class="day${x.hienTai ? ' now' : ''}" title="${x.thu} ${x.duong}: ${['', 'Không thuận', 'Cần thận trọng', 'Bình thường', 'Tốt', 'Rất tốt'][x.diem]}, ngày ${x.canChi}, ${x.than}">
+      <b>${THU[x.thu]}</b><span class="d">${x.duong.split('/').slice(0, 2).join('/')}</span><span class="bar5 lv-${x.diem}"></span><span class="t">${x.than}</span></div>`).join('')}</div>`);
+    h.push(`<div class="notes">${r.dong.map(x => `<p>${x}</p>`).join('')}</div>`);
+    if (r.ky === 'nam') h.push(`<form class="sao" id="sao-form" novalidate>
+      <p>${r.sao ? 'Đổi năm sinh để xem sao chiếu mệnh của người khác.' : 'Nhập năm sinh để xem sao chiếu mệnh năm nay.'}</p>
+      <label class="f"><span>Năm sinh</span><input type="number" id="nam-sinh" inputmode="numeric" min="1900" max="2100" value="${st.namSinh}"></label>
+      <fieldset class="f"><legend>Giới tính</legend><div class="seg">
+        <label><input type="radio" name="sao-gt" id="sao-nam" ${st.gioiTinh !== 'nu' ? 'checked' : ''}><span>Nam</span></label>
+        <label><input type="radio" name="sao-gt" id="sao-nu" ${st.gioiTinh === 'nu' ? 'checked' : ''}><span>Nữ</span></label></div></fieldset>
+      <button type="submit">Xem sao</button></form>`);
+    h.push(`<div class="aspects">${r.muc.map(x => `<section><h3>${x.ten}</h3><p>${x.text}</p></section>`).join('')}</div>`);
+    h.push(`<p class="advice"><b>Lời khuyên:</b> ${r.loiKhuyen}</p>`);
+    h.push(`<dl class="facts">${r.gioTot ? `<div class="full"><dt>Giờ hoàng đạo</dt><dd>${r.gioTot.join(', ')}</dd></div>` : ''}
+      <div><dt>Màu may mắn</dt><dd>${r.mau}</dd></div><div><dt>Con số may mắn</dt><dd>${r.so}</dd></div></dl>`);
+    $('out').innerHTML = h.join('\n');
+  }
+
+  $('picker').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    st.tuoi = Number(b.dataset.t);
+    if (st.namSinh && chiNam(Number(st.namSinh)) !== st.tuoi) st.namSinh = ''; // năm sinh cũ không còn đúng tuổi
+    save(); render();
+  });
+  $('ky').addEventListener('change', e => { st.ky = e.target.value; save(); render(); });
+  $('ngay').addEventListener('change', render);
+  $('today').addEventListener('click', () => { $('ngay').value = homNay(); render(); });
+  $('out').addEventListener('submit', e => {
+    e.preventDefault();
+    const y = Number($('nam-sinh').value);
+    if (!Number.isInteger(y) || y < 1900 || y > 2100) { $('nam-sinh').setCustomValidity('Năm sinh từ 1900 đến 2100'); $('nam-sinh').reportValidity(); return; }
+    Object.assign(st, { namSinh: y, gioiTinh: $('sao-nu').checked ? 'nu' : 'nam', tuoi: chiNam(y) });
+    save(); render();
+  });
+  $('out').addEventListener('input', e => { if (e.target.id === 'nam-sinh') e.target.setCustomValidity(''); });
+  render();
+})();
+</script>
+</body>
+</html>

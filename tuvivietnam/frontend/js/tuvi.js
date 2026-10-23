@@ -306,6 +306,6 @@
     };
   }
 
-  const TuVi = { lapLaSo, solar2lunar, lunar2solar, jdFromDate, CHI, CAN };
+  const TuVi = { lapLaSo, solar2lunar, lunar2solar, jdFromDate, jdToDate, CHI, CAN };
   if (typeof module !== 'undefined' && module.exports) module.exports = TuVi; else root.TuVi = TuVi;
 })(typeof window !== 'undefined' ? window : globalThis);
