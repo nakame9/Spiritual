@@ -20,7 +20,9 @@ Tarot/
     └── test/               Kiểm tra bộ bài và API
 ```
 
-Trang xem bài nhận `#1la`, `#3la`, `#tinhcam` hoặc `#tinhyeu`, `#sunghiep`, `#taichinh`, `#banthan`, `#tongquan` trên đường dẫn để chọn sẵn kiểu trải hoặc chủ đề (trang chủ dùng cách này).
+Có 5 kiểu trải: 1 lá, 3 lá (Quá khứ, Hiện tại, Tương lai), 3 lá Tình cảm, 5 lá chữ thập và 10 lá Thập tự Celtic (lá 2 nằm ngang đè lên lá 1). Kiểu trải 5 và 10 lá có thêm `luoi` để vẽ đúng sơ đồ đặt lá.
+
+Trang xem bài nhận `#1la`, `#3la`, `#tinhcam`, `#5la`, `#10la` hoặc `#tinhyeu`, `#sunghiep`, `#taichinh`, `#banthan`, `#tongquan` trên đường dẫn để chọn sẵn kiểu trải hoặc chủ đề (trang chủ dùng cách này).
 
 Khi xáo, bộ bài tách đôi rồi trộn xen kẽ 3 lượt, sau đó các lá được chia ra thành hàng. Người dùng bật chế độ giảm chuyển động trên máy thì bỏ qua hiệu ứng. Hiệu ứng chỉ để trình diễn; thứ tự lá đã được xáo ngẫu nhiên trước đó.
 
@@ -46,7 +48,7 @@ npm test
 
 | Phương thức | Đường dẫn | Mô tả |
 |---|---|---|
-| `POST` | `/api/rut-bai` | Xáo bộ bài và rút theo kiểu trải. Gửi `{ "kieu": "1la" \| "3la" \| "tinhcam", "chuDe": "tongquan" \| "tinhyeu" \| "sunghiep" \| "taichinh" \| "banthan", "nguoc": true, "cauHoi": "..." }` (đều không bắt buộc; mặc định `3la`, `tongquan`, có lá ngược). Trả về `{ cauHoi, kieu, tenKieu, chuDe, tenChuDe, la: [...], tongQuan: [...] }`; mỗi lá có `y` (ý nghĩa theo chủ đề) và `yChung` (ý nghĩa chung, khi chủ đề khác Tổng quan) |
+| `POST` | `/api/rut-bai` | Xáo bộ bài và rút theo kiểu trải. Gửi `{ "kieu": "1la" \| "3la" \| "tinhcam" \| "5la" \| "10la", "chuDe": "tongquan" \| "tinhyeu" \| "sunghiep" \| "taichinh" \| "banthan", "nguoc": true, "cauHoi": "..." }` (đều không bắt buộc; mặc định `3la`, `tongquan`, có lá ngược). Trả về `{ cauHoi, kieu, tenKieu, chuDe, tenChuDe, la: [...], tongQuan: [...] }`; mỗi lá có `y` (ý nghĩa theo chủ đề) và `yChung` (ý nghĩa chung, khi chủ đề khác Tổng quan) |
 | `GET` | `/api/bo-bai` | Cả 78 lá với ý nghĩa xuôi và ngược |
 | `GET` | `/api/la-bai/:id` | Một lá, `id` từ 0 đến 77 (0–21 Ẩn Chính; 22–35 Gậy, 36–49 Cốc, 50–63 Kiếm, 64–77 Tiền, mỗi bộ từ Át đến Vua) |
 | `GET` | `/api/kieu-trai` | Các kiểu trải bài và ý nghĩa từng vị trí |

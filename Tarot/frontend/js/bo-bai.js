@@ -125,6 +125,17 @@
     '1la': { ten: 'Lá bài hôm nay', moTa: 'Một lá cho thông điệp bạn cần lúc này.', viTri: [['Thông điệp', 'Điều bạn cần lưu ý lúc này']] },
     '3la': { ten: 'Quá khứ, Hiện tại, Tương lai', moTa: 'Ba lá cho dòng chảy của một vấn đề.', viTri: [['Quá khứ', 'Điều đã dẫn tới tình huống hiện tại'], ['Hiện tại', 'Tình hình và năng lượng lúc này'], ['Tương lai', 'Hướng đi nếu mọi việc tiếp diễn như hiện tại']] },
     'tinhcam': { ten: 'Tình cảm', moTa: 'Ba lá cho bạn, người ấy và mối quan hệ.', viTri: [['Bạn', 'Cảm xúc và mong muốn của bạn'], ['Người ấy', 'Cảm xúc và suy nghĩ của người kia'], ['Mối quan hệ', 'Hướng phát triển của mối quan hệ']] },
+    // luoi: sơ đồ đặt lá trên lưới [hàng, cột, 'x' nếu lá nằm ngang]
+    '5la': { ten: 'Năm lá chữ thập', moTa: 'Năm lá cho nguyên nhân, diễn biến và lời khuyên.', viTri: [
+      ['Quá khứ', 'Điều đã dẫn tới tình huống hiện tại'], ['Hiện tại', 'Tình hình và năng lượng lúc này'], ['Tương lai', 'Hướng đi nếu mọi việc tiếp diễn'],
+      ['Gốc rễ', 'Nguyên nhân sâu xa của vấn đề'], ['Lời khuyên', 'Điều bạn nên làm hoặc lưu ý']],
+      luoi: { cot: 3, o: [[2, 1], [2, 2], [2, 3], [3, 2], [1, 2]] } },
+    '10la': { ten: 'Thập tự Celtic', moTa: 'Mười lá cho cái nhìn toàn diện về một vấn đề lớn.', viTri: [
+      ['Hiện tại', 'Tình hình cốt lõi của vấn đề'], ['Thử thách', 'Điều đang cản trở hoặc cần vượt qua'], ['Nền tảng', 'Gốc rễ sâu xa, điều nằm bên dưới vấn đề'],
+      ['Quá khứ gần', 'Điều vừa qua và đang lùi dần'], ['Mục tiêu', 'Điều bạn mong muốn hoặc đang hướng tới'], ['Tương lai gần', 'Điều sắp đến trong thời gian tới'],
+      ['Bản thân', 'Thái độ và cách bạn nhìn vấn đề'], ['Môi trường', 'Người xung quanh và hoàn cảnh bên ngoài'], ['Hy vọng và lo sợ', 'Điều bạn mong và điều bạn ngại'],
+      ['Kết quả', 'Kết cục nếu mọi việc tiếp diễn như hiện tại']],
+      luoi: { cot: 4, o: [[2, 2], [2, 2, 'x'], [3, 2], [2, 1], [1, 2], [2, 3], [4, 4], [3, 4], [2, 4], [1, 4]] } },
   };
 
   // Số ngẫu nhiên an toàn trong [0, n): trình duyệt dùng crypto.getRandomValues, Node dùng crypto.randomInt
@@ -156,8 +167,9 @@
     const out = [], n = la.length, cd = CHU_DE[chuDe];
     if (cd && cd.bo) {
       const so = la.filter(l => l.bo === cd.bo).length, b = THONG_TIN_BO[cd.bo];
-      out.push(so ? `Có ${so} lá bộ ${b.ten}, bộ gắn với chuyện ${cd.ten.toLowerCase()}: câu trả lời cho câu hỏi của bạn khá rõ ràng.`
-        : `Không có lá bộ ${b.ten} (bộ gắn với ${cd.ten.toLowerCase()}): chuyện ${cd.ten.toLowerCase()} lúc này chịu ảnh hưởng nhiều từ các mặt khác trong cuộc sống.`);
+      out.push(!so ? `Không có lá bộ ${b.ten} (bộ gắn với ${cd.ten.toLowerCase()}): chuyện ${cd.ten.toLowerCase()} lúc này chịu ảnh hưởng nhiều từ các mặt khác trong cuộc sống.`
+        : so >= Math.ceil(n * 0.3) ? `Có ${so} lá bộ ${b.ten}, bộ gắn với chuyện ${cd.ten.toLowerCase()}: câu trả lời cho câu hỏi của bạn khá rõ ràng.`
+        : `Có ${so} lá bộ ${b.ten} (bộ gắn với ${cd.ten.toLowerCase()}): chủ đề này có mặt trong trải bài nhưng chưa phải trọng tâm.`);
     }
     if (n === 1) {
       const l = la[0];
@@ -165,11 +177,11 @@
         : `${l.ten} thuộc bộ ${THONG_TIN_BO[l.bo].ten} (${THONG_TIN_BO[l.bo].nguyenTo}): hôm nay hãy chú ý chuyện ${THONG_TIN_BO[l.bo].chuDe}.`);
     } else {
       const chinh = la.filter(l => l.nhom === 'anChinh').length;
-      if (chinh >= 2) out.push(`Có ${chinh}/${n} lá Ẩn Chính: đây là giai đoạn có ý nghĩa lớn, mang những bài học quan trọng hơn là chuyện thường ngày.`);
+      if (chinh >= Math.max(2, Math.ceil(n * 0.4))) out.push(`Có ${chinh}/${n} lá Ẩn Chính: đây là giai đoạn có ý nghĩa lớn, mang những bài học quan trọng hơn là chuyện thường ngày.`);
       else if (chinh === 0) out.push('Không có lá Ẩn Chính: vấn đề nằm trong tầm tay bạn, phụ thuộc nhiều vào lựa chọn hằng ngày.');
       const dem = {};
       la.forEach(l => { if (l.bo) dem[l.bo] = (dem[l.bo] || 0) + 1; });
-      Object.entries(dem).filter(([, c]) => c >= 2).forEach(([b, c]) =>
+      Object.entries(dem).filter(([, c]) => c >= Math.max(2, Math.ceil(n * 0.4))).forEach(([b, c]) =>
         out.push(`${c} lá bộ ${THONG_TIN_BO[b].ten} (${THONG_TIN_BO[b].nguyenTo}): trọng tâm là ${THONG_TIN_BO[b].chuDe}.`));
     }
     const nguoc = la.filter(l => l.nguoc).length;

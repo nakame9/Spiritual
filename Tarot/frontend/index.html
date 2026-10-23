@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tarot · Lá Số Tử Vi</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Xem bài Tarot online bằng tiếng Việt: tự xáo bài, tự chọn lá, ba kiểu trải bài, năm chủ đề Tình yêu, Sự nghiệp, Tài chính, Bản thân, Tổng quan.">
+<meta name="description" content="Xem bài Tarot online bằng tiếng Việt: tự xáo bài, tự chọn lá, trải 1, 3, 5 hoặc 10 lá, năm chủ đề Tình yêu, Sự nghiệp, Tài chính, Bản thân, Tổng quan.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
@@ -44,6 +44,7 @@
 
   <section class="block" aria-labelledby="h-trai">
     <h2 id="h-trai">Các kiểu trải bài</h2>
+    <p class="lede">Chọn 1, 3, 5 hoặc 10 lá tùy câu hỏi đơn giản hay phức tạp. Số trên sơ đồ là thứ tự đặt lá.</p>
     <div class="spread-list" id="spreads"></div>
   </section>
 
@@ -72,11 +73,12 @@
   const { theLa } = LaBai, B = Tarot.BO_BAI;
   $('fan').innerHTML = [19, 17, 36].map(id => theLa(B[id], false, 'static')).join('');
 
-  // Kiểu trải bài: sơ đồ vị trí bằng lá úp, bấm để trải ngay
+  // Kiểu trải bài: sơ đồ đánh số đúng vị trí đặt lá, bấm để trải ngay
+  const w = n => n >= 10 ? '34px' : n >= 5 ? '40px' : '52px';
   $('spreads').innerHTML = Object.entries(Tarot.KIEU_TRAI).map(([k, t]) => `<article class="spread">
-    <div class="layout" style="--n:${t.viTri.length}">${t.viTri.map(([ten]) => `<div class="pos-card">${theLa(null)}<span>${ten}</span></div>`).join('')}</div>
-    <div><h3>${t.ten}</h3><p class="muted">${t.viTri.length} lá · ${t.moTa}</p>
-    <ul>${t.viTri.map(([ten, y]) => `<li><b>${ten}:</b> ${y.charAt(0).toLowerCase() + y.slice(1)}</li>`).join('')}</ul></div>
+    <div class="layout">${LaBai.soDo(t, (i, ngang) => `<div class="pos-card">${theLa(null)}${ngang ? '' : `<span>${i + 1}</span>`}</div>`, w(t.viTri.length))}</div>
+    <div><h3><span class="so">${t.viTri.length} lá</span> ${t.ten}</h3><p class="muted">${t.moTa}</p>
+    <ol>${t.viTri.map(([ten, y], i) => `<li><b>${ten}${t.luoi && t.luoi.o[i][2] ? ' (lá nằm ngang)' : ''}:</b> ${y.charAt(0).toLowerCase() + y.slice(1)}</li>`).join('')}</ol></div>
     <a class="btn primary" href="xem-bai.html#${k}">Trải bài này</a></article>`).join('');
 
   $('topics').innerHTML = Object.entries(Tarot.CHU_DE).map(([k, c]) => `<a class="topic" href="xem-bai.html#${k}"><b>${c.ten}</b><span>${c.moTa}</span></a>`).join('');

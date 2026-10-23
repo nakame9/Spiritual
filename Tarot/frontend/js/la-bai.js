@@ -63,5 +63,12 @@
   const theLa = (c, nguoc, lop) => `<div class="card ${lop || ''}"><div class="in"><div class="back">${lungLa}</div>
     <div class="face${nguoc ? ' rev' : ''}">${c ? matLa(c) : ''}</div></div></div>`;
 
-  root.LaBai = { theLa, matLa, esc };
+  /** Sơ đồ trải bài: hàng ngang, hoặc lưới khi kiểu trải có `luoi`. o(i, ngang) trả về nội dung ô thứ i. */
+  function soDo(t, o, w) {
+    if (!t.luoi) return `<div class="sodo" style="--cot:${t.viTri.length}; --w:${w}">${t.viTri.map((v, i) => `<div class="o">${o(i, false)}</div>`).join('')}</div>`;
+    return `<div class="sodo" style="--cot:${t.luoi.cot}; --w:${w}">${t.luoi.o.map(([h, c, x], i) =>
+      `<div class="o${x ? ' ngang' : ''}" style="grid-row:${h}; grid-column:${c}">${o(i, !!x)}</div>`).join('')}</div>`;
+  }
+
+  root.LaBai = { theLa, matLa, esc, soDo };
 })(window);

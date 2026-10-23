@@ -2,11 +2,15 @@
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
-  const { theLa, esc } = LaBai;
+  const { theLa, esc, soDo } = LaBai;
   const giam = matchMedia('(prefers-reduced-motion: reduce)');
   const co = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 
-  // Mở từ trang chủ với #3la, #tinhcam, #tinhyeu… thì chọn sẵn kiểu trải hoặc chủ đề
+  // Ô chọn kiểu trải, xếp theo số lá
+  $('spreads').innerHTML = Object.entries(Tarot.KIEU_TRAI).map(([k, t]) => `<label><input type="radio" name="kieu" id="kieu-${k}" value="${k}"${k === '3la' ? ' checked' : ''}>
+    <span><em class="so">${t.viTri.length}</em><b>${t.ten}</b><small>${t.viTri.length} lá · ${t.moTa}</small></span></label>`).join('');
+
+  // Mở từ trang chủ với #3la, #10la, #tinhyeu… thì chọn sẵn kiểu trải hoặc chủ đề
   const h = decodeURIComponent(location.hash.slice(1));
   if (co(Tarot.KIEU_TRAI, h)) $('kieu-' + h).checked = true;
   if (co(Tarot.CHU_DE, h)) document.querySelector(`input[name="chude"][value="${h}"]`).checked = true;
@@ -22,14 +26,15 @@
   }
   matchMedia('(max-width: 760px)').addEventListener('change', () => { if (st.xao.length && !st.dangXao) veDeck(); });
 
+  // Bề rộng lá trong sơ đồ: trải càng nhiều lá thì lá càng nhỏ, co theo màn hình
+  const BE_RONG = n => n >= 10 ? 'clamp(54px, 13vw, 88px)' : n >= 5 ? 'clamp(64px, 19vw, 108px)' : 'clamp(88px, 27vw, 160px)';
   function veSlots() {
-    const k = Tarot.KIEU_TRAI[st.kieu];
-    $('slots').style.setProperty('--n', k.viTri.length);
-    $('slots').innerHTML = k.viTri.map((v, i) => {
-      const c = st.chon[i];
-      return `<div class="slot"><span class="pos">${v[0]}</span>${c ? theLa(Tarot.BO_BAI[c.id], c.nguoc) : '<div class="empty"></div>'}</div>`;
-    }).join('');
-    $('count').textContent = `${st.chon.length}/${k.viTri.length}`;
+    const k = Tarot.KIEU_TRAI[st.kieu], n = k.viTri.length;
+    $('slots').innerHTML = soDo(k, (i, ngang) => {
+      const c = st.chon[i], nhan = k.luoi ? `${i + 1}. ${k.viTri[i][0]}` : k.viTri[i][0];
+      return `<div class="slot">${c ? theLa(Tarot.BO_BAI[c.id], c.nguoc) : '<div class="empty"></div>'}${ngang ? '' : `<span class="pos">${nhan}</span>`}</div>`;
+    }, BE_RONG(n)) + (k.luoi ? `<ol class="chu-giai">${k.viTri.map(([t], i) => `<li>${t}${k.luoi.o[i][2] ? ' (lá nằm ngang)' : ''}</li>`).join('')}</ol>` : '');
+    $('count').textContent = `${st.chon.length}/${n}`;
   }
   function capNhatNut() {
     $('ngau-nhien').disabled = st.dangXao || st.chon.length >= soLa();
@@ -97,7 +102,7 @@
   }
 
   function lat() {
-    const cards = [...$('slots').querySelectorAll('.card')], buoc = giam.matches ? 0 : 450;
+    const cards = [...$('slots').querySelectorAll('.card')], buoc = giam.matches ? 0 : (cards.length > 5 ? 220 : 450);
     cards.forEach((el, i) => setTimeout(() => el.classList.add('up'), 250 + i * buoc));
     setTimeout(docKetQua, 250 + cards.length * buoc + (giam.matches ? 0 : 500));
   }
