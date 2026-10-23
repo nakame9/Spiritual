@@ -152,15 +152,124 @@
     return ids.map(id => ({ id, nguoc: coNguoc && rand(2) === 1 }));
   }
 
+  // Lá mang sắc thái nặng khi xuôi (khi ngược thường là hồi phục, gỡ ra): dùng để đoán chiều thuận/nghịch của từng lá
+  const NANG = new Set([15, 16, 18, 26, 31, 40, 51, 52, 54, 56, 57, 58, 59, 68]);
+  const thuan = l => NANG.has(l.id) === !!l.nguoc; // xuôi lá thường, hoặc ngược lá nặng
+  const noiTu = ds => ds.length > 1 ? `${ds.slice(0, -1).join(', ')} và ${ds[ds.length - 1]}` : ds[0];
+  const tuKhoa = (l, n = 3) => noiTu(l.tuKhoa.split(', ').slice(0, n));
+
+  // Ý nghĩa theo vị trí: [khi lá thuận, khi lá nghịch]; {k} là từ khóa của lá theo chiều đã rút
+  const VI_TRI = {
+    'Thông điệp': ['Lời nhắn dành cho bạn lúc này xoay quanh {k}. Hãy mang tinh thần đó theo mình trong ngày.', 'Lời nhắn lúc này là hãy để ý tới {k}. Nhận ra sớm thì bạn sẽ dễ điều chỉnh hơn.'],
+    'Quá khứ': ['Những gì đã qua mang dấu ấn của {k}. Đó là nền đã đưa bạn tới tình huống hôm nay.', 'Chuyện đã qua để lại {k}. Có thể điều đó chưa khép lại hẳn và vẫn còn ảnh hưởng tới bây giờ.'],
+    'Hiện tại': ['Lúc này, năng lượng chính quanh vấn đề là {k}. Đây là điểm tựa bạn đang có.', 'Lúc này bạn đang đối mặt với {k}. Đây là điểm cần nhìn thẳng và gỡ trước tiên.'],
+    'Tương lai': ['Nếu giữ hướng đi hiện tại, phía trước là {k}.', 'Nếu không thay đổi gì, phía trước có thể là {k}. Tương lai này chưa cố định, bạn vẫn xoay chuyển được.'],
+    'Bạn': ['Về phía bạn, cảm xúc và mong muốn đang nghiêng về {k}.', 'Về phía bạn, trong lòng đang mang {k}, có thể bạn chưa nói ra hoặc chưa tự nhận ra.'],
+    'Người ấy': ['Về phía người ấy, điều họ cảm nhận và hướng tới là {k}.', 'Về phía người ấy, họ đang mang {k}, nên có thể chưa thể hiện hết lòng mình.'],
+    'Mối quan hệ': ['Mối quan hệ đang phát triển theo hướng {k}.', 'Mối quan hệ đang gặp {k}. Hai người cần thẳng thắn với nhau để tìm cách gỡ.'],
+    'Gốc rễ': ['Nguyên nhân sâu xa của vấn đề nằm ở {k}, và đó cũng là nguồn lực bạn có thể dựa vào.', 'Sâu bên dưới vấn đề là {k}, điều có thể bạn đang né tránh hoặc chưa nhìn thẳng vào.'],
+    'Lời khuyên': ['Lời khuyên dành cho bạn: hãy dựa vào {k}.', 'Lời khuyên dành cho bạn: hãy cẩn thận với {k}. Tránh được điều này, bạn sẽ đi đúng hướng hơn.'],
+    'Thử thách': ['Điều cần vượt qua lúc này là {k}. Đây là thử thách vừa sức, cũng là cơ hội để bạn lớn lên.', 'Trở ngại chính là {k}. Đây là nút thắt cần gỡ trước khi đi tiếp.'],
+    'Nền tảng': ['Bên dưới tất cả là {k}, một nền tảng vững để bạn dựa vào.', 'Bên dưới tất cả là {k}, gốc rễ của những gì đang diễn ra.'],
+    'Quá khứ gần': ['Điều vừa qua là {k}, và nó đang lùi dần để nhường chỗ cho chuyện mới.', 'Điều vừa qua là {k}. Nó đang lùi dần, bạn không cần mang theo nữa.'],
+    'Mục tiêu': ['Điều bạn mong muốn hoặc đang hướng tới là {k}.', 'Trong điều bạn đang hướng tới có lẫn {k}. Hãy xem lại mục tiêu này có thật sự là của bạn không.'],
+    'Tương lai gần': ['Thời gian tới sẽ mang đến {k}.', 'Thời gian tới có thể gặp {k}, nên chuẩn bị tinh thần từ bây giờ.'],
+    'Bản thân': ['Cách bạn đang đối diện vấn đề mang tinh thần {k}.', 'Cách bạn nhìn vấn đề đang bị ảnh hưởng bởi {k}, nên có thể bạn chưa thấy hết bức tranh.'],
+    'Môi trường': ['Người xung quanh và hoàn cảnh bên ngoài mang tới {k}.', 'Từ bên ngoài, bạn có thể gặp {k} từ người xung quanh hoặc hoàn cảnh.'],
+    'Hy vọng và lo sợ': ['Điều bạn thầm mong là {k}, và cũng chính điều đó khiến bạn hồi hộp.', 'Điều bạn lo sợ là {k}. Gọi tên nỗi sợ là bước đầu để nó nhẹ đi.'],
+    'Kết quả': ['Nếu mọi việc tiếp diễn như hiện tại, kết quả sẽ là {k}.', 'Nếu mọi việc tiếp diễn như hiện tại, kết quả có thể là {k}. Bạn vẫn đổi được điều này bằng những lựa chọn từ bây giờ.'],
+  };
+  function theoViTri(viTri, moTa, l) {
+    const mau = VI_TRI[viTri];
+    return mau ? mau[thuan(l) ? 0 : 1].replace('{k}', tuKhoa(l)) : `${moTa}: ${tuKhoa(l)}.`;
+  }
+
   /** Ghép kết quả cho các lá đã chọn: chon = [{ id, nguoc }] theo thứ tự vị trí */
   function docBai(kieu, chon, chuDe = 'tongquan') {
     const k = KIEU_TRAI[kieu], rieng = chuDe !== 'tongquan';
     const la = chon.map((c, i) => {
       const card = BO_BAI[c.id], chieu = c.nguoc ? 'nguoc' : 'xuoi', m = card[chieu];
-      return { viTri: k.viTri[i][0], yViTri: k.viTri[i][1], id: card.id, ten: card.ten, tenEn: card.tenEn, so: card.so, nhom: card.nhom, bo: card.bo,
+      const l = { viTri: k.viTri[i][0], yViTri: k.viTri[i][1], id: card.id, ten: card.ten, tenEn: card.tenEn, so: card.so, nhom: card.nhom, bo: card.bo,
         nguoc: !!c.nguoc, tuKhoa: m.tuKhoa, y: rieng ? card.chuDe[chuDe][chieu] : m.y, yChung: rieng ? m.y : null };
+      l.yTheoViTri = theoViTri(l.viTri, l.yViTri, l);
+      return l;
     });
-    return { kieu, tenKieu: k.ten, chuDe, tenChuDe: CHU_DE[chuDe].ten, la, tongQuan: tongQuan(la, chuDe) };
+    return { kieu, tenKieu: k.ten, chuDe, tenChuDe: CHU_DE[chuDe].ten, la, luanGiai: luanGiai(kieu, la, chuDe), tongQuan: tongQuan(la, chuDe) };
+  }
+
+  /** Bài đọc liền mạch: mở bài (sắc thái chung) → các đoạn nối lá theo cấu trúc kiểu trải → lời nhắn chung */
+  function luanGiai(kieu, la, chuDe) {
+    const n = la.length, cd = chuDe === 'tongquan' ? 'vấn đề của bạn' : `chuyện ${CHU_DE[chuDe].ten.toLowerCase()}`;
+    const goi = l => l.ten + (l.nguoc ? ' ngược' : '');
+    const k2 = l => tuKhoa(l, 2), k1 = l => tuKhoa(l, 1);
+    const noi = (a, b) => thuan(a) ? (thuan(b) ? 'rồi tiếp nối bằng' : 'nhưng sau đó gặp') : (thuan(b) ? 'rồi dần chuyển sang' : 'và tiếp tục với');
+    const bo = l => THONG_TIN_BO[l.bo];
+    const out = [];
+
+    if (n === 1) {
+      const a = la[0];
+      out.push(`${goi(a)} là lá dành cho ${cd} lúc này. ${a.nhom === 'anChinh' ? 'Đây là một lá Ẩn Chính, nên thông điệp có sức nặng hơn chuyện thường ngày.' : `Lá thuộc bộ ${bo(a).ten} (${bo(a).nguyenTo}), gắn với ${bo(a).chuDe}.`}`);
+      out.push(thuan(a) ? `Năng lượng của lá đang thuận chiều: hãy tận dụng ${tuKhoa(a)} để đi tiếp.` : `Lá nhắc bạn để ý tới ${tuKhoa(a)} trước khi đi tiếp. Nhận ra điều này đã là một nửa lời giải.`);
+      return out;
+    }
+
+    // Mở bài: sắc thái chung, lá Ẩn Chính, bộ nổi bật
+    const tb = la.reduce((s, l) => s + (thuan(l) ? 1 : -1), 0) / n;
+    let mo = `Nhìn chung, trải bài cho thấy ${cd} đang ở giai đoạn ${tb >= 0.5 ? 'khá thuận lợi' : tb <= -0.5 ? 'nhiều thử thách' : 'đan xen giữa thuận lợi và thử thách'}`;
+    const chinh = la.filter(l => l.nhom === 'anChinh').length;
+    if (chinh >= Math.max(2, Math.ceil(n * 0.4))) mo += `, với ${chinh} lá Ẩn Chính báo hiệu một bước ngoặt quan trọng`;
+    const dem = {};
+    la.forEach(l => { if (l.bo) dem[l.bo] = (dem[l.bo] || 0) + 1; });
+    const [boManh, soManh] = Object.entries(dem).sort((x, y) => y[1] - x[1])[0] || [];
+    if (soManh >= Math.max(2, Math.ceil(n * 0.4))) mo += `. Các lá nghiêng về bộ ${THONG_TIN_BO[boManh].ten}, nên trọng tâm là ${THONG_TIN_BO[boManh].chuDe}`;
+    out.push(mo + '.');
+
+    const dongThoiGian = (a, b, c) => {
+      const xu = thuan(a) !== thuan(c) ? (thuan(c) ? 'Xu hướng chung đang đi lên: mọi việc sáng dần so với trước.' : 'Xu hướng đang đi xuống so với trước, nên đây là lúc cần chủ động điều chỉnh.')
+        : thuan(a) !== thuan(b) ? (thuan(c) ? 'Hiện tại là đoạn trũng giữa hai giai đoạn thuận lợi: vượt qua được thì mọi việc sẽ sáng lại.' : 'Hiện tại có một điểm sáng, cần giữ vững để không trượt lại khó khăn cũ.')
+        : thuan(c) ? 'Dòng chảy khá ổn định và thuận chiều.' : 'Những khó khăn có xu hướng kéo dài nếu bạn không thay đổi cách làm.';
+      return `Câu chuyện bắt đầu từ ${goi(a)}, mang dấu ấn ${k2(a)}, ${noi(a, b)} ${goi(b)} ở hiện tại, nơi ${k2(b)} là điều nổi bật. Nếu giữ hướng này, ${goi(c)} cho thấy phía trước là ${k2(c)}. ${xu}`;
+    };
+    const L = la;
+    if (kieu === '3la') out.push(dongThoiGian(L[0], L[1], L[2]));
+    else if (kieu === '5la') {
+      out.push(dongThoiGian(L[0], L[1], L[2]));
+      out.push(`Gốc rễ của mọi chuyện là ${goi(L[3])} (${k2(L[3])}), ${thuan(L[3]) ? 'một điểm tựa tốt để bạn bám vào' : 'điều cần được nhìn thẳng và gỡ dần'}. Lá Lời khuyên ${goi(L[4])} gợi ý ${thuan(L[4]) ? 'hãy dựa vào' : 'hãy cẩn thận với'} ${k2(L[4])}.`);
+    } else if (kieu === 'tinhcam') {
+      const [a, b, c] = L;
+      let p = `Về phía bạn là ${goi(a)} (${k2(a)}), còn người ấy là ${goi(b)} (${k2(b)}). `;
+      p += thuan(a) && thuan(b) ? 'Cả hai đều đang mang năng lượng tích cực, nên dễ hiểu và đồng điệu với nhau.'
+        : !thuan(a) && !thuan(b) ? 'Cả hai đều đang có vướng mắc riêng, hãy cho nhau thời gian và sự kiên nhẫn.'
+        : `Hai người đang ở hai trạng thái khác nhau: ${thuan(a) ? 'bạn' : 'người ấy'} cởi mở hơn, còn ${thuan(a) ? 'người ấy' : 'bạn'} vẫn đang vướng bận, nên cần lắng nghe nhau nhiều hơn.`;
+      if (a.nhom === 'anChinh' && b.nhom === 'anChinh') p += ' Cả hai lá đều là Ẩn Chính: mối quan hệ này có ý nghĩa lớn với cả hai.';
+      else if (a.bo && a.bo === b.bo) p += ` Hai lá cùng bộ ${bo(a).ten}, cho thấy hai người cùng quan tâm tới ${bo(a).chuDe}.`;
+      out.push(p);
+      out.push(`Mối quan hệ được thể hiện qua ${goi(c)}: ${thuan(c) ? `hướng phát triển khá tích cực, xoay quanh ${k2(c)}` : `đang gặp ${k2(c)}, cần cả hai cùng vun vén`}.`);
+    } else if (kieu === '10la') {
+      out.push(`Ở trung tâm là ${goi(L[0])} (${k2(L[0])}), bị chắn ngang bởi ${goi(L[1])} (${k2(L[1])}). ${thuan(L[1]) ? 'Thử thách này vừa sức và có thể trở thành động lực.' : 'Đây là nút thắt chính cần gỡ.'}`);
+      out.push(`Bên dưới, ${goi(L[2])} cho thấy gốc rễ là ${k2(L[2])}, còn ${goi(L[3])} (${k2(L[3])}) là chuyện vừa qua và đang lùi dần. Phía trước, ${goi(L[5])} mang tới ${k2(L[5])}, còn ${goi(L[4])} cho thấy điều bạn hướng tới ${thuan(L[4]) ? 'là' : 'còn lẫn'} ${k2(L[4])}.`);
+      out.push(`Về phía bạn, ${goi(L[6])} cho thấy ${thuan(L[6]) ? `bạn đang mang tinh thần ${k2(L[6])}` : `bạn đang bị ${k2(L[6])} chi phối`}. Người xung quanh và hoàn cảnh (${goi(L[7])}) mang màu sắc ${k2(L[7])}. Trong lòng, điều bạn vừa mong vừa ngại là ${k2(L[8])} (${goi(L[8])}).`);
+      const kq = L[9], mt = L[4];
+      out.push(`Kết quả nếu mọi việc tiếp diễn là ${goi(kq)} (${k2(kq)}). ` + (thuan(kq) ? (thuan(mt) ? 'Kết quả khá gần với điều bạn mong muốn.' : 'Kết quả có thể tốt hơn bạn nghĩ, dù mục tiêu ban đầu còn lẫn băn khoăn.')
+        : (thuan(mt) ? 'Kết quả chưa khớp với điều bạn mong, nên cần điều chỉnh, bắt đầu từ thử thách ở trung tâm.' : 'Kết quả và mục tiêu đều còn vướng, hãy xem lại mục tiêu trước khi dồn sức.')));
+    } else out.push(L.map((l, i) => `${i ? noi(L[i - 1], l) + ' ' : ''}${goi(l)} ở vị trí ${l.viTri.toLowerCase()} (${k2(l)})`).join(', ') + '.');
+
+    // Lời nhắn chung: dựa vào lá thuận đầu tiên và lá nghịch đầu tiên
+    const manh = la.find(thuan), yeu = la.find(l => !thuan(l));
+    out.push(!yeu ? `Lời nhắn chung: đây là lúc nên chủ động. Hãy tận dụng ${k1(manh)} (${goi(manh)}) để tiến lên trong ${cd}.`
+      : !manh ? `Lời nhắn chung: các lá nặng nề cho thấy những gì cần sửa, không phải một kết cục đã định. Hãy bắt đầu từ việc gỡ ${k1(yeu)} (${goi(yeu)}), từng bước một.`
+      : `Lời nhắn chung: mọi việc chưa ngã ngũ. Hãy dựa vào ${k1(manh)} (${goi(manh)}) và để ý ${k1(yeu)} (${goi(yeu)}); cách bạn xử lý điểm này sẽ quyết định kết quả.`);
+    return out;
+  }
+
+  // Tìm lá không phân biệt dấu: theo tên Việt, tên Anh, số hiệu, từ khóa xuôi/ngược. nhom: 'anChinh' hoặc mã bộ.
+  const boDau = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();
+  const NHOM = ['anChinh', 'gay', 'coc', 'kiem', 'tien'];
+  function timLa(q = '', nhom = '') {
+    const goc = String(q).trim().toLowerCase(), coDau = boDau(goc) !== goc; // gõ có dấu thì so có dấu, để "đồng" không ra "động"
+    const t = coDau ? goc : boDau(goc), chuan = coDau ? s => s.toLowerCase() : boDau;
+    return BO_BAI.filter(l => (!nhom || (nhom === 'anChinh' ? l.nhom === 'anChinh' : l.bo === nhom)) &&
+      (!t || chuan(`${l.ten} | ${l.tenEn} | ${l.so} | ${l.xuoi.tuKhoa} | ${l.nguoc.tuKhoa}`).includes(t)));
   }
 
   function tongQuan(la, chuDe) {
@@ -191,6 +300,6 @@
     return out;
   }
 
-  const Tarot = { BO_BAI, KIEU_TRAI, CHU_DE, THONG_TIN_BO, xaoBai, docBai, ngauNhien };
+  const Tarot = { BO_BAI, KIEU_TRAI, CHU_DE, THONG_TIN_BO, NHOM, xaoBai, docBai, timLa, ngauNhien };
   if (typeof module !== 'undefined' && module.exports) module.exports = Tarot; else root.Tarot = Tarot;
 })(typeof window !== 'undefined' ? window : globalThis);

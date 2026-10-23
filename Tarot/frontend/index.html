@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tarot · Lá Số Tử Vi</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Xem bài Tarot online bằng tiếng Việt: tự xáo bài, tự chọn lá, trải 1, 3, 5 hoặc 10 lá, năm chủ đề Tình yêu, Sự nghiệp, Tài chính, Bản thân, Tổng quan.">
+<meta name="description" content="Xem bài Tarot online bằng tiếng Việt: tự xáo bài, tự chọn lá, trải 1, 3, 5 hoặc 10 lá, năm chủ đề, thư viện tra cứu 78 lá Tình yêu, Sự nghiệp, Tài chính, Bản thân, Tổng quan.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
@@ -18,6 +18,7 @@
     <a class="brand" href="../../tuvivietnam/frontend/index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi</a>
     <nav aria-label="Menu chính"><a href="../../tuvivietnam/frontend/index.html">Trang chủ</a><a href="../../tuvivietnam/frontend/la-so.html">Lập lá số</a><a href="../../tuvivietnam/frontend/con-giap.html">12 con giáp</a><a href="index.html" aria-current="page">Tarot</a><a href="../../tuvivietnam/frontend/bai-viet.html">Bài viết</a></nav>
   </header>
+  <nav class="subnav" aria-label="Tarot"><a href="index.html" aria-current="page">Giới thiệu</a><a href="xem-bai.html">Xem bài</a><a href="thu-vien.html">Thư viện 78 lá</a></nav>
 
   <section class="hero">
     <div>
@@ -27,6 +28,7 @@
       <div class="cta">
         <a class="btn primary" href="xem-bai.html">Bắt đầu xem bài</a>
         <a class="btn ghost" href="xem-bai.html#1la">Rút lá bài hôm nay</a>
+        <a class="btn ghost" href="thu-vien.html">Thư viện 78 lá</a>
       </div>
     </div>
     <div class="fan" id="fan" aria-hidden="true"></div>
@@ -55,7 +57,7 @@
 
   <section class="block" aria-labelledby="h-bo">
     <h2 id="h-bo">Bộ bài 78 lá</h2>
-    <p class="lede">Gồm 22 lá Ẩn Chính nói về những bước ngoặt lớn của đời người, và 56 lá Ẩn Phụ chia thành bốn bộ ứng với bốn nguyên tố, nói về những chuyện hằng ngày.</p>
+    <p class="lede">Gồm 22 lá Ẩn Chính nói về những bước ngoặt lớn của đời người, và 56 lá Ẩn Phụ chia thành bốn bộ ứng với bốn nguyên tố, nói về những chuyện hằng ngày. Bấm vào từng nhóm để tra cứu ý nghĩa các lá trong <a href="thu-vien.html">thư viện</a>.</p>
     <div class="suit-list" id="suits"></div>
   </section>
 
@@ -85,10 +87,10 @@
 
   // Bộ bài: Ẩn Chính và 4 bộ Ẩn Phụ, mỗi nhóm một lá mẫu
   const NHOM = [
-    [0, 'Ẩn Chính', '22 lá', 'Những bước ngoặt, bài học lớn và hành trình trưởng thành, từ Kẻ Khờ đến Thế Giới.'],
-    ...Object.entries(Tarot.THONG_TIN_BO).map(([ma, b], i) => [22 + i * 14, `Bộ ${b.ten}`, `14 lá · ${b.nguyenTo}`, `${b.en}: ${b.chuDe.charAt(0).toUpperCase() + b.chuDe.slice(1)}.`]),
+    [0, 'Ẩn Chính', '22 lá', 'anChinh', 'Những bước ngoặt, bài học lớn và hành trình trưởng thành, từ Kẻ Khờ đến Thế Giới.'],
+    ...Object.entries(Tarot.THONG_TIN_BO).map(([ma, b], i) => [22 + i * 14, `Bộ ${b.ten}`, `14 lá · ${b.nguyenTo}`, ma, `${b.en}: ${b.chuDe.charAt(0).toUpperCase() + b.chuDe.slice(1)}.`]),
   ];
-  $('suits').innerHTML = NHOM.map(([id, ten, so, y]) => `<div class="suit">${theLa(B[id], false, 'static')}<div><h3>${ten}</h3><p class="muted">${so}</p><p>${y}</p></div></div>`).join('');
+  $('suits').innerHTML = NHOM.map(([id, ten, so, ma, y]) => `<a class="suit" href="thu-vien.html#nhom-${ma}">${theLa(B[id], false, 'static')}<div><h3>${ten}</h3><p class="muted">${so}</p><p>${y}</p></div></a>`).join('');
 })();
 </script>
 </body>

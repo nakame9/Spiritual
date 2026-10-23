@@ -94,3 +94,51 @@ test('API theo chủ đề', async () => {
   assert.strictEqual((await post({ chuDe: 'toString' })).status, 400);
   assert.deepStrictEqual(Object.keys(await (await fetch(base + '/api/chu-de')).json()), ['tongquan', 'tinhyeu', 'sunghiep', 'taichinh', 'banthan']);
 });
+
+test('ý nghĩa theo vị trí: theo chiều thuận/nghịch của lá, ghép từ khóa', () => {
+  const r = Tarot.docBai('3la', [{ id: 16, nguoc: false }, { id: 52, nguoc: true }, { id: 19, nguoc: false }]);
+  assert.match(r.la[0].yTheoViTri, /^Chuyện đã qua để lại biến động bất ngờ, sụp đổ và thức tỉnh\./); // Tòa Tháp xuôi: nghịch
+  assert.match(r.la[1].yTheoViTri, /^Lúc này, năng lượng chính quanh vấn đề là hồi phục/); // 3 Kiếm ngược: thuận
+  assert.match(r.la[2].yTheoViTri, /phía trước là niềm vui, thành công và sức sống\.$/);
+  const viTri = new Set(Object.values(Tarot.KIEU_TRAI).flatMap(k => k.viTri.map(v => v[0])));
+  for (const v of viTri) assert.doesNotMatch(Tarot.docBai('1la', [{ id: 0 }]).la[0].yTheoViTri, /\{k\}/, v);
+});
+
+test('tổng hợp luận giải: bài đọc liền mạch cho mọi kiểu trải và chủ đề, nhắc đủ các lá', () => {
+  for (const kieu of Object.keys(Tarot.KIEU_TRAI)) for (const chuDe of Object.keys(Tarot.CHU_DE)) for (let i = 0; i < 60; i++) {
+    const n = Tarot.KIEU_TRAI[kieu].viTri.length, r = Tarot.docBai(kieu, Tarot.xaoBai().slice(0, n), chuDe);
+    const txt = r.luanGiai.join(' ') + r.la.map(l => l.yTheoViTri).join(' ');
+    assert.doesNotMatch(txt, /undefined|NaN|\{|\}|\s\s/, `${kieu} ${chuDe}`);
+    r.la.forEach(l => assert.ok(txt.includes(l.ten), `${kieu}: thiếu ${l.ten}`));
+    if (n > 1) { assert.match(r.luanGiai[0], /^Nhìn chung/); assert.match(r.luanGiai.at(-1), /^Lời nhắn chung/); }
+  }
+  assert.strictEqual(Tarot.docBai('10la', Tarot.xaoBai().slice(0, 10)).luanGiai.length, 6);
+  const tc = Tarot.docBai('tinhcam', [{ id: 41 }, { id: 46, nguoc: true }, { id: 6 }], 'tinhyeu').luanGiai.join(' ');
+  assert.match(tc, /bạn cởi mở hơn, còn người ấy vẫn đang vướng bận/);
+  assert.match(tc, /Hai lá cùng bộ Cốc/);
+});
+
+test('tìm lá: không dấu, tên tiếng Anh, từ khóa, lọc theo nhóm', () => {
+  assert.deepStrictEqual(Tarot.timLa('ngoi sao').map(l => l.ten), ['Ngôi Sao']);
+  assert.deepStrictEqual(Tarot.timLa('The Star').map(l => l.id), [17]);
+  assert.strictEqual(Tarot.timLa('', 'anChinh').length, 22);
+  assert.strictEqual(Tarot.timLa('', 'coc').length, 14);
+  const dong = Tarot.timLa('Đồng').map(l => l.ten); // có dấu: không lẫn "động lực", "biến động"
+  assert.ok(dong.includes('Tiểu Đồng Kiếm') && dong.includes('5 Gậy') && !dong.includes('Át Gậy') && !dong.includes('Tòa Tháp'), dong.join());
+  assert.ok(Tarot.timLa('dong').some(l => l.ten === 'Át Gậy')); // không dấu: khớp rộng
+  assert.strictEqual(Tarot.timLa('khong co la nao').length, 0);
+});
+
+test('API thư viện và trang thư viện', async () => {
+  const get = async u => (await fetch(base + u)).json();
+  assert.strictEqual((await get('/api/bo-bai?q=ngoi%20sao'))[0].ten, 'Ngôi Sao');
+  assert.strictEqual((await get('/api/bo-bai?nhom=coc')).length, 14);
+  assert.strictEqual((await fetch(base + '/api/bo-bai?nhom=abc')).status, 400);
+  assert.strictEqual((await fetch(base + '/api/bo-bai?q=' + 'x'.repeat(101))).status, 400);
+  const r = await (await fetch(base + '/api/rut-bai', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kieu: '5la' }) })).json();
+  assert.ok(Array.isArray(r.luanGiai) && r.luanGiai.length >= 3 && r.la.every(l => l.yTheoViTri.length > 20));
+  const tv = await fetch(base + '/thu-vien.html');
+  assert.strictEqual(tv.status, 200);
+  assert.match(await tv.text(), /Thư viện 78 lá Tarot/);
+  assert.strictEqual((await fetch(base + '/js/thu-vien.js')).status, 200);
+});

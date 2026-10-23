@@ -17,7 +17,13 @@ app.use('/api', (req, res, next) => {
 });
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
-app.get('/api/bo-bai', (req, res) => res.json(Tarot.BO_BAI));
+// Không có tham số thì trả cả bộ; ?q= tìm không dấu theo tên, tên tiếng Anh, từ khóa; ?nhom=anChinh|gay|coc|kiem|tien
+app.get('/api/bo-bai', (req, res) => {
+  const { q = '', nhom = '' } = req.query;
+  if (typeof q !== 'string' || q.length > 100) return res.status(400).json({ error: 'q cần là chuỗi tối đa 100 ký tự.' });
+  if (nhom && !Tarot.NHOM.includes(nhom)) return res.status(400).json({ error: `nhom cần là ${Tarot.NHOM.join(', ')}.` });
+  res.json(Tarot.timLa(q, nhom));
+});
 app.get('/api/la-bai/:id', (req, res) => {
   const id = Number(req.params.id), la = Number.isInteger(id) && Tarot.BO_BAI[id];
   if (!la) return res.status(404).json({ error: 'Không có lá bài này (id từ 0 đến 77).' });

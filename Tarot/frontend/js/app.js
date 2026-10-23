@@ -203,12 +203,14 @@
     const r = Tarot.docBai(st.kieu, st.chon, st.chuDe);
     $('kq-tieu-de').textContent = `${r.tenKieu} · ${r.tenChuDe}`;
     $('reading').innerHTML = `${st.cauHoi ? `<p class="q"><b>Câu hỏi:</b> ${esc(st.cauHoi)}</p>` : ''}
-      ${r.la.map(l => `<div class="item">${theLa(Tarot.BO_BAI[l.id], l.nguoc, 'static')}
-        <div><span class="step">${l.viTri}</span><h3>${l.ten}</h3>
-        <div class="meta"><span>${l.tenEn}</span><span class="chip ${l.nguoc ? 'n' : 'x'}">${l.nguoc ? 'Ngược' : 'Xuôi'}</span></div>
-        <p class="kw">${l.tuKhoa.charAt(0).toUpperCase() + l.tuKhoa.slice(1)}</p><p>${l.y}</p>${l.yChung ? `<p class="hint">Ý nghĩa chung: ${l.yChung}</p>` : ''}
-        <p class="hint">Vị trí "${l.viTri}": ${l.yViTri.toLowerCase()}.</p></div></div>`).join('')}
-      <div class="sum"><h3>Tổng quan</h3><ul>${r.tongQuan.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+      ${r.la.map((l, i) => `<div class="item">${theLa(Tarot.BO_BAI[l.id], l.nguoc, 'static')}
+        <div><span class="step">${r.la.length > 1 ? `${i + 1}. ` : ''}${l.viTri}</span><h3>${l.ten}</h3>
+        <div class="meta"><span>${l.tenEn}</span><span class="chip ${l.nguoc ? 'n' : 'x'}">${l.nguoc ? 'Ngược' : 'Xuôi'}</span><a href="thu-vien.html#la-${l.id}" target="_blank" rel="noopener">Tra cứu lá này</a></div>
+        <p class="kw">${l.tuKhoa.charAt(0).toUpperCase() + l.tuKhoa.slice(1)}</p>
+        <p class="vt"><b>Ở vị trí ${l.viTri}:</b> ${l.yTheoViTri}</p>
+        <p><b>${r.chuDe === 'tongquan' ? 'Ý nghĩa' : `Về ${r.tenChuDe.toLowerCase()}`}:</b> ${l.y}</p>${l.yChung ? `<p class="hint">Ý nghĩa chung: ${l.yChung}</p>` : ''}</div></div>`).join('')}
+      <div class="sum"><h3>Tổng hợp luận giải</h3>${r.luanGiai.map(p => `<p>${p}</p>`).join('')}
+        <h4>Điểm đáng chú ý</h4><ul>${r.tongQuan.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
     $('ket-qua').hidden = false;
     cuon($('ket-qua'));
   }
