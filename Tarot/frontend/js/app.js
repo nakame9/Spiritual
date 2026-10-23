@@ -57,42 +57,73 @@
     $('dem').innerHTML = lat ? `Đã lật <b class="count">${st.chon.filter(c => c.mo).length}/${n}</b>` : `Đã rút <b class="count">${st.chon.length}/${n}</b>`;
   }
 
-  // ---------- Xáo bài: tách đôi bộ bài, trộn xen kẽ 3 lượt, rồi chia ra thành hàng ----------
-  const SO_LA_XAO = 16, VONG = 3, MOI_VONG = 700;
+  // ---------- Xáo bài: trải quạt → trộn xen kẽ 2 lượt → cắt 3 xấp → gõ cho gọn → chia ra thành hàng ----------
+  // Chỉ để trình diễn: thứ tự thật đã xáo ngẫu nhiên bằng Tarot.xaoBai trước đó.
+  const SO_LA_XAO = 16, SAO = [[8, 18, 0], [88, 12, .5], [14, 78, 1.1], [92, 70, .3], [30, 4, .8], [72, 90, 1.4]];
   function xaoBai() {
     st.xao = Tarot.xaoBai(st.nguoc); st.chon = []; st.bay = []; st.pha = 'xao'; const luot = ++st.luot;
     veSlots(); $('ket-qua').hidden = true;
     $('deck').hidden = true; $('stage').hidden = false; $('dang-xao').textContent = 'Đang xáo bài…';
-    $('stage').innerHTML = Array.from({ length: SO_LA_XAO }, (_, i) => `<div class="sc" style="--i:${i}">${theLa(null)}</div>`).join('');
+    $('stage').innerHTML = Array.from({ length: SO_LA_XAO }, (_, i) => `<div class="sc" style="--i:${i}; z-index:${i}">${theLa(null)}</div>`).join('') +
+      SAO.map(([x, y, d]) => `<svg class="sao" style="left:${x}%; top:${y}%; animation-delay:${d}s"><use href="#sao4"/></svg>`).join('');
     const tiep = () => { if (luot === st.luot) xongXao(); };
     if (giam.matches) return tiep();
-    const nua = SO_LA_XAO / 2, xep = r => `translate(0, ${(-r * 0.7).toFixed(1)}px)`;
-    const anims = [...$('stage').children].map((el, i) => {
-      const trai = i < nua, k = i % nua, dx = trai ? -1 : 1;
-      const thuTu = 2 * k + (trai ? 0 : 1); // xen kẽ trái, phải như khi trộn bài thật
-      const kf = [];
-      for (let v = 0; v < VONG; v++) {
-        const o = v / VONG, b = 1 / VONG;
-        kf.push({ offset: o, transform: `${xep(v ? thuTu : i)} rotate(0deg)` });
-        kf.push({ offset: o + b * 0.32, transform: `translate(${dx * (64 + k * 4)}px, ${-k * 1.5}px) rotate(${dx * (8 + k * 1.5)}deg)`, easing: 'cubic-bezier(.3,.6,.3,1)' });
-        kf.push({ offset: o + b * (0.5 + thuTu / SO_LA_XAO * 0.4), transform: `${xep(thuTu)} rotate(0deg)` });
-      }
-      kf.push({ offset: 1, transform: `${xep(thuTu)} rotate(0deg)` });
-      return el.animate(kf, { duration: VONG * MOI_VONG, easing: 'ease-in-out', fill: 'forwards' });
-    });
-    Promise.all(anims.map(a => a.finished)).then(tiep, tiep);
+    dienXao(luot).then(tiep, tiep);
+  }
+  async function dienXao(luot) {
+    const the = [...$('stage').querySelectorAll('.sc')], N = the.length, rong = $('stage').clientWidth;
+    let pos = the.map((_, i) => i); // pos[i]: lá i đang ở lớp thứ mấy từ dưới lên
+    const xep = (p, dx = 0, dy = 0, g = 0) => `translate(${dx}px, ${(dy - p * 0.7).toFixed(1)}px) rotate(${g}deg)`;
+    const doiLop = (moi, ms) => setTimeout(() => the.forEach((el, i) => { el.style.zIndex = moi[i]; }), ms);
+    const buoc = (nhan, ms, kf) => {
+      if (luot !== st.luot) return Promise.reject();
+      $('dang-xao').textContent = nhan;
+      return Promise.all(the.map((el, i) => el.animate(kf(i), { duration: ms, easing: 'ease-in-out', fill: 'forwards' }).finished));
+    };
+
+    // 1. Trải quạt: xòe các lá quanh một điểm dưới đáy rồi gom lại
+    const goc = Math.min(6, rong / 70);
+    the.forEach(el => { el.style.transformOrigin = '50% 115%'; });
+    await buoc('Đang trải bài…', 1100, i => { const g = ((pos[i] - (N - 1) / 2) * goc).toFixed(1);
+      return [{ transform: xep(pos[i]) }, { offset: .45, transform: xep(0, 0, -6, g) }, { offset: .62, transform: xep(0, 0, -6, g) }, { transform: xep(pos[i]) }]; });
+    the.forEach(el => { el.style.transformOrigin = ''; });
+
+    // 2. Trộn: tách đôi sang hai bên, thả xen kẽ từng lá từ dưới lên
+    for (let v = 0; v < 2; v++) {
+      const nua = N / 2, moi = pos.map(p => p < nua ? 2 * p : 2 * (p - nua) + 1);
+      doiLop(moi, 300); // đổi lớp lúc hai nửa đang tách xa nhau nên không thấy lá nhảy lớp
+      await buoc('Đang trộn bài…', 760, i => { const trai = pos[i] < nua, k = trai ? pos[i] : pos[i] - nua, dx = trai ? -1 : 1;
+        return [{ transform: xep(pos[i]) },
+          { offset: .35, transform: xep(0, dx * (70 + k * 4), -k * 1.5, dx * (8 + k * 1.5)), easing: 'cubic-bezier(.3,.6,.3,1)' },
+          { offset: .5 + moi[i] / N * .35, transform: xep(moi[i]) }, { transform: xep(moi[i]) }]; });
+      pos = moi;
+    }
+
+    // 3. Cắt bài: xấp trên sang phải, xấp giữa sang trái; xấp trên đặt xuống đáy, xấp giữa lên trên cùng
+    const a = Math.round(N / 3), b = Math.round(2 * N / 3), xa = Math.min(120, (rong - 104) / 2);
+    const xap = p => p >= b ? 1 : p >= a ? -1 : 0;
+    const moi = pos.map(p => p >= b ? p - b : N - b + p); // xấp trên xuống đáy, xấp dưới và xấp giữa giữ thứ tự ở trên nó
+    doiLop(moi, 450);
+    await buoc('Đang cắt bài…', 1000, i => { const s = xap(pos[i]), dx = s * xa;
+      return [{ transform: xep(pos[i]) }, { offset: .3, transform: xep(pos[i], dx, -8, s * 4) }, { offset: .55, transform: xep(moi[i], dx, -8, s * 4) }, { transform: xep(moi[i]) }]; });
+    pos = moi;
+
+    // 4. Gõ bài: nhấc cả xấp lên rồi gõ xuống cho gọn
+    await buoc('Đang gõ bài cho gọn…', 480, i => [{ transform: xep(pos[i]) }, { offset: .4, transform: xep(pos[i], 0, -14) },
+      { offset: .75, transform: xep(pos[i], 0, 2) }, { transform: xep(pos[i]) }]);
   }
   function xongXao() {
     $('stage').hidden = true; $('deck').hidden = false;
     veDeck();
     const luot = st.luot, xong = () => { if (luot !== st.luot) return; st.pha = 'rut'; capNhat(); $('dang-xao').textContent = `Đã xáo xong. Hãy rút ${soLa()} lá từ bộ bài đang úp.`; };
     if (giam.matches) return xong();
-    // Chia bài: từng lá bay từ giữa bộ bài ra đúng chỗ của nó
+    $('dang-xao').textContent = 'Đang chia bài…';
+    // Chia bài: từng lá bay từ giữa bộ bài ra đúng chỗ của nó, hơi nghiêng như được búng ra
     const khung = $('deck').getBoundingClientRect(), cx = khung.left + khung.width / 2, cy = khung.top + 60;
     const anims = [...$('deck').querySelectorAll('button')].map((b, i) => {
       const r = b.getBoundingClientRect();
       return b.animate([
-        { transform: `translate(${(cx - r.left - r.width / 2).toFixed(0)}px, ${(cy - r.top - r.height / 2).toFixed(0)}px) scale(.9)`, opacity: 0 },
+        { transform: `translate(${(cx - r.left - r.width / 2).toFixed(0)}px, ${(cy - r.top - r.height / 2).toFixed(0)}px) scale(.9) rotate(${i % 2 ? 9 : -9}deg)`, opacity: 0 },
         { transform: 'none', opacity: 1 },
       ], { duration: 420, delay: i * 9, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards' });
     });

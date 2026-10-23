@@ -24,7 +24,7 @@ Có 5 kiểu trải: 1 lá, 3 lá (Quá khứ, Hiện tại, Tương lai), 3 lá
 
 Trang xem bài nhận `#1la`, `#3la`, `#tinhcam`, `#5la`, `#10la` hoặc `#tinhyeu`, `#sunghiep`, `#taichinh`, `#banthan`, `#tongquan` trên đường dẫn để chọn sẵn kiểu trải hoặc chủ đề (trang chủ dùng cách này).
 
-Khi xáo, bộ bài tách đôi rồi trộn xen kẽ 3 lượt, sau đó các lá được chia ra thành hàng. Người dùng bấm lá úp nào thì lá đó bay vào ô kế tiếp trong trải bài. Rút đủ lá thì chạm từng lá (hoặc "Lật tất cả") để lật: lá nhấc lên, xoay mặt, rồi hiện tên lá và chiều Xuôi/Ngược bên dưới; lật hết mới hiện ý nghĩa. Người dùng bật chế độ giảm chuyển động trên máy thì bỏ qua hiệu ứng. Hiệu ứng chỉ để trình diễn; thứ tự lá đã được xáo ngẫu nhiên trước đó.
+Khi xáo có 4 động tác nối nhau (khoảng 4 giây): trải quạt, trộn xen kẽ 2 lượt, cắt thành 3 xấp rồi chồng lại theo thứ tự khác, gõ cho gọn; dòng trạng thái ghi tên từng động tác, quanh bộ bài có vầng sáng và sao lấp lánh. Sau đó các lá được chia ra thành hàng. Người dùng bấm lá úp nào thì lá đó bay vào ô kế tiếp trong trải bài. Rút đủ lá thì chạm từng lá (hoặc "Lật tất cả") để lật: lá nhấc lên, xoay mặt, rồi hiện tên lá và chiều Xuôi/Ngược bên dưới; lật hết mới hiện ý nghĩa. Người dùng bật chế độ giảm chuyển động trên máy thì bỏ qua hiệu ứng. Hiệu ứng chỉ để trình diễn; thứ tự lá đã được xáo ngẫu nhiên trước đó.
 
 Frontend tự xáo bài trên trình duyệt (dùng `crypto.getRandomValues`, mọi lá có xác suất như nhau), nên trang trên GitHub Pages chạy không cần máy chủ.
 Backend dùng chung `frontend/js/bo-bai.js`, nên API ra cùng nội dung với trang web.

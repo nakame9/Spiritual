@@ -61,6 +61,12 @@ textarea:focus-visible, .spreads input:focus-visible + span, .deck button:focus-
 .stage { position: relative; height: 230px; }
 .stage .sc { position: absolute; width: 104px; left: calc(50% - 52px); top: 22px; transform: translateY(calc(var(--i) * -0.7px)); }
 .stage .sc .card { box-shadow: 0 2px 6px rgba(30, 10, 50, .18); border-radius: 9px; }
+/* Vầng sáng tím thở nhẹ sau bộ bài và vài ngôi sao lấp lánh quanh sân xáo */
+.stage::before { content: ""; position: absolute; left: 50%; top: 50%; width: 300px; height: 220px; margin: -110px 0 0 -150px; border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--tu) 22%, transparent), transparent); animation: tho 2.4s ease-in-out infinite; pointer-events: none; }
+@keyframes tho { 50% { scale: 1.15; opacity: .6; } }
+.stage .sao { position: absolute; width: 14px; height: 14px; color: var(--tu); opacity: 0; animation: lap 1.8s ease-in-out infinite; pointer-events: none; }
+@keyframes lap { 50% { opacity: .85; scale: 1.25; rotate: 45deg; } }
 .eyebrow a { color: inherit; }
 .slots { display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .sodo { display: grid; grid-template-columns: repeat(var(--cot), var(--w)); justify-content: center; gap: 12px 14px; max-width: 100%; }
@@ -123,7 +129,7 @@ textarea:focus-visible, .spreads input:focus-visible + span, .deck button:focus-
   .panel { padding: 16px; }
   .item { grid-template-columns: 72px minmax(0, 1fr); gap: 12px; }
 }
-@media (prefers-reduced-motion: reduce) { .card .in, .deck button, .slot .lat .card { transition: none; } .slot .lat .card, .card.nhac, .ten { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .card .in, .deck button, .slot .lat .card { transition: none; } .slot .lat .card, .card.nhac, .ten, .stage::before, .stage .sao { animation: none; } }
 
 /* ---------- Trang chủ Tarot: các bước, kiểu trải bài, chủ đề, bộ bài ---------- */
 .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
