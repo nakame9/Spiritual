@@ -66,7 +66,7 @@ test('API tra bài và phục vụ trang', async () => {
   assert.match(await home.text(), /Các kiểu trải bài/);
   const xem = await fetch(base + '/xem-bai.html');
   assert.strictEqual(xem.status, 200);
-  assert.match(await xem.text(), /Xáo bài và chọn lá/);
+  assert.match(await xem.text(), /Xáo bài, rút và lật lá/);
   for (const f of ['bo-bai.js', 'la-bai.js', 'app.js', 'y-nghia-chu-de.js']) assert.strictEqual((await fetch(base + '/js/' + f)).status, 200, f);
 });
 
