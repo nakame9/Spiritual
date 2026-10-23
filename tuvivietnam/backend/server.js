@@ -5,10 +5,29 @@ const express = require('express');
 const TuVi = require('../frontend/js/tuvi.js');
 const LuanGiai = require('../frontend/js/luangiai.js');
 const ConGiap = require('../frontend/js/congiap.js');
+const Markdown = require('../frontend/js/markdown.js');
+const { moKho } = require('./lib/kho');
+const quanTri = require('./quan-tri');
 
 const FRONTEND = path.join(__dirname, '..', 'frontend');
+// DATA_DIR nên trỏ tới ổ đĩa bền vững khi chạy trên máy chủ thật (dữ liệu bài viết, tài khoản nằm ở đây)
+const kho = moKho(process.env.DATA_DIR || path.join(__dirname, 'data'));
+if (quanTri.taoAdminDauTien(kho, process.env)) console.log(`Đã tạo quản trị viên "${process.env.ADMIN_USER}".`);
+LuanGiai.apDung(kho.data.luanGiai);
+
 const app = express();
-app.use(express.json({ limit: '10kb' }));
+app.set('trust proxy', 1); // chạy sau proxy HTTPS của nhà cung cấp hosting: lấy đúng IP và bật cookie Secure
+app.use(express.json({ limit: '300kb' }));
+
+// API công khai cho phép gọi từ trang khác (frontend đặt ở GitHub Pages); API quản trị thì không
+app.use('/api', (req, res, next) => {
+  if (req.path.startsWith('/admin')) return next();
+  res.set('Access-Control-Allow-Origin', '*');
+  if (req.method !== 'OPTIONS') return next();
+  res.set({ 'Access-Control-Allow-Methods': 'GET, POST', 'Access-Control-Allow-Headers': 'Content-Type' });
+  res.sendStatus(204);
+});
+app.use('/api/admin', quanTri({ kho, LuanGiai }));
 
 /** Kiểm tra dữ liệu gửi lên, trả về tham số cho TuVi.lapLaSo hoặc ném lỗi tiếng Việt */
 function docVao(b) {
@@ -71,7 +90,20 @@ app.get('/api/con-giap', (req, res) => {
   res.json(KY[ky](tuoi, TuVi.jdFromDate(...d), opts));
 });
 
+// Bài viết đã xuất bản và các đoạn luận giải đã sửa, cho web công khai
+const daXuatBan = () => kho.data.baiViet.filter(b => b.trangThai === 'xuatban').sort((a, b) => b.taoLuc.localeCompare(a.taoLuc));
+app.get('/api/bai-viet', (req, res) => res.json(daXuatBan().map(({ slug, tieuDe, chuyenMuc, tomTat, phutDoc, tacGia, taoLuc }) => ({ slug, tieuDe, chuyenMuc, tomTat, phutDoc, tacGia, taoLuc }))));
+app.get('/api/bai-viet/:slug', (req, res) => {
+  const b = daXuatBan().find(x => x.slug === req.params.slug);
+  if (!b) return res.status(404).json({ error: 'Không tìm thấy bài viết.' });
+  const { slug, tieuDe, chuyenMuc, tomTat, phutDoc, tacGia, taoLuc, suaLuc } = b;
+  res.json({ slug, tieuDe, chuyenMuc, tomTat, phutDoc, tacGia, taoLuc, suaLuc, html: Markdown.render(b.noiDung) });
+});
+app.get('/api/luan-giai/ghi-de', (req, res) => res.json(kho.data.luanGiai));
+
 app.use('/api', (req, res) => res.status(404).json({ error: 'Không có API này.' }));
+// Trang quản trị không cho nhúng vào trang khác (chống clickjacking)
+app.use('/admin', (req, res, next) => { res.set({ 'X-Frame-Options': 'DENY', 'Referrer-Policy': 'same-origin' }); next(); });
 app.use(express.static(FRONTEND));
 
 // Lỗi JSON hỏng hoặc lỗi bất ngờ: trả lời gọn, không lộ chi tiết máy chủ

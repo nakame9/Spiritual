@@ -181,6 +181,7 @@ a.tool:hover { border-color: var(--tu); }
 </div>
 
 <script src="js/tuvi.js"></script>
+<script src="js/api.js"></script>
 <script>
 (function () {
   'use strict';
@@ -255,4 +256,11 @@ a.tool:hover { border-color: var(--tu); }
   $('q-form').addEventListener('change', e => { if (e.target.name === 'q-lich') syncNhuan(); });
   show(false);
 })();
+// Có backend thì "Bài viết mới" lấy 3 bài mới nhất từ trang quản trị
+layApi('/api/bai-viet').then(ds => {
+  if (!ds.length) return;
+  document.querySelector('.posts').innerHTML = ds.slice(0, 3).map(b => `<a class="post" href="bai-viet.html#${escHtml(b.slug)}">
+    <p class="eyebrow">${escHtml(b.chuyenMuc)}</p><h3>${escHtml(b.tieuDe)}</h3><p>${escHtml(b.tomTat)}</p>
+    <span class="meta"><span>${b.phutDoc} phút đọc</span><b>Đọc bài →</b></span></a>`).join('');
+}).catch(() => {});
 </script>

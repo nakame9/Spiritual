@@ -1,4 +1,5 @@
 // Kiểm tra API: npm test
+process.env.DATA_DIR = require('fs').mkdtempSync(require('path').join(require('os').tmpdir(), 'tuvi-api-'));
 const { test, before, after } = require('node:test');
 const assert = require('node:assert');
 const app = require('../server.js');

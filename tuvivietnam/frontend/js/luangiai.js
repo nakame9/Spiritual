@@ -239,6 +239,38 @@
   }
 
   const THU_TU = ['Mệnh', 'Tài Bạch', 'Quan Lộc', 'Phu Thê', 'Thiên Di', 'Phúc Đức', 'Điền Trạch', 'Tật Ách', 'Tử Tức', 'Phụ Mẫu', 'Huynh Đệ', 'Nô Bộc'];
-  const LuanGiai = { luanGiai, THU_TU };
+
+  // ---------- Nội dung sửa được từ trang quản trị ----------
+  const TEN_CHINH = { 1: 'Tử Vi', 2: 'Liêm Trinh', 3: 'Thiên Đồng', 4: 'Vũ Khúc', 5: 'Thái Dương', 6: 'Thiên Cơ', 7: 'Thiên Phủ',
+    8: 'Thái Âm', 9: 'Tham Lang', 10: 'Cự Môn', 11: 'Thiên Tướng', 12: 'Thiên Lương', 13: 'Thất Sát', 14: 'Phá Quân' };
+  const TRUONG = { tinh: 'Bản chất', tot: 'Khi sáng (nối sau "Sao đang sáng nên")', xau: 'Khi hãm (nối sau "Sao đang hãm nên")',
+    than: 'Ở cung Mệnh, Phúc Đức', tien: 'Ở cung Tài Bạch, Điền Trạch', viec: 'Ở cung Quan Lộc, Thiên Di, Nô Bộc',
+    tinh2: 'Ở cung Phu Thê, Tử Tức, Phụ Mẫu, Huynh Đệ', benh: 'Ở cung Tật Ách' };
+  const PHU_TEN = ['Tả Phù, Hữu Bật', 'Văn Xương, Văn Khúc', 'Thiên Khôi, Thiên Việt', 'Lộc Tồn', 'Hóa Lộc', 'Hóa Quyền', 'Hóa Khoa',
+    'Thiên Mã', 'Thiên Quan, Thiên Phúc', 'Ân Quang, Thiên Quý', 'Tam Thai, Bát Tọa', 'Thai Phụ, Phong Cáo', 'Quốc Ấn',
+    'Long Trì, Phượng Các', 'Hồng Loan, Thiên Hỷ', 'Thiên Đức, Nguyệt Đức, Giải Thần, Thiên Giải, Địa Giải', 'Thiên Trù',
+    'Kình Dương, Đà La', 'Địa Không, Địa Kiếp', 'Hỏa Tinh, Linh Tinh', 'Hóa Kỵ', 'Thiên Hình', 'Thiên Riêu, Đào Hoa',
+    'Cô Thần, Quả Tú', 'Thiên Khốc, Thiên Hư', 'Tang Môn, Bạch Hổ', 'Kiếp Sát', 'Phá Toái', 'Đại Hao, Tiểu Hao', 'Thiên La, Địa Võng'];
+  const MAC_DINH = JSON.parse(JSON.stringify({ CUNG_Y, CHINH, PHU }));
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  /** Danh sách các đoạn chữ sửa được: [{ khoa, nhom, nhan, macDinh }] */
+  function danhMuc() {
+    const out = [];
+    Object.keys(MAC_DINH.CUNG_Y).forEach(t => out.push({ khoa: `cung.${t}`, nhom: '12 cung', nhan: `Cung ${t}`, macDinh: MAC_DINH.CUNG_Y[t] }));
+    Object.keys(MAC_DINH.CHINH).forEach(id => Object.keys(TRUONG).forEach(f =>
+      out.push({ khoa: `chinh.${id}.${f}`, nhom: TEN_CHINH[id], nhan: TRUONG[f], macDinh: MAC_DINH.CHINH[id][f] })));
+    MAC_DINH.PHU.forEach((g, i) => out.push({ khoa: `phu.${i}`, nhom: 'Phụ tinh', nhan: `${PHU_TEN[i]} (${g[1] ? 'hỗ trợ' : 'cần lưu ý'})`, macDinh: g[2] }));
+    return out;
+  }
+  /** Dùng các đoạn đã sửa { khoa: chữ }; khóa vắng mặt thì về mặc định. Chữ sửa được escape vì sẽ chèn vào HTML. */
+  function apDung(ghiDe) {
+    const g = ghiDe || {}, lay = (k, md) => Object.prototype.hasOwnProperty.call(g, k) ? esc(g[k]) : md;
+    Object.keys(CUNG_Y).forEach(t => { CUNG_Y[t] = lay(`cung.${t}`, MAC_DINH.CUNG_Y[t]); });
+    Object.keys(CHINH).forEach(id => Object.keys(TRUONG).forEach(f => { CHINH[id][f] = lay(`chinh.${id}.${f}`, MAC_DINH.CHINH[id][f]); }));
+    PHU.forEach((p, i) => { p[2] = lay(`phu.${i}`, MAC_DINH.PHU[i][2]); });
+  }
+
+  const LuanGiai = { luanGiai, THU_TU, danhMuc, apDung };
   if (typeof module !== 'undefined' && module.exports) module.exports = LuanGiai; else root.LuanGiai = LuanGiai;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -149,5 +149,17 @@ article + article { border-top: 1px solid var(--line); padding-top: 48px; }
 
   <footer class="foot"><span>Lá Số Tử Vi · an sao phái Việt, lịch âm theo thuật toán Hồ Ngọc Đức</span><span>Nội dung chỉ để tham khảo.</span></footer>
 </div>
+<script src="js/api.js"></script>
+<script>
+// Có backend thì hiện bài viết từ trang quản trị; không có thì giữ các bài có sẵn ở trên
+layApi('/api/bai-viet').then(ds => Promise.all(ds.map(b => layApi('/api/bai-viet/' + encodeURIComponent(b.slug))))).then(ds => {
+  if (!ds.length) return;
+  document.querySelector('.toc').innerHTML = '<p>Mục lục</p>' + ds.map(b => `<a href="#${escHtml(b.slug)}">${escHtml(b.tieuDe)}</a>`).join('');
+  document.querySelector('.articles').innerHTML = ds.map(b => `<article id="${escHtml(b.slug)}">
+    <p class="eyebrow">${escHtml(b.chuyenMuc)}</p><h2>${escHtml(b.tieuDe)}</h2><p class="meta">${b.phutDoc} phút đọc</p>${b.html}</article>`).join('');
+  const dich = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (dich) dich.scrollIntoView();
+}).catch(() => {});
+</script>
 </body>
 </html>

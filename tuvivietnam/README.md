@@ -1,6 +1,6 @@
 # Tử Vi Việt Nam
 
-Website lập lá số tử vi theo phái Việt, có luận giải từng cung và bài viết nhập môn.
+Website lập lá số tử vi theo phái Việt, có luận giải từng cung, tử vi 12 con giáp, bài viết, và trang quản trị.
 
 ```
 tuvivietnam/
@@ -9,15 +9,22 @@ tuvivietnam/
 │   ├── la-so.html       Lập lá số 12 cung + luận giải
 │   ├── con-giap.html    Tử vi 12 con giáp theo ngày, tuần, tháng, năm
 │   ├── bai-viet.html    Bài viết
+│   ├── admin/index.html Trang quản trị (chỉ chạy khi mở qua backend)
 │   ├── css/site.css     Màu, chữ, menu dùng chung
 │   └── js/
 │       ├── tuvi.js      Engine: lịch âm (Hồ Ngọc Đức) và an sao
-│       ├── luangiai.js  Luận giải theo cung
-│       └── congiap.js   Tử vi 12 con giáp
+│       ├── luangiai.js  Luận giải theo cung (sửa được từ trang quản trị)
+│       ├── congiap.js   Tử vi 12 con giáp
+│       ├── markdown.js  Hiển thị bài viết viết bằng Markdown rút gọn
+│       └── api.js       Địa chỉ backend (TUVI_API) cho web công khai
 └── backend/             Máy chủ Node.js + Express
-    ├── server.js        API và phục vụ thư mục frontend
+    ├── server.js        API công khai và phục vụ thư mục frontend
+    ├── quan-tri.js      API quản trị: đăng nhập, bài viết, luận giải, người dùng
+    ├── lib/kho.js       Lưu dữ liệu vào file JSON trong DATA_DIR
+    ├── lib/xacthuc.js   Mật khẩu (scrypt), phiên đăng nhập, chặn đoán mật khẩu
+    ├── data-mau/        Bài viết mẫu nạp vào lần chạy đầu
     ├── package.json
-    └── test/            Kiểm tra engine và API
+    └── test/            Kiểm tra engine, API và trang quản trị
 ```
 
 Frontend tự tính lá số ngay trên trình duyệt, nên trang trên GitHub Pages chạy không cần máy chủ.
@@ -34,7 +41,40 @@ npm start        # mở http://localhost:3000
 npm test         # chạy kiểm tra
 ```
 
-Đổi cổng bằng biến môi trường `PORT`, ví dụ `PORT=8080 npm start`.
+Biến môi trường:
+
+| Biến | Ý nghĩa |
+|---|---|
+| `PORT` | Cổng chạy, mặc định 3000 |
+| `DATA_DIR` | Thư mục lưu dữ liệu (bài viết, tài khoản, luận giải đã sửa). Mặc định `backend/data` |
+| `ADMIN_USER`, `ADMIN_PASSWORD` | Tạo quản trị viên đầu tiên khi chưa có tài khoản nào. Mật khẩu ít nhất 8 ký tự |
+
+## Trang quản trị
+
+1. Chạy lần đầu kèm tài khoản quản trị:
+   ```bash
+   ADMIN_USER=quantri ADMIN_PASSWORD='mat-khau-cua-ban' npm start
+   ```
+   (Windows PowerShell: `$env:ADMIN_USER="quantri"; $env:ADMIN_PASSWORD="mat-khau-cua-ban"; npm start`)
+2. Mở http://localhost:3000/admin/ và đăng nhập. Sau lần đầu không cần hai biến này nữa; nên đổi mật khẩu trong mục Tài khoản.
+3. Các mục:
+   - **Bài viết**: viết, sửa, xóa; để nháp hoặc xuất bản. Bài xuất bản hiện ở trang Bài viết và mục Bài viết mới trên trang chủ.
+   - **Luận giải**: sửa 154 đoạn chữ (ý nghĩa 12 cung, 14 chính tinh theo từng lĩnh vực, phụ tinh); khôi phục mặc định từng đoạn.
+   - **Người dùng** (chỉ quản trị viên): thêm biên tập viên hoặc quản trị viên, đổi vai trò, khóa, đặt lại mật khẩu, xóa.
+   - **Tài khoản**: đổi mật khẩu của mình.
+
+Bảo mật: mật khẩu băm bằng scrypt; cookie đăng nhập HttpOnly, SameSite=Lax, hết hạn sau 8 giờ; sai mật khẩu 5 lần thì tạm khóa 15 phút theo IP; không ai tự khóa hay tự xóa được mình, và luôn còn ít nhất một quản trị viên. Nội dung nhập từ trang quản trị được escape trước khi hiện trên web.
+
+Dữ liệu nằm trong `DATA_DIR/du-lieu.json` (có mật khẩu đã băm, đừng đưa lên GitHub; thư mục `backend/data` đã được bỏ qua trong `.gitignore`). Sao lưu file này định kỳ.
+
+## Đưa lên mạng
+
+Trang quản trị cần backend chạy trên một máy chủ (Render, Railway, VPS…). Lưu ý:
+
+- Chọn gói có **ổ đĩa bền vững** và đặt `DATA_DIR` vào đó. Ổ đĩa mặc định của các gói miễn phí bị xóa mỗi lần khởi động lại, mất hết bài viết và tài khoản.
+- Đặt `ADMIN_USER`, `ADMIN_PASSWORD` cho lần chạy đầu, đăng nhập, đổi mật khẩu, rồi xóa hai biến đó.
+- Phiên đăng nhập lưu trong bộ nhớ: khởi động lại máy chủ thì phải đăng nhập lại. Chỉ chạy **một** tiến trình máy chủ.
+- Khi web công khai vẫn đặt ở GitHub Pages, sửa `frontend/js/api.js`: điền địa chỉ backend vào `TUVI_API` để trang Bài viết, trang chủ và luận giải lấy nội dung từ trang quản trị. Để trống thì GitHub Pages dùng nội dung có sẵn trong file HTML.
 
 ## API
 
@@ -75,6 +115,14 @@ curl "http://localhost:3000/api/con-giap?tuoi=7&ky=nam&namSinh=1990&gioiTinh=nam
 ```
 
 Trả về tiêu đề, mức độ (`diem` 1–5, `nhan`), các ghi chú quan hệ can chi (`dong`), 4 mục Công việc, Tài lộc, Tình cảm, Sức khỏe (`muc`), lời khuyên, màu và số may mắn; theo ngày có thêm `gioTot`, theo tuần có `tuan` (7 ngày), theo năm có `sao`.
+
+### Nội dung từ trang quản trị
+
+- `GET /api/bai-viet`: danh sách bài đã xuất bản (mới nhất trước), không kèm nội dung.
+- `GET /api/bai-viet/:slug`: một bài, có `html` đã chuyển từ Markdown.
+- `GET /api/luan-giai/ghi-de`: các đoạn luận giải đã sửa, dạng `{ "cung.Mệnh": "...", "chinh.1.tinh": "..." }`.
+
+Các API công khai cho phép gọi từ trang khác (CORS). API quản trị nằm dưới `/api/admin` và cần đăng nhập.
 
 ### `GET /api/health`
 

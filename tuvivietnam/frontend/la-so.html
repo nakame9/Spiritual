@@ -188,6 +188,7 @@ form { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; pa
 
 <script src="js/tuvi.js"></script>
 <script src="js/luangiai.js"></script>
+<script src="js/api.js"></script>
 <script>
 (function () {
   'use strict';
@@ -333,6 +334,8 @@ form { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; pa
     if (el && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); select(Number(el.dataset.c)); }
   });
   if (saved) draw(false); // mở lại lá số đã lập trước đó
+  // Có backend thì dùng các đoạn luận giải đã sửa trong trang quản trị
+  layApi('/api/luan-giai/ghi-de').then(g => { LuanGiai.apDung(g); if (L && sel) select(sel); }).catch(() => {});
 })();
 </script>
 </body>

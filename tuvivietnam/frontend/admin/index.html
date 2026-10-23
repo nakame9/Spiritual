@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Quản trị · Lá Số Tử Vi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+<style>
+/* Trang quản trị: thanh trên cùng, hàng tab, vùng làm việc; bảng và form gọn để quét nhanh */
+.login { max-width: 400px; margin: 8vh auto 0; display: flex; flex-direction: column; gap: 16px; }
+.panel { background: var(--cell); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.panel h2, .panel h3 { margin: 0; font-family: var(--f-display); font-weight: 700; }
+.panel h2 { font-size: 22px; } .panel h3 { font-size: 18px; }
+.f { width: 100%; }
+textarea { width: 100%; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); font: 400 15px/1.6 var(--f-ui); padding: 10px 12px; resize: vertical; }
+textarea:focus-visible { outline: 2px solid var(--tu); outline-offset: 1px; }
+.err { margin: 0; }
+.muted { color: var(--soft); font-size: 13.5px; margin: 0; }
+
+.top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.top .who a, .muted a { color: var(--tu); }
+.top .who { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 14px; }
+.chip { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 2px 9px; border: 1px solid var(--line); color: var(--soft); white-space: nowrap; }
+.chip.on { background: var(--tu); border-color: var(--tu); color: var(--cell); }
+.chip.ok { color: var(--moc); border-color: currentColor; }
+.chip.warn { color: var(--tho); border-color: currentColor; }
+.chip.bad { color: var(--hoa); border-color: currentColor; }
+.btn2 { height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--cell); color: var(--ink); font: 500 14px var(--f-ui); cursor: pointer; white-space: nowrap; }
+.btn2:hover { border-color: var(--tu); }
+.btn2.danger { color: var(--hoa); }
+.btn2.danger.armed { background: var(--hoa); border-color: var(--hoa); color: var(--cell); }
+.btn2:disabled, button.go:disabled { opacity: .5; cursor: default; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--tu); outline-offset: 2px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tabs a { text-decoration: none; color: var(--soft); font-weight: 500; padding: 7px 14px; border-radius: 999px; }
+.tabs a:hover { background: var(--hl); color: var(--ink); }
+.tabs a[aria-current="page"] { background: var(--ink); color: var(--paper); }
+.row { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: flex-end; }
+.row > .grow { flex: 1 1 240px; }
+.spread { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
+
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { font-size: 11.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--soft); white-space: nowrap; }
+td.title a { color: var(--ink); font-weight: 600; text-decoration: none; }
+td.title a:hover { color: var(--tu); text-decoration: underline; }
+td .acts { display: flex; flex-wrap: wrap; gap: 6px; }
+.num { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--soft); }
+
+.editor-tabs { display: flex; gap: 4px; }
+.editor-tabs button { border: 0; background: none; color: var(--soft); font: 600 13px var(--f-ui); padding: 6px 10px; border-radius: 6px; cursor: pointer; }
+.editor-tabs button[aria-pressed="true"] { background: var(--hl); color: var(--ink); }
+.preview { border: 1px dashed var(--line); border-radius: 8px; padding: 6px 16px; min-height: 360px; font-size: 16px; line-height: 1.7; }
+.preview h3 { font-size: 17px; } .preview p { margin: 10px 0; }
+
+.lg-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 20px; align-items: start; }
+.groups { display: flex; flex-direction: column; gap: 2px; position: sticky; top: 12px; }
+.groups button { text-align: left; border: 0; background: none; padding: 7px 10px; border-radius: 6px; font: 500 14px var(--f-ui); color: var(--ink); cursor: pointer; display: flex; justify-content: space-between; gap: 8px; }
+.groups button:hover { background: var(--hl); }
+.groups button[aria-pressed="true"] { background: var(--tu); color: var(--cell); }
+.groups small { opacity: .8; font-variant-numeric: tabular-nums; }
+.field { display: flex; flex-direction: column; gap: 8px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.field:last-child { border-bottom: 0; }
+input.mini { height: 36px; font-size: 14px; flex: 1 1 180px; width: auto; min-width: 0; }
+.field .md { font-size: 13px; color: var(--soft); margin: 0; }
+
+.toast { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--paper); padding: 10px 16px; border-radius: 8px; font-weight: 500; box-shadow: 0 6px 24px rgba(0, 0, 0, .18); }
+@media (max-width: 760px) {
+  .lg-layout { grid-template-columns: minmax(0, 1fr); }
+  .groups { position: static; flex-direction: row; flex-wrap: wrap; }
+  .panel { padding: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="login" id="login-view" hidden>
+    <div>
+      <p class="eyebrow">Lá Số Tử Vi</p>
+      <h1>Quản trị</h1>
+    </div>
+    <form class="panel" id="login-form" novalidate>
+      <label class="f"><span>Tên đăng nhập</span><input type="text" id="l-ten" autocomplete="username" autocapitalize="none" spellcheck="false"></label>
+      <label class="f"><span>Mật khẩu</span><input type="password" id="l-mk" autocomplete="current-password"></label>
+      <button class="go" type="submit">Đăng nhập</button>
+      <p class="err" id="l-err" role="alert" hidden></p>
+    </form>
+    <p class="muted"><a href="../index.html">← Về trang chủ</a></p>
+  </section>
+
+  <div id="app" hidden>
+    <div class="top">
+      <a class="brand" href="../index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi · Quản trị</a>
+      <div class="who"><span id="who"></span><a href="../index.html">Xem website</a><button class="btn2" id="logout" type="button">Đăng xuất</button></div>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Mục quản trị" style="margin-top:16px"></nav>
+    <main id="view" style="margin-top:18px"></main>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="../js/markdown.js"></script>
+<script>
+(function () {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const ngayGio = iso => { const d = new Date(iso); return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; };
+  const VAI = { admin: 'Quản trị viên', bientap: 'Biên tập viên' };
+  let me = null;
+
+  async function api(method, url, body) {
+    let r;
+    try {
+      r = await fetch('/api/admin' + url, { method, credentials: 'same-origin', headers: body === undefined ? {} : { 'Content-Type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) });
+    } catch (e) { throw new Error('Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại.'); }
+    const j = await r.json().catch(() => null);
+    if (r.status === 401 && url !== '/dang-nhap') { showLogin(); throw new Error(j && j.error || 'Bạn cần đăng nhập.'); }
+    if (!r.ok) throw new Error(j && j.error ? j.error : 'Trang quản trị cần chạy cùng backend (npm start trong thư mục backend).');
+    return j;
+  }
+  let toastT;
+  function toast(msg) { $('toast').textContent = msg; $('toast').hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { $('toast').hidden = true; }, 2600); }
+  function loiTrong(el, e) { el.textContent = e.message; el.hidden = false; }
+  // Nút xóa cần bấm hai lần: lần đầu đổi chữ để xác nhận
+  function haiLan(btn, label, fn) {
+    if (!btn.classList.contains('armed')) { btn.classList.add('armed'); btn.dataset.old = btn.textContent; btn.textContent = label; setTimeout(() => { btn.classList.remove('armed'); btn.textContent = btn.dataset.old; }, 4000); return; }
+    fn();
+  }
+
+  // ---------- Đăng nhập ----------
+  function showLogin() { me = null; $('app').hidden = true; $('login-view').hidden = false; $('l-ten').focus(); }
+  $('login-form').addEventListener('submit', async e => {
+    e.preventDefault(); $('l-err').hidden = true;
+    try { me = await api('POST', '/dang-nhap', { tenDangNhap: $('l-ten').value, matKhau: $('l-mk').value }); $('l-mk').value = ''; showApp(); }
+    catch (err) { loiTrong($('l-err'), err); }
+  });
+  $('logout').addEventListener('click', async () => { await api('POST', '/dang-xuat', {}).catch(() => {}); showLogin(); });
+
+  const TABS = [['bai-viet', 'Bài viết'], ['luan-giai', 'Luận giải'], ['nguoi-dung', 'Người dùng', 'admin'], ['tai-khoan', 'Tài khoản']];
+  function showApp() {
+    $('login-view').hidden = true; $('app').hidden = false;
+    $('who').innerHTML = `<b>${esc(me.tenHienThi)}</b><span class="chip">${VAI[me.vaiTro]}</span>`;
+    route();
+  }
+  function route() {
+    const tabs = TABS.filter(t => !t[2] || me.vaiTro === t[2]);
+    let cur = location.hash.slice(1).split('/')[0];
+    if (!tabs.some(t => t[0] === cur)) cur = 'bai-viet';
+    $('tabs').innerHTML = tabs.map(t => `<a href="#${t[0]}"${t[0] === cur ? ' aria-current="page"' : ''}>${t[1]}</a>`).join('');
+    ({ 'bai-viet': baiViet, 'luan-giai': luanGiai, 'nguoi-dung': nguoiDung, 'tai-khoan': taiKhoan })[cur]();
+  }
+  window.addEventListener('hashchange', () => { if (me) route(); });
+
+  // ---------- Bài viết ----------
+  async function baiViet() {
+    const id = location.hash.split('/')[1];
+    if (id) return soanBai(id === 'moi' ? null : id);
+    $('view').innerHTML = '<p class="muted">Đang tải…</p>';
+    const ds = await api('GET', '/bai-viet');
+    $('view').innerHTML = `<section class="panel">
+      <div class="spread"><h2>Bài viết <span class="muted">(${ds.length})</span></h2><a class="btn primary" href="#bai-viet/moi">Viết bài mới</a></div>
+      ${ds.length ? `<div class="table-wrap"><table><thead><tr><th>Tiêu đề</th><th>Chuyên mục</th><th>Trạng thái</th><th>Tác giả</th><th>Sửa lúc</th></tr></thead><tbody>
+      ${ds.map(b => `<tr><td class="title"><a href="#bai-viet/${esc(b.id)}">${esc(b.tieuDe)}</a><div class="muted">/${esc(b.slug)}</div></td>
+        <td>${esc(b.chuyenMuc)}</td><td>${b.trangThai === 'xuatban' ? '<span class="chip ok">Đã xuất bản</span>' : '<span class="chip warn">Nháp</span>'}</td>
+        <td>${esc(b.tacGia)}</td><td class="num">${ngayGio(b.suaLuc)}</td></tr>`).join('')}</tbody></table></div>`
+        : '<p class="muted">Chưa có bài viết nào. Bấm "Viết bài mới" để bắt đầu.</p>'}
+    </section>`;
+  }
+  async function soanBai(id) {
+    const b = id ? (await api('GET', '/bai-viet')).find(x => x.id === id) : { tieuDe: '', slug: '', chuyenMuc: 'Kiến thức', tomTat: '', phutDoc: '', noiDung: '', trangThai: 'nhap' };
+    if (!b) { location.hash = '#bai-viet'; return; }
+    $('view').innerHTML = `<form class="panel" id="bv-form" novalidate>
+      <div class="spread"><h2>${id ? 'Sửa bài viết' : 'Bài viết mới'}</h2><a href="#bai-viet">← Danh sách bài viết</a></div>
+      <label class="f"><span>Tiêu đề</span><input type="text" id="bv-tieu-de" maxlength="200" value="${esc(b.tieuDe)}"></label>
+      <div class="row">
+        <label class="f grow"><span>Đường dẫn</span><input type="text" id="bv-slug" maxlength="80" value="${esc(b.slug)}" placeholder="tự tạo từ tiêu đề"></label>
+        <label class="f grow"><span>Chuyên mục</span><input type="text" id="bv-cm" maxlength="60" value="${esc(b.chuyenMuc)}"></label>
+        <label class="f" style="width:130px"><span>Phút đọc</span><input type="number" id="bv-phut" min="1" max="120" value="${esc(b.phutDoc)}" placeholder="tự tính"></label>
+        <label class="f" style="width:160px"><span>Trạng thái</span><select id="bv-tt"><option value="nhap">Nháp</option><option value="xuatban">Xuất bản</option></select></label>
+      </div>
+      <label class="f"><span>Tóm tắt (hiện ở trang chủ)</span><textarea id="bv-tom-tat" rows="2" maxlength="400">${esc(b.tomTat)}</textarea></label>
+      <div class="f"><div class="spread"><span>Nội dung</span><div class="editor-tabs"><button type="button" data-v="soan" aria-pressed="true">Soạn</button><button type="button" data-v="xem" aria-pressed="false">Xem trước</button></div></div>
+        <textarea id="bv-noi-dung" rows="18">${esc(b.noiDung)}</textarea><div class="preview" id="bv-preview" hidden></div>
+        <p class="muted">Cách viết: <code>## Tiêu đề mục</code>, dòng bắt đầu bằng <code>- </code> là danh sách, <code>**đậm**</code>, <code>*nghiêng*</code>, <code>[chữ](https://...)</code>. Cách một dòng trống để sang đoạn mới.</p></div>
+      <p class="err" id="bv-err" role="alert" hidden></p>
+      <div class="spread"><div class="row"><button class="go" type="submit">Lưu bài viết</button></div>${id ? '<button class="btn2 danger" type="button" id="bv-xoa">Xóa bài viết</button>' : ''}</div>
+    </form>`;
+    $('bv-tt').value = b.trangThai;
+    $('view').querySelector('.editor-tabs').addEventListener('click', e => {
+      const v = e.target.dataset.v; if (!v) return;
+      $('view').querySelectorAll('.editor-tabs button').forEach(x => x.setAttribute('aria-pressed', x.dataset.v === v));
+      $('bv-preview').innerHTML = Markdown.render($('bv-noi-dung').value);
+      $('bv-preview').hidden = v !== 'xem'; $('bv-noi-dung').hidden = v === 'xem';
+    });
+    $('bv-form').addEventListener('submit', async e => {
+      e.preventDefault(); $('bv-err').hidden = true;
+      const body = { tieuDe: $('bv-tieu-de').value, slug: $('bv-slug').value, chuyenMuc: $('bv-cm').value, phutDoc: $('bv-phut').value === '' ? '' : Number($('bv-phut').value), tomTat: $('bv-tom-tat').value, noiDung: $('bv-noi-dung').value, trangThai: $('bv-tt').value };
+      try {
+        const kq = await api(id ? 'PUT' : 'POST', id ? `/bai-viet/${id}` : '/bai-viet', body);
+        toast(kq.trangThai === 'xuatban' ? 'Đã lưu và xuất bản' : 'Đã lưu bản nháp');
+        if (!id) location.hash = `#bai-viet/${kq.id}`; else $('bv-slug').value = kq.slug;
+      } catch (err) { loiTrong($('bv-err'), err); }
+    });
+    if (id) $('bv-xoa').addEventListener('click', e => haiLan(e.currentTarget, 'Bấm lần nữa để xóa', async () => {
+      try { await api('DELETE', `/bai-viet/${id}`); toast('Đã xóa bài viết'); location.hash = '#bai-viet'; } catch (err) { loiTrong($('bv-err'), err); }
+    }));
+  }
+
+  // ---------- Luận giải ----------
+  let lg = null, nhomChon = '12 cung';
+  async function luanGiai() {
+    $('view').innerHTML = '<p class="muted">Đang tải…</p>';
+    lg = await api('GET', '/luan-giai');
+    veLuanGiai();
+  }
+  function veLuanGiai() {
+    const nhom = [...new Set(lg.danhMuc.map(x => x.nhom))];
+    const dem = n => lg.danhMuc.filter(x => x.nhom === n && x.khoa in lg.ghiDe).length;
+    const truong = lg.danhMuc.filter(x => x.nhom === nhomChon);
+    $('view').innerHTML = `<section class="panel">
+      <div><h2>Nội dung luận giải</h2><p class="muted">Sửa các đoạn chữ dùng để ghép phần luận giải trên trang Lập lá số. Thay đổi có hiệu lực ngay sau khi lưu. Đã sửa ${Object.keys(lg.ghiDe).length}/${lg.danhMuc.length} đoạn.</p></div>
+      <div class="lg-layout">
+        <div class="groups" role="group" aria-label="Nhóm nội dung">${nhom.map(n => `<button type="button" data-n="${esc(n)}" aria-pressed="${n === nhomChon}">${esc(n)}${dem(n) ? `<small>${dem(n)} đã sửa</small>` : ''}</button>`).join('')}</div>
+        <div>${truong.map(x => {
+          const sua = x.khoa in lg.ghiDe;
+          return `<div class="field" data-k="${esc(x.khoa)}">
+            <div class="spread"><b>${esc(x.nhan)}</b>${sua ? '<span class="chip on">Đã sửa</span>' : '<span class="chip">Mặc định</span>'}</div>
+            <textarea rows="3" maxlength="2000">${esc(sua ? lg.ghiDe[x.khoa] : x.macDinh)}</textarea>
+            ${sua ? `<p class="md">Mặc định: ${esc(x.macDinh)}</p>` : ''}
+            <div class="row"><button class="btn2" type="button" data-a="luu" disabled>Lưu</button>${sua ? '<button class="btn2" type="button" data-a="goc">Khôi phục mặc định</button>' : ''}</div>
+          </div>`;
+        }).join('')}</div>
+      </div></section>`;
+  }
+  $('view').addEventListener('click', async e => {
+    const g = e.target.closest('.groups button');
+    if (g) { nhomChon = g.dataset.n; veLuanGiai(); return; }
+    const a = e.target.closest('.field button'); if (!a) return;
+    const f = a.closest('.field'), khoa = f.dataset.k;
+    try {
+      await api('PUT', '/luan-giai', { khoa, noiDung: a.dataset.a === 'goc' ? null : f.querySelector('textarea').value });
+      if (a.dataset.a === 'goc') delete lg.ghiDe[khoa]; else lg.ghiDe[khoa] = f.querySelector('textarea').value.trim();
+      toast(a.dataset.a === 'goc' ? 'Đã khôi phục mặc định' : 'Đã lưu đoạn luận giải'); veLuanGiai();
+    } catch (err) { toast(err.message); }
+  });
+  $('view').addEventListener('input', e => {
+    const f = e.target.closest('.field'); if (f) f.querySelector('[data-a="luu"]').disabled = false;
+  });
+
+  // ---------- Người dùng ----------
+  async function nguoiDung() {
+    $('view').innerHTML = '<p class="muted">Đang tải…</p>';
+    const ds = await api('GET', '/nguoi-dung');
+    $('view').innerHTML = `<section class="panel">
+      <h2>Người dùng <span class="muted">(${ds.length})</span></h2>
+      <p class="muted">Quản trị viên quản lý mọi thứ; biên tập viên chỉ sửa bài viết và luận giải.</p>
+      <div class="table-wrap"><table><thead><tr><th>Tên đăng nhập</th><th>Tên hiển thị</th><th>Vai trò</th><th>Trạng thái</th><th>Tạo lúc</th><th>Thao tác</th></tr></thead><tbody>
+      ${ds.map(u => { const minh = u.id === me.id; return `<tr data-id="${esc(u.id)}"><td><b>${esc(u.tenDangNhap)}</b>${minh ? ' <span class="chip">Bạn</span>' : ''}</td><td>${esc(u.tenHienThi)}</td>
+        <td><select data-a="vai" aria-label="Vai trò của ${esc(u.tenDangNhap)}" ${minh ? 'disabled' : ''}><option value="admin"${u.vaiTro === 'admin' ? ' selected' : ''}>Quản trị viên</option><option value="bientap"${u.vaiTro === 'bientap' ? ' selected' : ''}>Biên tập viên</option></select></td>
+        <td>${u.khoa ? '<span class="chip bad">Đã khóa</span>' : '<span class="chip ok">Hoạt động</span>'}</td><td class="num">${ngayGio(u.taoLuc)}</td>
+        <td><div class="acts">${minh ? '' : `<button class="btn2" type="button" data-a="khoa">${u.khoa ? 'Mở khóa' : 'Khóa'}</button>`}<button class="btn2" type="button" data-a="mk">Đặt lại mật khẩu</button>${minh ? '' : '<button class="btn2 danger" type="button" data-a="xoa">Xóa</button>'}</div>
+          <div class="row" data-mk hidden style="margin-top:8px"><input type="password" autocomplete="new-password" placeholder="Mật khẩu mới, ít nhất 8 ký tự" aria-label="Mật khẩu mới" class="mini"><button class="btn2" type="button" data-a="luu-mk">Lưu</button></div></td></tr>`; }).join('')}
+      </tbody></table></div>
+      <p class="err" id="nd-err" role="alert" hidden></p>
+    </section>
+    <form class="panel" id="nd-form" novalidate style="margin-top:16px">
+      <h3>Thêm người dùng</h3>
+      <div class="row">
+        <label class="f grow"><span>Tên đăng nhập</span><input type="text" id="nd-ten" maxlength="32" autocapitalize="none" spellcheck="false" placeholder="vd: bientap.lan"></label>
+        <label class="f grow"><span>Tên hiển thị</span><input type="text" id="nd-hien-thi" maxlength="60" placeholder="vd: Nguyễn Thị Lan"></label>
+        <label class="f" style="width:180px"><span>Vai trò</span><select id="nd-vai"><option value="bientap">Biên tập viên</option><option value="admin">Quản trị viên</option></select></label>
+        <label class="f grow"><span>Mật khẩu</span><input type="password" id="nd-mk" autocomplete="new-password" placeholder="ít nhất 8 ký tự"></label>
+        <button class="go" type="submit">Thêm</button>
+      </div>
+      <p class="err" id="nd-form-err" role="alert" hidden></p>
+    </form>`;
+    const tbody = $('view').querySelector('tbody');
+    tbody.addEventListener('change', async e => {
+      if (e.target.dataset.a !== 'vai') return;
+      const id = e.target.closest('tr').dataset.id;
+      try { await api('PUT', `/nguoi-dung/${id}`, { vaiTro: e.target.value }); toast('Đã đổi vai trò'); nguoiDung(); } catch (err) { loiTrong($('nd-err'), err); nguoiDung(); }
+    });
+    tbody.addEventListener('click', async e => {
+      const b = e.target.closest('button'); if (!b) return;
+      const tr = b.closest('tr'), id = tr.dataset.id, u = ds.find(x => x.id === id);
+      $('nd-err').hidden = true;
+      try {
+        if (b.dataset.a === 'khoa') { await api('PUT', `/nguoi-dung/${id}`, { khoa: !u.khoa }); toast(u.khoa ? 'Đã mở khóa' : 'Đã khóa tài khoản'); nguoiDung(); }
+        if (b.dataset.a === 'mk') { const r = tr.querySelector('[data-mk]'); r.hidden = !r.hidden; if (!r.hidden) r.querySelector('input').focus(); }
+        if (b.dataset.a === 'luu-mk') { await api('PUT', `/nguoi-dung/${id}`, { matKhau: tr.querySelector('[data-mk] input').value }); toast('Đã đặt lại mật khẩu'); tr.querySelector('[data-mk]').hidden = true; tr.querySelector('[data-mk] input').value = ''; }
+        if (b.dataset.a === 'xoa') haiLan(b, 'Bấm lần nữa để xóa', async () => {
+          try { await api('DELETE', `/nguoi-dung/${id}`); toast('Đã xóa người dùng'); nguoiDung(); } catch (err) { loiTrong($('nd-err'), err); }
+        });
+      } catch (err) { loiTrong($('nd-err'), err); }
+    });
+    $('nd-form').addEventListener('submit', async e => {
+      e.preventDefault(); $('nd-form-err').hidden = true;
+      try {
+        await api('POST', '/nguoi-dung', { tenDangNhap: $('nd-ten').value, tenHienThi: $('nd-hien-thi').value, vaiTro: $('nd-vai').value, matKhau: $('nd-mk').value });
+        toast('Đã thêm người dùng'); nguoiDung();
+      } catch (err) { loiTrong($('nd-form-err'), err); }
+    });
+  }
+
+  // ---------- Tài khoản ----------
+  function taiKhoan() {
+    $('view').innerHTML = `<form class="panel" id="tk-form" novalidate style="max-width:480px">
+      <h2>Đổi mật khẩu</h2>
+      <p class="muted">Đăng nhập: <b>${esc(me.tenDangNhap)}</b> · ${VAI[me.vaiTro]}. Sau khi đổi, các máy khác đang đăng nhập tài khoản này sẽ bị đăng xuất.</p>
+      <label class="f"><span>Mật khẩu hiện tại</span><input type="password" id="tk-cu" autocomplete="current-password"></label>
+      <label class="f"><span>Mật khẩu mới (ít nhất 8 ký tự)</span><input type="password" id="tk-moi" autocomplete="new-password"></label>
+      <label class="f"><span>Nhập lại mật khẩu mới</span><input type="password" id="tk-moi2" autocomplete="new-password"></label>
+      <p class="err" id="tk-err" role="alert" hidden></p>
+      <div><button class="go" type="submit">Đổi mật khẩu</button></div>
+    </form>`;
+    $('tk-form').addEventListener('submit', async e => {
+      e.preventDefault(); $('tk-err').hidden = true;
+      if ($('tk-moi').value !== $('tk-moi2').value) return loiTrong($('tk-err'), new Error('Hai lần nhập mật khẩu mới không giống nhau.'));
+      try { await api('POST', '/doi-mat-khau', { matKhauCu: $('tk-cu').value, matKhauMoi: $('tk-moi').value }); toast('Đã đổi mật khẩu'); taiKhoan(); }
+      catch (err) { loiTrong($('tk-err'), err); }
+    });
+  }
+
+  // Khởi động: đã đăng nhập thì vào thẳng, chưa thì hiện form
+  api('GET', '/toi').then(u => { me = u; showApp(); }).catch(err => {
+    showLogin();
+    if (!/đăng nhập/.test(err.message)) loiTrong($('l-err'), err);
+  });
+})();
+</script>
+</body>
+</html>
