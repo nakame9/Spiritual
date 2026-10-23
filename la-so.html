@@ -78,6 +78,7 @@ form { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; pa
 .legend ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 14px; }
 .legend li { display: flex; align-items: center; gap: 6px; }
 .dot { width: 10px; height: 10px; border-radius: 50%; background: currentColor; display: inline-block; }
+.empty { margin: 0; padding: 28px 20px; text-align: center; color: var(--soft); border: 1px dashed var(--line); border-radius: 10px; background: var(--cell); }
 .note { color: var(--soft); font-size: 13px; max-width: 75ch; margin: 0; }
 
 /* Luận giải: hàng nút chọn cung, rồi một thẻ phân tích cho cung đang chọn */
@@ -147,9 +148,10 @@ form { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; pa
   </form>
   <p class="err" id="err" role="alert" hidden></p>
 
-  <section class="board" id="board" aria-label="Lá số 12 cung"></section>
+  <p class="empty" id="empty">Nhập ngày giờ sinh rồi bấm <b>Lập lá số</b> để xem lá số 12 cung và luận giải.</p>
+  <section class="board" id="board" aria-label="Lá số 12 cung" hidden></section>
 
-  <section class="lg" id="luan-giai" aria-labelledby="h-lg">
+  <section class="lg" id="luan-giai" aria-labelledby="h-lg" hidden>
     <div class="lg-head">
       <h2 id="h-lg">Luận giải lá số</h2>
       <p>Chọn một cung để đọc phân tích, hoặc bấm thẳng vào ô trên lá số. Nội dung dựa trên ý nghĩa truyền thống của các sao, chỉ để tham khảo.</p>
@@ -195,11 +197,10 @@ form { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; pa
   $('gio').innerHTML = GIO.map((r, i) => `<option value="${i + 1}">${CHI[i + 1]} (${r})</option>`).join('');
 
   const KEY = 'laso-tuvi-input';
-  const SAMPLE = { ten: '', nam: true, am: false, nhuan: false, ngay: 15, thang: 8, namSinh: 1990, gio: 5, xem: new Date().getFullYear() };
+  const BLANK = { ten: '', nam: true, am: false, nhuan: false, ngay: '', thang: '', namSinh: '', gio: 1, xem: new Date().getFullYear() };
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) { /* bỏ qua */ }
-  let isExample = !saved;
-  const init = Object.assign({}, SAMPLE, saved || {});
+  const init = Object.assign({}, BLANK, saved || {});
   $('ten').value = init.ten; $('gt-' + (init.nam ? 'nam' : 'nu')).checked = true;
   $('lich-' + (init.am ? 'am' : 'duong')).checked = true; $('nhuan').checked = init.nhuan;
   $('ngay').value = init.ngay; $('thang').value = init.thang; $('nam').value = init.namSinh;
@@ -267,7 +268,6 @@ form { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; pa
         <p class="eyebrow">Thiên bàn</p>
         <h2 id="mid-ten"></h2>
       </div>
-      ${isExample ? '<span class="chip">Lá số mẫu. Nhập ngày sinh của bạn ở trên.</span>' : ''}
       <dl class="info">
         <dt>Dương lịch</dt><dd>${d.ngay}/${d.thang}/${d.nam}</dd>
         <dt>Âm lịch</dt><dd>${a.ngay}/${a.thang}${a.nhuan ? ' (nhuận)' : ''}/${a.nam} <span class="sub">năm ${cc.nam}</span></dd>
@@ -308,11 +308,11 @@ form { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; pa
     }
     $('err').hidden = true;
     if (fromUser) {
-      isExample = false;
       try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) { /* bỏ qua */ }
     }
     $('board').innerHTML = midHTML(v) + L.cung.map(c => cellHTML(c, v)).join('');
-    $('mid-ten').textContent = v.ten || (isExample ? 'Lá số mẫu' : 'Lá số');
+    $('mid-ten').textContent = v.ten || 'Lá số';
+    $('empty').hidden = true; $('board').hidden = false; $('luan-giai').hidden = false;
     $('lg-tabs').innerHTML = LuanGiai.THU_TU.map(t => {
       const c = L.cung.find(x => x.ten === t);
       return `<button type="button" data-c="${c.so}">${t}${c.than ? ' · Thân' : ''}</button>`;
@@ -321,14 +321,18 @@ form { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; pa
   }
   $('lg-tabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) select(Number(b.dataset.c)); });
 
-  $('form').addEventListener('submit', e => { e.preventDefault(); draw(true); });
-  $('form').addEventListener('change', e => { if (e.target.name === 'lich') syncNhuan(); draw(true); });
+  // Chỉ lập lá số khi bấm nút; đổi ô nhập không tự vẽ lại
+  $('form').addEventListener('submit', e => {
+    e.preventDefault(); draw(true);
+    if (!$('board').hidden && $('board').getBoundingClientRect().top > innerHeight * 0.6) $('board').scrollIntoView({ block: 'start' });
+  });
+  $('form').addEventListener('change', e => { if (e.target.name === 'lich') syncNhuan(); });
   $('board').addEventListener('click', e => { const el = e.target.closest('.cell'); if (el) select(Number(el.dataset.c)); });
   $('board').addEventListener('keydown', e => {
     const el = e.target.closest('.cell');
     if (el && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); select(Number(el.dataset.c)); }
   });
-  draw(false);
+  if (saved) draw(false); // mở lại lá số đã lập trước đó
 })();
 </script>
 </body>

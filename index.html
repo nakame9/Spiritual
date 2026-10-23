@@ -252,7 +252,7 @@ a.tool:hover { border-color: var(--tu); }
   }
 
   $('q-form').addEventListener('submit', e => { e.preventDefault(); show(true); });
-  $('q-form').addEventListener('change', e => { if (e.target.name === 'q-lich') syncNhuan(); show(true); });
+  $('q-form').addEventListener('change', e => { if (e.target.name === 'q-lich') syncNhuan(); });
   show(false);
 })();
 </script>
