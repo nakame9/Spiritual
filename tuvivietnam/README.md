@@ -6,7 +6,6 @@ Website lập lá số tử vi theo phái Việt, có luận giải từng cung,
 tuvivietnam/
 ├── frontend/            Trang web tĩnh, chạy được ngay trên GitHub Pages
 │   ├── index.html       Trang chủ: kết hợp tử vi, cung hoàng đạo, số chủ đạo để dự đoán may mắn, tình cảm, sự nghiệp; công cụ, bài viết mới
-│   ├── xem-nhanh.html   Xem tử vi nhanh: cung Mệnh, bản mệnh, cục, đại hạn đang chạy
 │   ├── la-so.html       Lập lá số 12 cung + luận giải
 │   ├── con-giap.html    Tử vi 12 con giáp theo ngày, tuần, tháng, năm
 │   ├── bai-viet.html    Bài viết

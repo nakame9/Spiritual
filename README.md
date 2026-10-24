@@ -13,7 +13,7 @@ flowchart LR
     G["index.html ở gốc\n(chuyển hướng)"] --> TV
     subgraph TV["tuvivietnam/frontend"]
       home["index.html\nTrang chủ kết hợp 3 hệ"]
-      tvp["xem-nhanh · la-so · con-giap · bai-viet · admin"]
+      tvp["la-so · con-giap · bai-viet · admin"]
     end
     TA["Tarot/frontend\nindex · xem-bai · thu-vien"]
     ZO["zodiac/frontend\nindex · cung · tu-vi · tuong-hop · ban-do-sao"]

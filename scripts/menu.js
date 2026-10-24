@@ -10,7 +10,6 @@ const GOC = path.join(__dirname, '..');
 // [đường dẫn tính từ gốc kho, nhãn, thư mục hoặc trang được tô đậm khi đang ở đó]
 const MENU = [
   ['tuvivietnam/frontend/index.html', 'Trang chủ'],
-  ['tuvivietnam/frontend/xem-nhanh.html', 'Tử vi nhanh'],
   ['tuvivietnam/frontend/la-so.html', 'Lập lá số'],
   ['tuvivietnam/frontend/con-giap.html', '12 con giáp'],
   ['Tarot/frontend/index.html', 'Tarot', 'Tarot/frontend/'],
