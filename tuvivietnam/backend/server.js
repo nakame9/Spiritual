@@ -125,7 +125,7 @@ app.use(express.static(FRONTEND));
 // Phục vụ cả site theo đúng bố cục GitHub Pages (thư mục shared và các phần bên cạnh), để chạy một máy chủ này là đủ cả site
 const GOC_KHO = path.join(__dirname, '..', '..');
 app.use('/shared', express.static(path.join(GOC_KHO, 'shared')));
-for (const p of ['tuvivietnam', 'zodiac', 'numerology', 'Tarot']) app.use(`/${p}/frontend`, express.static(path.join(GOC_KHO, p, 'frontend')));
+for (const p of ['tuvivietnam', 'zodiac', 'numerology', 'xemngay', 'Tarot']) app.use(`/${p}/frontend`, express.static(path.join(GOC_KHO, p, 'frontend')));
 
 // Lỗi JSON hỏng hoặc lỗi bất ngờ: trả lời gọn, không lộ chi tiết máy chủ
 app.use((err, req, res, next) => {

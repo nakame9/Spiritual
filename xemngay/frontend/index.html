@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Xem ngày tốt xấu · Lịch âm, giờ hoàng đạo · Lá Số Tử Vi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Xem ngày tốt xấu theo lịch Việt Nam: âm lịch, can chi, ngày hoàng đạo hắc đạo, trực, sao, tiết khí, ngày kỵ, giờ hoàng đạo, hướng xuất hành và tuổi xung hợp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
+<link rel="stylesheet" href="../../shared/site.css">
+<link rel="stylesheet" href="css/xem-ngay.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="site">
+    <a class="brand" href="../../tuvivietnam/frontend/index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi</a>
+    <nav aria-label="Menu chính"><a href="../../tuvivietnam/frontend/index.html">Trang chủ</a><a href="../../tuvivietnam/frontend/la-so.html">Lập lá số</a><a href="../../tuvivietnam/frontend/con-giap.html">12 con giáp</a><a href="index.html" aria-current="page">Xem ngày</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="../../numerology/frontend/index.html">Số chủ đạo</a><a href="../../tuvivietnam/frontend/bai-viet.html">Bài viết</a></nav>
+  </header>
+  <nav class="subnav" aria-label="Xem ngày"><a href="index.html" aria-current="page">Xem ngày</a><a href="chon-ngay.html">Chọn ngày theo việc</a></nav>
+
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Lịch vạn niên</p>
+      <h1>Xem ngày tốt xấu</h1>
+      <p class="lede">Chọn một ngày để xem âm lịch, can chi, ngày hoàng đạo hay hắc đạo, trực, sao, tiết khí, các ngày kỵ, giờ hoàng đạo và hướng xuất hành. Nhập năm sinh để biết ngày đó hợp hay xung với tuổi của bạn.</p>
+    </div>
+    <form class="panel" id="form" novalidate>
+      <h2>Chọn ngày</h2>
+      <label class="f"><span>Ngày dương lịch</span><input type="date" id="ngay" min="1900-01-01" max="2100-12-31" required></label>
+      <label class="f"><span>Năm sinh âm lịch (không bắt buộc)</span><input type="text" inputmode="numeric" id="nam" maxlength="4" placeholder="Ví dụ: 1990" autocomplete="off"></label>
+      <p class="err" id="loi" role="alert" hidden></p>
+      <div class="row"><button class="go" type="submit">Xem ngày</button><button class="btn2" type="button" id="hom-nay">Hôm nay</button></div>
+    </form>
+  </section>
+
+  <section class="panel" id="chi-tiet" aria-live="polite" aria-labelledby="h-ngay"></section>
+
+  <section class="panel" aria-labelledby="h-lich">
+    <div class="lich-dau"><button class="btn2" type="button" id="truoc" aria-label="Tháng trước">‹</button><h2 id="h-lich"></h2><button class="btn2" type="button" id="sau" aria-label="Tháng sau">›</button></div>
+    <div class="lich" id="lich" role="grid" aria-labelledby="h-lich"></div>
+    <p class="chu-giai"><span class="cham Tot"></span>Tốt <span class="cham Kha"></span>Khá <span class="cham Binh"></span>Bình thường <span class="cham Xau"></span>Xấu</p>
+    <p class="muted">Số nhỏ là ngày âm lịch. Bấm vào một ngày để xem chi tiết.</p>
+  </section>
+
+  <p class="note">Nội dung xem ngày do Lá Số Tử Vi biên soạn theo lịch vạn niên dân gian Việt Nam: ngày hoàng đạo theo tháng âm lịch, thập nhị trực theo tiết khí, nhị thập bát tú, các ngày kỵ phổ biến. Các sách lịch có thể khác nhau ở một vài chi tiết; nội dung chỉ để tham khảo.</p>
+  <footer class="foot"><span>Lá Số Tử Vi · Xem ngày tốt xấu</span><span>Nội dung chỉ để tham khảo.</span></footer>
+</div>
+<script src="../../tuvivietnam/frontend/js/tuvi.js"></script>
+<script src="../../tuvivietnam/frontend/js/congiap.js"></script>
+<script src="js/lich-ngay.js"></script>
+<script src="js/trang-xem-ngay.js"></script>
+</body>
+</html>

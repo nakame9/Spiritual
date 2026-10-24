@@ -12,6 +12,7 @@ const MENU = [
   ['tuvivietnam/frontend/index.html', 'Trang chủ'],
   ['tuvivietnam/frontend/la-so.html', 'Lập lá số'],
   ['tuvivietnam/frontend/con-giap.html', '12 con giáp'],
+  ['xemngay/frontend/index.html', 'Xem ngày', 'xemngay/frontend/'],
   ['Tarot/frontend/index.html', 'Tarot', 'Tarot/frontend/'],
   ['zodiac/frontend/index.html', 'Hoàng đạo', 'zodiac/frontend/'],
   ['numerology/frontend/index.html', 'Số chủ đạo', 'numerology/frontend/'],

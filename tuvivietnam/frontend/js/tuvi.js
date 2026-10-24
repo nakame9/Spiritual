@@ -39,7 +39,8 @@
       : -0.000278 + 0.000265 * T + 0.000262 * T2;
     return Jd1 + C1 - deltat;
   }
-  function sunLong(jdn, tz) {
+  /** Kinh độ Mặt Trời (độ, 0–360) lúc 0 giờ ngày jdn theo múi giờ tz */
+  function kinhDoMatTroi(jdn, tz = 7) {
     const T = (jdn - 2451545.5 - tz / 24) / 36525, T2 = T * T;
     const M = 357.52910 + 35999.05030 * T - 0.0001559 * T2 - 0.00000048 * T * T2;
     const L0 = 280.46645 + 36000.76983 * T + 0.0003032 * T2;
@@ -48,8 +49,9 @@
     const omega = 125.04 - 1934.136 * T;
     let L = (L0 + DL - 0.00569 - 0.00478 * Math.sin(omega * dr)) * dr;
     L -= PI * 2 * Math.floor(L / (PI * 2));
-    return INT(L / PI * 6);
+    return L / dr;
   }
+  const sunLong = (jdn, tz) => INT(kinhDoMatTroi(jdn, tz) / 30);
   const newMoonDay = (k, tz) => INT(newMoon(k) + 0.5 + tz / 24);
   function lunarMonth11(yy, tz) {
     const k = INT((jdFromDate(31, 12, yy) - 2415021) / 29.530588853);
@@ -306,6 +308,6 @@
     };
   }
 
-  const TuVi = { lapLaSo, solar2lunar, lunar2solar, jdFromDate, jdToDate, CHI, CAN };
+  const TuVi = { lapLaSo, solar2lunar, lunar2solar, jdFromDate, jdToDate, kinhDoMatTroi, CHI, CAN };
   if (typeof module !== 'undefined' && module.exports) module.exports = TuVi; else root.TuVi = TuVi;
 })(typeof window !== 'undefined' ? window : globalThis);

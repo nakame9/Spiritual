@@ -244,6 +244,6 @@
   }
 
   const conGiap = t => ({ chi: CHI[t], con: CON[t], han: HAN[t], hanh: HANH[t] });
-  const ConGiap = { tuViNgay, tuViTuan, tuViThang, tuViNam, quanHe, gioHoangDao, conGiap, CON };
+  const ConGiap = { tuViNgay, tuViTuan, tuViThang, tuViNam, quanHe, gioHoangDao, thongTinNgay, conGiap, CON, GIO, THU, THAN, TOT };
   if (typeof module !== 'undefined' && module.exports) module.exports = ConGiap; else root.ConGiap = ConGiap;
 })(typeof window !== 'undefined' ? window : globalThis);

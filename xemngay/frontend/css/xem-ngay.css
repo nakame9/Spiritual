@@ -1,0 +1,84 @@
+/* Xem ngày tốt xấu: dùng chung bảng màu của site. Màu mức ngày: Tốt xanh, Khá tím, Bình thường xám, Xấu đỏ. */
+:root { --tot: var(--moc); --kha: var(--tu); --binh: var(--soft); --xau: var(--hoa); }
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.hero h1 { font-size: clamp(32px, 4.6vw, 48px); margin-top: 8px; }
+.hero .lede { margin-top: 12px; font-size: 16px; }
+.panel { background: var(--cell); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.panel h2 { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 24px; }
+.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.hai { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+input[type="date"] { width: 100%; }
+.muted { color: var(--soft); font-size: 13.5px; margin: 0; }
+.eyebrow a { color: inherit; }
+.muted a, .lede a { color: var(--tu); font-weight: 600; }
+.note { color: var(--soft); font-size: 13px; max-width: 80ch; margin: 0; }
+.btn2 { height: 40px; padding: 0 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--cell); color: var(--ink); font: 500 14px var(--f-ui); cursor: pointer; }
+.btn2:hover { border-color: var(--tu); }
+.nho { margin: 0 0 8px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--tu); }
+.Tot { --mau: var(--tot); } .Kha { --mau: var(--kha); } .Binh { --mau: var(--binh); } .Xau { --mau: var(--xau); }
+
+/* Chi tiết một ngày */
+.ngay-dau { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 22px; align-items: center; }
+.ngay-dau .to { width: 132px; padding: 12px 8px; border-radius: 12px; border: 2px solid var(--mau); text-align: center; display: flex; flex-direction: column; gap: 2px; background: var(--paper); }
+.ngay-dau .to b { font: 700 54px/1 var(--f-display); color: var(--mau); }
+.ngay-dau .to span { font-size: 13px; color: var(--soft); }
+.tom { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.tom h2 { font-size: 28px; }
+.diem-ngay { display: flex; align-items: baseline; gap: 10px; }
+.diem-ngay b { font: 700 30px var(--f-display); color: var(--mau); }
+.diem-ngay span { font-weight: 600; }
+.thanh { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; max-width: 420px; }
+.thanh i { display: block; height: 100%; border-radius: 99px; background: var(--mau); }
+.luoi-o { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.luoi-o .o { padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.luoi-o .o.xau { border-left: 4px solid var(--xau); }
+.luoi-o .nhan { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--soft); }
+.luoi-o b { font-size: 15.5px; }
+.luoi-o p { margin: 0; font-size: 14px; line-height: 1.6; }
+.gio { display: flex; flex-wrap: wrap; gap: 8px; }
+.gio span { padding: 6px 12px; border-radius: 999px; background: var(--hl); font-size: 13.5px; }
+.gio b { margin-right: 6px; color: var(--tu); }
+.ly-do { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.ly-do li { font-size: 14px; line-height: 1.6; padding-left: 24px; position: relative; }
+.ly-do li::before { content: '•'; position: absolute; left: 6px; color: var(--soft); font-weight: 700; }
+.ly-do li.tot::before { content: '✓'; color: var(--tot); left: 2px; }
+.ly-do li.xau::before { content: '✕'; color: var(--xau); left: 2px; }
+
+/* Lịch tháng */
+.lich-dau { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.lich-dau .btn2 { width: 44px; font-size: 20px; padding: 0; }
+.lich { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.lich .thu { text-align: center; font-size: 12px; font-weight: 600; color: var(--soft); padding: 4px 0; }
+.lich .ngay { position: relative; min-height: 64px; padding: 6px 4px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; font-family: var(--f-ui); }
+.lich .ngay:hover { border-color: var(--tu); }
+.lich .ngay b { font: 700 18px var(--f-display); }
+.lich .ngay small { font-size: 11.5px; color: var(--soft); }
+.lich .ngay.nay b { color: var(--tu); text-decoration: underline; text-underline-offset: 3px; }
+.lich .ngay.chon { border: 2px solid var(--tu); background: var(--hl); }
+.cham { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--mau); }
+.lich .cham { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); }
+.chu-giai { margin: 0; font-size: 13px; color: var(--soft); display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.chu-giai .cham { margin-left: 6px; }
+
+/* Danh sách ngày tốt */
+.ds-ngay { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; counter-reset: n; }
+.ds-ngay > li { padding: 14px 16px; border: 1px solid var(--line); border-left: 4px solid var(--mau); border-radius: 10px; background: var(--paper); display: flex; flex-direction: column; gap: 8px; }
+.ds-dau { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.ds-dau > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ds-dau b { font-size: 16px; }
+.ds-dau .pt { font: 700 24px var(--f-display); color: var(--mau); white-space: nowrap; }
+
+@media (max-width: 860px) {
+  .hero, .luoi-o { grid-template-columns: minmax(0, 1fr); }
+  .panel { padding: 16px; }
+}
+@media (max-width: 520px) {
+  .ngay-dau { grid-template-columns: minmax(0, 1fr); }
+  .ngay-dau .to { width: 100%; flex-direction: row; justify-content: center; align-items: baseline; gap: 10px; }
+  .ngay-dau .to b { font-size: 40px; }
+  .lich { gap: 3px; }
+  .lich .ngay { min-height: 54px; padding: 4px 2px 12px; border-radius: 8px; }
+  .lich .ngay b { font-size: 15px; }
+  .lich .ngay small { font-size: 10px; }
+  .hai { grid-template-columns: minmax(0, 1fr); }
+}
