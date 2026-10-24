@@ -97,12 +97,10 @@ a.tool:hover { border-color: var(--tu); }
 .nguon { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; border-top: 1px dashed var(--line); padding-top: 10px; }
 .nguon li { display: flex; flex-direction: column; gap: 3px; font-size: 13.5px; line-height: 1.6; color: var(--soft); }
 .nguon .dau { display: flex; justify-content: space-between; gap: 8px; color: var(--ink); font-weight: 600; font-size: 13px; }
-.sao-diem { color: #B7791F; letter-spacing: 1px; white-space: nowrap; font-weight: 400; }
-.sao-diem i { color: var(--line); font-style: normal; }
+.nguon .pt { color: var(--tu); white-space: nowrap; }
+.thanh.mini { height: 4px; margin-bottom: 2px; }
 .them { margin: 0; padding: 10px 12px; border-radius: 8px; background: var(--hl); font-size: 13.5px; line-height: 1.6; }
 .cach-tinh { margin: 0; color: var(--soft); font-size: 13px; max-width: 90ch; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sao-diem { color: #F2C14E; } }
-:root[data-theme="dark"] .sao-diem { color: #F2C14E; }
 @media (max-width: 1000px) { .du-doan { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 820px) { .ho-so { grid-template-columns: minmax(0, 1fr); } }
 </style>
@@ -164,7 +162,7 @@ a.tool:hover { border-color: var(--tu); }
     <p class="ky-info" id="ky-info"></p>
     <p class="tom-tat" id="tom-tat"></p>
     <div class="du-doan" id="du-doan" aria-live="polite"></div>
-    <p class="cach-tinh"><b>Cách tính:</b> mỗi hệ cho điểm 1–5. Tử vi lấy 40% từ nền lá số (Tài Bạch và Phúc Đức cho may mắn, Phu Thê cho tình cảm, Quan Lộc cho sự nghiệp) và 60% từ vận của tuổi trong ngày, tháng âm lịch, năm âm lịch. Cung hoàng đạo dựa trên vị trí thật của các hành tinh so với cung Mặt Trời của bạn. Số chủ đạo dựa trên ngày, tháng, năm cá nhân và thiên hướng của con số. Điểm chung là trung bình ba hệ. Nội dung chỉ để tham khảo.</p>
+    <p class="cach-tinh"><b>Cách tính:</b> mỗi hệ cho điểm từ 0% đến 100%, 50% là mức trung bình. Tử vi lấy 40% từ nền lá số (Tài Bạch và Phúc Đức cho may mắn, Phu Thê cho tình cảm, Quan Lộc cho sự nghiệp) và 60% từ vận của tuổi trong ngày, tháng âm lịch, năm âm lịch. Cung hoàng đạo dựa trên vị trí thật của các hành tinh so với cung Mặt Trời của bạn. Số chủ đạo dựa trên ngày, tháng, năm cá nhân và thiên hướng của con số. Điểm chung là trung bình ba hệ. Nội dung chỉ để tham khảo.</p>
   </section>
 
   <section class="block" aria-labelledby="h-tools">

@@ -10,7 +10,7 @@
   const SH = node ? require('../../../numerology/frontend/js/so-hoc.js') : root.SoHoc;
   const kep = x => Math.max(1, Math.min(5, x));
   const tron = x => Math.round(x * 10) / 10;
-  const phay = x => String(x).replace('.', ','); // số thập phân kiểu Việt Nam
+  const pt = d => Math.round((d - 1) / 4 * 100); // điểm 1–5 ra phần trăm: 1 = 0%, 3 = 50%, 5 = 100%
   const cauDau = s => (s.match(/^.*?[.!?](\s|$)/) || [s])[0].trim();
 
   // ---------- Tử vi: độ vững của cung trên lá số ----------
@@ -81,18 +81,18 @@
         const z = ma === 'mayMan' ? (lvz.sao + tb4) / 2 : lvz.sao;
         const s = kep(sh[k][ma].diem + nghieng[ma] * 0.5);
         const tong = (tv + z + s) / 3;
-        return { ma, ten, diem: tron(tong), sao: Math.round(tong), phanTram: Math.round(tong / 5 * 100), muc: mucCua(tong),
+        return { ma, ten, diem: tron(tong), phanTram: pt(tong), muc: mucCua(tong),
           tongHop: `${dongThuan([tv, z, s], ['tử vi', `cung ${cung.ten}`, 'số chủ đạo'])} ${KET[ma][mucCua(tong)]}`,
           nguon: [
-            { he: 'Tử vi', diem: tron(tv), loi: `${n.map(moTaCung).join(' ')} ${cg[k].muc.find(x => x.ten === tuVi).text}` },
-            { he: `Cung ${cung.ten}`, diem: tron(z), loi: cauDau(lvz.loi) },
-            { he: `Số chủ đạo ${scd.hien}`, diem: tron(s), loi: `${TEN_SO[k]} số ${sh[k].so} (${sh[k].ten}): ${sh[k][ma].loi}` },
+            { he: 'Tử vi', diem: tron(tv), phanTram: pt(tv), loi: `${n.map(moTaCung).join(' ')} ${cg[k].muc.find(x => x.ten === tuVi).text}` },
+            { he: `Cung ${cung.ten}`, diem: tron(z), phanTram: pt(z), loi: cauDau(lvz.loi) },
+            { he: `Số chủ đạo ${scd.hien}`, diem: tron(s), phanTram: pt(s), loi: `${TEN_SO[k]} số ${sh[k].so} (${sh[k].ten}): ${sh[k][ma].loi}` },
           ] };
       });
       const xep = [...linhVuc].sort((a, b) => b.diem - a.diem);
       ky[k] = { tuVi: { tieuDe: cg[k].tieuDe, nhan: cg[k].nhan, ly: cg[k].dong[0] }, linhVuc,
-        tomTat: xep[0].diem - xep[2].diem < 0.4 ? `Ba mặt khá cân bằng, quanh mức ${phay(tron((xep[0].diem + xep[2].diem) / 2))}/5.`
-          : `Nổi bật nhất là ${xep[0].ten.toLowerCase()} (${phay(xep[0].diem)}/5); ${xep[2].ten.toLowerCase()} cần chú ý hơn (${phay(xep[2].diem)}/5).` };
+        tomTat: xep[0].phanTram - xep[2].phanTram < 10 ? `Ba mặt khá cân bằng, quanh mức ${Math.round((xep[0].phanTram + xep[2].phanTram) / 2)}%.`
+          : `Nổi bật nhất là ${xep[0].ten.toLowerCase()} (${xep[0].phanTram}%); ${xep[2].ten.toLowerCase()} cần chú ý hơn (${xep[2].phanTram}%).` };
     }
 
     const menh = L.cung[L.menh - 1], chinhMenh = menh.sao.filter(s => s.loai === 1);

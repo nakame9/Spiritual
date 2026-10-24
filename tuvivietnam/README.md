@@ -125,9 +125,9 @@ Trả về:
 
 - `hoSo`: tuổi can chi, bản mệnh, cung Mệnh (tử vi); cung hoàng đạo; số chủ đạo và năm cá nhân.
 - `ky.ngay`, `ky.thang`, `ky.nam`: mỗi mốc có `linhVuc` gồm May mắn, Tình cảm, Sự nghiệp. Mỗi mặt có:
-  - `diem`: điểm chung 1–5, là trung bình ba hệ;
+  - `phanTram`: điểm chung 0–100% (50% là trung bình), quy từ `diem` 1–5 là trung bình ba hệ;
   - `tongHop`: câu nói rõ hệ nào thuận, hệ nào nghịch, kèm lời khuyên;
-  - `nguon`: điểm và lời giải của từng hệ.
+  - `nguon`: điểm (`diem`, `phanTram`) và lời giải của từng hệ.
 - `mayMan`: màu và số may mắn.
 
 Điểm từng hệ:

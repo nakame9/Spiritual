@@ -28,8 +28,6 @@
   }
   const [ny, nm, nd] = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date()).split('-').map(Number);
   const HOM_NAY = { y: ny, m: nm, d: nd };
-  const so = x => String(x).replace('.', ',');
-  const sao = n => `<span class="sao-diem" role="img" aria-label="${n} trên 5 sao">${'★'.repeat(n)}<i>${'★'.repeat(5 - n)}</i></span>`;
   let kq = null, ky = 'ngay';
 
   function veKy() {
@@ -39,11 +37,11 @@
     $('ky-info').textContent = `${moc}. ${p.tuVi.tieuDe}: ${p.tuVi.nhan.toLowerCase()}. ${p.tuVi.ly}`;
     $('tom-tat').textContent = p.tomTat;
     $('du-doan').innerHTML = p.linhVuc.map(l => `<article class="lv-the ${l.muc}">
-      <header><h3>${l.ten}</h3><span class="diem">${so(l.diem)}<small>/5</small></span></header>
-      <div class="thanh" role="img" aria-label="${l.phanTram}%"><i style="width:${l.phanTram}%"></i></div>
+      <header><h3>${l.ten}</h3><span class="diem">${l.phanTram}<small>%</small></span></header>
+      <div class="thanh" aria-hidden="true"><i style="width:${l.phanTram}%"></i></div>
       <p class="tong-hop">${l.tongHop}</p>
       ${l.ma === 'mayMan' ? `<p class="them"><b>Màu hợp:</b> ${kq.mayMan.mau}${ky === 'ngay' ? `; theo Mặt Trăng hôm nay thêm màu ${kq.mayMan.mauHomNay}` : ''}.<br><b>Số may mắn:</b> ${kq.mayMan.so.join(', ')}.</p>` : ''}
-      <ul class="nguon">${l.nguon.map(x => `<li><span class="dau"><span>${x.he}</span>${sao(Math.round(x.diem))}</span>${x.loi}</li>`).join('')}</ul></article>`).join('');
+      <ul class="nguon">${l.nguon.map(x => `<li><span class="dau"><span>${x.he}</span><span class="pt">${x.phanTram}%</span></span><span class="thanh mini" aria-hidden="true"><i style="width:${x.phanTram}%"></i></span>${x.loi}</li>`).join('')}</ul></article>`).join('');
   }
 
   function show() {

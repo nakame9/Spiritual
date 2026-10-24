@@ -27,7 +27,10 @@ test('dự đoán: 3 mốc × 3 mặt, mỗi mặt có điểm 1–5 từ đủ 
       for (const n of l.nguon) assert.ok(n.diem >= 1 && n.diem <= 5 && n.loi.length > 20, `${k} ${l.ma} ${n.he}`);
       assert.ok(Math.abs(l.diem - l.nguon.reduce((a, n) => a + n.diem, 0) / 3) <= 0.11, `${k} ${l.ma}`);
       assert.ok(l.tongHop.length > 30);
+      for (const x of [l, ...l.nguon]) assert.ok(Number.isInteger(x.phanTram) && x.phanTram >= 0 && x.phanTram <= 100, `${k} ${l.ma} %`);
     }
+    assert.match(r.ky[k].tomTat, /\d+%/);
+    assert.doesNotMatch(r.ky[k].tomTat, /\/5/);
   }
 });
 
