@@ -51,6 +51,6 @@ test('API tổng hợp và trang chủ mới, trang xem nhanh, tài nguyên các
   const home = await (await fetch(base + '/')).text();
   assert.match(home, /Một ngày sinh, ba góc nhìn/);
   assert.match(await (await fetch(base + '/xem-nhanh.html')).text(), /<h1>Xem tử vi nhanh<\/h1>/);
-  for (const p of ['/js/tong-hop.js', '/js/trang-chu.js', '/zodiac/frontend/js/luan-giai.js', '/zodiac/frontend/js/vendor/astronomy.browser.min.js', '/numerology/frontend/js/so-hoc.js', '/Tarot/frontend/index.html'])
+  for (const p of ['/js/tong-hop.js', '/js/trang-chu.js', '/shared/site.css', '/tuvivietnam/frontend/index.html', '/numerology/frontend/index.html', '/zodiac/frontend/js/luan-giai.js', '/zodiac/frontend/js/vendor/astronomy.browser.min.js', '/numerology/frontend/js/so-hoc.js', '/Tarot/frontend/index.html'])
     assert.strictEqual((await fetch(base + p)).status, 200, p);
 });

@@ -19,7 +19,6 @@ Chức năng cung hoàng đạo (chiêm tinh phương Tây) của website Lá S�
 zodiac/
 ├── frontend/                   Trang web tĩnh, chạy được ngay trên GitHub Pages
 │   ├── index.html, cung.html, tu-vi.html, tuong-hop.html, ban-do-sao.html
-│   ├── css/site.css            Màu, chữ, menu (giống phần tử vi)
 │   ├── css/zodiac.css          Giao diện cung hoàng đạo, màu bốn nguyên tố
 │   └── js/
 │       ├── vendor/astronomy.browser.min.js   Astronomy Engine 2.1.19 (MIT, Don Cross)

@@ -1,4 +1,4 @@
-/* Màu, chữ và form dùng chung cho mọi trang của Lá Số Tử Vi */
+/* Màu, chữ, form và khung trang dùng chung cho mọi phần của site (tử vi, Tarot, hoàng đạo, số chủ đạo). Chỉ có một bản này. */
 :root {
   --paper: #F4F3F8; --cell: #FFFFFF; --mid: #ECE8F4; --ink: #221C33; --soft: #6B6480; --line: #D3CDE0;
   --tu: #6A2C91; --hl: #F1E9F8; --tag: #221C33; --tag-fg: #FFFFFF;

@@ -11,7 +11,6 @@ tuvivietnam/
 │   ├── con-giap.html    Tử vi 12 con giáp theo ngày, tuần, tháng, năm
 │   ├── bai-viet.html    Bài viết
 │   ├── admin/index.html Trang quản trị (chỉ chạy khi mở qua backend)
-│   ├── css/site.css     Màu, chữ, menu dùng chung
 │   └── js/
 │       ├── tuvi.js      Engine: lịch âm (Hồ Ngọc Đức) và an sao
 │       ├── luangiai.js  Luận giải theo cung (sửa được từ trang quản trị)

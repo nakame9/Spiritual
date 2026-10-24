@@ -122,8 +122,10 @@ app.use('/api', (req, res) => res.status(404).json({ error: 'Không có API này
 // Trang quản trị không cho nhúng vào trang khác (chống clickjacking)
 app.use('/admin', (req, res, next) => { res.set({ 'X-Frame-Options': 'DENY', 'Referrer-Policy': 'same-origin' }); next(); });
 app.use(express.static(FRONTEND));
-// Các phần khác của site nằm cạnh thư mục tuvivietnam; phục vụ luôn để trang chủ và menu chạy được khi chạy riêng máy chủ này
-for (const p of ['zodiac', 'numerology', 'Tarot']) app.use(`/${p}/frontend`, express.static(path.join(__dirname, '..', '..', p, 'frontend')));
+// Phục vụ cả site theo đúng bố cục GitHub Pages (thư mục shared và các phần bên cạnh), để chạy một máy chủ này là đủ cả site
+const GOC_KHO = path.join(__dirname, '..', '..');
+app.use('/shared', express.static(path.join(GOC_KHO, 'shared')));
+for (const p of ['tuvivietnam', 'zodiac', 'numerology', 'Tarot']) app.use(`/${p}/frontend`, express.static(path.join(GOC_KHO, p, 'frontend')));
 
 // Lỗi JSON hỏng hoặc lỗi bất ngờ: trả lời gọn, không lộ chi tiết máy chủ
 app.use((err, req, res, next) => {

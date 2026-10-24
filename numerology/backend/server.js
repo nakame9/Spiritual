@@ -41,6 +41,7 @@ app.get('/api/chu-ky', (req, res) => res.json(SoHoc.CHU_KY));
 
 app.use('/api', (req, res) => res.status(404).json({ error: 'Không có API này.' }));
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
+app.use('/shared', express.static(path.join(__dirname, '..', '..', 'shared'))); // CSS dùng chung của cả site
 app.use((err, req, res, next) => {
   if (err.type === 'entity.parse.failed') return res.status(400).json({ error: 'Dữ liệu gửi lên không phải JSON hợp lệ.' });
   console.error(err);

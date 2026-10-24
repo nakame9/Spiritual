@@ -8,7 +8,6 @@ Tarot/
 │   ├── index.html          Trang chủ Tarot: giới thiệu, cách xem, các kiểu trải bài, chủ đề, bộ 78 lá
 │   ├── xem-bai.html        Trang xem bài: câu hỏi → xáo bài (có hiệu ứng) → rút lá → lật lá → đọc ý nghĩa
 │   ├── thu-vien.html       Thư viện: tra cứu 78 lá, tìm không dấu, lọc theo nhóm, xem chi tiết từng lá
-│   ├── css/site.css        Màu, chữ, menu (giống phần tử vi)
 │   ├── css/tarot.css       Giao diện lá bài, bộ bài, kết quả
 │   └── js/
 │       ├── bo-bai.js       78 lá, ý nghĩa chung, chủ đề, kiểu trải bài, xáo bài, đọc bài, luận giải, tìm lá

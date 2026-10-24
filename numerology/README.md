@@ -15,7 +15,6 @@ Chức năng thần số học của website Lá Số Tử Vi. Cách tính theo 
 numerology/
 ├── frontend/              Trang web tĩnh, chạy được ngay trên GitHub Pages
 │   ├── index.html         Tính số chủ đạo, các chỉ số, biểu đồ ngày sinh, năm cá nhân, ý nghĩa các số
-│   ├── css/site.css       Màu, chữ, menu (giống phần tử vi)
 │   ├── css/so-hoc.css     Giao diện trang số chủ đạo
 │   └── js/so-hoc.js       Cách tính và nội dung (dùng chung với backend và trang chủ tử vi)
 │       js/trang-so-hoc.js Giao diện

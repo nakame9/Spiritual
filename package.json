@@ -1,0 +1,12 @@
+{
+  "name": "spiritual",
+  "private": true,
+  "description": "Lá Số Tử Vi: tử vi, Tarot, cung hoàng đạo, số chủ đạo. Lệnh chung cho cả kho; mỗi phần vẫn chạy riêng được trong thư mục backend của nó.",
+  "scripts": {
+    "cai-dat": "npm install --prefix tuvivietnam/backend && npm install --prefix Tarot/backend && npm install --prefix zodiac/backend && npm install --prefix numerology/backend",
+    "test": "node scripts/menu.js --kiem-tra && npm test --prefix tuvivietnam/backend && npm test --prefix Tarot/backend && npm test --prefix zodiac/backend && npm test --prefix numerology/backend",
+    "menu": "node scripts/menu.js",
+    "start": "npm start --prefix tuvivietnam/backend"
+  },
+  "engines": { "node": ">=18" }
+}
