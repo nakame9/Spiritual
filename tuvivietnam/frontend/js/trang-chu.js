@@ -10,17 +10,17 @@
   const KEY = 'laso-tuvi-input';
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) { /* trình duyệt chặn lưu trữ */ }
-  const v0 = Object.assign({ ten: '', nam: true, am: false, nhuan: false, ngay: '', thang: '', namSinh: '', gio: 1 }, saved || {});
+  const v0 = Object.assign({ nam: true, am: false, nhuan: false, ngay: '', thang: '', namSinh: '', gio: 1 }, saved || {});
   $(v0.nam ? 'q-nam' : 'q-nu').checked = true;
   $(v0.am ? 'q-am' : 'q-duong').checked = true;
   $('q-nhuan').checked = !!v0.nhuan;
-  $('q-ten').value = v0.ten || ''; $('q-ngay').value = v0.ngay; $('q-thang').value = v0.thang; $('q-namsinh').value = v0.namSinh; $('q-gio').value = v0.gio;
+  $('q-ngay').value = v0.ngay; $('q-thang').value = v0.thang; $('q-namsinh').value = v0.namSinh; $('q-gio').value = v0.gio;
   const syncNhuan = () => { $('q-nhuan-wrap').hidden = !$('q-am').checked; };
   syncNhuan();
 
   function read() {
     const n = id => Number($(id).value);
-    const v = { ten: $('q-ten').value.trim(), nam: $('q-nam').checked, am: $('q-am').checked, nhuan: $('q-nhuan').checked, ngay: n('q-ngay'), thang: n('q-thang'), namSinh: n('q-namsinh'), gio: n('q-gio') };
+    const v = { nam: $('q-nam').checked, am: $('q-am').checked, nhuan: $('q-nhuan').checked, ngay: n('q-ngay'), thang: n('q-thang'), namSinh: n('q-namsinh'), gio: n('q-gio') };
     if (!Number.isInteger(v.namSinh) || v.namSinh < 1900 || v.namSinh > 2100) throw new Error('Năm sinh cần trong khoảng 1900–2100.');
     if (!Number.isInteger(v.thang) || v.thang < 1 || v.thang > 12) throw new Error('Tháng sinh cần từ 1 đến 12.');
     if (!Number.isInteger(v.ngay) || v.ngay < 1 || v.ngay > (v.am ? 30 : 31)) throw new Error(`Ngày sinh cần từ 1 đến ${v.am ? 30 : 31}.`);
@@ -50,14 +50,13 @@
     let v;
     try {
       v = read();
-      kq = TongHop.duDoan({ ngay: v.ngay, thang: v.thang, nam: v.namSinh, amLich: v.am, nhuan: v.nhuan, gio: v.gio, namGioi: v.nam, ten: v.ten }, HOM_NAY);
+      kq = TongHop.duDoan({ ngay: v.ngay, thang: v.thang, nam: v.namSinh, amLich: v.am, nhuan: v.nhuan, gio: v.gio, namGioi: v.nam }, HOM_NAY);
     } catch (e) {
       $('q-err').textContent = e.message; $('q-err').hidden = false; return;
     }
     $('q-err').hidden = true;
     try { localStorage.setItem(KEY, JSON.stringify(Object.assign({}, saved || {}, v, { xem: HOM_NAY.y }))); } catch (e) { /* bỏ qua */ }
     const h = kq.hoSo, t = h.tuVi, z = h.hoangDao, s = h.soHoc;
-    $('h-kq').textContent = v.ten ? `Dự đoán cho ${v.ten}` : 'Dự đoán của bạn';
     $('sinh').textContent = `${v.nam ? 'Nam' : 'Nữ'}, sinh ngày ${kq.ngaySinh.duong} dương lịch (${kq.ngaySinh.am} âm lịch), ${kq.ngaySinh.gio}.`;
     $('ho-so').innerHTML = `
       <a class="hs" href="la-so.html"><span class="nhan">Tử vi</span><b>${t.canChi} · tuổi ${t.con}</b><p>Mệnh ${t.banMenh} · ${t.cuc}</p>

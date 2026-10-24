@@ -1,8 +1,8 @@
-/* Trang xem bài Tarot: đặt câu hỏi → xáo bài (có hiệu ứng) → rút lá úp → tự lật từng lá → đọc. Cần bo-bai.js và la-bai.js. */
+/* Trang xem bài Tarot: chọn chủ đề và kiểu trải → xáo bài (có hiệu ứng) → rút lá úp → tự lật từng lá → đọc. Cần bo-bai.js và la-bai.js. */
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
-  const { theLa, esc, soDo } = LaBai;
+  const { theLa, soDo } = LaBai;
   const giam = matchMedia('(prefers-reduced-motion: reduce)');
   const co = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 
@@ -16,7 +16,7 @@
   if (co(Tarot.CHU_DE, h)) document.querySelector(`input[name="chude"][value="${h}"]`).checked = true;
 
   // pha: 'xao' đang xáo → 'rut' chọn lá úp → 'lat' lật từng lá → 'xong'. luot tăng mỗi lần xáo để bỏ các hẹn giờ của lượt cũ.
-  const st = { kieu: '3la', chuDe: 'tongquan', nguoc: true, cauHoi: '', xao: [], chon: [], pha: '', luot: 0, bay: [] };
+  const st = { kieu: '3la', chuDe: 'tongquan', nguoc: true, xao: [], chon: [], pha: '', luot: 0, bay: [] };
   const kieu = () => Tarot.KIEU_TRAI[st.kieu];
   const soLa = () => kieu().viTri.length;
   const ngang = i => !!(kieu().luoi && kieu().luoi.o[i][2]);
@@ -134,7 +134,6 @@
     st.kieu = document.querySelector('input[name="kieu"]:checked').value;
     st.chuDe = document.querySelector('input[name="chude"]:checked').value;
     st.nguoc = $('nguoc').checked;
-    st.cauHoi = $('cau-hoi').value.trim();
     $('chon-moTa').textContent = `Nghĩ về câu hỏi của bạn rồi rút ${soLa()} lá trong bộ bài đang úp. Rút đủ thì lật từng lá để xem.`;
     $('buoc2').hidden = false;
     xaoBai();
@@ -202,7 +201,7 @@
   function docKetQua() {
     const r = Tarot.docBai(st.kieu, st.chon, st.chuDe);
     $('kq-tieu-de').textContent = `${r.tenKieu} · ${r.tenChuDe}`;
-    $('reading').innerHTML = `${st.cauHoi ? `<p class="q"><b>Câu hỏi:</b> ${esc(st.cauHoi)}</p>` : ''}
+    $('reading').innerHTML = `
       ${r.la.map((l, i) => `<div class="item">${theLa(Tarot.BO_BAI[l.id], l.nguoc, 'static')}
         <div><span class="step">${r.la.length > 1 ? `${i + 1}. ` : ''}${l.viTri}</span><h3>${l.ten}</h3>
         <div class="meta"><span>${l.tenEn}</span><span class="chip ${l.nguoc ? 'n' : 'x'}">${l.nguoc ? 'Ngược' : 'Xuôi'}</span><a href="thu-vien.html#la-${l.id}" target="_blank" rel="noopener">Tra cứu lá này</a></div>
@@ -230,6 +229,6 @@
   $('lam-lai').addEventListener('click', () => {
     st.luot++; st.pha = ''; st.xao = []; st.chon = [];
     $('buoc2').hidden = true; $('ket-qua').hidden = true;
-    cuon($('form')); $('cau-hoi').focus({ preventScroll: true });
+    cuon($('form'));
   });
 })();

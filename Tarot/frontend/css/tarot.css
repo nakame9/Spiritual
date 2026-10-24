@@ -1,4 +1,4 @@
-/* Trang Tarot: hero có 3 lá mẫu → bước 1 đặt câu hỏi → bước 2 chọn lá từ hàng bài úp → bước 3 lật bài và đọc.
+/* Trang Tarot: hero có 3 lá mẫu → bước 1 chọn chủ đề, kiểu trải → bước 2 chọn lá từ hàng bài úp → bước 3 lật bài và đọc.
    Màu theo bộ: Gậy = lửa, Cốc = nước, Kiếm = khí, Tiền = đất, Ẩn Chính = tím của site. */
 :root {
   --face: #FFFFFF; --face-line: #D9D3E6; --back: #4E2370; --back-2: #6A2C91; --back-star: #E9D7F7;
@@ -23,8 +23,7 @@
 .panel { background: var(--cell); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 .panel h2 { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 22px; display: flex; align-items: baseline; gap: 10px; }
 .step { font-family: var(--f-ui); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--tu); }
-textarea { width: 100%; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); font: 400 15px/1.6 var(--f-ui); padding: 10px 12px; resize: vertical; }
-textarea:focus-visible, .spreads input:focus-visible + span, .deck button:focus-visible, button:focus-visible { outline: 2px solid var(--tu); outline-offset: 2px; }
+.spreads input:focus-visible + span, .deck button:focus-visible, button:focus-visible { outline: 2px solid var(--tu); outline-offset: 2px; }
 .f { width: 100%; }
 
 .spreads { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
@@ -105,7 +104,6 @@ textarea:focus-visible, .spreads input:focus-visible + span, .deck button:focus-
 .card.static .face { transform: none; }
 
 .reading { display: flex; flex-direction: column; gap: 14px; }
-.q { margin: 0; padding: 12px 16px; background: var(--hl); border-radius: 10px; font-size: 15px; }
 .item { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 18px; padding: 16px 0; border-top: 1px solid var(--line); align-items: start; }
 .item h3 { margin: 0; font-family: var(--f-display); font-size: 20px; font-weight: 700; }
 .item .meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 4px 0 6px; font-size: 13px; color: var(--soft); }

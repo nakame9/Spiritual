@@ -38,10 +38,9 @@ app.post('/api/rut-bai', (req, res) => {
   if (!Tarot.KIEU_TRAI[kieu]) return res.status(400).json({ error: `kieu cần là ${Object.keys(Tarot.KIEU_TRAI).join(', ')}.` });
   if (!Object.prototype.hasOwnProperty.call(Tarot.CHU_DE, chuDe)) return res.status(400).json({ error: `chuDe cần là ${Object.keys(Tarot.CHU_DE).join(', ')}.` });
   if (b.nguoc !== undefined && typeof b.nguoc !== 'boolean') return res.status(400).json({ error: 'nguoc cần là true hoặc false.' });
-  if (b.cauHoi !== undefined && (typeof b.cauHoi !== 'string' || b.cauHoi.length > 300)) return res.status(400).json({ error: 'cauHoi tối đa 300 ký tự.' });
   const n = Tarot.KIEU_TRAI[kieu].viTri.length;
   const ketQua = Tarot.docBai(kieu, Tarot.xaoBai(b.nguoc !== false).slice(0, n), chuDe);
-  res.json(Object.assign({ cauHoi: (b.cauHoi || '').trim() }, ketQua));
+  res.json(ketQua);
 });
 
 app.use('/api', (req, res) => res.status(404).json({ error: 'Không có API này.' }));

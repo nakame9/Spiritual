@@ -10,11 +10,6 @@
   const chuTinh = c => c.chuTinh.length > 1 ? `${HANH_TINH[c.chuTinh[0]].ten} (hiện đại), ${HANH_TINH[c.chuTinh[1]].ten} (cổ điển)` : HANH_TINH[c.chuTinh[0]].ten;
   const ky = (c, lop = '') => `<span class="ky ${lop}" aria-hidden="true">${c.kyHieu}</span>`;
   const nt = c => `nt-${c.nguyenTo}`;
-  // Nhớ cung đã chọn trên máy này cho lần sau (không bắt buộc, lỗi thì bỏ qua)
-  const nho = {
-    lay() { try { const v = localStorage.getItem('zodiac-cung'); return theoId[v] ? v : null; } catch { return null; } },
-    dat(v) { try { localStorage.setItem('zodiac-cung', v); } catch { /* trình duyệt chặn lưu trữ */ } },
-  };
   /** Đọc ô ngày/giờ dạng số; trả về { y, m, d, h, mi } hoặc chuỗi lỗi */
   function docNgay(p, canGio) {
     const so = id => { const v = ($(p + id) || {}).value; return v === undefined || String(v).trim() === '' ? null : Number(v); };
@@ -28,5 +23,5 @@
     return { y, m, d, h, mi: mi || 0 };
   }
   const homNay = () => { const x = root.ThienVan.ngayTai(new Date(), root.ChiemTinh.VN); return { y: x.y, m: x.m, d: x.d }; };
-  root.UI = { $, esc, CUNG, theoId, HANH_TINH, NGUYEN_TO, TINH_CHAT, sao, ngayNgan, chuTinh, ky, nt, nho, docNgay, homNay };
+  root.UI = { $, esc, CUNG, theoId, HANH_TINH, NGUYEN_TO, TINH_CHAT, sao, ngayNgan, chuTinh, ky, nt, docNgay, homNay };
 })(window);

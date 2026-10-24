@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Xem bài · Tarot · Lá Số Tử Vi</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Xem bài Tarot online: đặt câu hỏi, tự chọn lá từ bộ 78 lá, đọc ý nghĩa xuôi ngược bằng tiếng Việt cho từng vị trí.">
+<meta name="description" content="Xem bài Tarot online: chọn chủ đề, tự chọn lá từ bộ 78 lá, đọc ý nghĩa xuôi ngược bằng tiếng Việt cho từng vị trí.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
@@ -24,14 +24,12 @@
     <div>
       <p class="eyebrow"><a href="index.html">Tarot</a> · Xem bài</p>
       <h1>Xem bài Tarot</h1>
-      <p class="lede">Đặt một câu hỏi, chọn kiểu trải bài, rồi tự tay chọn lá từ bộ bài đã xáo. Mỗi lá có ý nghĩa xuôi và ngược, đọc theo chủ đề bạn chọn và theo vị trí của nó trong trải bài.</p>
+      <p class="lede">Nghĩ về điều bạn muốn hỏi, chọn chủ đề và kiểu trải bài, rồi tự tay chọn lá từ bộ bài đã xáo. Mỗi lá có ý nghĩa xuôi và ngược, đọc theo chủ đề bạn chọn và theo vị trí của nó trong trải bài.</p>
     </div>
   </section>
 
   <form class="panel" id="form" novalidate>
-    <h2><span class="step">Bước 1</span>Đặt câu hỏi</h2>
-    <label class="f"><span>Câu hỏi của bạn (không bắt buộc)</span>
-      <textarea id="cau-hoi" rows="2" maxlength="300" placeholder="Ví dụ: Tôi nên làm gì để công việc tháng tới thuận lợi hơn?"></textarea></label>
+    <h2><span class="step">Bước 1</span>Chọn chủ đề và kiểu trải bài</h2>
     <fieldset class="f" style="border:0;margin:0;padding:0"><legend>Chủ đề</legend>
       <div class="topics">
         <label><input type="radio" name="chude" value="tongquan" checked><span>Tổng quan</span></label>
@@ -62,7 +60,7 @@
   <section class="panel" id="ket-qua" hidden aria-labelledby="kq-tieu-de">
     <h2><span class="step">Bước 3</span><span id="kq-tieu-de">Kết quả</span></h2>
     <div class="reading" id="reading"></div>
-    <div class="actions"><button class="go" type="button" id="rut-lai">Rút lại với câu hỏi này</button><button class="btn2" type="button" id="lam-lai">Đặt câu hỏi khác</button></div>
+    <div class="actions"><button class="go" type="button" id="rut-lai">Rút lại</button><button class="btn2" type="button" id="lam-lai">Đổi chủ đề hoặc kiểu trải</button></div>
   </section>
 
   <p class="note">Bộ bài được xáo ngẫu nhiên ngay trên máy bạn. Ý nghĩa các lá do Lá Số Tử Vi biên soạn theo cách hiểu phổ biến của Tarot, dùng để suy ngẫm và tham khảo, không thay cho lời khuyên chuyên môn về sức khỏe, pháp lý hay tài chính.</p>

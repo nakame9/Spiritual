@@ -1,7 +1,7 @@
 /* Trang chủ cung hoàng đạo: xác định cung Mặt Trời, lưới 12 cung, nguyên tố và tính chất. */
 (function () {
   'use strict';
-  const { $, CUNG, NGUYEN_TO, TINH_CHAT, ngayNgan, chuTinh, ky, nt, nho, docNgay } = UI;
+  const { $, CUNG, NGUYEN_TO, TINH_CHAT, ngayNgan, chuTinh, ky, nt, docNgay } = UI;
 
   $('luoi').innerHTML = CUNG.map(c => `<a class="cung-the ${nt(c)}" href="cung.html#${c.id}">${ky(c)}<b>${c.ten}</b><small>${ngayNgan(c)}</small>
     <span class="chip">${NGUYEN_TO[c.nguyenTo].ten} · ${chuTinh(c).split(' (')[0]}</span></a>`).join('');
@@ -16,7 +16,6 @@
     $('loi').hidden = typeof v !== 'string'; $('loi').textContent = typeof v === 'string' ? v : '';
     if (typeof v === 'string') return;
     const r = ChiemTinh.xacDinhCung(v), c = r.cung;
-    nho.dat(c.id);
     const nhanNgay = `${v.d}/${v.m}/${v.y}`;
     let ghiChu = '';
     if (r.giaoCung) ghiChu = `<p class="canh-bao">Ngày ${nhanNgay} là ngày giao cung: Mặt Trời chuyển từ ${r.giaoCung.truoc.ten} sang ${r.giaoCung.sau.ten} lúc ${r.giaoCung.luc} (giờ Việt Nam). Sinh trước giờ này là ${r.giaoCung.truoc.ten}, từ giờ này trở đi là ${r.giaoCung.sau.ten}. Nhập giờ sinh để biết chính xác.</p>`;

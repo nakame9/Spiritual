@@ -53,11 +53,11 @@
   const mucCua = d => d >= 3.6 ? 'cao' : d <= 2.6 ? 'thap' : 'vua';
 
   /**
-   * v = { ngay, thang, nam, amLich, nhuan, gio (1–12 theo chi), namGioi, ten }
+   * v = { ngay, thang, nam, amLich, nhuan, gio (1–12 theo chi), namGioi }
    * homNay = { y, m, d } dương lịch theo giờ Việt Nam
    */
   function duDoan(v, homNay) {
-    const L = TuVi.lapLaSo({ ngay: v.ngay, thang: v.thang, nam: v.nam, amLich: !!v.amLich, nhuan: !!v.nhuan, gio: v.gio, namGioi: !!v.namGioi, ten: v.ten || '' });
+    const L = TuVi.lapLaSo({ ngay: v.ngay, thang: v.thang, nam: v.nam, amLich: !!v.amLich, nhuan: !!v.nhuan, gio: v.gio, namGioi: !!v.namGioi });
     const ds = L.duong, h = homNay;
     // Cung hoàng đạo: giờ giữa canh giờ sinh (Tý = 0 giờ, Sửu = 2 giờ…) theo giờ Việt Nam
     const xd = CT.xacDinhCung({ y: ds.nam, m: ds.thang, d: ds.ngay, h: ((v.gio - 1) * 2) % 24, mi: 0 }), cung = xd.cung;
@@ -97,7 +97,6 @@
 
     const menh = L.cung[L.menh - 1], chinhMenh = menh.sao.filter(s => s.loai === 1);
     return {
-      ten: v.ten || '',
       ngaySinh: { duong: `${ds.ngay}/${ds.thang}/${ds.nam}`, am: `${L.am.ngay}/${L.am.thang}${L.am.nhuan ? ' nhuận' : ''}/${L.am.nam}`, gio: `giờ ${TuVi.CHI[v.gio]}`, iso: `${ds.nam}-${String(ds.thang).padStart(2, '0')}-${String(ds.ngay).padStart(2, '0')}` },
       hoSo: {
         tuVi: { canChi: L.canChi.nam, con: ConGiap.CON[L.chiNam], banMenh: L.banMenh, cuc: L.cuc, menhChi: menh.chi,

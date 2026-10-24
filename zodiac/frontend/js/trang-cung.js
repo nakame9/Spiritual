@@ -1,15 +1,14 @@
 /* Trang chi tiết một cung: cung.html#bach-duong. Tổng quan, tính cách, tình yêu, sự nghiệp, Mặt Trăng và cung Mọc, tử vi hôm nay. */
 (function () {
   'use strict';
-  const { $, CUNG, theoId, NGUYEN_TO, TINH_CHAT, sao, ngayNgan, chuTinh, ky, nt, nho, homNay } = UI;
+  const { $, CUNG, theoId, NGUYEN_TO, TINH_CHAT, sao, ngayNgan, chuTinh, ky, nt, homNay } = UI;
   const MUC = [['s-tinh-cach', 'Tính cách'], ['s-tinh-yeu', 'Tình yêu'], ['s-su-nghiep', 'Sự nghiệp'], ['s-trang-moc', 'Mặt Trăng và cung Mọc'], ['s-tu-vi', 'Tử vi hôm nay']];
   $('toc').innerHTML = MUC.map(([id, t]) => `<button type="button" data-den="${id}">${t}</button>`).join('');
   $('toc').addEventListener('click', e => { const b = e.target.closest('button'); if (b) $(b.dataset.den).scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   const ds = (xs, lop) => `<ul${lop ? ` class="${lop}"` : ''}>${xs.map(x => `<li>${x}</li>`).join('')}</ul>`;
 
   function ve() {
-    const id = theoId[location.hash.slice(1)] ? location.hash.slice(1) : (nho.lay() || 'bach-duong'), c = theoId[id], s = c.so;
-    nho.dat(id);
+    const id = theoId[location.hash.slice(1)] ? location.hash.slice(1) : 'bach-duong', c = theoId[id], s = c.so;
     document.title = `${c.ten} (${c.en}) · Cung hoàng đạo · Lá Số Tử Vi`;
     $('chon').innerHTML = CUNG.map(x => `<a class="${nt(x)}" href="#${x.id}"${x.id === id ? ' aria-current="page"' : ''}>${ky(x)}${x.ten}</a>`).join('');
     $('dau').className = `dau-cung ${nt(c)}`;

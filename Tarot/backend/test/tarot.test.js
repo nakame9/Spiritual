@@ -39,12 +39,11 @@ test('đọc bài: đúng vị trí, ý nghĩa theo chiều lá, có tổng quan
 
 test('API rút bài: đúng số lá, không trùng, từ chối dữ liệu sai', async () => {
   const post = body => fetch(base + '/api/rut-bai', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  const r = await (await post({ kieu: 'tinhcam', cauHoi: ' Người ấy nghĩ gì? ', nguoc: false })).json();
+  const r = await (await post({ kieu: 'tinhcam', nguoc: false })).json();
   assert.strictEqual(r.la.length, 3);
   assert.strictEqual(new Set(r.la.map(l => l.id)).size, 3);
   assert.deepStrictEqual(r.la.map(l => l.viTri), ['Bạn', 'Người ấy', 'Mối quan hệ']);
   assert.ok(r.la.every(l => !l.nguoc));
-  assert.strictEqual(r.cauHoi, 'Người ấy nghĩ gì?');
   assert.strictEqual((await (await post({ kieu: '1la' })).json()).la.length, 1);
   const r5 = await (await post({ kieu: '5la' })).json();
   assert.deepStrictEqual(r5.la.map(l => l.viTri), ['Quá khứ', 'Hiện tại', 'Tương lai', 'Gốc rễ', 'Lời khuyên']);
@@ -52,7 +51,7 @@ test('API rút bài: đúng số lá, không trùng, từ chối dữ liệu sai
   assert.strictEqual(new Set(r10.la.map(l => l.id)).size, 10);
   assert.deepStrictEqual(r10.la.slice(0, 2).map(l => l.viTri), ['Hiện tại', 'Thử thách']);
   assert.strictEqual(r10.la[9].viTri, 'Kết quả');
-  for (const body of [{ kieu: '7la' }, { nguoc: 'co' }, { cauHoi: 'x'.repeat(301) }]) assert.strictEqual((await post(body)).status, 400, JSON.stringify(body));
+  for (const body of [{ kieu: '7la' }, { nguoc: 'co' }]) assert.strictEqual((await post(body)).status, 400, JSON.stringify(body));
 });
 
 test('API tra bài và phục vụ trang', async () => {

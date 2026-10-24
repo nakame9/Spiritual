@@ -1,11 +1,11 @@
 /* Trang độ tương hợp: #a=bach-duong&b=thien-binh. Chọn cung hoặc nhập ngày sinh, xem điểm 3 mặt và bảng hợp với 12 cung. */
 (function () {
   'use strict';
-  const { $, CUNG, theoId, ky, nt, nho, ngayNgan } = UI;
+  const { $, CUNG, theoId, ky, nt, ngayNgan } = UI;
   const opt = CUNG.map(c => `<option value="${c.id}">${c.kyHieu} ${c.ten} (${ngayNgan(c)})</option>`).join('');
   $('a').innerHTML = opt; $('b').innerHTML = opt;
   const q = new URLSearchParams(location.hash.slice(1));
-  $('a').value = theoId[q.get('a')] ? q.get('a') : (nho.lay() || 'bach-duong');
+  $('a').value = theoId[q.get('a')] ? q.get('a') : 'bach-duong';
   $('b').value = theoId[q.get('b')] ? q.get('b') : 'thien-binh';
 
   function ve() {
@@ -26,7 +26,7 @@
       </tbody></table></div>`;
   }
   const theoNgay = (o, el) => { const [y, m, d] = o.value.split('-').map(Number); if (y >= 1900) { el.value = ChiemTinh.cungTheoBang(m, d).id; ve(); } };
-  $('a').addEventListener('change', () => { nho.dat($('a').value); ve(); });
+  $('a').addEventListener('change', ve);
   $('b').addEventListener('change', ve);
   $('na').addEventListener('change', e => theoNgay(e.target, $('a')));
   $('nb').addEventListener('change', e => theoNgay(e.target, $('b')));

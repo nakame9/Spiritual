@@ -1,12 +1,12 @@
 # Tarot
 
-Chức năng xem bài Tarot của website Lá Số Tử Vi: đặt câu hỏi, chọn chủ đề (Tổng quan, Tình yêu, Sự nghiệp, Tài chính, Bản thân) và kiểu trải bài, tự chọn lá từ bộ 78 lá đã xáo, lật bài và đọc ý nghĩa xuôi/ngược theo chủ đề và vị trí.
+Chức năng xem bài Tarot của website Lá Số Tử Vi: chọn chủ đề (Tổng quan, Tình yêu, Sự nghiệp, Tài chính, Bản thân) và kiểu trải bài, tự chọn lá từ bộ 78 lá đã xáo, lật bài và đọc ý nghĩa xuôi/ngược theo chủ đề và vị trí.
 
 ```
 Tarot/
 ├── frontend/               Trang web tĩnh, chạy được ngay trên GitHub Pages
 │   ├── index.html          Trang chủ Tarot: giới thiệu, cách xem, các kiểu trải bài, chủ đề, bộ 78 lá
-│   ├── xem-bai.html        Trang xem bài: câu hỏi → xáo bài (có hiệu ứng) → rút lá → lật lá → đọc ý nghĩa
+│   ├── xem-bai.html        Trang xem bài: chủ đề, kiểu trải → xáo bài (có hiệu ứng) → rút lá → lật lá → đọc ý nghĩa
 │   ├── thu-vien.html       Thư viện: tra cứu 78 lá, tìm không dấu, lọc theo nhóm, xem chi tiết từng lá
 │   ├── css/tarot.css       Giao diện lá bài, bộ bài, kết quả
 │   └── js/
@@ -57,7 +57,7 @@ npm test
 
 | Phương thức | Đường dẫn | Mô tả |
 |---|---|---|
-| `POST` | `/api/rut-bai` | Xáo bộ bài và rút theo kiểu trải. Gửi `{ "kieu": "1la" \| "3la" \| "tinhcam" \| "5la" \| "10la", "chuDe": "tongquan" \| "tinhyeu" \| "sunghiep" \| "taichinh" \| "banthan", "nguoc": true, "cauHoi": "..." }` (đều không bắt buộc; mặc định `3la`, `tongquan`, có lá ngược). Trả về `{ cauHoi, kieu, tenKieu, chuDe, tenChuDe, la: [...], luanGiai: [...], tongQuan: [...] }`; mỗi lá có `yTheoViTri` (ý nghĩa theo vị trí), `y` (ý nghĩa theo chủ đề) và `yChung` (ý nghĩa chung, khi chủ đề khác Tổng quan); `luanGiai` là các đoạn của bài đọc tổng hợp |
+| `POST` | `/api/rut-bai` | Xáo bộ bài và rút theo kiểu trải. Gửi `{ "kieu": "1la" \| "3la" \| "tinhcam" \| "5la" \| "10la", "chuDe": "tongquan" \| "tinhyeu" \| "sunghiep" \| "taichinh" \| "banthan", "nguoc": true }` (đều không bắt buộc; mặc định `3la`, `tongquan`, có lá ngược). Trả về `{ kieu, tenKieu, chuDe, tenChuDe, la: [...], luanGiai: [...], tongQuan: [...] }`; mỗi lá có `yTheoViTri` (ý nghĩa theo vị trí), `y` (ý nghĩa theo chủ đề) và `yChung` (ý nghĩa chung, khi chủ đề khác Tổng quan); `luanGiai` là các đoạn của bài đọc tổng hợp |
 | `GET` | `/api/bo-bai` | Cả 78 lá với ý nghĩa xuôi, ngược và theo 4 chủ đề. Tra cứu bằng `?q=` (tên lá, tên tiếng Anh, từ khóa; không dấu cũng được) và `?nhom=anChinh\|gay\|coc\|kiem\|tien` |
 | `GET` | `/api/la-bai/:id` | Một lá, `id` từ 0 đến 77 (0–21 Ẩn Chính; 22–35 Gậy, 36–49 Cốc, 50–63 Kiếm, 64–77 Tiền, mỗi bộ từ Át đến Vua) |
 | `GET` | `/api/kieu-trai` | Các kiểu trải bài và ý nghĩa từng vị trí |
@@ -69,7 +69,7 @@ Ví dụ:
 ```bash
 curl -X POST http://localhost:3001/api/rut-bai \
   -H "Content-Type: application/json" \
-  -d '{"kieu":"tinhcam","chuDe":"tinhyeu","cauHoi":"Mối quan hệ này sẽ ra sao?"}'
+  -d '{"kieu":"tinhcam","chuDe":"tinhyeu"}'
 ```
 
 Dữ liệu sai trả mã 400 kèm `{ "error": "..." }` bằng tiếng Việt. Các API cho phép gọi từ trang khác (CORS).

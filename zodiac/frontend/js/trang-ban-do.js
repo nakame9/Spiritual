@@ -32,13 +32,13 @@
     $('loi').hidden = !loi; $('loi').textContent = loi;
     if (loi) return;
     const bd = ChiemTinh.banDoSao({ ...ngay, coGio: !khongGio, tz: noi.tz, viDo: noi.viDo, kinhDo: noi.kinhDo });
-    ve(bd, ngay, noi, $('ten').value.trim(), khongGio);
+    ve(bd, ngay, noi, khongGio);
     $('kq').hidden = false;
     $('kq').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
   });
 
-  function ve(bd, n, noi, ten, khongGio) {
-    $('tom-tat').textContent = `${ten ? ten + ': ' : ''}sinh ngày ${hai(n.d)}/${hai(n.m)}/${n.y}${khongGio ? ' (không rõ giờ)' : ` lúc ${hai(n.h)}:${hai(n.mi)}`} tại ${noi.ten}, ${bd.thoiDiem.lech}.`;
+  function ve(bd, n, noi, khongGio) {
+    $('tom-tat').textContent = `Sinh ngày ${hai(n.d)}/${hai(n.m)}/${n.y}${khongGio ? ' (không rõ giờ)' : ` lúc ${hai(n.h)}:${hai(n.mi)}`} tại ${noi.ten}, ${bd.thoiDiem.lech}.`;
     const b3 = bd.bigThree, the = (nhan, kyHieu, x, them) => {
       if (!x) return `<div class="b3"><span class="nhan">${nhan}</span><h3>Chưa xác định</h3><p>Cần giờ sinh và nơi sinh để biết cung Mọc, vì cung Mọc đổi khoảng 2 giờ một lần.</p></div>`;
       const c = theoId[x.cung];

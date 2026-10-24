@@ -1,11 +1,11 @@
 /* Trang tử vi theo cung: ngày, tuần, tháng, năm. Địa chỉ #bo-cap hoặc #bo-cap/tuan để chia sẻ. */
 (function () {
   'use strict';
-  const { $, CUNG, theoId, sao, ky, nt, nho, homNay } = UI;
+  const { $, CUNG, theoId, sao, ky, nt, homNay } = UI;
   const KY = ['ngay', 'tuan', 'thang', 'nam'];
   const hai = n => String(n).padStart(2, '0');
   const [h1, h2] = decodeURIComponent(location.hash.slice(1)).split('/');
-  const st = { cung: theoId[h1] ? h1 : (nho.lay() || 'bach-duong'), ky: KY.includes(h2) ? h2 : 'ngay', ngay: homNay() };
+  const st = { cung: theoId[h1] ? h1 : 'bach-duong', ky: KY.includes(h2) ? h2 : 'ngay', ngay: homNay() };
 
   $('chon').innerHTML = CUNG.map(c => `<label class="${nt(c)}"><input type="radio" name="cung" value="${c.id}"><span>${ky(c)}${c.ten}</span></label>`).join('');
   const NGHICH = { 'Sao Thủy': 'giao tiếp, giấy tờ, máy móc dễ trục trặc; hợp để xem lại việc cũ', 'Sao Kim': 'tình cảm và chi tiêu cần chậm lại; người cũ dễ quay lại', 'Sao Hỏa': 'năng lượng hành động chững lại; tránh nóng vội và tranh cãi' };
@@ -18,7 +18,6 @@
     document.querySelector(`input[name="cung"][value="${st.cung}"]`).checked = true;
     document.querySelectorAll('#ky button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.ky === st.ky)));
     $('ngay').value = `${y}-${hai(m)}-${hai(d)}`;
-    nho.dat(st.cung);
     history.replaceState(null, '', `#${st.cung}${st.ky === 'ngay' ? '' : '/' + st.ky}`);
     let tieuDe, than;
     if (st.ky === 'ngay') {

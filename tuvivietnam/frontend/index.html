@@ -101,8 +101,6 @@ a.tool:hover { border-color: var(--tu); }
 .sao-diem i { color: var(--line); font-style: normal; }
 .them { margin: 0; padding: 10px 12px; border-radius: 8px; background: var(--hl); font-size: 13.5px; line-height: 1.6; }
 .cach-tinh { margin: 0; color: var(--soft); font-size: 13px; max-width: 90ch; }
-.q-ten { flex: 1 1 100%; }
-.q-ten input { width: 100%; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sao-diem { color: #F2C14E; } }
 :root[data-theme="dark"] .sao-diem { color: #F2C14E; }
 @media (max-width: 1000px) { .du-doan { grid-template-columns: minmax(0, 1fr); } }
@@ -131,7 +129,6 @@ a.tool:hover { border-color: var(--tu); }
       <h2>Xem dự đoán của bạn</h2>
       <p class="hint">Nhập ngày giờ sinh rồi bấm Xem dự đoán.</p>
       <form id="q-form" novalidate>
-        <label class="f q-ten"><span>Họ tên (không bắt buộc)</span><input type="text" id="q-ten" maxlength="60" autocomplete="off"></label>
         <fieldset class="f"><legend>Giới tính</legend>
           <div class="seg">
             <label><input type="radio" name="q-gt" id="q-nam" checked><span>Nam</span></label>
