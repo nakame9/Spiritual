@@ -17,7 +17,7 @@ flowchart LR
     end
     TA["Tarot/frontend\nindex · xem-bai · thu-vien"]
     ZO["zodiac/frontend\nindex · cung · tu-vi · tuong-hop · ban-do-sao"]
-    NU["numerology/frontend\nindex"]
+    NU["numerology/frontend\nindex · tuong-hop"]
     SH["shared/site.css"]
   end
   home -- "tong-hop.js dùng" --> ZO
@@ -82,7 +82,7 @@ Trang chủ nạp lõi của phần khác qua đường dẫn tương đối, v�
 | `tuvivietnam/backend` | 3000 | `POST /api/la-so`, `POST /api/tong-hop`, `GET /api/con-giap`, `GET /api/bai-viet`, `/api/admin/*` (đăng nhập). Phục vụ thêm `/shared`, `/Tarot/frontend`, `/zodiac/frontend`, `/numerology/frontend` nên chạy một máy chủ này là đủ cả site |
 | `Tarot/backend` | 3001 | `POST /api/rut-bai`, `GET /api/bo-bai?q=&nhom=`, `GET /api/la-bai/:id`, `GET /api/kieu-trai`, `GET /api/chu-de` |
 | `zodiac/backend` | 3002 | `GET /api/xac-dinh`, `GET /api/tu-vi/:cung`, `GET /api/tuong-hop`, `POST /api/ban-do-sao`, `GET /api/cung`, `GET /api/dia-diem` |
-| `numerology/backend` | 3003 | `GET /api/so-chu-dao`, `GET /api/y-nghia/:so`, `GET /api/chu-ky` |
+| `numerology/backend` | 3003 | `GET /api/so-chu-dao`, `GET /api/tuong-hop`, `GET /api/y-nghia/:so`, `GET /api/chu-ky` |
 
 Mọi máy chủ đều có `GET /api/health`. API công khai cho phép CORS. Dữ liệu sai trả mã 400 kèm lỗi tiếng Việt. Chi tiết từng API nằm trong README của từng phần.
 

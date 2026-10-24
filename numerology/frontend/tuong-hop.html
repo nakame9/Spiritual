@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>So sánh hai số chủ đạo · Thần số học · Lá Số Tử Vi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="So sánh số chủ đạo của hai người theo thần số học Pythagoras: mức độ tương hợp, phong cách yêu và giao tiếp của mỗi người, lời khuyên để hiểu nhau hơn.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
+<link rel="stylesheet" href="../../shared/site.css">
+<link rel="stylesheet" href="css/so-hoc.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="site">
+    <a class="brand" href="../../tuvivietnam/frontend/index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi</a>
+    <nav aria-label="Menu chính"><a href="../../tuvivietnam/frontend/index.html">Trang chủ</a><a href="../../tuvivietnam/frontend/la-so.html">Lập lá số</a><a href="../../tuvivietnam/frontend/con-giap.html">12 con giáp</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="index.html" aria-current="page">Số chủ đạo</a><a href="../../tuvivietnam/frontend/bai-viet.html">Bài viết</a></nav>
+  </header>
+  <nav class="subnav" aria-label="Số chủ đạo"><a href="index.html">Tính số chủ đạo</a><a href="tuong-hop.html" aria-current="page">So sánh hai số chủ đạo</a><a href="index.html#h-y">Ý nghĩa các số</a></nav>
+
+  <section>
+    <p class="eyebrow"><a href="index.html">Số chủ đạo</a> · So sánh</p>
+    <h1>So sánh hai số chủ đạo</h1>
+    <p class="lede">Chọn số chủ đạo của hai người, hoặc nhập ngày sinh để tự tính. Mức hợp nhau dựa trên vị trí của hai số trên biểu đồ ngày sinh 3 × 3: cùng hàng là cùng mặt phẳng tính cách, cùng nằm trên một mũi tên là bổ trợ cho nhau.</p>
+  </section>
+  <div class="panel th-chon">
+    <div class="th-ben"><label class="f"><span>Số chủ đạo của bạn</span><select id="a"></select></label><div class="phu">Chưa biết số? Nhập ngày sinh: <input type="date" id="na" min="1900-01-01" max="2100-12-31" aria-label="Ngày sinh của bạn"></div></div>
+    <span class="va" aria-hidden="true">&amp;</span>
+    <div class="th-ben"><label class="f"><span>Số chủ đạo của người ấy</span><select id="b"></select></label><div class="phu">Chưa biết số? Nhập ngày sinh: <input type="date" id="nb" min="1900-01-01" max="2100-12-31" aria-label="Ngày sinh của người ấy"></div></div>
+  </div>
+  <section class="panel" id="kq" aria-live="polite"></section>
+  <section class="panel" id="bang" aria-labelledby="h-bang"></section>
+
+  <p class="note">Nội dung thần số học do Lá Số Tử Vi biên soạn theo cách tính Pythagoras phổ biến ở Việt Nam, chỉ để tham khảo và giải trí. Hợp hay không hợp còn tùy vào cách hai người đối xử với nhau.</p>
+  <footer class="foot"><span>Lá Số Tử Vi · Số chủ đạo</span><span>Nội dung chỉ để tham khảo.</span></footer>
+</div>
+<script src="js/so-hoc.js"></script>
+<script src="js/trang-tuong-hop.js"></script>
+</body>
+</html>

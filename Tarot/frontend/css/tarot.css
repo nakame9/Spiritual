@@ -172,12 +172,6 @@
 .suit h3 { margin: 0; font-family: var(--f-display); font-size: 18px; }
 .suit p { margin: 2px 0 0; font-size: 14px; }
 
-/* ---------- Menu phụ Tarot ---------- */
-.subnav { display: flex; flex-wrap: wrap; gap: 6px; margin-top: -8px; }
-.subnav a { font-size: 13.5px; font-weight: 500; color: var(--soft); text-decoration: none; padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--cell); }
-.subnav a:hover { color: var(--ink); border-color: var(--tu); }
-.subnav a[aria-current="page"] { color: var(--cell); background: var(--tu); border-color: var(--tu); font-weight: 600; }
-
 /* ---------- Thư viện 78 lá ---------- */
 input[type="search"] { height: 42px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); font: 400 15px var(--f-ui); padding: 0 12px; width: 100%; }
 .topics small { font-size: 12px; opacity: .7; margin-left: 4px; }

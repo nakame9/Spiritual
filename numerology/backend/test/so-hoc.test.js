@@ -17,7 +17,45 @@ test('số chủ đạo: cộng mọi chữ số, giữ 10, 11, 22/4; chỉ ra 2
   const gap = new Set();
   for (let t = Date.UTC(1900, 0, 1); t < Date.UTC(2100, 0, 1); t += 864e5) { const x = new Date(t); gap.add(S.soChuDao(x.getUTCDate(), x.getUTCMonth() + 1, x.getUTCFullYear()).so); }
   assert.deepStrictEqual([...gap].sort((a, b) => a - b), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 22]);
-  for (const n of gap) { const c = S.SO_CHU_DAO[n]; assert.ok(c.tongQuan && c.diemManh.length === 4 && c.diemYeu.length === 4 && c.tinhYeu && c.suNghiep && c.nghe.length === 5 && c.loiKhuyen, n); }
+  for (const n of gap) { const c = S.SO_CHU_DAO[n]; assert.ok(c.tongQuan && c.diemManh.length === 4 && c.diemYeu.length === 4 && c.tinhYeu && c.giaoTiep && c.camXuc && c.suNghiep && c.lamViec && c.nghe.length === 5 && c.baiHoc && c.cauHoi.length === 3 && c.loiKhuyen, n); }
+});
+
+test('cách tính từng bước dừng đúng chỗ', () => {
+  assert.deepStrictEqual(S.buocSoChuDao(15, 8, 1990).slice(1), ['Cộng tất cả các chữ số: 1 + 5 + 8 + 1 + 9 + 9 + 0 = 33.', '33 lớn hơn 11 nên cộng tiếp các chữ số: 3 + 3 = 6.', 'Dừng ở 6 vì kết quả đã nằm trong khoảng 2 đến 11.']);
+  assert.match(S.buocSoChuDao(2, 1, 1990).at(-1), /22\/4/);
+  assert.match(S.buocSoChuDao(9, 1, 1990).at(-1), /Dừng ở 11/);
+});
+
+test('năm cá nhân theo hai cách tính', () => {
+  const h = { y: 2026, m: 10, d: 24 };
+  assert.strictEqual(S.tinh({ d: 15, m: 8, y: 1990 }, h, '', 'sinhNhat').namCaNhan.nam, 2026); // đã qua sinh nhật
+  const truoc = S.tinh({ d: 15, m: 12, y: 1990 }, h, '', 'sinhNhat'), dl = S.tinh({ d: 15, m: 12, y: 1990 }, h);
+  assert.deepStrictEqual([truoc.namCaNhan.nam, truoc.namCaNhan.so, truoc.chuKy9[0].nam], [2025, 9, 2025]);
+  assert.deepStrictEqual([dl.namCaNhan.nam, dl.namCaNhan.so, dl.namCaNhan.truongPhai], [2026, 1, 'duongLich']);
+  assert.match(dl.namCaNhan.cachTinh, /6 \+ 3 \+ 10 = 19, rút gọn 1 \+ 9 = 10, rút gọn 1 \+ 0 = 1\./);
+});
+
+test('bốn đỉnh cao', () => {
+  const r = S.dinhCao(15, 8, 1990, { y: 2026, m: 10, d: 24 }); // ngày 6, tháng 8, năm 1; số chủ đạo 6
+  assert.deepStrictEqual(r.dinh.map(x => [x.so, x.tuoi, x.nam, x.trangThai]), [[5, 30, 2020, 'qua'], [7, 39, 2029, 'toi'], [3, 48, 2038, 'sau'], [9, 57, 2047, 'sau']]);
+  assert.deepStrictEqual(S.dinhCao(9, 1, 1990, { y: 2026, m: 1, d: 1 }).dinh.map(x => x.tuoi), [34, 43, 52, 61]); // số 11 tính là 2
+  assert.deepStrictEqual(S.dinhCao(9, 1, 1991, { y: 2026, m: 1, d: 1 }).dinh.map(x => x.so), [1, 11, 3, 3]); // ngày 9 + năm 2 = 11 được giữ
+  for (let t = Date.UTC(1900, 0, 1); t < Date.UTC(2100, 0, 1); t += 7 * 864e5) {
+    const x = new Date(t); for (const d of S.dinhCao(x.getUTCDate(), x.getUTCMonth() + 1, x.getUTCFullYear(), { y: 2026, m: 1, d: 1 }).dinh) assert.ok(S.DINH[d.so], d.so);
+  }
+});
+
+test('so sánh hai số chủ đạo: đối xứng, theo lưới 3 × 3', () => {
+  const muc = (a, b) => [S.tuongHop(a, b).muc, S.tuongHop(a, b).phanTram];
+  assert.deepStrictEqual(muc(6, 9), ['Hợp tự nhiên', 85]); // cùng hàng 3-6-9
+  assert.deepStrictEqual(muc(6, 6), ['Đồng điệu', 75]);
+  assert.deepStrictEqual(muc(2, 3), ['Bổ trợ', 70]); // cùng mũi tên 1-2-3
+  assert.deepStrictEqual(muc(3, 4), ['Cần dung hòa', 55]);
+  assert.deepStrictEqual(muc(11, 2), ['Đồng điệu', 75]);
+  assert.deepStrictEqual(muc(22, 7), ['Hợp tự nhiên', 85]);
+  const cac = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 22];
+  for (const a of cac) for (const b of cac) { const r = S.tuongHop(a, b); assert.strictEqual(r.phanTram, S.tuongHop(b, a).phanTram); assert.ok(r.moTa.length > 60 && r.loiKhuyen, `${a}-${b}`); }
+  assert.strictEqual(S.tuongHop(1, 5), null);
 });
 
 test('chỉ số ngày sinh, thái độ, năm/tháng/ngày cá nhân', () => {
@@ -54,5 +92,11 @@ test('API', async () => {
   assert.strictEqual((await get('/api/y-nghia/22'))[1].hien, '22/4');
   assert.strictEqual((await get('/api/y-nghia/1'))[0], 404);
   assert.strictEqual(Object.keys((await get('/api/chu-ky'))[1]).length, 9);
-  for (const p of ['/', '/js/so-hoc.js', '/js/trang-so-hoc.js']) assert.strictEqual((await fetch(base + p)).status, 200, p);
+  assert.strictEqual((await get('/api/so-chu-dao?ngaySinh=1990-12-15&homNay=2026-10-24&truongPhai=sinhNhat'))[1].namCaNhan.nam, 2025);
+  assert.strictEqual((await get('/api/so-chu-dao?ngaySinh=1990-12-15&truongPhai=abc'))[0], 400);
+  assert.strictEqual((await get('/api/so-chu-dao?ngaySinh=1990-12-15&truongPhai=toString'))[0], 400);
+  const [s2, th] = await get('/api/tuong-hop?a=6&b=9');
+  assert.strictEqual(s2, 200); assert.strictEqual(th.phanTram, 85);
+  for (const q of ['a=1&b=9', 'a=6', 'a=6&b=x', 'a=06&b=9']) assert.strictEqual((await get('/api/tuong-hop?' + q))[0], 400, q);
+  for (const p of ['/', '/tuong-hop.html', '/js/so-hoc.js', '/js/trang-so-hoc.js', '/js/trang-tuong-hop.js']) assert.strictEqual((await fetch(base + p)).status, 200, p);
 });

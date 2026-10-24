@@ -18,12 +18,13 @@
     <a class="brand" href="../../tuvivietnam/frontend/index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi</a>
     <nav aria-label="Menu chính"><a href="../../tuvivietnam/frontend/index.html">Trang chủ</a><a href="../../tuvivietnam/frontend/la-so.html">Lập lá số</a><a href="../../tuvivietnam/frontend/con-giap.html">12 con giáp</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="index.html" aria-current="page">Số chủ đạo</a><a href="../../tuvivietnam/frontend/bai-viet.html">Bài viết</a></nav>
   </header>
+  <nav class="subnav" aria-label="Số chủ đạo"><a href="index.html" aria-current="page">Tính số chủ đạo</a><a href="tuong-hop.html">So sánh hai số chủ đạo</a><a href="index.html#h-y">Ý nghĩa các số</a></nav>
 
   <section class="hero">
     <div>
       <p class="eyebrow">Thần số học Pythagoras</p>
       <h1>Số chủ đạo</h1>
-      <p class="lede">Số chủ đạo là con số quan trọng nhất trong thần số học, tính bằng cách cộng tất cả chữ số trong ngày sinh dương lịch. Con số này nói lên tính cách, điểm mạnh, bài học và hướng đi phù hợp với bạn. Thêm họ tên để xem các chỉ số sứ mệnh, linh hồn và nhân cách.</p>
+      <p class="lede">Số chủ đạo là con số quan trọng nhất trong thần số học, tính bằng cách cộng tất cả chữ số trong ngày sinh dương lịch. Con số này nói lên tính cách, điểm mạnh, bài học và hướng đi phù hợp với bạn. Kết quả gồm cách tính từng bước, tình yêu, sự nghiệp, bài học phát triển bản thân, biểu đồ ngày sinh, năm cá nhân và bốn đỉnh cao cuộc đời.</p>
     </div>
     <form class="panel" id="form" novalidate>
       <h2>Tính số chủ đạo</h2>
@@ -34,19 +35,27 @@
     </form>
   </section>
 
-  <div id="kq" hidden>
+  <div id="kq" class="kq" hidden>
     <section class="panel" aria-labelledby="h-scd">
       <div class="so-lon" id="so-lon"></div>
+      <div class="o-nho buoc"><h3>Cách tính từng bước</h3><ol id="buoc"></ol>
+        <p class="muted">Quy tắc rút gọn: cộng các chữ số cho tới khi còn từ 2 đến 11. Riêng 11 và 22 là số bậc thầy nên được giữ nguyên; 22 viết là 22/4.</p></div>
       <p class="doan" id="tong-quan"></p>
       <div class="hai-cot" id="manh-yeu"></div>
-      <div class="hai-cot" id="yeu-nghiep"></div>
-      <p class="ket" id="loi-khuyen"></p>
     </section>
-    <section class="panel" aria-labelledby="h-cs" style="margin-top: 20px"><h2 id="h-cs">Các chỉ số khác</h2><div class="chi-so" id="chi-so"></div></section>
-    <section class="panel" aria-labelledby="h-bd" style="margin-top: 20px"><h2 id="h-bd">Biểu đồ ngày sinh</h2>
+    <section class="panel" aria-labelledby="h-ty"><h2 id="h-ty">Tình yêu và mối quan hệ</h2><div class="ba-cot" id="tinh-yeu"></div>
+      <p class="muted"><a id="link-so-sanh" href="tuong-hop.html">So sánh với số chủ đạo của người ấy →</a></p></section>
+    <section class="panel" aria-labelledby="h-sn"><h2 id="h-sn">Công việc và sự nghiệp</h2><div class="hai-cot" id="su-nghiep"></div></section>
+    <section class="panel" aria-labelledby="h-bh"><h2 id="h-bh">Bài học phát triển bản thân</h2><p class="doan" id="bai-hoc"></p>
+      <div class="o-nho"><h3>Câu hỏi để tự suy ngẫm</h3><ol class="cau-hoi" id="cau-hoi"></ol></div><p class="ket" id="loi-khuyen"></p></section>
+    <section class="panel" aria-labelledby="h-cs"><h2 id="h-cs">Các chỉ số khác</h2><div class="chi-so" id="chi-so"></div></section>
+    <section class="panel" aria-labelledby="h-bd"><h2 id="h-bd">Biểu đồ ngày sinh</h2>
       <p class="muted">Mỗi chữ số trong ngày sinh được đặt vào ô của nó. Ba ô thẳng hàng cùng có số tạo thành mũi tên sức mạnh; ba ô cùng trống là mũi tên cần khắc phục.</p>
       <div class="bd-wrap"><div class="luoi" id="luoi" role="img"></div><ul class="mui-ten" id="mui-ten"></ul></div></section>
-    <section class="panel" aria-labelledby="h-nam" style="margin-top: 20px"><h2 id="h-nam">Năm cá nhân</h2><div id="nam-ca-nhan"></div></section>
+    <section class="panel" aria-labelledby="h-nam"><div class="nam-dau"><h2 id="h-nam">Năm cá nhân</h2>
+      <label class="f"><span>Cách tính</span><select id="truong-phai"><option value="duongLich">Theo năm dương lịch</option><option value="sinhNhat">Theo ngày sinh nhật</option></select></label></div>
+      <div id="nam-ca-nhan"></div></section>
+    <section class="panel" aria-labelledby="h-dc"><h2 id="h-dc">Bốn đỉnh cao cuộc đời</h2><p class="muted" id="dc-cach"></p><div class="dinh" id="dinh"></div></section>
   </div>
 
   <section class="block" aria-labelledby="h-y">

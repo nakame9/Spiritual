@@ -17,14 +17,22 @@
     return { d, m, y };
   }
 
+  let dangXem = null; // ngày sinh và tên đang hiển thị, để đổi cách tính năm cá nhân không phải bấm lại
+
   function ve(ns, ten) {
-    const r = SoHoc.tinh(ns, HOM_NAY, ten), c = r.soChuDao;
+    dangXem = { ns, ten };
+    const r = SoHoc.tinh(ns, HOM_NAY, ten, $('truong-phai').value), c = r.soChuDao;
     $('so-lon').innerHTML = `<span class="so${c.hien.length > 2 ? ' nho' : ''}">${c.hien}</span><p class="eyebrow">Số chủ đạo của ${ten ? esc(ten) : 'bạn'} · sinh ${r.ngaySinh}</p>
-      <h2 id="h-scd">Số ${c.hien}: ${c.ten}</h2><p class="muted">${c.tuKhoa}</p><p class="cach-tinh">Cách tính: ${c.cachTinh}</p>`;
+      <h2 id="h-scd">Số ${c.hien}: ${c.ten}</h2><p class="muted">${c.tuKhoa}</p>`;
+    $('buoc').innerHTML = c.buoc.map(x => `<li>${x}</li>`).join('');
     $('tong-quan').textContent = c.tongQuan;
     $('manh-yeu').innerHTML = `<div class="o-nho manh"><h3>Điểm mạnh</h3>${ds(c.diemManh)}</div><div class="o-nho yeu"><h3>Điểm cần cải thiện</h3>${ds(c.diemYeu)}</div>`;
-    $('yeu-nghiep').innerHTML = `<div class="o-nho"><h3>Tình yêu</h3><p>${c.tinhYeu}</p></div>
-      <div class="o-nho"><h3>Sự nghiệp</h3><p>${c.suNghiep}</p><div class="nghe" style="margin-top: 10px">${c.nghe.map(x => `<span>${x}</span>`).join('')}</div></div>`;
+    $('tinh-yeu').innerHTML = [['Phong cách yêu', c.tinhYeu], ['Giao tiếp', c.giaoTiep], ['Cảm xúc', c.camXuc]].map(([h, p]) => `<div class="o-nho"><h3>${h}</h3><p>${p}</p></div>`).join('');
+    $('link-so-sanh').href = `tuong-hop.html#a=${c.so}`;
+    $('su-nghiep').innerHTML = `<div class="o-nho"><h3>Phong cách làm việc</h3><p>${c.lamViec}</p></div>
+      <div class="o-nho"><h3>Môi trường và lĩnh vực phù hợp</h3><p>${c.suNghiep}</p><div class="nghe" style="margin-top: 10px">${c.nghe.map(x => `<span>${x}</span>`).join('')}</div></div>`;
+    $('bai-hoc').textContent = c.baiHoc;
+    $('cau-hoi').innerHTML = c.cauHoi.map(x => `<li>${x}</li>`).join('');
     $('loi-khuyen').innerHTML = `<b>Lời khuyên:</b> ${c.loiKhuyen}`;
 
     const the = (nhan, x, khung) => x ? `<div><span class="nhan">${nhan}</span><b>${x.hien}</b><small>${x.tuKhoa}</small><p>${khung} ${x.moTa}</p></div>` : '';
@@ -39,14 +47,28 @@
     $('mui-ten').innerHTML = (mt.length ? mt.join('') : '<li>Biểu đồ của bạn không có mũi tên nào: các năng lượng phân bố đều, không quá nổi trội cũng không thiếu hụt rõ rệt.</li>')
       + (b.soThieu.length ? `<li>Số còn thiếu: <b>${b.soThieu.join(', ')}</b>. Đây là những bài học bạn sẽ dần bổ sung qua trải nghiệm.</li>` : '');
 
+    veNam(r);
+
+    const dc = r.dinhCao, g = dc.rutGon;
+    $('dc-cach').textContent = `Ngày, tháng, năm sinh rút gọn còn: ngày ${g.ngay}, tháng ${g.thang}, năm ${g.nam}. Mốc tuổi của đỉnh 1 bằng 36 trừ số chủ đạo`
+      + `${c.so !== dc.soChuDaoGoc ? ` (số ${c.hien} tính là ${dc.soChuDaoGoc})` : ''}: 36 − ${dc.soChuDaoGoc} = ${dc.dinh[0].tuoi} tuổi; mỗi đỉnh sau cách nhau 9 năm. Năm ${HOM_NAY.y} bạn ${dc.tuoiNay} tuổi.`;
+    const NHAN = { qua: 'Đã qua', toi: 'Đỉnh sắp tới', sau: 'Phía trước' };
+    $('dinh').innerHTML = dc.dinh.map(x => `<div class="${x.trangThai}"><span class="nhan">Đỉnh ${x.thu} · ${NHAN[x.trangThai]}</span>
+      <b>${x.hien}</b><h3>${x.ten}</h3><p class="moc">${x.tuoi} tuổi · năm ${x.nam}</p><p>${x.moTa}</p><p class="cach-tinh">${x.cachTinh}</p></div>`).join('');
+    $('kq').hidden = false;
+  }
+
+  function veNam(r) {
     const n = r.namCaNhan, t = r.thangCaNhan, g = r.ngayCaNhan;
     const lv = x => ['tinhCam', 'suNghiep', 'mayMan'].map((k, i) => `<div class="lv"><div class="lv-dau"><b>${['Tình cảm', 'Sự nghiệp', 'May mắn'][i]}</b>${sao(x[k].diem)}</div><p>${x[k].loi}</p></div>`).join('');
-    $('nam-ca-nhan').innerHTML = `<div class="so-lon" style="margin-bottom: 14px"><span class="so">${n.so}</span><p class="eyebrow">Năm ${n.nam}</p><h2>Năm cá nhân số ${n.so}: ${n.ten}</h2><p>${n.moTa}</p></div>
+    const khoang = n.truongPhai === 'sinhNhat' ? `Từ sinh nhật năm ${n.nam} đến sinh nhật năm ${n.nam + 1}` : `Năm ${n.nam}`;
+    $('nam-ca-nhan').innerHTML = `<p class="muted">${n.moTaTruongPhai}</p>
+      <div class="so-lon" style="margin: 14px 0"><span class="so">${n.so}</span><p class="eyebrow">${khoang}</p><h2>Năm cá nhân số ${n.so}: ${n.ten}</h2><p>${n.moTa}</p><p class="cach-tinh">Cách tính: ${n.cachTinh}</p></div>
       <div class="ba-cot">${lv(n)}</div>
       <div class="hai-cot" style="margin-top: 14px"><div class="o-nho"><h3>Tháng cá nhân (tháng ${t.thang}): số ${t.so}, ${t.ten}</h3><p>${t.moTa}</p></div><div class="o-nho"><h3>Ngày cá nhân hôm nay: số ${g.so}, ${g.ten}</h3><p>${g.moTa}</p></div></div>
       <h3 class="muted" style="margin: 16px 0 8px">Chu kỳ 9 năm của bạn</h3><div class="chu-ky">${r.chuKy9.map((x, i) => `<div class="${i ? '' : 'nay'}"><b>${x.so}</b>${x.nam}<br>${x.ten}</div>`).join('')}</div>`;
-    $('kq').hidden = false;
   }
+  $('truong-phai').addEventListener('change', () => { if (dangXem) veNam(SoHoc.tinh(dangXem.ns, HOM_NAY, dangXem.ten, $('truong-phai').value)); });
 
   $('form').addEventListener('submit', e => {
     e.preventDefault();

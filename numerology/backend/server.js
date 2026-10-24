@@ -24,11 +24,17 @@ const homNay = () => { const [y, m, d] = new Intl.DateTimeFormat('en-CA', { time
 const boc = fn => (req, res) => { try { res.json(fn(req)); } catch (e) { if (e instanceof Loi) res.status(400).json({ error: e.message }); else throw e; } };
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
-// Toàn bộ chỉ số: ?ngaySinh=1990-08-15&ten=Nguyễn Văn A&homNay=2026-10-24 (ten, homNay không bắt buộc)
+// Toàn bộ chỉ số: ?ngaySinh=1990-08-15&ten=Nguyễn Văn A&homNay=2026-10-24&truongPhai=sinhNhat (ten, homNay, truongPhai không bắt buộc)
 app.get('/api/so-chu-dao', boc(req => {
-  const ten = req.query.ten;
+  const { ten, truongPhai } = req.query;
   if (ten !== undefined && (typeof ten !== 'string' || ten.length > 60)) throw new Loi('ten tối đa 60 ký tự.');
-  return SoHoc.tinh(docNgay(req.query.ngaySinh, 'ngaySinh'), req.query.homNay ? docNgay(req.query.homNay, 'homNay') : homNay(), ten);
+  if (truongPhai !== undefined && !Object.hasOwn(SoHoc.TRUONG_PHAI, truongPhai)) throw new Loi(`truongPhai chỉ nhận: ${Object.keys(SoHoc.TRUONG_PHAI).join(', ')}.`);
+  return SoHoc.tinh(docNgay(req.query.ngaySinh, 'ngaySinh'), req.query.homNay ? docNgay(req.query.homNay, 'homNay') : homNay(), ten, truongPhai);
+}));
+// So sánh hai số chủ đạo: ?a=6&b=9 (2–11 hoặc 22)
+app.get('/api/tuong-hop', boc(req => {
+  const so = k => { const v = req.query[k]; if (typeof v !== 'string' || !/^\d+$/.test(v) || !SoHoc.SO_CHU_DAO[v]) throw new Loi(`${k} là số chủ đạo 2–11 hoặc 22.`); return Number(v); };
+  return SoHoc.tuongHop(so('a'), so('b'));
 }));
 // Ý nghĩa một số chủ đạo: 2–11 hoặc 22
 app.get('/api/y-nghia/:so', (req, res) => {

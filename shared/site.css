@@ -40,6 +40,7 @@ input[type="text"], input[type="number"], input[type="password"], select {
 input[type="number"] { -moz-appearance: textfield; }
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 input:focus-visible, select:focus-visible, button:focus-visible, .seg input:focus-visible + span { outline: 2px solid var(--tu); outline-offset: 1px; }
+input[type="date"], input[type="time"] { height: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); font: 500 15px var(--f-ui); padding: 0 10px; }
 .date { display: flex; gap: 6px; align-items: center; }
 .date input { width: 52px; text-align: center; padding: 0 4px; }
 .date input.y { width: 72px; }
@@ -72,3 +73,9 @@ a.btn { display: inline-flex; align-items: center; justify-content: center; gap:
 a.btn.primary { background: var(--tu); color: var(--cell); }
 a.btn.ghost { border: 1px solid var(--line); color: var(--ink); background: var(--cell); }
 a.btn:hover { filter: brightness(1.08); }
+
+/* Menu phụ trong một chức năng (Tarot, Hoàng đạo, Số chủ đạo) */
+.subnav { display: flex; flex-wrap: wrap; gap: 6px; margin-top: -8px; }
+.subnav a { font-size: 13.5px; font-weight: 500; color: var(--soft); text-decoration: none; padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--cell); }
+.subnav a:hover { color: var(--ink); border-color: var(--tu); }
+.subnav a[aria-current="page"] { color: var(--cell); background: var(--tu); border-color: var(--tu); font-weight: 600; }
