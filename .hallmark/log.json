@@ -1,0 +1,40 @@
+[
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "site",
+  "shape": "Map / Diagram",
+  "theme": "solstice",
+  "axes": "light/high-contrast-serif/warm",
+  "hero": "Banner",
+  "nav": "banner over a bar",
+  "footer": "statement",
+  "imagery": "photographs, library 5, warm; product captures 4",
+  "photos": [
+   "Candle light projected through a glass orb.jpg",
+   "Bookshelf Prunksaal OeNB Vienna AT matl00786ch.jpg",
+   "Kométa C-2020 F3 (NEOWISE).jpg",
+   "PalouseFromSteptoeButteMay2023-1.jpg",
+   "Oriental hanging lanterns. Souk Haddadine, Marrakech Medina, Morocco.jpg"
+  ],
+  "entry": "form in a raised well beside the head",
+  "fingerprint": "light/serif/warm/banner/map/ink-band",
+  "sections": [
+   "Hero (birth-date form)",
+   "Results",
+   "Map",
+   "Switcher (4 captures)",
+   "Split (photo + ruled list)",
+   "Index rows on ink band",
+   "Footer"
+  ],
+  "signature": "the map from what you bring to the tool that reads it",
+  "waived": [
+   "37",
+   "59",
+   "39b"
+  ],
+  "prompt": "Vietnamese spirituality site: tử vi, lunar calendar, tarot, zodiac, numerology; home full, 16 tool pages restyle",
+  "date": "2026-10-31"
+ }
+]

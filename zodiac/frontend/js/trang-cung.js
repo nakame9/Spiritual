@@ -41,7 +41,7 @@
     const n = homNay(), tv = ChiemTinh.tuViNgay(s, n.y, n.m, n.d);
     $('s-tu-vi').innerHTML = `<h2 id="h-tv">Tử vi hôm nay, ${tv.thu} ${tv.ngay}</h2><p class="chu-de">${tv.chuDe}</p>
       <div class="lv-grid">${tv.linhVuc.map(l => `<div class="lv"><div class="lv-dau"><b>${l.ten}</b>${sao(l.sao)}</div><p>${l.loi}</p></div>`).join('')}</div>
-      <p class="links"><a href="tu-vi.html#${id}">Xem tử vi tuần, tháng, năm của ${c.ten} →</a></p>`;
+      <p class="links"><a href="tu-vi.html#${id}">Xem tử vi tuần, tháng, năm của ${c.ten}</a></p>`;
   }
   addEventListener('hashchange', () => { ve(); scrollTo({ top: 0 }); });
   ve();

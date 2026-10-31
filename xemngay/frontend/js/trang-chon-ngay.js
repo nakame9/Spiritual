@@ -24,7 +24,7 @@
       ${r.soNgayTot ? `<ol class="ds-ngay">${r.ngay.map(x => `<li class="${LOP[x.muc]}">
         <div class="ds-dau"><div><b>${x.duong.thu}, ${x.duong.chu}</b><span class="muted">Âm lịch ${x.am.chu} · ${x.canChi.ngay} · ${x.hoangDao.than} hoàng đạo · trực ${x.truc.ten} · sao ${x.sao.ten}</span></div><span class="pt">${x.phanTram}%</span></div>
         <ul class="ly-do">${x.lyDo.filter(l => l.tot || l.xau).map(l => `<li class="${l.tot ? 'tot' : 'xau'}">${l.text}</li>`).join('')}</ul>
-        <p class="muted">Giờ hoàng đạo: ${x.gioHoangDao.map(g => `${g.chi} (${g.gio})`).join(', ')}. <a href="index.html#ngay=${iso(x.duong.y, x.duong.m, x.duong.d)}${n ? `&nam=${n}` : ''}">Xem chi tiết →</a></p></li>`).join('')}</ol>`
+        <p class="muted">Giờ hoàng đạo: ${x.gioHoangDao.map(g => `${g.chi} (${g.gio})`).join(', ')}. <a href="index.html#ngay=${iso(x.duong.y, x.duong.m, x.duong.d)}${n ? `&nam=${n}` : ''}">Xem chi tiết</a></p></li>`).join('')}</ol>`
         : '<p>Hãy thử mở rộng khoảng thời gian, hoặc xem lịch tháng để chọn ngày khá nhất.</p>'}`;
     $('kq').hidden = false;
     $('kq').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });

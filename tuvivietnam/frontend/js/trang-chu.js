@@ -57,12 +57,12 @@
     const h = kq.hoSo, t = h.tuVi, z = h.hoangDao, s = h.soHoc;
     $('sinh').textContent = `${v.nam ? 'Nam' : 'Nữ'}, sinh ngày ${kq.ngaySinh.duong} dương lịch (${kq.ngaySinh.am} âm lịch), ${kq.ngaySinh.gio}.`;
     $('ho-so').innerHTML = `
-      <a class="hs" href="la-so.html"><span class="nhan">Tử vi</span><b>${t.canChi} · tuổi ${t.con}</b><p>Mệnh ${t.banMenh} · ${t.cuc}</p>
-        <p>Cung Mệnh tại ${t.menhChi}: ${t.menhChinh.length ? t.menhChinh.join(', ') : 'Vô chính diệu'}</p><span class="more">Xem lá số đầy đủ →</span></a>
-      <a class="hs" href="../../zodiac/frontend/cung.html#${z.id}"><span class="nhan">Cung hoàng đạo</span><b><span class="ky-zodiac" aria-hidden="true">${z.kyHieu}</span> ${z.ten} <span style="font: 500 14px var(--f-ui); color: var(--soft)">${z.en}</span></b>
-        <p>Nguyên tố ${z.nguyenTo} · ${z.tuKhoa}</p>${z.giaoCung ? `<p>Sinh đúng ngày giao cung ${z.giaoCung}; đã tính theo giờ sinh.</p>` : ''}<span class="more">Tính cách, tình yêu, sự nghiệp →</span></a>
-      <a class="hs" href="../../numerology/frontend/index.html#ngay=${kq.ngaySinh.iso}"><span class="nhan">Số chủ đạo</span><b>${s.hien} · ${s.ten}</b><p>${s.tuKhoa}</p>
-        <p>Năm cá nhân ${HOM_NAY.y}: số ${s.namCaNhan.so} (${s.namCaNhan.ten})</p><span class="more">Xem đủ các chỉ số →</span></a>`;
+      <a class="hs" href="la-so.html"><span class="nhan">Tử vi</span><b>${t.canChi}, tuổi ${t.con}</b><p>Mệnh ${t.banMenh}, ${t.cuc}</p>
+        <p>Cung Mệnh tại ${t.menhChi}: ${t.menhChinh.length ? t.menhChinh.join(', ') : 'Vô chính diệu'}</p><span class="more">Xem lá số đầy đủ</span></a>
+      <a class="hs" href="../../zodiac/frontend/cung.html#${z.id}"><span class="nhan">Cung hoàng đạo</span><b><span class="ky-zodiac" aria-hidden="true">${z.kyHieu}</span> ${z.ten} <span class="en">${z.en}</span></b>
+        <p>Nguyên tố ${z.nguyenTo}: ${z.tuKhoa}</p>${z.giaoCung ? `<p>Sinh đúng ngày giao cung ${z.giaoCung}; đã tính theo giờ sinh.</p>` : ''}<span class="more">Tính cách, tình yêu, sự nghiệp</span></a>
+      <a class="hs" href="../../numerology/frontend/index.html#ngay=${kq.ngaySinh.iso}"><span class="nhan">Số chủ đạo</span><b>Số ${s.hien}: ${s.ten}</b><p>${s.tuKhoa}</p>
+        <p>Năm cá nhân ${HOM_NAY.y}: số ${s.namCaNhan.so} (${s.namCaNhan.ten})</p><span class="more">Xem đủ các chỉ số</span></a>`;
     veKy();
     $('kq').hidden = false;
     $('kq').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
@@ -72,11 +72,30 @@
   $('q-form').addEventListener('change', e => { if (e.target.name === 'q-lich') syncNhuan(); });
   $('ky-tab').addEventListener('click', e => { const b = e.target.closest('button'); if (b && kq) { ky = b.dataset.ky; veKy(); } });
 
+  // Dải lịch trên cùng: hôm nay theo lịch vạn niên (cùng cách tính với trang Xem ngày)
+  if (window.XemNgay) {
+    const r = XemNgay.xemNgay(HOM_NAY.d, HOM_NAY.m, HOM_NAY.y);
+    $('hom-nay').innerHTML = `${r.duong.thu}, ${r.duong.chu}, ngày ${r.am.d}/${r.am.m}${r.am.nhuan ? ' nhuận' : ''} âm lịch, ${r.canChi.ngay}, ${r.hoangDao.tot ? 'hoàng đạo' : 'hắc đạo'} ${r.hoangDao.than}. <a href="../../xemngay/frontend/index.html">Xem ngày hôm nay</a>`;
+  }
+
+  // Thẻ xem trước công cụ: bấm hoặc dùng phím mũi tên để đổi màn hình
+  const tabs = [...document.querySelectorAll('.mh-tab [role="tab"]')];
+  function chonTab(t, focus) {
+    tabs.forEach(x => { const on = x === t; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; $(x.getAttribute('aria-controls')).hidden = !on; });
+    if (focus) t.focus();
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => chonTab(t));
+    t.addEventListener('keydown', e => {
+      const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+      if (k) { e.preventDefault(); chonTab(tabs[(i + k + tabs.length) % tabs.length], true); }
+    });
+  });
+
   // Có backend thì "Bài viết mới" lấy 3 bài mới nhất từ trang quản trị
   layApi('/api/bai-viet').then(ds => {
     if (!ds.length) return;
-    document.querySelector('.posts').innerHTML = ds.slice(0, 3).map(b => `<a class="post" href="bai-viet.html#${escHtml(b.slug)}">
-      <p class="eyebrow">${escHtml(b.chuyenMuc)}</p><h3>${escHtml(b.tieuDe)}</h3><p>${escHtml(b.tomTat)}</p>
-      <span class="meta"><span>${b.phutDoc} phút đọc</span><b>Đọc bài →</b></span></a>`).join('');
+    document.querySelector('.posts').innerHTML = ds.slice(0, 3).map(b => `<li><a class="post" href="bai-viet.html#${escHtml(b.slug)}">
+      <h3>${escHtml(b.tieuDe)}</h3><p>${escHtml(b.tomTat)}</p><span class="meta">${escHtml(b.chuyenMuc)}, ${b.phutDoc} phút đọc</span></a></li>`).join('');
   }).catch(() => {});
 })();

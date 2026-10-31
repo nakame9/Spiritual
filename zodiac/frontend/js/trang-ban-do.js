@@ -42,7 +42,7 @@
     const b3 = bd.bigThree, the = (nhan, kyHieu, x, them) => {
       if (!x) return `<div class="b3"><span class="nhan">${nhan}</span><h3>Chưa xác định</h3><p>Cần giờ sinh và nơi sinh để biết cung Mọc, vì cung Mọc đổi khoảng 2 giờ một lần.</p></div>`;
       const c = theoId[x.cung];
-      return `<div class="b3 ${nt(c)}"><span class="nhan">${kyHieu} ${nhan}</span><h3>${ky(c)}${c.ten}</h3>${them || ''}<p>${x.loi}</p><a class="links" href="cung.html#${c.id}" style="color: var(--tu); font-weight: 600; font-size: 14px">Về cung ${c.ten} →</a></div>`;
+      return `<div class="b3 ${nt(c)}"><span class="nhan">${kyHieu} ${nhan}</span><h3>${ky(c)}${c.ten}</h3>${them || ''}<p>${x.loi}</p><a class="links" href="cung.html#${c.id}" style="color: var(--tu); font-weight: 600; font-size: 14px">Về cung ${c.ten}</a></div>`;
     };
     const tm = b3.matTrang.chuaChac ? `<p class="canh-bao">Hôm đó Mặt Trăng chuyển từ ${b3.matTrang.chuaChac[0]} sang ${b3.matTrang.chuaChac[1]}; cần giờ sinh để biết chắc.</p>` : '';
     $('big3').innerHTML = the('Mặt Trời: bản chất', HANH_TINH.matTroi.kyHieu, b3.matTroi) + the('Mặt Trăng: cảm xúc', HANH_TINH.matTrang.kyHieu, b3.matTrang, tm) + the('Cung Mọc: ấn tượng đầu tiên', '↑', b3.cungMoc);

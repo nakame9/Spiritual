@@ -24,6 +24,6 @@
       <h3>${c.ten} <span class="muted" style="font-family: var(--f-ui); font-size: 15px">${c.en}</span></h3>
       <p class="muted">${ngayNgan(c)} · ${NGUYEN_TO[c.nguyenTo].ten} · ${TINH_CHAT[c.tinhChat].ten} · ${chuTinh(c)}</p>
       <p>${c.tongQuan.split('. ').slice(0, 2).join('. ').replace(/\.?$/, '.')}</p>
-      <div class="links"><a href="cung.html#${c.id}">Tính cách, tình yêu, sự nghiệp →</a><a href="tu-vi.html#${c.id}">Tử vi hôm nay →</a><a href="tuong-hop.html#a=${c.id}">Độ tương hợp →</a><a href="ban-do-sao.html">Bản đồ sao đầy đủ →</a></div></div>`;
+      <div class="links"><a href="cung.html#${c.id}">Tính cách, tình yêu, sự nghiệp</a><a href="tu-vi.html#${c.id}">Tử vi hôm nay</a><a href="tuong-hop.html#a=${c.id}">Độ tương hợp</a><a href="ban-do-sao.html">Bản đồ sao đầy đủ</a></div></div>`;
   });
 })();

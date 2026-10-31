@@ -1,2 +1,4 @@
 node_modules/
 tuvivietnam/backend/data/
+*/frontend/.hallmark/
+.hallmark/before*

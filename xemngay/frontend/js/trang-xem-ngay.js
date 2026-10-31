@@ -37,7 +37,7 @@
       </div>
       <div><h3 class="nho">Giờ hoàng đạo</h3><div class="gio">${r.gioHoangDao.map(g => `<span><b>${g.chi}</b>${g.gio}</span>`).join('')}</div></div>
       <div><h3 class="nho">Vì sao ngày này ${r.muc.toLowerCase()}</h3><ul class="ly-do">${r.lyDo.map(x => `<li class="${x.tot ? 'tot' : x.xau ? 'xau' : ''}">${x.text}</li>`).join('')}</ul></div>
-      <p class="muted"><a href="chon-ngay.html">Cần chọn ngày cho một việc cụ thể? Chọn ngày theo việc →</a></p>`;
+      <p class="muted">Cần chọn ngày cho một việc cụ thể? <a href="chon-ngay.html">Chọn ngày theo việc</a></p>`;
   }
 
   function veLich() {

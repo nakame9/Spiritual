@@ -5,83 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Quản trị · Lá Số Tử Vi</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
+<meta name="description" content="Trang quản trị bài viết và luận giải của Lá Số Tử Vi.">
 <link rel="stylesheet" href="../../../shared/site.css">
-<style>
-/* Trang quản trị: thanh trên cùng, hàng tab, vùng làm việc; bảng và form gọn để quét nhanh */
-.login { max-width: 400px; margin: 8vh auto 0; display: flex; flex-direction: column; gap: 16px; }
-.panel { background: var(--cell); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.panel h2, .panel h3 { margin: 0; font-family: var(--f-display); font-weight: 700; }
-.panel h2 { font-size: 22px; } .panel h3 { font-size: 18px; }
-.f { width: 100%; }
-textarea { width: 100%; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); font: 400 15px/1.6 var(--f-ui); padding: 10px 12px; resize: vertical; }
-textarea:focus-visible { outline: 2px solid var(--tu); outline-offset: 1px; }
-.err { margin: 0; }
-.muted { color: var(--soft); font-size: 13.5px; margin: 0; }
-
-.top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
-.top .who a, .muted a { color: var(--tu); }
-.top .who { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 14px; }
-.chip { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 2px 9px; border: 1px solid var(--line); color: var(--soft); white-space: nowrap; }
-.chip.on { background: var(--tu); border-color: var(--tu); color: var(--cell); }
-.chip.ok { color: var(--moc); border-color: currentColor; }
-.chip.warn { color: var(--tho); border-color: currentColor; }
-.chip.bad { color: var(--hoa); border-color: currentColor; }
-.btn2 { height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--cell); color: var(--ink); font: 500 14px var(--f-ui); cursor: pointer; white-space: nowrap; }
-.btn2:hover { border-color: var(--tu); }
-.btn2.danger { color: var(--hoa); }
-.btn2.danger.armed { background: var(--hoa); border-color: var(--hoa); color: var(--cell); }
-.btn2:disabled, button.go:disabled { opacity: .5; cursor: default; }
-button:focus-visible, a:focus-visible { outline: 2px solid var(--tu); outline-offset: 2px; }
-.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
-.tabs a { text-decoration: none; color: var(--soft); font-weight: 500; padding: 7px 14px; border-radius: 999px; }
-.tabs a:hover { background: var(--hl); color: var(--ink); }
-.tabs a[aria-current="page"] { background: var(--ink); color: var(--paper); }
-.row { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: flex-end; }
-.row > .grow { flex: 1 1 240px; }
-.spread { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
-
-.table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
-th { font-size: 11.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--soft); white-space: nowrap; }
-td.title a { color: var(--ink); font-weight: 600; text-decoration: none; }
-td.title a:hover { color: var(--tu); text-decoration: underline; }
-td .acts { display: flex; flex-wrap: wrap; gap: 6px; }
-.num { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--soft); }
-
-.editor-tabs { display: flex; gap: 4px; }
-.editor-tabs button { border: 0; background: none; color: var(--soft); font: 600 13px var(--f-ui); padding: 6px 10px; border-radius: 6px; cursor: pointer; }
-.editor-tabs button[aria-pressed="true"] { background: var(--hl); color: var(--ink); }
-.preview { border: 1px dashed var(--line); border-radius: 8px; padding: 6px 16px; min-height: 360px; font-size: 16px; line-height: 1.7; }
-.preview h3 { font-size: 17px; } .preview p { margin: 10px 0; }
-
-.lg-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 20px; align-items: start; }
-.groups { display: flex; flex-direction: column; gap: 2px; position: sticky; top: 12px; }
-.groups button { text-align: left; border: 0; background: none; padding: 7px 10px; border-radius: 6px; font: 500 14px var(--f-ui); color: var(--ink); cursor: pointer; display: flex; justify-content: space-between; gap: 8px; }
-.groups button:hover { background: var(--hl); }
-.groups button[aria-pressed="true"] { background: var(--tu); color: var(--cell); }
-.groups small { opacity: .8; font-variant-numeric: tabular-nums; }
-.field { display: flex; flex-direction: column; gap: 8px; padding: 14px 0; border-bottom: 1px solid var(--line); }
-.field:last-child { border-bottom: 0; }
-input.mini { height: 36px; font-size: 14px; flex: 1 1 180px; width: auto; min-width: 0; }
-.field .md { font-size: 13px; color: var(--soft); margin: 0; }
-
-.toast { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--paper); padding: 10px 16px; border-radius: 8px; font-weight: 500; box-shadow: 0 6px 24px rgba(0, 0, 0, .18); }
-@media (max-width: 760px) {
-  .lg-layout { grid-template-columns: minmax(0, 1fr); }
-  .groups { position: static; flex-direction: row; flex-wrap: wrap; }
-  .panel { padding: 16px; }
-}
-</style>
+<link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
 <div class="wrap">
   <section class="login" id="login-view" hidden>
     <div>
-      <p class="eyebrow">Lá Số Tử Vi</p>
       <h1>Quản trị</h1>
     </div>
     <form class="panel" id="login-form" novalidate>
@@ -90,7 +21,7 @@ input.mini { height: 36px; font-size: 14px; flex: 1 1 180px; width: auto; min-wi
       <button class="go" type="submit">Đăng nhập</button>
       <p class="err" id="l-err" role="alert" hidden></p>
     </form>
-    <p class="muted"><a href="../index.html">← Về trang chủ</a></p>
+    <p class="muted"><a href="../index.html">Về trang chủ</a></p>
   </section>
 
   <div id="app" hidden>
@@ -176,7 +107,7 @@ input.mini { height: 36px; font-size: 14px; flex: 1 1 180px; width: auto; min-wi
     const b = id ? (await api('GET', '/bai-viet')).find(x => x.id === id) : { tieuDe: '', slug: '', chuyenMuc: 'Kiến thức', tomTat: '', phutDoc: '', noiDung: '', trangThai: 'nhap' };
     if (!b) { location.hash = '#bai-viet'; return; }
     $('view').innerHTML = `<form class="panel" id="bv-form" novalidate>
-      <div class="spread"><h2>${id ? 'Sửa bài viết' : 'Bài viết mới'}</h2><a href="#bai-viet">← Danh sách bài viết</a></div>
+      <div class="spread"><h2>${id ? 'Sửa bài viết' : 'Bài viết mới'}</h2><a href="#bai-viet">Danh sách bài viết</a></div>
       <label class="f"><span>Tiêu đề</span><input type="text" id="bv-tieu-de" maxlength="200" value="${esc(b.tieuDe)}"></label>
       <div class="row">
         <label class="f grow"><span>Đường dẫn</span><input type="text" id="bv-slug" maxlength="80" value="${esc(b.slug)}" placeholder="tự tạo từ tiêu đề"></label>

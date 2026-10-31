@@ -46,7 +46,9 @@ Spiritual/
 ├── README.md               Tài liệu này
 ├── package.json            Lệnh chung: cai-dat, test, menu, start
 ├── index.html, la-so.html, bai-viet.html   Chuyển hướng vào tuvivietnam/frontend (giữ link cũ)
-├── shared/site.css         Màu, chữ, form, khung trang, sáng/tối. Một bản cho cả site
+├── design.md               Hệ giao diện đã khóa (Solstice): màu, chữ, nút, quy tắc. Trang mới đọc file này trước
+├── shared/site.css         Hệ giao diện dùng chung: khung trang, menu, chân trang, nút, ô nhập, sáng/tối. Một bản cho cả site
+├── shared/tokens.css, base.css, fonts.css, fonts/   Token màu và khoảng cách, quy tắc nền, phông tự lưu (Yeseva One, Archivo, Archivo Narrow)
 ├── scripts/menu.js         Menu chính khai báo một chỗ, ghi vào mọi trang và kiểm tra lệch
 ├── tuvivietnam/            Tử vi + trang chủ          (frontend, backend, README)
 ├── xemngay/                Xem ngày tốt xấu           (frontend, backend, README)
@@ -108,8 +110,9 @@ Mỗi phần vẫn chạy riêng được: `cd zodiac/backend && npm install && 
 
 | Việc | Sửa ở đâu |
 |---|---|
-| Đổi màu, chữ, kiểu nút, menu cho cả site | `shared/site.css` |
-| Thêm, bớt, đổi tên mục menu | `MENU` trong `scripts/menu.js`, rồi chạy `npm run menu` |
+| Đổi màu, chữ, kiểu nút, menu cho cả site | Token trong `shared/tokens.css`, thành phần trong `shared/site.css`; ghi lại thay đổi trong `design.md` |
+| Đổi ảnh | Ảnh Wikimedia Commons là thẻ `<img>` trong từng trang, ghi công ở chân trang (`data-credits`). Ảnh chụp công cụ ở `tuvivietnam/frontend/img/cong-cu/` |
+| Thêm, bớt, đổi tên mục menu | `MENU` trong `scripts/menu.js`, rồi chạy `npm run menu` (ghi cả menu chính và menu chân trang) |
 | Thêm trang mới trong một phần | Tạo `frontend/<trang>.html`, đặt `<nav aria-label="Menu chính"></nav>` và link `../../shared/site.css`, rồi chạy `npm run menu` |
 | Thêm một phần mới | Tạo `<phần>/frontend` và `<phần>/backend` theo khuôn trên. Thêm lệnh vào `package.json` gốc, thêm mục vào `scripts/menu.js`. Nếu muốn `npm start` phục vụ luôn phần mới thì thêm tên thư mục vào vòng lặp phục vụ tĩnh trong `tuvivietnam/backend/server.js` |
 | Sửa nội dung luận giải | Tử vi: trang quản trị (khi chạy backend) hoặc `tuvivietnam/frontend/js/luangiai.js`. Tarot: `bo-bai.js`, `y-nghia-chu-de.js`. Hoàng đạo: `cung-hoang-dao.js`, `luan-giai.js`. Số chủ đạo: `so-hoc.js`. Xem ngày: `xemngay/frontend/js/lich-ngay.js` (trực, sao, ngày kỵ, hướng, cách chấm điểm) |

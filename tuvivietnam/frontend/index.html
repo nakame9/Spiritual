@@ -5,125 +5,23 @@
 <title>Lá Số Tử Vi · Tử vi, cung hoàng đạo, số chủ đạo</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Kết hợp tử vi phái Việt, cung hoàng đạo và số chủ đạo để dự đoán may mắn, tình cảm, sự nghiệp hôm nay, tháng này và năm nay.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
 <link rel="stylesheet" href="../../shared/site.css">
-<style>
-/* Trang chủ: hero hai cột (giới thiệu | form), kết quả ba hệ, công cụ, bài viết */
-.wrap { gap: 28px; }
-.hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 40px; align-items: start; padding-top: 12px; }
-.hero h1 { font-size: clamp(32px, 4.6vw, 50px); margin-top: 8px; }
-.hero .lede { font-size: 16.5px; margin-top: 14px; }
-.facts { display: flex; flex-wrap: wrap; gap: 14px 32px; margin: 26px 0 0; }
-.facts div { display: flex; flex-direction: column; }
-.facts dt { font-family: var(--f-display); font-weight: 700; font-size: 24px; line-height: 1.2; font-variant-numeric: tabular-nums; }
-.facts dd { margin: 0; color: var(--soft); font-size: 13px; }
-.cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
-
-.quick { background: var(--cell); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
-.quick h2 { font-family: var(--f-display); font-weight: 700; font-size: 21px; margin: 0; }
-.quick .hint { margin: -8px 0 0; color: var(--soft); font-size: 13.5px; }
-.quick form { display: flex; flex-wrap: wrap; gap: 12px 14px; align-items: flex-end; }
-.quick .f-gio { flex: 1 1 160px; }
-.quick .f-gio select { width: 100%; }
-.err { margin: 0; }
-.out { border-top: 1px dashed var(--line); padding-top: 14px; display: flex; flex-direction: column; gap: 12px; }
-.out .chip { align-self: flex-start; font-size: 11.5px; font-weight: 500; color: var(--tu); border: 1px dashed var(--tu); border-radius: 999px; padding: 2px 10px; }
-.out .menh { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 19px; line-height: 1.35; text-wrap: balance; }
-.out .menh small { display: block; font-family: var(--f-ui); font-weight: 600; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); margin-bottom: 2px; }
-.out .vcd { font-style: italic; font-weight: 500; color: var(--soft); }
-.out dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 5px 16px; margin: 0; font-size: 13.5px; }
-.out dt { color: var(--soft); }
-.out dd { margin: 0; font-weight: 500; }
-.out .sub { color: var(--soft); font-weight: 400; }
-.cta-row { display: flex; flex-wrap: wrap; gap: 8px; }
-
-.block { display: flex; flex-direction: column; gap: 16px; padding-top: 8px; }
-.sec-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px; }
-.sec-head h2 { font-family: var(--f-display); font-weight: 700; font-size: 27px; margin: 0; }
-.sec-head a { color: var(--tu); font-weight: 600; text-decoration: none; }
-.sec-head a:hover { text-decoration: underline; }
-
-.tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
-.tool { background: var(--cell); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 8px; color: var(--ink); text-decoration: none; min-width: 0; }
-a.tool:hover { border-color: var(--tu); }
-.glyph { font-family: 'Noto Serif SC', 'Noto Serif CJK SC', 'Songti SC', 'SimSun', serif; font-size: 30px; line-height: 1; color: var(--tu); }
-.tool h3 { margin: 4px 0 0; font-size: 16px; font-weight: 700; }
-.tool p { margin: 0; color: var(--soft); font-size: 13.5px; }
-.tool .more { margin-top: auto; padding-top: 6px; color: var(--tu); font-weight: 600; font-size: 13.5px; }
-
-.posts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.post { background: var(--cell); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 8px; color: var(--ink); text-decoration: none; min-width: 0; }
-.post:hover { border-color: var(--tu); }
-.post h3 { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 19px; line-height: 1.3; text-wrap: balance; }
-.post p { margin: 0; color: var(--soft); font-size: 14px; }
-.post .meta { margin-top: auto; padding-top: 6px; font-size: 13px; color: var(--soft); display: flex; justify-content: space-between; gap: 8px; }
-.post .meta b { color: var(--tu); font-weight: 600; }
-
-@media (max-width: 900px) { .posts { grid-template-columns: minmax(0, 1fr); } }
-@media (max-width: 820px) { .hero { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
-@media (max-width: 480px) { .quick { padding: 16px; } }
-
-/* Kết quả kết hợp ba hệ */
-.kq { display: flex; flex-direction: column; gap: 16px; }
-.kq > h2 { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 27px; }
-.ho-so { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.hs { display: flex; flex-direction: column; gap: 6px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--cell); color: var(--ink); text-decoration: none; min-width: 0; }
-.hs:hover { border-color: var(--tu); }
-.hs .nhan { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--tu); }
-.hs b { font-family: var(--f-display); font-size: 21px; line-height: 1.25; }
-.hs p { margin: 0; color: var(--soft); font-size: 14px; }
-.hs .more { margin-top: auto; padding-top: 6px; color: var(--tu); font-weight: 600; font-size: 13.5px; }
-.ky-zodiac { font-family: 'Segoe UI Symbol', 'Noto Sans Symbols 2', 'Noto Sans Symbols', 'Apple Symbols', 'DejaVu Sans', sans-serif; color: var(--tu); }
-.ky-tab { display: flex; flex-wrap: wrap; gap: 6px; }
-.ky-tab button { height: 40px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--cell); color: var(--ink); font: 500 14.5px var(--f-ui); cursor: pointer; }
-.ky-tab button[aria-pressed="true"] { background: var(--tu); border-color: var(--tu); color: var(--cell); font-weight: 600; }
-.ky-info { margin: 0; color: var(--soft); font-size: 14px; }
-.tom-tat { margin: 0; padding: 12px 16px; border-radius: 10px; background: var(--hl); font-size: 15px; font-weight: 500; }
-.du-doan { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: start; }
-.lv-the { display: flex; flex-direction: column; gap: 10px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--cell); min-width: 0; }
-.lv-the header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-.lv-the h3 { margin: 0; font-family: var(--f-display); font-size: 22px; }
-.lv-the .diem { font: 700 26px var(--f-display); color: var(--tu); }
-.lv-the .diem small { font: 500 14px var(--f-ui); color: var(--soft); }
-.thanh { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
-.thanh i { display: block; height: 100%; border-radius: 99px; background: var(--tu); }
-.lv-the.thap .thanh i { background: var(--hoa); } .lv-the.cao .thanh i { background: var(--moc); }
-.lv-the .tong-hop { margin: 0; font-size: 14.5px; line-height: 1.65; font-weight: 500; }
-.nguon { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; border-top: 1px dashed var(--line); padding-top: 10px; }
-.nguon li { display: flex; flex-direction: column; gap: 3px; font-size: 13.5px; line-height: 1.6; color: var(--soft); }
-.nguon .dau { display: flex; justify-content: space-between; gap: 8px; color: var(--ink); font-weight: 600; font-size: 13px; }
-.nguon .pt { color: var(--tu); white-space: nowrap; }
-.thanh.mini { height: 4px; margin-bottom: 2px; }
-.them { margin: 0; padding: 10px 12px; border-radius: 8px; background: var(--hl); font-size: 13.5px; line-height: 1.6; }
-.cach-tinh { margin: 0; color: var(--soft); font-size: 13px; max-width: 90ch; }
-@media (max-width: 1000px) { .du-doan { grid-template-columns: minmax(0, 1fr); } }
-@media (max-width: 820px) { .ho-so { grid-template-columns: minmax(0, 1fr); } }
-</style>
+<link rel="stylesheet" href="css/trang-chu.css">
 
 <div class="wrap">
+  <p class="banner" id="hom-nay"></p>
   <header class="site">
     <a class="brand" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi</a>
     <nav aria-label="Menu chính"><a href="index.html" aria-current="page">Trang chủ</a><a href="la-so.html">Lập lá số</a><a href="con-giap.html">12 con giáp</a><a href="../../xemngay/frontend/index.html">Xem ngày</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="../../numerology/frontend/index.html">Số chủ đạo</a><a href="bai-viet.html">Bài viết</a></nav>
   </header>
 
-  <section class="hero">
-    <div>
-      <p class="eyebrow">Tử vi · Cung hoàng đạo · Số chủ đạo</p>
-      <h1>Một ngày sinh, ba góc nhìn về vận may của bạn</h1>
-      <p class="lede">Lá Số Tử Vi kết hợp tử vi phái Việt, chiêm tinh phương Tây và thần số học để dự đoán may mắn, tình cảm và sự nghiệp của bạn hôm nay, tháng này và năm nay. Mỗi hệ cho một điểm riêng; khi cả ba cùng thuận hoặc cùng nghịch, tín hiệu càng rõ ràng.</p>
-      <dl class="facts">
-        <div><dt>3 hệ</dt><dd>tử vi, hoàng đạo, thần số học</dd></div>
-        <div><dt>3 mặt</dt><dd>may mắn, tình cảm, sự nghiệp</dd></div>
-        <div><dt>3 mốc</dt><dd>hôm nay, tháng này, năm nay</dd></div>
-      </dl>
+  <section class="hero-tc" aria-labelledby="h-hero">
+    <div class="hero-chu">
+      <h1 id="h-hero">Một ngày sinh, ba góc nhìn</h1>
+      <p class="lead">Ba hệ cùng đọc may mắn, tình cảm, sự nghiệp của bạn.</p>
     </div>
-
     <div class="quick">
-      <h2>Xem dự đoán của bạn</h2>
-      <p class="hint">Nhập ngày giờ sinh rồi bấm Xem dự đoán.</p>
-      <form id="q-form" novalidate>
+      <form id="q-form" novalidate aria-label="Xem dự đoán của bạn">
         <fieldset class="f"><legend>Giới tính</legend>
           <div class="seg">
             <label><input type="radio" name="q-gt" id="q-nam" checked><span>Nam</span></label>
@@ -138,9 +36,9 @@ a.tool:hover { border-color: var(--tu); }
         </fieldset>
         <fieldset class="f"><legend>Ngày sinh</legend>
           <div class="date">
-            <input type="number" id="q-ngay" inputmode="numeric" min="1" max="31" aria-label="Ngày">
-            <i>/</i><input type="number" id="q-thang" inputmode="numeric" min="1" max="12" aria-label="Tháng">
-            <i>/</i><input type="number" id="q-namsinh" class="y" inputmode="numeric" min="1900" max="2100" aria-label="Năm">
+            <input type="number" id="q-ngay" inputmode="numeric" min="1" max="31" aria-label="Ngày" placeholder="Ngày">
+            <i>/</i><input type="number" id="q-thang" inputmode="numeric" min="1" max="12" aria-label="Tháng" placeholder="Tháng">
+            <i>/</i><input type="number" id="q-namsinh" class="y" inputmode="numeric" min="1900" max="2100" aria-label="Năm" placeholder="Năm">
             <label class="nhuan" id="q-nhuan-wrap" hidden><input type="checkbox" id="q-nhuan">Nhuận</label>
           </div>
         </fieldset>
@@ -162,47 +60,98 @@ a.tool:hover { border-color: var(--tu); }
     <p class="cach-tinh"><b>Cách tính:</b> mỗi hệ cho điểm từ 0% đến 100%, 50% là mức trung bình. Tử vi lấy 40% từ nền lá số (Tài Bạch và Phúc Đức cho may mắn, Phu Thê cho tình cảm, Quan Lộc cho sự nghiệp) và 60% từ vận của tuổi trong ngày, tháng âm lịch, năm âm lịch. Cung hoàng đạo dựa trên vị trí thật của các hành tinh so với cung Mặt Trời của bạn. Số chủ đạo dựa trên ngày, tháng, năm cá nhân và thiên hướng của con số. Điểm chung là trung bình ba hệ. Nội dung chỉ để tham khảo.</p>
   </section>
 
-  <section class="block" aria-labelledby="h-tools">
-    <div class="sec-head"><h2 id="h-tools">Các công cụ</h2></div>
-    <div class="tools">
-      <a class="tool" href="la-so.html"><span class="glyph" aria-hidden="true">命</span><h3>Lập lá số tử vi</h3><p>Lá số 12 cung đầy đủ kèm luận giải từng cung: Mệnh, Tài Bạch, Quan Lộc, Phu Thê và các cung còn lại.</p><span class="more">Mở công cụ →</span></a>
-      <a class="tool" href="con-giap.html"><span class="glyph" aria-hidden="true">肖</span><h3>Tử vi 12 con giáp</h3><p>Tử vi hôm nay, tuần, tháng, năm theo tuổi: công việc, tài lộc, tình cảm, giờ hoàng đạo.</p><span class="more">Xem tử vi →</span></a>
-      <a class="tool" href="../../zodiac/frontend/index.html"><span class="glyph" aria-hidden="true">星</span><h3>Cung hoàng đạo</h3><p>Xác định cung, tính cách, tình yêu, sự nghiệp, tử vi theo cung, độ tương hợp và bản đồ sao.</p><span class="more">Khám phá →</span></a>
-      <a class="tool" href="../../numerology/frontend/index.html"><span class="glyph" aria-hidden="true">数</span><h3>Số chủ đạo</h3><p>Thần số học: số chủ đạo, các chỉ số theo ngày sinh và tên, biểu đồ ngày sinh, năm cá nhân.</p><span class="more">Tính số →</span></a>
-      <a class="tool" href="../../Tarot/frontend/index.html"><span class="glyph" aria-hidden="true">牌</span><h3>Xem bài Tarot</h3><p>Đặt câu hỏi, tự chọn lá từ bộ 78 lá, đọc ý nghĩa xuôi ngược cho từng vị trí.</p><span class="more">Rút bài →</span></a>
-      <a class="tool" href="../../xemngay/frontend/index.html"><span class="glyph" aria-hidden="true">日</span><h3>Xem ngày tốt xấu</h3><p>Lịch âm, ngày hoàng đạo, trực, sao, giờ tốt và chọn ngày cho cưới hỏi, khai trương, động thổ.</p><span class="more">Xem ngày →</span></a>
+  <section class="ban-do" aria-labelledby="h-map">
+    <div class="map-dau">
+      <h2 id="h-map">Bạn mang đến điều gì?</h2>
+      <p class="lead">Một ngày sinh, một ngày bất kỳ hay một câu hỏi. Mỗi thứ có công cụ đọc riêng.</p>
+    </div>
+    <div class="map" role="list">
+      <div class="nhom" role="listitem">
+        <p class="vao">Ngày giờ sinh</p>
+        <ul class="nhanh">
+          <li><a href="#q-form">Dự đoán tổng hợp</a><span>may mắn, tình cảm, sự nghiệp theo ngày, tháng, năm</span></li>
+          <li><a href="la-so.html">Lập lá số tử vi</a><span>12 cung, chính tinh, đại hạn và tiểu hạn</span></li>
+          <li><a href="con-giap.html">Tử vi 12 con giáp</a><span>vận theo tuổi, giờ hoàng đạo</span></li>
+          <li><a href="../../zodiac/frontend/index.html">Cung hoàng đạo</a><span>tính cách, độ tương hợp, bản đồ sao</span></li>
+          <li><a href="../../numerology/frontend/index.html">Số chủ đạo</a><span>biểu đồ ngày sinh, năm cá nhân, bốn đỉnh cao</span></li>
+        </ul>
+      </div>
+      <div class="nhom" role="listitem">
+        <p class="vao">Một ngày</p>
+        <ul class="nhanh">
+          <li><a href="../../xemngay/frontend/index.html">Xem ngày tốt xấu</a><span>hoàng đạo, trực, sao, giờ tốt, chọn ngày theo việc</span></li>
+        </ul>
+      </div>
+      <div class="nhom" role="listitem">
+        <p class="vao">Một câu hỏi</p>
+        <ul class="nhanh">
+          <li><a href="../../Tarot/frontend/index.html">Xem bài Tarot</a><span>ý nghĩa xuôi, ngược của từng lá theo vị trí</span></li>
+        </ul>
+      </div>
     </div>
   </section>
 
-  <section class="block" aria-labelledby="h-posts">
-    <div class="sec-head"><h2 id="h-posts">Bài viết mới</h2><a href="bai-viet.html">Xem tất cả bài viết</a></div>
-    <div class="posts">
-      <a class="post" href="bai-viet.html#tu-vi-la-gi">
-        <p class="eyebrow">Nhập môn</p>
-        <h3>Tử vi đẩu số là gì?</h3>
-        <p>Lá số gồm những gì, vì sao có 12 cung và hơn 100 sao, phái Việt khác sách Trung Hoa ở đâu.</p>
-        <span class="meta"><span>4 phút đọc</span><b>Đọc bài →</b></span>
-      </a>
-      <a class="post" href="bai-viet.html#doc-la-so">
-        <p class="eyebrow">Cách đọc lá số</p>
-        <h3>12 cung và tam phương tứ chính</h3>
-        <p>Bắt đầu từ cung Mệnh, xem cùng tam hợp và xung chiếu, hiểu độ sáng của sao và cung Vô chính diệu.</p>
-        <span class="meta"><span>5 phút đọc</span><b>Đọc bài →</b></span>
-      </a>
-      <a class="post" href="bai-viet.html#dai-han-tieu-han">
-        <p class="eyebrow">Vận hạn</p>
-        <h3>Đại hạn và tiểu hạn tính thế nào?</h3>
-        <p>Mỗi cung giữ 10 năm bắt đầu từ số cục, chiều đi theo âm dương nam nữ, và tiểu hạn đổi cung mỗi năm.</p>
-        <span class="meta"><span>4 phút đọc</span><b>Đọc bài →</b></span>
-      </a>
+  <section class="man-hinh" aria-labelledby="h-mh">
+    <h2 id="h-mh">Bốn màn hình thật</h2>
+    <div class="mh-tab" role="tablist" aria-label="Chọn công cụ">
+      <button type="button" role="tab" id="t-laso" aria-controls="p-laso" aria-selected="true">Lá số 12 cung</button>
+      <button type="button" role="tab" id="t-sao" aria-controls="p-sao" aria-selected="false" tabindex="-1">Bản đồ sao</button>
+      <button type="button" role="tab" id="t-tarot" aria-controls="p-tarot" aria-selected="false" tabindex="-1">Trải bài Tarot</button>
+      <button type="button" role="tab" id="t-lich" aria-controls="p-lich" aria-selected="false" tabindex="-1">Lịch tháng</button>
+    </div>
+    <div class="mh-panel" role="tabpanel" id="p-laso" aria-labelledby="t-laso">
+      <figure class="chup" data-slot="laso" data-kind="product" data-alt="Lá số 12 cung của một ngày sinh mẫu"><picture><source media="(max-width: 40rem)" srcset="img/cong-cu/la-so-dt.webp" width="720" height="514"><img src="img/cong-cu/la-so.webp" width="1440" height="1027" alt="Lá số 12 cung lập cho ngày sinh mẫu 15/8/1990, giờ Thìn" loading="lazy"></picture></figure>
+      <div class="mh-chu"><p>Lá số 12 cung đầy đủ kèm luận giải từng cung: Mệnh, Tài Bạch, Quan Lộc, Phu Thê và các cung còn lại.</p><a class="btn2" href="la-so.html">Lập lá số</a></div>
+    </div>
+    <div class="mh-panel" role="tabpanel" id="p-sao" aria-labelledby="t-sao" hidden>
+      <figure class="chup" data-slot="sao" data-kind="product" data-alt="Bản đồ sao của một ngày sinh mẫu"><picture><source media="(max-width: 40rem)" srcset="img/cong-cu/ban-do-sao-dt.webp" width="720" height="720"><img src="img/cong-cu/ban-do-sao.webp" width="1440" height="730" alt="Bản đồ sao với vị trí 10 hành tinh cho ngày sinh mẫu" loading="lazy"></picture></figure>
+      <div class="mh-chu"><p>Vị trí 10 hành tinh lúc bạn sinh ra, cung Mọc, cung Mặt Trăng và các góc chiếu chính.</p><a class="btn2" href="../../zodiac/frontend/ban-do-sao.html">Vẽ bản đồ sao</a></div>
+    </div>
+    <div class="mh-panel" role="tabpanel" id="p-tarot" aria-labelledby="t-tarot" hidden>
+      <figure class="chup" data-slot="tarot" data-kind="product" data-alt="Một trải bài Tarot ba lá đã lật"><picture><source media="(max-width: 40rem)" srcset="img/cong-cu/tarot-dt.webp" width="720" height="498"><img src="img/cong-cu/tarot.webp" width="1440" height="588" alt="Trải bài Tarot ba lá đã lật, kèm vị trí và chiều xuôi ngược" loading="lazy"></picture></figure>
+      <div class="mh-chu"><p>Tự chọn lá từ bộ 78 lá đã xáo, lật từng lá và đọc ý nghĩa xuôi ngược cho từng vị trí.</p><a class="btn2" href="../../Tarot/frontend/xem-bai.html">Rút bài</a></div>
+    </div>
+    <div class="mh-panel" role="tabpanel" id="p-lich" aria-labelledby="t-lich" hidden>
+      <figure class="chup" data-slot="lich" data-kind="product" data-alt="Lịch tháng tô màu theo ngày tốt xấu"><picture><source media="(max-width: 40rem)" srcset="img/cong-cu/lich-thang-dt.webp" width="720" height="352"><img src="img/cong-cu/lich-thang.webp" width="1440" height="727" alt="Lịch tháng với ngày âm lịch và mức tốt xấu của từng ngày" loading="lazy"></picture></figure>
+      <div class="mh-chu"><p>Lịch âm, ngày hoàng đạo, trực, sao, giờ tốt và chọn ngày cho cưới hỏi, khai trương, động thổ.</p><a class="btn2" href="../../xemngay/frontend/index.html">Xem ngày</a></div>
     </div>
   </section>
 
-  <footer class="foot"><span>Lá Số Tử Vi · tử vi phái Việt, chiêm tinh phương Tây, thần số học</span><span>Nội dung chỉ để tham khảo.</span></footer>
+  <section class="ba-ba" aria-labelledby="h-ba">
+    <figure class="anh anh-nen">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Candle_light_projected_through_a_glass_orb.jpg/1280px-Candle_light_projected_through_a_glass_orb.jpg" srcset="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Candle_light_projected_through_a_glass_orb.jpg/960px-Candle_light_projected_through_a_glass_orb.jpg 960w, https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Candle_light_projected_through_a_glass_orb.jpg/1280px-Candle_light_projected_through_a_glass_orb.jpg 1280w, https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Candle_light_projected_through_a_glass_orb.jpg/1920px-Candle_light_projected_through_a_glass_orb.jpg 1920w" sizes="(max-width: 60rem) 100vw, 58vw" width="4724" height="2657" alt="Ngọn nến trong chân đèn đồng bên quả cầu thủy tinh, ánh sáng hắt qua quả cầu" loading="lazy" onerror="this.closest('figure').hidden = true">
+    </figure>
+    <div class="ba-chu">
+      <h2 id="h-ba">Ba&nbsp;hệ, ba&nbsp;mặt, ba&nbsp;mốc</h2>
+      <dl class="so-ba">
+        <div><dt>Ba hệ</dt><dd>tử vi phái Việt, chiêm tinh phương Tây, thần số học</dd></div>
+        <div><dt>Ba mặt</dt><dd>may mắn, tình cảm, sự nghiệp</dd></div>
+        <div><dt>Ba mốc</dt><dd>hôm nay, tháng này, năm nay</dd></div>
+      </dl>
+      <p>Mỗi hệ cho một điểm riêng; khi cả ba cùng thuận hoặc cùng nghịch, tín hiệu càng rõ ràng.</p>
+    </div>
+  </section>
+
+  <section class="bai dai-muc" aria-labelledby="h-posts">
+    <div class="bai-dau"><h2 id="h-posts">Bài viết mới</h2><a class="btn2" href="bai-viet.html">Tất cả bài viết</a></div>
+    <ol class="posts">
+      <li><a class="post" href="bai-viet.html#tu-vi-la-gi"><h3>Tử vi đẩu số là gì?</h3><p>Lá số gồm những gì, vì sao có 12 cung và hơn 100 sao, phái Việt khác sách Trung Hoa ở đâu.</p><span class="meta">Nhập môn, 4 phút đọc</span></a></li>
+      <li><a class="post" href="bai-viet.html#doc-la-so"><h3>12 cung và tam phương tứ chính</h3><p>Bắt đầu từ cung Mệnh, xem cùng tam hợp và xung chiếu, hiểu độ sáng của sao và cung Vô chính diệu.</p><span class="meta">Cách đọc lá số, 5 phút đọc</span></a></li>
+      <li><a class="post" href="bai-viet.html#dai-han-tieu-han"><h3>Đại hạn và tiểu hạn tính thế nào?</h3><p>Mỗi cung giữ 10 năm bắt đầu từ số cục, chiều đi theo âm dương nam nữ, và tiểu hạn đổi cung mỗi năm.</p><span class="meta">Vận hạn, 4 phút đọc</span></a></li>
+    </ol>
+  </section>
+
+  <footer class="foot">
+    <p class="foot-loi">Lá Số Tử Vi: tử vi phái Việt, chiêm tinh phương Tây, thần số học, Tarot và lịch vạn niên.</p>
+    <nav aria-label="Chân trang"><a href="index.html">Trang chủ</a><a href="la-so.html">Lập lá số</a><a href="con-giap.html">12 con giáp</a><a href="../../xemngay/frontend/index.html">Xem ngày</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="../../numerology/frontend/index.html">Số chủ đạo</a><a href="bai-viet.html">Bài viết</a></nav>
+    <p class="small">Nội dung chỉ để tham khảo.</p>
+    <p class="small" data-credits>Ảnh: <a href="https://commons.wikimedia.org/wiki/File:Candle_light_projected_through_a_glass_orb.jpg">W.carter</a> (CC BY-SA 4.0, Wikimedia Commons).</p>
+  </footer>
 </div>
 
 <script src="js/tuvi.js"></script>
 <script src="js/congiap.js"></script>
+<script src="../../xemngay/frontend/js/lich-ngay.js"></script>
 <script src="js/api.js"></script>
 <script src="../../zodiac/frontend/js/vendor/astronomy.browser.min.js"></script>
 <script src="../../zodiac/frontend/js/thien-van.js"></script>

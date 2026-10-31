@@ -6,38 +6,8 @@
 <title>Bài viết · Lá Số Tử Vi</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Bài viết nhập môn tử vi: tử vi đẩu số là gì, cách đọc 12 cung, đại hạn và tiểu hạn.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
 <link rel="stylesheet" href="../../shared/site.css">
-<style>
-/* Trang bài viết: mục lục bên trái (dính khi cuộn), cột chữ 68 ký tự bên phải */
-.layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; align-items: start; }
-.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); display: flex; flex-direction: column; gap: 4px; }
-.toc p { margin: 0 0 6px; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); }
-.toc a { color: var(--ink); text-decoration: none; font-size: 14px; padding: 6px 10px; border-radius: 6px; border-left: 2px solid var(--line); }
-.toc a:hover { background: var(--hl); border-left-color: var(--tu); }
-.articles { display: flex; flex-direction: column; gap: 56px; max-width: 68ch; }
-article { scroll-margin-top: 20px; }
-article h2 { font-family: var(--f-display); font-weight: 700; font-size: clamp(26px, 3.4vw, 32px); line-height: 1.2; margin: 6px 0 4px; text-wrap: balance; }
-article .meta { color: var(--soft); font-size: 13px; margin: 0 0 18px; }
-article h3 { font-size: 17px; font-weight: 700; margin: 26px 0 6px; }
-article p, article li { font-size: 16px; line-height: 1.75; }
-article p { margin: 0 0 14px; }
-article ul, article ol { margin: 0 0 14px; padding-left: 22px; }
-article li { margin-bottom: 4px; }
-article table { border-collapse: collapse; font-size: 14.5px; margin: 4px 0 16px; font-variant-numeric: tabular-nums; }
-article th, article td { text-align: left; padding: 6px 14px 6px 0; border-bottom: 1px solid var(--line); }
-article th { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--soft); }
-.table-wrap { overflow-x: auto; }
-.try { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--cell); }
-.try p { margin: 0; font-size: 14.5px; flex: 1 1 220px; }
-article + article { border-top: 1px solid var(--line); padding-top: 48px; }
-@media (max-width: 820px) {
-  .layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
-  .toc { position: static; }
-}
-</style>
+<link rel="stylesheet" href="css/bai-viet.css">
 </head>
 <body>
 <div class="wrap">
@@ -46,25 +16,26 @@ article + article { border-top: 1px solid var(--line); padding-top: 48px; }
     <nav aria-label="Menu chính"><a href="index.html">Trang chủ</a><a href="la-so.html">Lập lá số</a><a href="con-giap.html">12 con giáp</a><a href="../../xemngay/frontend/index.html">Xem ngày</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="../../numerology/frontend/index.html">Số chủ đạo</a><a href="bai-viet.html" aria-current="page">Bài viết</a></nav>
   </header>
 
-  <header>
-    <p class="eyebrow">Kiến thức tử vi</p>
-    <h1>Bài viết</h1>
-    <p class="lede">Những bài nhập môn ngắn để đọc được lá số của chính mình.</p>
+  <header class="dau-bai">
+    <div>
+      <h1>Bài viết</h1>
+      <p class="lede">Những bài nhập môn ngắn để đọc được lá số của chính mình.</p>
+    </div>
+    <figure class="anh"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Bookshelf_Prunksaal_OeNB_Vienna_AT_matl00786ch.jpg/1280px-Bookshelf_Prunksaal_OeNB_Vienna_AT_matl00786ch.jpg" srcset="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Bookshelf_Prunksaal_OeNB_Vienna_AT_matl00786ch.jpg/960px-Bookshelf_Prunksaal_OeNB_Vienna_AT_matl00786ch.jpg 960w, https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Bookshelf_Prunksaal_OeNB_Vienna_AT_matl00786ch.jpg/1280px-Bookshelf_Prunksaal_OeNB_Vienna_AT_matl00786ch.jpg 1280w, https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Bookshelf_Prunksaal_OeNB_Vienna_AT_matl00786ch.jpg/1920px-Bookshelf_Prunksaal_OeNB_Vienna_AT_matl00786ch.jpg 1920w" sizes="(max-width: 60rem) 100vw, 55vw" width="3015" height="2010" alt="Những cuốn sách bìa da cũ trên giá gỗ, cạnh chiếc thang thư viện" style="object-position: 50% 45%" fetchpriority="high" onerror="this.closest('figure').hidden = true"></figure>
   </header>
 
   <div class="layout">
     <nav class="toc" aria-label="Mục lục">
       <p>Mục lục</p>
-      <a href="#tu-vi-la-gi">Tử vi đẩu số là gì?</a>
-      <a href="#doc-la-so">12 cung và tam phương tứ chính</a>
-      <a href="#dai-han-tieu-han">Đại hạn và tiểu hạn tính thế nào?</a>
+      <a href="#tu-vi-la-gi">Tử vi đẩu số</a>
+      <a href="#doc-la-so">12 cung, tam phương</a>
+      <a href="#dai-han-tieu-han">Đại hạn, tiểu hạn</a>
     </nav>
 
     <div class="articles">
       <article id="tu-vi-la-gi">
-        <p class="eyebrow">Nhập môn</p>
         <h2>Tử vi đẩu số là gì?</h2>
-        <p class="meta">4 phút đọc</p>
+        <p class="meta">Nhập môn, 4 phút đọc</p>
         <p>Tử vi đẩu số là một môn lý số phương Đông. Từ giờ, ngày, tháng và năm sinh theo âm lịch, người ta lập ra một bảng gọi là lá số, rồi dựa vào vị trí các sao trên bảng để bàn về tính cách và các giai đoạn trong đời người. Tên gọi lấy từ sao Tử Vi, ngôi sao đứng đầu hệ thống. Theo truyền thuyết, môn này do Trần Đoàn, một đạo sĩ thời Ngũ Đại sang đầu nhà Tống, hệ thống hóa.</p>
         <h3>Lá số gồm những gì</h3>
         <p>Lá số là một hình vuông chia làm 12 ô bao quanh một ô lớn ở giữa. Mỗi ô ứng với một địa chi, từ Tý đến Hợi, và mang tên một cung nói về một mặt của đời sống:</p>
@@ -84,12 +55,11 @@ article + article { border-top: 1px solid var(--line); padding-top: 48px; }
       </article>
 
       <article id="doc-la-so">
-        <p class="eyebrow">Cách đọc lá số</p>
         <h2>12 cung và tam phương tứ chính</h2>
-        <p class="meta">5 phút đọc</p>
+        <p class="meta">Cách đọc lá số, 5 phút đọc</p>
         <p>Người mới thường nhìn vào cả 12 ô cùng lúc và thấy rối. Cách dễ hơn là đi theo một thứ tự cố định.</p>
         <h3>1. Bắt đầu từ cung Mệnh và cung Thân</h3>
-        <p>Cung Mệnh được tính từ tháng và giờ sinh. Đây là điểm xuất phát của mọi phép xem, nói về bản chất và hướng đi chung của người đó. Cung Thân cũng tính từ tháng và giờ sinh nhưng đếm theo chiều ngược lại, và theo quan niệm phổ biến thì ảnh hưởng rõ hơn ở nửa sau cuộc đời. Cung Thân luôn trùng với một trong sáu cung Mệnh, Phúc Đức, Quan Lộc, Thiên Di, Tài Bạch hoặc Phu Thê; trên lá số, cung đó được đánh dấu "Thân".</p>
+        <p>Cung Mệnh được tính từ tháng và giờ sinh. Đây là điểm xuất phát của mọi phép xem, nói về bản chất và hướng đi chung của người đó. Cung Thân cũng tính từ tháng và giờ sinh nhưng đếm theo chiều ngược lại, và theo quan niệm phổ biến thì ảnh hưởng rõ hơn ở nửa sau cuộc đời. Cung Thân luôn trùng với một trong sáu cung Mệnh, Phúc Đức, Quan Lộc, Thiên Di, Tài Bạch hoặc Phu Thê; trên lá số, cung đó được đánh dấu “Thân”.</p>
         <h3>2. Xem tam phương tứ chính</h3>
         <p>Một cung không đứng một mình. Khi xem một cung, người ta xem cùng lúc bốn cung:</p>
         <ul>
@@ -107,9 +77,8 @@ article + article { border-top: 1px solid var(--line); padding-top: 48px; }
       </article>
 
       <article id="dai-han-tieu-han">
-        <p class="eyebrow">Vận hạn</p>
         <h2>Đại hạn và tiểu hạn tính thế nào?</h2>
-        <p class="meta">4 phút đọc</p>
+        <p class="meta">Vận hạn, 4 phút đọc</p>
         <p>Lá số gốc mô tả cả cuộc đời. Để xem từng giai đoạn, tử vi dùng đại hạn cho từng mười năm và tiểu hạn cho từng năm.</p>
         <h3>Đại hạn: mỗi cung giữ mười năm</h3>
         <p>Đại hạn đầu tiên luôn bắt đầu tại cung Mệnh. Tuổi bắt đầu bằng số cục của lá số:</p>
@@ -117,11 +86,11 @@ article + article { border-top: 1px solid var(--line); padding-top: 48px; }
           <table>
             <thead><tr><th>Cục</th><th>Đại hạn đầu</th></tr></thead>
             <tbody>
-              <tr><td>Thủy nhị cục</td><td>2–11 tuổi</td></tr>
-              <tr><td>Mộc tam cục</td><td>3–12 tuổi</td></tr>
-              <tr><td>Kim tứ cục</td><td>4–13 tuổi</td></tr>
-              <tr><td>Thổ ngũ cục</td><td>5–14 tuổi</td></tr>
-              <tr><td>Hỏa lục cục</td><td>6–15 tuổi</td></tr>
+              <tr><td>Thủy nhị cục</td><td>2 đến 11 tuổi</td></tr>
+              <tr><td>Mộc tam cục</td><td>3 đến 12 tuổi</td></tr>
+              <tr><td>Kim tứ cục</td><td>4 đến 13 tuổi</td></tr>
+              <tr><td>Thổ ngũ cục</td><td>5 đến 14 tuổi</td></tr>
+              <tr><td>Hỏa lục cục</td><td>6 đến 15 tuổi</td></tr>
             </tbody>
           </table>
         </div>
@@ -130,7 +99,7 @@ article + article { border-top: 1px solid var(--line); padding-top: 48px; }
           <li><b>Dương Nam và Âm Nữ</b> đi thuận, theo chiều Tý, Sửu, Dần.</li>
           <li><b>Âm Nam và Dương Nữ</b> đi nghịch, theo chiều Tý, Hợi, Tuất.</li>
         </ul>
-        <p>Ví dụ: một người nam sinh năm Canh Ngọ, Thổ ngũ cục, Mệnh tại Mão. Canh là can Dương nên đại hạn đi thuận: 5–14 tuổi ở Mão, 15–24 tuổi ở Thìn, 25–34 tuổi ở Tỵ, và cứ thế tiếp tục.</p>
+        <p>Ví dụ: một người nam sinh năm Canh Ngọ, Thổ ngũ cục, Mệnh tại Mão. Canh là can Dương nên đại hạn đi thuận: 5 đến 14 tuổi ở Mão, 15 đến 24 tuổi ở Thìn, 25 đến 34 tuổi ở Tỵ, và cứ thế tiếp tục.</p>
         <h3>Tiểu hạn: mỗi năm một cung</h3>
         <p>Tiểu hạn đổi cung mỗi năm. Cung khởi đầu phụ thuộc vào chi năm sinh:</p>
         <ul>
@@ -141,13 +110,18 @@ article + article { border-top: 1px solid var(--line); padding-top: 48px; }
         </ul>
         <p>Năm đầu đời nằm ở cung khởi, sau đó nam đi thuận, nữ đi nghịch, mỗi năm một cung. Mỗi ô trên lá số ghi sẵn chi của những năm tiểu hạn đi qua ô đó.</p>
         <h3>Tuổi dùng để tính</h3>
-        <p>Tử vi dùng tuổi âm, hay còn gọi là tuổi mụ: lấy năm đang xem trừ năm sinh âm lịch rồi cộng thêm một. Trên trang lập lá số, bạn nhập "Năm xem hạn"; ô có đại hạn đang chạy và ô tiểu hạn của năm đó sẽ được tô màu tím.</p>
+        <p>Tử vi dùng tuổi âm, hay còn gọi là tuổi mụ: lấy năm đang xem trừ năm sinh âm lịch rồi cộng thêm một. Trên trang lập lá số, bạn nhập “Năm xem hạn”; ô có đại hạn đang chạy và ô tiểu hạn của năm đó sẽ được tô màu tím.</p>
         <div class="try"><p>Xem đại hạn và tiểu hạn năm nay của bạn.</p><a class="btn primary" href="la-so.html">Lập lá số</a></div>
       </article>
     </div>
   </div>
 
-  <footer class="foot"><span>Lá Số Tử Vi · an sao phái Việt, lịch âm theo thuật toán Hồ Ngọc Đức</span><span>Nội dung chỉ để tham khảo.</span></footer>
+  <footer class="foot">
+    <p class="foot-loi">Lá Số Tử Vi: tử vi phái Việt, chiêm tinh phương Tây, thần số học, Tarot và lịch vạn niên.</p>
+    <nav aria-label="Chân trang"><a href="index.html">Trang chủ</a><a href="la-so.html">Lập lá số</a><a href="con-giap.html">12 con giáp</a><a href="../../xemngay/frontend/index.html">Xem ngày</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="../../numerology/frontend/index.html">Số chủ đạo</a><a href="bai-viet.html">Bài viết</a></nav>
+    <p class="small" data-credits>Ảnh: <a href="https://commons.wikimedia.org/wiki/File:Bookshelf_Prunksaal_OeNB_Vienna_AT_matl00786ch.jpg">Matl</a> (CC BY-SA 3.0, Wikimedia Commons).</p>
+    <p class="small">An sao phái Việt, lịch âm theo thuật toán Hồ Ngọc Đức. Nội dung chỉ để tham khảo.</p>
+  </footer>
 </div>
 <script src="js/api.js"></script>
 <script>
@@ -156,7 +130,8 @@ layApi('/api/bai-viet').then(ds => Promise.all(ds.map(b => layApi('/api/bai-viet
   if (!ds.length) return;
   document.querySelector('.toc').innerHTML = '<p>Mục lục</p>' + ds.map(b => `<a href="#${escHtml(b.slug)}">${escHtml(b.tieuDe)}</a>`).join('');
   document.querySelector('.articles').innerHTML = ds.map(b => `<article id="${escHtml(b.slug)}">
-    <p class="eyebrow">${escHtml(b.chuyenMuc)}</p><h2>${escHtml(b.tieuDe)}</h2><p class="meta">${b.phutDoc} phút đọc</p>${b.html}</article>`).join('');
+    <h2>${escHtml(b.tieuDe)}</h2>
+        <p class="meta">${escHtml(b.chuyenMuc)}, ${b.phutDoc} phút đọc</p>${b.html}</article>`).join('');
   const dich = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
   if (dich) dich.scrollIntoView();
 }).catch(() => {});

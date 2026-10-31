@@ -45,7 +45,7 @@
             <dl>${CHU_DE.map(([k, t]) => `<dt>${t.ten}</dt><dd>${c.chuDe[k][ch]}</dd>`).join('')}</dl></section>`).join('')}</div>
         </div>
       </div>
-      <nav class="ct-nav" aria-label="Lá khác"><button class="btn2" type="button" data-di="-1">← ${truoc.ten}</button><button class="btn2" type="button" data-di="1">${sau.ten} →</button></nav>`;
+      <nav class="ct-nav" aria-label="Lá khác"><button class="btn2" type="button" data-di="-1">Lá trước: ${truoc.ten}</button><button class="btn2" type="button" data-di="1">Lá sau: ${sau.ten}</button></nav>`;
   }
   const sang = di => location.replace('#la-' + ((dangXem + di + 78) % 78)); // thay địa chỉ, không chồng thêm lịch sử
   function theoHash() {

@@ -4,108 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lập lá số · Lá Số Tử Vi</title>
+<meta name="description" content="Lập lá số tử vi 12 cung theo cách an sao phái Việt, kèm luận giải từng cung, đại hạn và tiểu hạn.">
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
 <link rel="stylesheet" href="../../shared/site.css">
-<style>
-/* Bàn lá số 4×4 truyền thống, thiên bàn chiếm 2×2 ở giữa; dưới 760px xếp 2 cột theo thứ tự cung từ Mệnh */
-form { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; padding: 16px; background: var(--cell); border: 1px solid var(--line); border-radius: 10px; }
-.f-name { flex: 1 1 200px; }
-.f-gio select { width: 172px; }
-.f-xem input { width: 80px; }
-
-/* Lá số */
-.board { display: grid; gap: 1px; background: var(--line); border: 1.5px solid var(--ink); }
-.cell {
-  background: var(--cell); padding: 8px 10px; display: flex; flex-direction: column; gap: 6px;
-  min-height: 210px; min-width: 0; cursor: pointer; position: relative; transition: background-color .15s;
-}
-.cell:focus-visible { outline: 2px solid var(--tu); outline-offset: -3px; }
-.cell.is-rel { background: var(--hl); }
-.cell.is-sel { background: var(--hl); box-shadow: inset 0 0 0 2px var(--tu); }
-.top { display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 2px 6px; }
-.ten { font-weight: 700; font-size: 11.5px; letter-spacing: .09em; text-transform: uppercase; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
-.is-menh .ten { color: var(--tu); }
-.than { font-size: 9.5px; letter-spacing: .08em; border: 1px solid var(--tu); color: var(--tu); border-radius: 3px; padding: 0 4px; line-height: 1.5; }
-.canchi { font-size: 11px; color: var(--soft); grid-column: 1; }
-.dh { grid-row: 1 / span 2; grid-column: 2; font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums; padding: 1px 6px; border-radius: 4px; line-height: 1.4; }
-.dh.now { background: var(--tu); color: var(--cell); }
-.chinh { list-style: none; margin: 2px 0 0; padding: 0; text-align: center; font-family: var(--f-display); font-weight: 700; font-size: 15px; line-height: 1.35; }
-.vcd { text-align: center; font-style: italic; color: var(--soft); font-size: 12px; margin: 2px 0 0; }
-.dt { font-family: var(--f-ui); font-weight: 500; font-size: 10.5px; color: var(--soft); margin-left: 2px; }
-.phu { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 8px; font-size: 12px; line-height: 1.5; }
-.phu ul { list-style: none; margin: 0; padding: 0; min-width: 0; }
-.phu .hung { text-align: right; }
-.hoa-tag { font-family: var(--f-ui); font-size: 9.5px; font-weight: 700; letter-spacing: .03em; border: 1px solid currentColor; border-radius: 3px; padding: 0 3px; margin-left: 3px; vertical-align: 1px; white-space: nowrap; }
-.hoa-tag.ky { background: var(--hoa); border-color: var(--hoa); color: var(--cell); }
-.chinh .hoa-tag { font-size: 10px; }
-.K { color: var(--kim); } .M { color: var(--moc); } .T { color: var(--thuy); } .H { color: var(--hoa); } .O { color: var(--tho); }
-.bot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 11px; color: var(--soft); padding-top: 4px; border-top: 1px dashed var(--line); }
-.bot .tags { display: flex; gap: 4px; }
-.tag { font-size: 10px; font-weight: 600; padding: 0 5px; border-radius: 3px; background: var(--tag); color: var(--tag-fg); line-height: 1.6; }
-.th { font-variant-numeric: tabular-nums; padding: 0 5px; border-radius: 3px; }
-.th.now { background: var(--tu); color: var(--cell); font-weight: 600; }
-
-.mid { background: var(--mid); padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.mid h2 { font-family: var(--f-display); font-weight: 700; font-size: 24px; line-height: 1.2; margin: 0; text-wrap: balance; overflow-wrap: anywhere; }
-.chip { align-self: flex-start; font-size: 11.5px; font-weight: 500; color: var(--tu); border: 1px dashed var(--tu); border-radius: 999px; padding: 2px 10px; }
-.info { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 16px; margin: 0; font-size: 13.5px; }
-.info dt { color: var(--soft); }
-.info dd { margin: 0; font-weight: 500; }
-.info .sub { color: var(--soft); font-weight: 400; }
-.rel { margin: auto 0 0; padding-top: 10px; border-top: 1px solid var(--line); font-size: 13px; color: var(--soft); }
-.rel b { color: var(--ink); font-weight: 600; }
-
-@media (min-width: 760px) {
-  .board { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-areas: "c6 c7 c8 c9" "c5 mid mid c10" "c4 mid mid c11" "c3 c2 c1 c12"; }
-  .mid { grid-area: mid; }
-  .c1 { grid-area: c1; } .c2 { grid-area: c2; } .c3 { grid-area: c3; } .c4 { grid-area: c4; } .c5 { grid-area: c5; } .c6 { grid-area: c6; }
-  .c7 { grid-area: c7; } .c8 { grid-area: c8; } .c9 { grid-area: c9; } .c10 { grid-area: c10; } .c11 { grid-area: c11; } .c12 { grid-area: c12; }
-}
-@media (max-width: 759.98px) {
-  .board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .mid { grid-column: 1 / -1; order: -1; }
-  .cell { order: var(--o); min-height: 0; padding: 8px; }
-  .phu { font-size: 11.5px; gap: 0 4px; }
-  .chinh { font-size: 14px; }
-}
-
-/* Chú giải */
-.legend { display: flex; flex-wrap: wrap; gap: 16px 40px; font-size: 13px; }
-.legend h3 { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); margin: 0 0 6px; }
-.legend ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 14px; }
-.legend li { display: flex; align-items: center; gap: 6px; }
-.dot { width: 10px; height: 10px; border-radius: 50%; background: currentColor; display: inline-block; }
-.empty { margin: 0; padding: 28px 20px; text-align: center; color: var(--soft); border: 1px dashed var(--line); border-radius: 10px; background: var(--cell); }
-.note { color: var(--soft); font-size: 13px; max-width: 75ch; margin: 0; }
-
-/* Luận giải: hàng nút chọn cung, rồi một thẻ phân tích cho cung đang chọn */
-.lg { display: flex; flex-direction: column; gap: 14px; scroll-margin-top: 16px; }
-.lg-head h2 { font-family: var(--f-display); font-weight: 700; font-size: 27px; margin: 0; }
-.lg-head p { margin: 4px 0 0; color: var(--soft); }
-.lg-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
-.lg-tabs button { height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--cell); color: var(--ink); font: 500 13.5px var(--f-ui); cursor: pointer; }
-.lg-tabs button:hover { border-color: var(--tu); }
-.lg-tabs button[aria-pressed="true"] { background: var(--tu); border-color: var(--tu); color: var(--cell); font-weight: 600; }
-.lg-tabs button:focus-visible { outline: 2px solid var(--tu); outline-offset: 2px; }
-.lg-card { background: var(--cell); border: 1px solid var(--line); border-radius: 12px; padding: 22px 24px; max-width: 860px; min-width: 0; }
-.lg-card header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
-.lg-card h3 { font-family: var(--f-display); font-weight: 700; font-size: 24px; margin: 0; display: flex; align-items: center; gap: 8px; }
-.lg-pos { color: var(--soft); font-size: 13px; }
-.lg-card h4 { margin: 20px 0 6px; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); }
-.lg-card p, .lg-card li { font-size: 15px; line-height: 1.7; }
-.lg-card p { margin: 8px 0 0; }
-.lg-card p.lg-intro { color: var(--soft); font-style: italic; }
-.lg-card ul { margin: 0; padding-left: 20px; }
-.lg-dt { font-size: 11px; font-weight: 600; color: var(--tu); border: 1px solid currentColor; border-radius: 3px; padding: 0 4px; vertical-align: 2px; white-space: nowrap; }
-.lg-card p.lg-note { background: var(--hl); border-radius: 8px; padding: 8px 12px; font-size: 14px; }
-.lg-card p.lg-tp { border-top: 1px dashed var(--line); padding-top: 12px; margin-top: 18px; color: var(--soft); font-size: 14px; }
-.lg-tp b { color: var(--ink); }
-@media (max-width: 759.98px) { .lg-card { padding: 16px; } }
-@media (prefers-reduced-motion: reduce) { .cell { transition: none; } }
-</style>
+<link rel="stylesheet" href="css/la-so.css">
 </head>
 <body>
 
@@ -115,7 +17,6 @@ form { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; pa
     <nav aria-label="Menu chính"><a href="index.html">Trang chủ</a><a href="la-so.html" aria-current="page">Lập lá số</a><a href="con-giap.html">12 con giáp</a><a href="../../xemngay/frontend/index.html">Xem ngày</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="../../numerology/frontend/index.html">Số chủ đạo</a><a href="bai-viet.html">Bài viết</a></nav>
   </header>
   <header>
-    <p class="eyebrow">Tử Vi Đẩu Số · 紫微斗數</p>
     <h1>Lập lá số tử vi</h1>
     <p class="lede">Nhập ngày giờ sinh để lập lá số 12 cung theo cách an sao phái Việt. Bấm vào một cung để xem tam phương tứ chính của cung đó.</p>
   </header>
@@ -164,8 +65,8 @@ form { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; pa
     <div>
       <h3>Màu ngũ hành của sao</h3>
       <ul>
-        <li class="K"><span class="dot"></span>Kim</li><li class="M"><span class="dot"></span>Mộc</li>
-        <li class="T"><span class="dot"></span>Thủy</li><li class="H"><span class="dot"></span>Hỏa</li><li class="O"><span class="dot"></span>Thổ</li>
+        <li class="K"><span class="o-mau" aria-hidden="true"></span>Kim</li><li class="M"><span class="o-mau" aria-hidden="true"></span>Mộc</li>
+        <li class="T"><span class="o-mau" aria-hidden="true"></span>Thủy</li><li class="H"><span class="o-mau" aria-hidden="true"></span>Hỏa</li><li class="O"><span class="o-mau" aria-hidden="true"></span>Thổ</li>
       </ul>
     </div>
     <div>
@@ -183,7 +84,11 @@ form { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; pa
     </div>
   </section>
   <p class="note">An sao theo phái Việt (Thái Thứ Lang, Thiên Lương), lịch âm theo thuật toán Hồ Ngọc Đức với múi giờ Việt Nam. Sinh tháng nhuận được tính như tháng thường. Người sinh từ 23:00 đến 24:00 thuộc giờ Tý; nhiều thầy tính sang ngày hôm sau, nên hãy nhập ngày theo cách bạn quen dùng. Lá số chỉ để tham khảo.</p>
-  <footer class="foot"><span>Lá Số Tử Vi · an sao phái Việt, lịch âm theo thuật toán Hồ Ngọc Đức</span><span>Nội dung chỉ để tham khảo.</span></footer>
+  <footer class="foot">
+    <p class="foot-loi">Lá Số Tử Vi: tử vi phái Việt, chiêm tinh phương Tây, thần số học, Tarot và lịch vạn niên.</p>
+    <nav aria-label="Chân trang"><a href="index.html">Trang chủ</a><a href="la-so.html">Lập lá số</a><a href="con-giap.html">12 con giáp</a><a href="../../xemngay/frontend/index.html">Xem ngày</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="../../numerology/frontend/index.html">Số chủ đạo</a><a href="bai-viet.html">Bài viết</a></nav>
+    <p class="small">An sao phái Việt, lịch âm theo thuật toán Hồ Ngọc Đức. Nội dung chỉ để tham khảo.</p>
+  </footer>
 </div>
 
 <script src="js/tuvi.js"></script>

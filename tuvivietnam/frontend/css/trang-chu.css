@@ -1,0 +1,135 @@
+/* Hallmark · page: / (trang chủ) · shape: Map / Diagram · hero: Banner · nav: banner over a bar · footer: statement · imagery: photographs, library 1 · product captures 4 · signature: the map from what you bring to the tool that reads it */
+/* Hallmark · waive 59 · section.ban-do starts 104px under the hero's warm field · the Banner hero hands its lower edge to the map so the map shows on the first screen */
+/* Hallmark · reworded "Một ngày sinh, ba góc nhìn về vận may của bạn" to "Một ngày sinh, ba góc nhìn" · the hero head is seven words or fewer */
+/* Hallmark · reworded the hero lede (51 words) to "Ba hệ cùng đọc may mắn, tình cảm, sự nghiệp của bạn." · 58 names the hero paragraph; its last sentence moved under the photograph */
+/* Hallmark · dropped "Xem dự đoán của bạn" and "Nhập ngày giờ sinh rồi bấm Xem dự đoán." over the form · 58 names a third text block in the hero; the form keeps the name as its aria-label */
+/* Hallmark · reworded "Các công cụ" (#h-tools) to "Bạn mang đến điều gì?" (#h-map) · the six tool cards became the map, each tool name kept as its link */
+/* Trang chủ: dải lịch hôm nay, hero có form ngày sinh, kết quả ba hệ, bản đồ công cụ, màn hình từng công cụ, ba hệ ba mặt ba mốc, bài viết mới */
+.wrap { gap: 0; }
+
+/* Dải lịch hôm nay trên cùng */
+.banner { margin: 0; padding-block: var(--space-xs); border-bottom: var(--rule-hair) solid var(--color-rule); font: 600 var(--text-sm)/1.4 var(--font-outlier); color: var(--color-muted); }
+.banner:empty { display: none; }
+.banner a { color: var(--color-ink); margin-left: var(--space-xs); }
+
+/* Hero: tiêu đề bên trái, form ngày sinh trong tấm nổi bên phải */
+.hero-tc {
+  display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-2xl); align-items: end; padding-block: var(--space-2xl) var(--space-xl);
+  /* Ánh chiều dài của Solstice: giấy kem ngả dần sang vàng, chạy hết bề ngang màn hình (border-image tràn lề, không cần 100vw) */
+  border-image: linear-gradient(to bottom, var(--color-paper), var(--color-glow)) fill 0 / / 0 100vmax;
+}
+.hero-chu h1 { font-size: var(--text-display); max-width: 12ch; }
+.hero-chu .lead { margin-top: var(--space-lg); color: var(--color-ink-2); max-width: 30em; }
+.quick { padding: var(--space-xl); display: flex; flex-direction: column; gap: var(--space-md); }
+.quick form { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "gt lich" "ngay ngay" "gio gio" "nut nut"; gap: var(--space-md); align-items: end; }
+.quick form > :nth-child(1) { grid-area: gt; } .quick form > :nth-child(2) { grid-area: lich; }
+.quick form > :nth-child(3) { grid-area: ngay; } .quick .f-gio { grid-area: gio; } .quick button.go { grid-area: nut; }
+.quick .date input { width: 72px; } .quick .date input.y { width: 96px; }
+.quick .f-gio select { width: 100%; }
+
+/* Kết quả kết hợp ba hệ */
+.kq { display: flex; flex-direction: column; gap: var(--space-md); padding-top: var(--space-2xl); }
+.kq > h2 { margin: 0; }
+.ho-so { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap-columns); }
+.hs { display: flex; flex-direction: column; gap: var(--space-xs); padding: var(--space-lg); border-top: var(--rule-bar) solid var(--color-ink); background: var(--color-paper-2); color: var(--color-ink); text-decoration: none; min-width: 0; transition: background-color var(--dur-short) var(--ease-out); }
+.hs:hover { background: var(--color-paper-3); }
+.hs .nhan { font: 600 var(--text-sm)/1.3 var(--font-outlier); color: var(--color-muted); }
+.hs b { font: 400 var(--text-xl)/1.2 var(--font-display); }
+.hs .en { font: 400 var(--text-sm) var(--font-body); color: var(--color-muted); }
+.hs p { margin: 0; color: var(--color-ink-2); font-size: var(--text-sm); }
+.hs .more { margin-top: auto; padding-top: var(--space-xs); color: var(--color-ink); font-weight: 500; font-size: var(--text-sm); text-decoration: underline; text-underline-offset: 0.2em; }
+.ky-zodiac { font-family: var(--font-symbol); }
+.ky-tab { display: flex; flex-wrap: wrap; gap: var(--space-lg); border-bottom: var(--rule-hair) solid var(--color-rule); }
+.ky-tab button { min-height: 44px; padding: 0; border: 0; border-bottom: var(--rule-bar) solid transparent; margin-bottom: calc(-1 * var(--rule-hair)); background: none; color: var(--color-ink-2); font: 600 var(--text-md) var(--font-outlier); cursor: pointer; transition: color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out); }
+.ky-tab button:hover { color: var(--color-ink); border-bottom-color: var(--color-gold); }
+.ky-tab button[aria-pressed="true"] { color: var(--color-ink); border-bottom-color: var(--color-ink); }
+.ky-info { margin: 0; color: var(--color-muted); font-size: var(--text-sm); }
+.tom-tat { margin: 0; padding: var(--space-sm) var(--space-md); background: var(--color-paper-3); font-size: var(--text-md); font-weight: 500; }
+.du-doan { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap-columns); align-items: start; }
+.lv-the { display: flex; flex-direction: column; gap: var(--space-sm); padding: var(--space-lg); border: var(--rule-hair) solid var(--color-rule); background: var(--color-paper-2); min-width: 0; }
+.lv-the header { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-xs); }
+.lv-the h3 { margin: 0; }
+.lv-the .diem { font: 400 var(--text-2xl)/1 var(--font-display); color: var(--color-ink); }
+.lv-the .diem small { font: 500 var(--text-sm) var(--font-body); color: var(--color-muted); }
+.thanh { height: 8px; background: var(--color-paper-3); overflow: hidden; }
+.thanh i { display: block; height: 100%; background: var(--color-ink); }
+.lv-the.thap .thanh i { background: var(--color-accent); } .lv-the.cao .thanh i { background: var(--moc); }
+.lv-the .tong-hop { margin: 0; font-size: var(--text-md); line-height: 1.6; font-weight: 500; }
+.nguon { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-sm); border-top: var(--rule-hair) solid var(--color-rule); padding-top: var(--space-sm); }
+.nguon li { display: flex; flex-direction: column; gap: var(--space-2xs); font-size: var(--text-sm); line-height: 1.6; color: var(--color-ink-2); }
+.nguon .dau { display: flex; justify-content: space-between; gap: var(--space-xs); color: var(--color-ink); font: 600 var(--text-sm) var(--font-outlier); }
+.nguon .pt { white-space: nowrap; }
+.thanh.mini { height: 4px; margin-bottom: var(--space-3xs); }
+.them { margin: 0; padding: var(--space-sm); background: var(--color-paper-3); font-size: var(--text-sm); line-height: 1.6; }
+.cach-tinh { margin: 0; color: var(--color-muted); font-size: var(--text-sm); max-width: 90ch; }
+
+/* Bản đồ: điều bạn mang đến (trái) nối bằng chỉ vàng sang công cụ đọc nó và điều bạn nhận (phải) */
+.ban-do { padding-top: var(--space-2xl); display: flex; flex-direction: column; gap: var(--space-xl); }
+.map-dau { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--gap-columns); align-items: baseline; }
+.map-dau .lead { color: var(--color-ink-2); }
+.map { display: flex; flex-direction: column; border-top: var(--rule-bar) solid var(--color-ink); }
+.nhom { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: var(--gap-columns); align-items: center; padding-block: var(--space-lg); border-bottom: var(--rule-hair) solid var(--color-rule); }
+.vao { position: relative; margin: 0; font: 400 var(--text-2xl)/1.1 var(--font-display); color: var(--color-ink); }
+.nhanh { position: relative; margin: 0; padding: 0 0 0 var(--space-xl); list-style: none; border-left: var(--rule-bar) solid var(--color-gold); }
+.nhanh li { position: relative; display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 5fr); gap: var(--space-lg); align-items: baseline; padding-block: var(--space-sm); }
+.nhanh li + li { border-top: var(--rule-hair) dotted var(--color-gold); }
+.nhanh li::before { content: ""; position: absolute; left: calc(-1 * var(--space-xl)); top: 50%; width: var(--space-lg); border-top: var(--rule-hair) solid var(--color-gold); }
+.nhanh a { font: 400 var(--text-title)/1.25 var(--font-display); color: var(--color-ink); justify-self: start; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em; transition: color var(--dur-short) var(--ease-out), text-decoration-color var(--dur-short) var(--ease-out); }
+.nhanh a:hover { color: var(--color-accent); text-decoration-color: var(--color-accent); }
+.nhanh span { color: var(--color-ink-2); font-size: var(--text-md); }
+
+/* Màn hình từng công cụ, chụp từ trang thật */
+.man-hinh { padding-top: var(--section-gap); display: flex; flex-direction: column; gap: var(--space-xl); }
+.mh-tab { display: flex; flex-wrap: wrap; gap: var(--space-xl); border-bottom: var(--rule-hair) solid var(--color-rule); }
+.mh-tab button { min-height: 48px; padding: 0; border: 0; border-bottom: var(--rule-bar) solid transparent; margin-bottom: calc(-1 * var(--rule-hair)); background: none; color: var(--color-ink-2); font: 600 var(--text-lg) var(--font-outlier); cursor: pointer; white-space: nowrap; transition: color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out); }
+.mh-tab button:hover { color: var(--color-ink); border-bottom-color: var(--color-gold); }
+.mh-tab button[aria-selected="true"] { color: var(--color-ink); border-bottom-color: var(--color-ink); }
+.mh-panel { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: var(--space-2xl); align-items: center; }
+.chup { margin: 0; border: var(--rule-bar) solid var(--color-ink); box-shadow: var(--shadow-card); background: var(--color-paper-2); }
+.chup img { width: 100%; height: auto; }
+.mh-chu { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-lg); }
+.mh-chu p { font-size: var(--text-lead); line-height: 1.45; color: var(--color-ink-2); }
+
+/* Ảnh và ba hệ, ba mặt, ba mốc */
+.ba-ba { padding-top: var(--section-gap-l); display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-2xl); align-items: center; }
+.anh-nen { aspect-ratio: 5 / 4; }
+.anh-nen img { object-position: 45% 50%; }
+.ba-chu { display: flex; flex-direction: column; gap: var(--space-lg); }
+.so-ba { margin: 0; border-top: var(--rule-bar) solid var(--color-ink); }
+.so-ba div { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 5fr); gap: var(--space-md); align-items: baseline; padding-block: var(--space-md); border-bottom: var(--rule-hair) dotted var(--color-gold); }
+.so-ba dt { font: 600 var(--text-sm) var(--font-outlier); color: var(--color-muted); }
+.so-ba dd { margin: 0; font: 400 var(--text-lg)/1.3 var(--font-display); color: var(--color-ink); text-wrap: pretty; }
+.ba-chu > p { color: var(--color-ink-2); }
+
+/* Bài viết mới: ba hàng kẻ trên dải mực nâu, chữ kem (dải màu duy nhất của trang) */
+.bai { margin-top: var(--section-gap); padding-block: var(--section-gap-s); display: flex; flex-direction: column; gap: var(--space-xl); }
+.dai-muc { --color-ink: var(--band-ink); --color-ink-2: var(--band-ink-2); --color-muted: var(--band-muted); --color-rule: var(--band-rule); --color-accent: var(--band-accent); color: var(--band-ink); border-image: linear-gradient(var(--band-paper), var(--band-paper)) fill 0 / / 0 100vmax; }
+.dai-muc + .foot { margin-top: 0; border-top: 0; }
+.bai-dau { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--space-md); }
+.posts { margin: 0; padding: 0; list-style: none; border-top: var(--rule-bar) solid var(--color-ink); }
+.posts li { border-bottom: var(--rule-hair) solid var(--color-rule); }
+.post { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 5fr) minmax(0, 2fr); gap: var(--gap-columns); align-items: baseline; padding-block: var(--space-lg); color: var(--color-ink); text-decoration: none; }
+.post h3 { transition: color var(--dur-short) var(--ease-out); }
+.post:hover h3 { color: var(--color-accent); }
+.post p { color: var(--color-ink-2); }
+.post .meta { font: 600 var(--text-sm) var(--font-outlier); color: var(--color-muted); justify-self: end; text-align: right; }
+
+@media (max-width: 75rem) {
+  .hero-tc { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); align-items: start; padding-block: var(--space-2xl) var(--space-xl); }
+}
+@media (max-width: 60rem) {
+  .ho-so, .du-doan, .mh-panel, .ba-ba, .map-dau { grid-template-columns: minmax(0, 1fr); }
+  .ban-do, .man-hinh, .ba-ba { padding-top: var(--section-gap-s); }
+  .nhom { grid-template-columns: minmax(0, 1fr); gap: var(--space-md); }
+  .nhanh li { grid-template-columns: minmax(0, 1fr); gap: var(--space-2xs); }
+  .post { grid-template-columns: minmax(0, 1fr); gap: var(--space-xs); }
+  .post .meta { justify-self: start; text-align: left; }
+  .mh-tab { gap: var(--space-2xs) var(--space-lg); }
+}
+@media (max-width: 40rem) {
+  .quick { padding: var(--space-lg); }
+  .quick form { grid-template-columns: minmax(0, 1fr); grid-template-areas: "gt" "lich" "ngay" "gio" "nut"; }
+  .quick .date input { width: 64px; } .quick .date input.y { width: 88px; }
+  .nhanh { padding-left: var(--space-lg); }
+  .nhanh li::before { left: calc(-1 * var(--space-lg)); width: var(--space-md); }
+}

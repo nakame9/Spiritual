@@ -6,9 +6,6 @@
 <title>Xem ngày tốt xấu · Lịch âm, giờ hoàng đạo · Lá Số Tử Vi</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Xem ngày tốt xấu theo lịch Việt Nam: âm lịch, can chi, ngày hoàng đạo hắc đạo, trực, sao, tiết khí, ngày kỵ, giờ hoàng đạo, hướng xuất hành và tuổi xung hợp.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
 <link rel="stylesheet" href="../../shared/site.css">
 <link rel="stylesheet" href="css/xem-ngay.css">
 </head>
@@ -22,7 +19,6 @@
 
   <section class="hero">
     <div>
-      <p class="eyebrow">Lịch vạn niên</p>
       <h1>Xem ngày tốt xấu</h1>
       <p class="lede">Chọn một ngày để xem âm lịch, can chi, ngày hoàng đạo hay hắc đạo, trực, sao, tiết khí, các ngày kỵ, giờ hoàng đạo và hướng xuất hành. Nhập năm sinh để biết ngày đó hợp hay xung với tuổi của bạn.</p>
     </div>
@@ -33,19 +29,25 @@
       <p class="err" id="loi" role="alert" hidden></p>
       <div class="row"><button class="go" type="submit">Xem ngày</button><button class="btn2" type="button" id="hom-nay">Hôm nay</button></div>
     </form>
+    <figure class="anh anh-hero"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/PalouseFromSteptoeButteMay2023-1.jpg/1280px-PalouseFromSteptoeButteMay2023-1.jpg" srcset="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/PalouseFromSteptoeButteMay2023-1.jpg/960px-PalouseFromSteptoeButteMay2023-1.jpg 960w, https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/PalouseFromSteptoeButteMay2023-1.jpg/1280px-PalouseFromSteptoeButteMay2023-1.jpg 1280w, https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/PalouseFromSteptoeButteMay2023-1.jpg/1920px-PalouseFromSteptoeButteMay2023-1.jpg 1920w" sizes="(max-width: 60rem) 100vw, 45vw" width="9068" height="6045" alt="Sương vàng buổi bình minh trên những ngọn đồi trồng trọt" style="object-position: 50% 55%" fetchpriority="high" onerror="this.closest('figure').hidden = true"></figure>
   </section>
 
   <section class="panel" id="chi-tiet" aria-live="polite" aria-labelledby="h-ngay"></section>
 
   <section class="panel" aria-labelledby="h-lich">
-    <div class="lich-dau"><button class="btn2" type="button" id="truoc" aria-label="Tháng trước">‹</button><h2 id="h-lich"></h2><button class="btn2" type="button" id="sau" aria-label="Tháng sau">›</button></div>
+    <div class="lich-dau"><button class="btn2" type="button" id="truoc" aria-label="Tháng trước"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg></button><h2 id="h-lich"></h2><button class="btn2" type="button" id="sau" aria-label="Tháng sau"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg></button></div>
     <div class="lich" id="lich" role="grid" aria-labelledby="h-lich"></div>
     <p class="chu-giai"><span class="cham Tot"></span>Tốt <span class="cham Kha"></span>Khá <span class="cham Binh"></span>Bình thường <span class="cham Xau"></span>Xấu</p>
     <p class="muted">Số nhỏ là ngày âm lịch. Bấm vào một ngày để xem chi tiết.</p>
   </section>
 
   <p class="note">Nội dung xem ngày do Lá Số Tử Vi biên soạn theo lịch vạn niên dân gian Việt Nam: ngày hoàng đạo theo tháng âm lịch, thập nhị trực theo tiết khí, nhị thập bát tú, các ngày kỵ phổ biến. Các sách lịch có thể khác nhau ở một vài chi tiết; nội dung chỉ để tham khảo.</p>
-  <footer class="foot"><span>Lá Số Tử Vi · Xem ngày tốt xấu</span><span>Nội dung chỉ để tham khảo.</span></footer>
+  <footer class="foot">
+    <p class="foot-loi">Lá Số Tử Vi: tử vi phái Việt, chiêm tinh phương Tây, thần số học, Tarot và lịch vạn niên.</p>
+    <nav aria-label="Chân trang"><a href="../../tuvivietnam/frontend/index.html">Trang chủ</a><a href="../../tuvivietnam/frontend/la-so.html">Lập lá số</a><a href="../../tuvivietnam/frontend/con-giap.html">12 con giáp</a><a href="index.html">Xem ngày</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="../../numerology/frontend/index.html">Số chủ đạo</a><a href="../../tuvivietnam/frontend/bai-viet.html">Bài viết</a></nav>
+    <p class="small" data-credits>Ảnh: <a href="https://commons.wikimedia.org/wiki/File:PalouseFromSteptoeButteMay2023-1.jpg">Caleb Riston</a> (CC0, Wikimedia Commons).</p>
+    <p class="small">Lịch vạn niên dân gian Việt Nam. Nội dung chỉ để tham khảo.</p>
+  </footer>
 </div>
 <script src="../../tuvivietnam/frontend/js/tuvi.js"></script>
 <script src="../../tuvivietnam/frontend/js/congiap.js"></script>

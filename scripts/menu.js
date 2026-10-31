@@ -2,7 +2,8 @@
 /* Menu chính của cả site khai báo ở đây, một chỗ duy nhất.
  *   node scripts/menu.js            ghi lại menu vào mọi trang trong các thư mục frontend
  *   node scripts/menu.js --kiem-tra báo lỗi nếu trang nào lệch (npm test ở gốc kho chạy lệnh này)
- * Thêm mục menu: thêm một dòng vào MENU. Thêm trang mới: chỉ cần có <nav aria-label="Menu chính"></nav> trong trang. */
+ * Thêm mục menu: thêm một dòng vào MENU. Thêm trang mới: chỉ cần có <nav aria-label="Menu chính"></nav> trong trang.
+ * Trang nào có <nav aria-label="Chân trang"></nav> thì chân trang cũng nhận cùng danh sách này. */
 const fs = require('fs');
 const path = require('path');
 
@@ -19,25 +20,26 @@ const MENU = [
   ['tuvivietnam/frontend/bai-viet.html', 'Bài viết'],
 ];
 const THE_NAV = /<nav aria-label="Menu chính">[\s\S]*?<\/nav>/;
+const THE_CHAN = /<nav aria-label="Chân trang">[\s\S]*?<\/nav>/;
 
 function cacTrang() {
   return fs.readdirSync(GOC, { withFileTypes: true }).filter(d => d.isDirectory() && fs.existsSync(path.join(GOC, d.name, 'frontend')))
     .flatMap(d => fs.readdirSync(path.join(GOC, d.name, 'frontend')).filter(f => f.endsWith('.html')).map(f => path.join(GOC, d.name, 'frontend', f)));
 }
-function menuCho(trang) {
+function menuCho(trang, nhan = 'Menu chính') {
   const tuGoc = path.relative(GOC, trang).split(path.sep).join('/'), thuMuc = path.dirname(trang);
-  const links = MENU.map(([dich, nhan, vung]) => {
-    const dangO = vung ? tuGoc.startsWith(vung) : tuGoc === dich;
-    return `<a href="${path.relative(thuMuc, path.join(GOC, dich)).split(path.sep).join('/')}"${dangO ? ' aria-current="page"' : ''}>${nhan}</a>`;
+  const links = MENU.map(([dich, ten, vung]) => {
+    const dangO = nhan === 'Menu chính' && (vung ? tuGoc.startsWith(vung) : tuGoc === dich);
+    return `<a href="${path.relative(thuMuc, path.join(GOC, dich)).split(path.sep).join('/')}"${dangO ? ' aria-current="page"' : ''}>${ten}</a>`;
   });
-  return `<nav aria-label="Menu chính">${links.join('')}</nav>`;
+  return `<nav aria-label="${nhan}">${links.join('')}</nav>`;
 }
 
 const kiemTra = process.argv.includes('--kiem-tra'), lech = [];
 for (const trang of cacTrang()) {
   const s = fs.readFileSync(trang, 'utf8'), ten = path.relative(GOC, trang);
   if (!THE_NAV.test(s)) { lech.push(`${ten}: thiếu <nav aria-label="Menu chính">`); continue; }
-  const moi = s.replace(THE_NAV, menuCho(trang));
+  const moi = s.replace(THE_NAV, menuCho(trang)).replace(THE_CHAN, menuCho(trang, 'Chân trang'));
   if (moi === s) continue;
   if (kiemTra) lech.push(`${ten}: menu khác với scripts/menu.js`);
   else { fs.writeFileSync(trang, moi); console.log(`Đã cập nhật menu: ${ten}`); }
