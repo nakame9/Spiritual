@@ -12,7 +12,9 @@ tuvivietnam/
 │   ├── admin/index.html Trang quản trị (chỉ chạy khi mở qua backend)
 │   └── js/
 │       ├── tuvi.js      Engine: lịch âm (Hồ Ngọc Đức) và an sao
-│       ├── luangiai.js  Luận giải theo cung (sửa được từ trang quản trị)
+│       ├── luangiai.js  Luận giải theo cung: chính tinh và độ sáng, cách đồng cung, ngũ hành sao với cung, Tứ Hóa theo lĩnh vực,
+│       │                phụ tinh, Tuần Triệt, vòng Tràng Sinh, sao chiếu từ tam phương, đánh giá chung kèm điểm cộng/trừ và lời khuyên
+│       │                (ý nghĩa cung, chính tinh, phụ tinh sửa được từ trang quản trị)
 │       ├── congiap.js   Tử vi 12 con giáp
 │       ├── tong-hop.js  Dự đoán kết hợp ba hệ cho trang chủ (dùng thêm ../../zodiac và ../../numerology)
 │       ├── trang-chu.js Giao diện trang chủ

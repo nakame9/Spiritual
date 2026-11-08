@@ -26,6 +26,7 @@ for (let i = 0; i < 600; i++) {
     const h = LG.luanGiai(X, so);
     assert.ok(!/undefined|NaN/.test(h), h);
     assert.ok(h.includes('<h3>Cung'));
+    assert.ok(h.includes('Đánh giá chung') && h.includes('Lời khuyên'));
     if (so === X.menh && h.includes('hội đủ bộ')) cach++;
   }
 }
