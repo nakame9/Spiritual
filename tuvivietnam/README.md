@@ -6,13 +6,14 @@ Website lập lá số tử vi theo phái Việt, có luận giải từng cung,
 tuvivietnam/
 ├── frontend/            Trang web tĩnh, chạy được ngay trên GitHub Pages
 │   ├── index.html       Trang chủ: nhập ngày giờ sinh, nơi sinh, múi giờ; hồ sơ ba hệ và tổng quan vận trình 6 mục × 4 mốc; nút mở lá số, bản đồ sao, số chủ đạo; công cụ, bài viết mới
-│   ├── la-so.html       Lập lá số 12 cung + luận giải
+│   ├── la-so.html       Lập lá số 12 cung; luận giải 6 phần từng cung; đại hạn, tiểu hạn, lưu niên, lưu nguyệt, lưu nhật theo năm chọn; báo cáo in PDF; hồ sơ đã lưu
 │   ├── con-giap.html    Tử vi 12 con giáp theo ngày, tuần, tháng, năm
 │   ├── bai-viet.html    Bài viết
 │   ├── admin/index.html Trang quản trị (chỉ chạy khi mở qua backend)
 │   └── js/
 │       ├── tuvi.js      Engine: lịch âm (Hồ Ngọc Đức) và an sao
-│       ├── luangiai.js  Luận giải theo cung: chính tinh và độ sáng, cách đồng cung, ngũ hành sao với cung, Tứ Hóa theo lĩnh vực,
+│       ├── luangiai.js  Luận giải theo cung (tổng quan, phân tích sao, tam phương tứ chính, hỗ trợ và bất lợi, theo giai đoạn, lời khuyên),
+│       │                vận hạn theo năm và báo cáo lá số; chi tiết: chính tinh và độ sáng, cách đồng cung, ngũ hành sao với cung, Tứ Hóa theo lĩnh vực,
 │       │                phụ tinh, Tuần Triệt, vòng Tràng Sinh, sao chiếu từ tam phương, đánh giá chung kèm điểm cộng/trừ và lời khuyên
 │       │                (ý nghĩa cung, chính tinh, phụ tinh sửa được từ trang quản trị)
 │       ├── congiap.js   Tử vi 12 con giáp
@@ -93,6 +94,7 @@ Gửi JSON:
 | `amLich` | không | `true` nếu ngày nhập là âm lịch (mặc định dương lịch) |
 | `nhuan` | không | `true` nếu sinh vào tháng nhuận âm lịch |
 | `ten` | không | Họ tên, tối đa 100 ký tự |
+| `namXem` | không | Năm xem hạn (1900–2200), mặc định năm nay. Kết quả có thêm `vanHan`: đại hạn, tiểu hạn, sao lưu niên, phân tích công việc, tài chính, tình cảm, gia đình của năm, lưu nguyệt 12 tháng |
 
 Ví dụ:
 

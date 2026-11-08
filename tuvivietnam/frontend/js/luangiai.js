@@ -292,9 +292,20 @@
     return `<p>${tenSao(s)}${s.dacTinh ? ` <span class="lg-dt">${DT[s.dacTinh]}</span>` : ''}${s.hoa ? ` <span class="lg-dt">${s.hoa}</span>` : ''}: ${d.tinh}${muon ? '' : sang} ${d[lv === 'tinh' ? 'tinh2' : lv]}${c && s.hanh && c.hanh ? ` Về ngũ hành: ${nguHanh(s, c)}.` : ''}</p>`;
   }
 
-  /** Đánh giá chung một cung: cộng điểm tham khảo từ độ sáng chính tinh, phụ tinh, sao chiếu; nêu lý do và lời khuyên */
-  function danhGia(L, so, c, tpc) {
+  const TV = () => (typeof module !== 'undefined' && module.exports) ? require('./tuvi.js') : root.TuVi;
+  const CHU_DE = { 'Mệnh': 'tính cách, năng lực và hướng đi', 'Phụ Mẫu': 'cha mẹ và nền tảng gia đình', 'Phúc Đức': 'phúc phần, gia tộc và đời sống tinh thần',
+    'Điền Trạch': 'nhà cửa, đất đai và tài sản', 'Quan Lộc': 'công danh và sự nghiệp', 'Nô Bộc': 'bạn bè, đồng nghiệp và quan hệ xã hội',
+    'Thiên Di': 'đi xa, môi trường bên ngoài và giao tiếp', 'Tật Ách': 'sức khỏe', 'Tài Bạch': 'tiền bạc, thu nhập và cách quản lý tài chính',
+    'Tử Tức': 'con cái', 'Phu Thê': 'hôn nhân và người bạn đời', 'Huynh Đệ': 'anh chị em' };
+  const MUC_GD = { 'Rất thuận': 'một giai đoạn thuận, nên tận dụng để tiến lên', 'Khá tốt': 'một giai đoạn khá, làm có kế hoạch thì dễ thành',
+    'Trung bình, tốt xấu đan xen': 'một giai đoạn có cả cơ hội lẫn thử thách, cần chọn việc mà làm', 'Nhiều thử thách': 'một giai đoạn nhiều thử thách, nên giữ chắc nền tảng và tránh mạo hiểm' };
+  const muc4 = d => d >= 5 ? 'Rất thuận' : d >= 2 ? 'Khá tốt' : d > -2 ? 'Trung bình, tốt xấu đan xen' : 'Nhiều thử thách';
+  const so1 = d => `${d > 0 ? '+' : ''}${String(d).replace('.', ',')}`;
+
+  /** Điểm tham khảo của một cung: độ sáng chính tinh, phụ tinh trong cung, sao chiếu từ tam phương; Tuần Triệt làm giảm */
+  function diemCung(L, so) {
     // ponytail: thang điểm đơn giản để tóm tắt, không thay cách luận đầy đủ của thầy tử vi
+    const c = cungTai(L, so), tpc = [4, 8, 6].map(n => cungTai(L, lech(so, n)));
     let diem = 0; const cong = [], tru = [];
     const ghi = (ten, d) => { if (d > 0) cong.push(ten); else if (d < 0) tru.push(ten); diem += d; };
     let chinh = chinhCua(c), heSo = 1;
@@ -304,75 +315,205 @@
     tpc.forEach(t => t.sao.forEach(s => CHIEU.includes(s.id) && ghi(`${s.ten} chiếu`, DIEM[s.id] / 2)));
     if (c.triet) diem *= 0.6; else if (c.tuan) diem *= 0.8;
     diem = Math.round(diem * 2) / 2;
-    const muc = diem >= 5 ? 'Rất thuận' : diem >= 2 ? 'Khá tốt' : diem > -2 ? 'Trung bình, tốt xấu đan xen' : 'Nhiều thử thách';
-    const lk = LOI_KHUYEN[c.ten];
-    const khuyen = diem >= 0.5 ? lk[0] : lk[1];
-    return `<h4>Đánh giá chung</h4><p><b>${muc}</b> <span class="lg-dt">điểm tham khảo ${diem > 0 ? '+' : ''}${String(diem).replace('.', ',')}</span></p><ul>`
-      + (cong.length ? `<li>Điểm cộng: ${cong.join(', ')}.</li>` : '')
-      + (tru.length ? `<li>Điểm trừ: ${tru.join(', ')}.</li>` : '')
-      + (c.triet ? '<li>Có Triệt nên cả tốt lẫn xấu đều bị giảm bớt.</li>' : c.tuan ? '<li>Có Tuần nên cả tốt lẫn xấu đều giảm nhẹ.</li>' : '')
-      + `</ul><p class="lg-note"><b>Lời khuyên:</b> ${khuyen}</p>`;
+    return { diem, muc: muc4(diem), cong, tru };
   }
 
-  /** Trả về HTML luận giải của cung số `so` (1 = Tý) trên lá số L */
-  function luanGiai(L, so) {
-    const c = cungTai(L, so), lv = LINH_VUC[c.ten];
+  /** HTML luận giải cung số `so` (1 = Tý), chia 6 phần. `nam`: năm xem hạn (mặc định năm nay) */
+  function luanGiai(L, so, nam) {
+    nam = nam || new Date().getFullYear();
+    const c = cungTai(L, so), lv = LINH_VUC[c.ten], dg = diemCung(L, so);
     const h = [];
-    h.push(`<header><h3>Cung ${c.ten}${c.than ? ' <span class="than">Thân</span>' : ''}</h3><span class="lg-pos">tại ${c.chi} · hành ${c.hanh} · đại hạn ${c.daiHan}–${c.daiHan + 9} tuổi</span></header>`);
-    h.push(`<p class="lg-intro">${CUNG_Y[c.ten]}</p>`);
+    h.push(`<header><h3>Cung ${c.ten}${c.than ? ' <span class="than">Thân</span>' : ''}</h3><span class="lg-pos">tại ${c.can} ${c.chi}, hành ${c.hanh}, đại hạn ${c.daiHan}–${c.daiHan + 9} tuổi</span></header>`);
 
+    // 1. Tổng quan cung
+    h.push('<h4>1. Tổng quan cung</h4>');
+    h.push(`<p class="lg-intro">${CUNG_Y[c.ten]}</p>`);
+    h.push(`<p>Nhìn chung cung ${c.ten} ở mức <b>${dg.muc}</b> <span class="lg-dt">điểm tham khảo ${so1(dg.diem)}</span>: chuyện ${CHU_DE[c.ten]} của bạn có ${dg.diem >= 2 ? 'nền tảng tốt' : dg.diem > -2 ? 'cả mặt thuận lẫn mặt phải lo' : 'nhiều điều phải vun đắp'}. Kết luận này đã xét cả sao trong cung lẫn sao hội chiếu, không chỉ một sao riêng lẻ.</p>`);
+    if (c.ten === 'Mệnh') {
+      const than = L.cung[L.than - 1];
+      const ex = [THAN_CU[than.ten], `Bản mệnh ${L.banMenh}, ${L.cuc}: ${L.sinhKhac.toLowerCase()}, ${SINH_KHAC[L.sinhKhac]}.`,
+        `${L.thuanLy}: ${L.thuanLy.endsWith('thuận lý') ? 'tuổi và cung Mệnh cùng âm dương, mọi việc dễ xuôi hơn.' : 'tuổi và cung Mệnh khác âm dương, hay phải xoay xở nhiều hơn.'}`,
+        `Mệnh chủ <b>${L.menhChu}</b> là sao chủ về tính cách gốc; Thân chủ <b>${L.thanChu}</b> là sao chủ về cách bạn hành xử khi đã trưởng thành.`];
+      h.push(`<ul>${ex.filter(Boolean).map(x => `<li>${x}</li>`).join('')}</ul>`);
+    }
+
+    // 2. Phân tích các sao
+    h.push('<h4>2. Phân tích các sao</h4>');
     const chinh = chinhCua(c);
-    h.push('<h4>Chính tinh</h4>');
     if (chinh.length) {
       chinh.forEach(s => h.push(doanChinh(s, lv, false, c)));
       if (chinh.length === 2) h.push(`<p>${CAP[chinh.map(s => s.id).sort((a, b) => a - b).join('-')]}</p>`);
       if (chinh.some(s => s.dacTinh)) h.push('<p class="lg-intro">Độ sáng của sao theo vị trí: miếu, vượng, đắc là sáng (mặt tốt nổi lên); bình là trung tính; hãm là tối (mặt xấu dễ lộ ra).</p>');
-    }
-    else {
+    } else {
       const xung = cungTai(L, lech(so, 6)), muon = chinhCua(xung);
       h.push(`<p>Cung không có chính tinh (Vô chính diệu), nên mượn sao của cung xung chiếu ${xung.ten} tại ${xung.chi}. Ảnh hưởng của sao mượn yếu hơn, vì vậy các phụ tinh trong cung có vai trò lớn hơn.</p>`);
       muon.forEach(s => h.push(doanChinh(s, lv, true)));
       if (c.tuan || c.triet || c.sao.some(s => s.id === 53 || s.id === 54))
         h.push('<p>Sách cổ cho rằng cung Vô chính diệu gặp Tuần, Triệt hoặc Địa Không, Địa Kiếp lại thuận hơn bình thường.</p>');
     }
-
     const ids = new Set(c.sao.map(s => s.id));
     const ten = id => c.sao.find(s => s.id === id).ten;
     const HOA = [94, 93, 92, 95].filter(id => ids.has(id));
-    if (HOA.length) h.push(`<h4>Tứ Hóa</h4><ul>${HOA.map(id => {
+    if (HOA.length) h.push(`<p><b>Tứ Hóa</b></p><ul>${HOA.map(id => {
       const t = ten(id), mang = c.sao.find(s => s.hoa === t), g = PHU.find(x => x[0].includes(id));
       return `<li><b>${t}</b>${mang ? ` (đi theo ${mang.ten})` : ''}: ${g[2]}. ${HOA_LV[t][lv]}</li>`;
     }).join('')}</ul>`);
     const nhom = tot => PHU.filter(g => g[1] === tot && g[0].some(id => ids.has(id) && !HOA.includes(id)))
       .map(g => `<li><b>${g[0].filter(id => ids.has(id)).map(ten).join(', ')}</b>: ${g[2]}.</li>`);
     const tot = nhom(true), xau = nhom(false);
-    if (tot.length) h.push(`<h4>Sao hỗ trợ</h4><ul>${tot.join('')}</ul>`);
-    if (xau.length) h.push(`<h4>Sao cần lưu ý</h4><ul>${xau.join('')}</ul>`);
-    if (c.triet) h.push('<p class="lg-note"><b>Triệt</b> đóng ở cung này: sức của các sao bị chặn bớt, rõ nhất ở nửa đầu đời (trước khoảng 30 tuổi). Sao tốt bớt tốt, sao xấu cũng bớt xấu.</p>');
-    if (c.tuan) h.push('<p class="lg-note"><b>Tuần</b> đóng ở cung này: tác dụng giống Triệt nhưng nhẹ hơn, rõ hơn ở nửa sau cuộc đời.</p>');
-
+    if (tot.length) h.push(`<p><b>Phụ tinh hỗ trợ</b></p><ul>${tot.join('')}</ul>`);
+    if (xau.length) h.push(`<p><b>Phụ tinh cần lưu ý</b></p><ul>${xau.join('')}</ul>`);
     const ts = c.sao.find(s => TRANG_SINH[s.id]);
     if (ts) h.push(`<p>Vòng Tràng Sinh: cung gặp <b>${ts.ten}</b>, ${TRANG_SINH[ts.id]}.</p>`);
 
-    const tpc = [4, 8, 6].map(n => cungTai(L, lech(so, n)));
-    const chieu = tot => tpc.flatMap(t => t.sao.filter(s => CHIEU.includes(s.id) && (DIEM[s.id] > 0) === tot).map(s => `${s.ten} (${t.ten})`));
+    // 3. Tác động của tam phương tứ chính
+    h.push('<h4>3. Tác động của tam phương tứ chính</h4>');
+    const tp = [4, 8].map(n => lech(so, n)), xs = lech(so, 6);
+    const dongCung = (s2, vai) => { const t = cungTai(L, s2), d = diemCung(L, s2); return `<li><b>${t.ten}</b> tại ${t.chi} (${dsChinh(t)}), ${vai}, mức ${d.muc.toLowerCase()}.</li>`; };
+    h.push(`<ul>${tp.map(x => dongCung(x, 'tam hợp, cùng nhóm khí nên hỗ trợ trực tiếp')).join('')}${dongCung(xs, 'xung chiếu, đối diện nên chiếu thẳng vào cung này')}</ul>`);
+    const dTp = tp.map(x => diemCung(L, x).diem), dX = diemCung(L, xs).diem;
+    h.push(`<p>${dTp.every(d => d >= 2) ? 'Hai cung tam hợp đều vững, nên cung này có chỗ dựa tốt; khó khăn nếu có cũng dễ được bù lại.'
+      : dTp.every(d => d <= -2) ? 'Hai cung tam hợp đều yếu, nên cung này ít được nâng đỡ; phải tự lực nhiều hơn.'
+      : 'Hai cung tam hợp một mạnh một yếu hoặc ở mức vừa, nên sự hỗ trợ có nhưng không đều.'} ${dX >= 2 ? `Cung xung chiếu ${cungTai(L, xs).ten} tốt, mang lại cơ hội từ phía đối diện.` : dX <= -2 ? `Cung xung chiếu ${cungTai(L, xs).ten} nhiều sao xấu, dễ kéo theo trở ngại từ phía đối diện.` : ''}</p>`);
+    const tpc = [...tp, xs].map(x => cungTai(L, x));
+    const chieu = tt => tpc.flatMap(t => t.sao.filter(s => CHIEU.includes(s.id) && (DIEM[s.id] > 0) === tt).map(s => `${s.ten} (${t.ten})`));
     const ct = chieu(true), cx = chieu(false);
-    if (ct.length || cx.length) h.push(`<h4>Sao chiếu từ tam phương tứ chính</h4><p>Ảnh hưởng yếu hơn sao nằm trong cung, khoảng một nửa.${ct.length ? ` Sao tốt chiếu về: <b>${ct.join(', ')}</b>.` : ''}${cx.length ? ` Sao xấu chiếu về: <b>${cx.join(', ')}</b>.` : ''}</p>`);
+    if (ct.length || cx.length) h.push(`<p>Sao chiếu về (ảnh hưởng khoảng một nửa so với sao trong cung):${ct.length ? ` sao tốt <b>${ct.join(', ')}</b>.` : ''}${cx.length ? ` Sao xấu <b>${cx.join(', ')}</b>.` : ''}</p>`);
+    const quanh = [0, 4, 8, 6].flatMap(n => chinhCua(cungTai(L, lech(so, n))).map(s => s.id));
+    CACH.forEach(([ids2, ten2, y]) => { if (ids2.every(id => quanh.includes(id))) h.push(`<p>Tam phương tứ chính hội đủ bộ <b>${ten2}</b>: ${y}</p>`); });
 
-    if (c.ten === 'Mệnh') {
-      const than = L.cung[L.than - 1];
-      const ex = [THAN_CU[than.ten], `Bản mệnh ${L.banMenh}, ${L.cuc}: ${L.sinhKhac.toLowerCase()}, ${SINH_KHAC[L.sinhKhac]}.`,
-        `${L.thuanLy}: ${L.thuanLy.endsWith('thuận lý') ? 'tuổi và cung Mệnh cùng âm dương, mọi việc dễ xuôi hơn.' : 'tuổi và cung Mệnh khác âm dương, hay phải xoay xở nhiều hơn.'}`];
-      ex.push(`Mệnh chủ <b>${L.menhChu}</b> là sao chủ về tính cách gốc; Thân chủ <b>${L.thanChu}</b> là sao chủ về cách bạn hành xử khi đã trưởng thành. Hai sao này mạnh ở đâu trên lá số thì phần đời đó của bạn nổi bật.`);
-      const quanh = [0, 4, 8, 6].flatMap(n => chinhCua(cungTai(L, lech(so, n))).map(s => s.id));
-      CACH.forEach(([ids2, ten2, y]) => { if (ids2.every(id => quanh.includes(id))) ex.push(`Tam phương tứ chính hội đủ bộ <b>${ten2}</b>: ${y}`); });
-      h.push(`<h4>Tổng quan</h4><ul>${ex.map(x => `<li>${x}</li>`).join('')}</ul>`);
-    }
-    h.push(danhGia(L, so, c, tpc));
+    // 4. Yếu tố hỗ trợ và bất lợi
+    h.push('<h4>4. Các yếu tố hỗ trợ và bất lợi</h4><ul>'
+      + (dg.cong.length ? `<li>Hỗ trợ: ${dg.cong.join(', ')}.</li>` : '<li>Hỗ trợ: không có sao tốt đáng kể.</li>')
+      + (dg.tru.length ? `<li>Bất lợi: ${dg.tru.join(', ')}.</li>` : '<li>Bất lợi: không có sao xấu đáng kể.</li>') + '</ul>');
+    if (c.triet) h.push('<p class="lg-note"><b>Triệt</b> đóng ở cung này: sức của các sao bị chặn bớt, rõ nhất ở nửa đầu đời (trước khoảng 30 tuổi). Sao tốt bớt tốt, sao xấu cũng bớt xấu.</p>');
+    if (c.tuan) h.push('<p class="lg-note"><b>Tuần</b> đóng ở cung này: tác dụng giống Triệt nhưng nhẹ hơn, rõ hơn ở nửa sau cuộc đời.</p>');
+
+    // 5. Luận giải theo từng giai đoạn
+    h.push('<h4>5. Luận giải theo từng giai đoạn</h4>');
+    const T = TV(), namAm = L.am.nam, chiNam = y => T.CHI[(y + 8) % 12 + 1];
+    const gd = [`<li><b>Đại hạn ${c.daiHan}–${c.daiHan + 9} tuổi</b> (khoảng năm ${namAm + c.daiHan - 1}–${namAm + c.daiHan + 8}): mười năm này chuyện ${CHU_DE[c.ten]} nổi lên rõ nhất; theo mức của cung, đây là ${MUC_GD[dg.muc]}.</li>`];
+    if (c.triet) gd.push('<li>Trước khoảng 30 tuổi Triệt chặn mạnh, sau đó cung dần phát huy đúng sức.</li>');
+    if (c.tuan) gd.push('<li>Từ khoảng 30 tuổi trở đi Tuần mới có tác dụng rõ.</li>');
+    let y0 = nam; while (chiNam(y0) !== c.tieuHan) y0++;
+    gd.push(`<li><b>Tiểu hạn</b> các năm ${chiNam(y0)} rơi vào cung này: gần nhất là năm ${y0} (${y0 - namAm + 1} tuổi) và ${y0 + 12} (${y0 + 13 - namAm} tuổi). Những năm đó cung này làm Mệnh của năm, nên chuyện ${CHU_DE[c.ten]} được chú ý hơn.</li>`);
+    const luu = luuNien(L, nam).filter(x => x.so === so);
+    if (luu.length) gd.push(`<li><b>Năm ${nam}</b> có sao lưu đi vào cung này: ${luu.map(x => `${x.ten}, ${x.y}`).join('; ')}.</li>`);
+    h.push(`<ul>${gd.join('')}</ul>`);
+
+    // 6. Lời khuyên
+    const lk = LOI_KHUYEN[c.ten];
+    h.push(`<h4>6. Lời khuyên</h4><p class="lg-note">${dg.diem >= 0.5 ? lk[0] : lk[1]}</p>`);
     if (c.ten === 'Tật Ách') h.push('<p class="lg-note">Phần sức khỏe là liên hệ theo sách cổ, không thay cho lời khuyên của bác sĩ.</p>');
+    return h.join('\n');
+  }
 
-    const tp = [4, 8].map(n => cungTai(L, lech(so, n))), xc = cungTai(L, lech(so, 6));
-    h.push(`<p class="lg-tp">Nên xem cùng tam hợp ${tp.map(t => `<b>${t.ten}</b> (${dsChinh(t)})`).join(' và ')}, xung chiếu <b>${xc.ten}</b> (${dsChinh(xc)}).</p>`);
+  // ---------- Vận hạn: đại hạn, tiểu hạn, lưu niên, lưu nguyệt, lưu nhật ----------
+  /** Các sao lưu của năm `nam` (dương lịch, tính theo năm âm lịch cùng số): [{ ten, so (cung 1–12), diem, y }] */
+  function luuNien(L, nam) {
+    const T = TV(), can = (nam + 6) % 10 + 1, chi = (nam + 8) % 12 + 1, lt = T.LOC_TON[can], hoa = T.TU_HOA_CAN[can];
+    const theo = id => ` (theo ${T.SAO[id][0]})`;
+    return [
+      ['Lưu Thái Tuế', chi, 0, 'tâm điểm biến động của năm'],
+      ['Lưu Lộc Tồn', lt, 1.5, 'có lộc, giữ được tiền'], ['Lưu Kình Dương', T.dc(lt, 1), -1, 'cạnh tranh, va chạm'], ['Lưu Đà La', T.dc(lt, -1), -1, 'chậm trễ, vướng víu'],
+      ['Lưu Thiên Mã', [6, 3, 12, 9][chi % 4], 0.5, 'di chuyển, thay đổi'], ['Lưu Tang Môn', T.dc(chi, 2), -0.5, 'buồn phiền, chuyện hiếu'], ['Lưu Bạch Hổ', T.dc(chi, 8), -0.5, 'tranh chấp, va chạm'],
+      ['Lưu Hóa Lộc' + theo(hoa[0]), L.pos[hoa[0]], 1.5, 'tài lộc, cơ hội'], ['Lưu Hóa Quyền' + theo(hoa[1]), L.pos[hoa[1]], 1, 'quyền hành, chủ động'],
+      ['Lưu Hóa Khoa' + theo(hoa[2]), L.pos[hoa[2]], 1, 'danh tiếng, giấy tờ thuận'], ['Lưu Hóa Kỵ' + theo(hoa[3]), L.pos[hoa[3]], -1.5, 'vướng mắc, thị phi'],
+    ].map(([ten, so, diem, y]) => ({ ten, so, diem, y }));
+  }
+  const NAM_LV = {
+    congViec: ['Công việc', 4, ['Công việc có đà đi lên: hợp để nhận vai trò mới, mở rộng hoặc chủ động thay đổi.', 'Công việc giữ ổn định; tập trung nâng chuyên môn, làm chắc việc đang có.', 'Công việc dễ gặp trở ngại, thị phi hoặc thay đổi ngoài ý muốn; nên giữ vị trí, làm kỹ giấy tờ, tránh xung đột.']],
+    taiChinh: ['Tài chính', 8, ['Tài chính khá: thu nhập có cơ hội tăng, hợp tích lũy hoặc đầu tư đã tìm hiểu kỹ.', 'Thu chi cân bằng; nên lập ngân sách và để dành đều.', 'Tiền bạc dễ hao hụt, vướng nợ hoặc chi tiêu bất ngờ; tránh vay mượn, bảo lãnh và đầu tư liều.']],
+    tinhCam: ['Tình cảm', 10, ['Tình cảm thuận: dễ gặp người hợp, quan hệ gắn kết hơn; hợp cưới hỏi hoặc ra mắt.', 'Tình cảm êm, cần vun đắp bằng sự quan tâm đều đặn.', 'Tình cảm dễ hiểu lầm, xa cách; nên trò chuyện thẳng thắn, tránh quyết định khi nóng giận.']],
+    giaDinh: ['Gia đình', 3, ['Gia đình êm ấm, thuận cho việc nhà cửa: sửa nhà, mua đất, đón thành viên mới.', 'Gia đình ổn định; dành thời gian cho người thân là đủ.', 'Gia đình có việc phải lo (sức khỏe người thân, nhà cửa, giấy tờ đất); nên bàn bạc chung và chuẩn bị dự phòng.']],
+  };
+  const tenCung = (L, so) => `${cungTai(L, so).ten} (${cungTai(L, so).chi})`;
+  /** Điểm của cung trong một năm: nửa điểm gốc, cộng sao lưu trong cung và một nửa sao lưu ở tam phương tứ chính */
+  function diemNam(L, so, luu) {
+    const tam = [4, 8, 6].map(n => lech(so, n));
+    const trong = luu.filter(x => x.so === so), chieu = luu.filter(x => tam.includes(x.so) && x.diem);
+    const d = diemCung(L, so).diem * 0.5 + trong.reduce((a, x) => a + x.diem, 0) + chieu.reduce((a, x) => a + x.diem / 2, 0);
+    return { diem: Math.round(d * 2) / 2, trong, chieu };
+  }
+  const mucNam = d => d >= 2.5 ? 0 : d <= -1.5 ? 2 : 1;
+  const TEN_MUC_NAM = ['Thuận', 'Bình thường', 'Cần thận trọng'];
+
+  /** Dữ liệu vận hạn của năm `nam`: đại hạn, tiểu hạn, sao lưu, bốn mặt, lưu nguyệt, lưu nhật (khi `homNay` thuộc năm đó) */
+  function vanHan(L, nam, homNay) {
+    const T = TV(), tuoi = nam - L.am.nam + 1, chi = (nam + 8) % 12 + 1;
+    const luu = luuNien(L, nam);
+    const daiHan = [...L.cung].sort((a, b) => a.daiHan - b.daiHan).map(c => {
+      const hoa = T.TU_HOA_CAN[T.CAN.indexOf(c.can)];
+      return { so: c.so, ten: c.ten, chi: c.chi, tu: c.daiHan, den: c.daiHan + 9, nam: L.am.nam + c.daiHan - 1, chinh: dsChinh(c),
+        muc: diemCung(L, c.so).muc, hienTai: tuoi >= c.daiHan && tuoi <= c.daiHan + 9,
+        hoaLoc: cungTai(L, L.pos[hoa[0]]).ten, hoaKy: cungTai(L, L.pos[hoa[3]]).ten };
+    });
+    const th = L.cung.find(c => c.tieuHan === T.CHI[chi]).so;
+    const mat = Object.entries(NAM_LV).map(([ma, [ten, lechCung, cau]]) => {
+      const so = lech(th, lechCung), dn = diemNam(L, so, luu), m = mucNam(dn.diem);
+      return { ma, ten, so, cung: tenCung(L, so), diem: dn.diem, muc: TEN_MUC_NAM[m], loi: cau[m],
+        sao: [...dn.trong.map(x => `${x.ten} trong cung, ${x.y}`), ...dn.chieu.map(x => `${x.ten} chiếu từ ${cungTai(L, x.so).ten}`)] };
+    });
+    // Lưu nguyệt (Đẩu Quân): từ cung lưu Thái Tuế đếm nghịch đến tháng sinh, đếm thuận đến giờ sinh được tháng Giêng
+    const thang1 = T.dc(chi, -(L.am.thang - 1), L.gio - 1);
+    const luuNguyet = [...Array(12).keys()].map(i => {
+      const so = T.dc(thang1, i), dn = diemNam(L, so, luu);
+      return { thang: i + 1, so, cung: tenCung(L, so), muc: TEN_MUC_NAM[mucNam(dn.diem)], sao: dn.trong.map(x => x.ten.replace(/ \(theo.*/, '')) };
+    });
+    let luuNhat = null;
+    if (homNay) {
+      const [d, m, y] = T.solar2lunar(homNay.d, homNay.m, homNay.y);
+      if (y === nam) { const so = T.dc(luuNguyet[m - 1].so, d - 1); luuNhat = { am: `${d}/${m}`, so, cung: tenCung(L, so), muc: TEN_MUC_NAM[mucNam(diemNam(L, so, luu).diem)] }; }
+    }
+    return { nam, canChi: `${T.CAN[(nam + 6) % 10 + 1]} ${T.CHI[chi]}`, tuoi, daiHan, dhHienTai: daiHan.find(x => x.hienTai) || null,
+      tieuHan: { so: th, cung: tenCung(L, th), ...diemCung(L, th) }, luu: luu.map(x => ({ ...x, cung: tenCung(L, x.so) })), mat, luuNguyet, luuNhat };
+  }
+
+  function bangDaiHan(v) {
+    return `<div class="vh-cuon"><table class="vh-bang"><thead><tr><th>Tuổi</th><th>Từ năm</th><th>Cung</th><th>Chính tinh</th><th>Mức</th><th>Hóa Lộc đại hạn</th><th>Hóa Kỵ đại hạn</th></tr></thead><tbody>${v.daiHan.map(x =>
+      `<tr${x.hienTai ? ' class="now"' : ''}><td>${x.tu}–${x.den}</td><td>${x.nam}</td><td><b>${x.ten}</b> (${x.chi})</td><td>${x.chinh}</td><td>${x.muc}</td><td>${x.hoaLoc}</td><td>${x.hoaKy}</td></tr>`).join('')}</tbody></table></div>`;
+  }
+  function phanTichNam(v) {
+    return `<div class="vh-mat">${v.mat.map(m => `<div class="vh-o m${TEN_MUC_NAM.indexOf(m.muc)}"><h5>${m.ten} <span class="lg-dt">${m.muc}</span></h5>
+      <p>Cung ${m.ten.toLowerCase()} của năm rơi vào cung gốc <b>${m.cung}</b>. ${m.loi}</p>${m.sao.length ? `<p class="vh-sao">Sao lưu: ${m.sao.join('; ')}.</p>` : ''}</div>`).join('')}</div>`;
+  }
+  /** HTML phần vận hạn của năm `nam` */
+  function htmlVanHan(L, nam, homNay) {
+    const v = vanHan(L, nam, homNay), dh = v.dhHienTai;
+    const h = [`<h3>Năm ${nam} (${v.canChi}), ${v.tuoi > 0 ? `${v.tuoi} tuổi âm lịch` : 'trước năm sinh'}</h3>`];
+    h.push('<h4>Đại hạn: xu hướng mười năm</h4>');
+    h.push(dh ? `<p>Năm ${nam} bạn đang ở đại hạn <b>${dh.tu}–${dh.den} tuổi tại cung ${dh.ten}</b> (${dh.chinh}), mức ${dh.muc.toLowerCase()}. Mười năm này xoay quanh chuyện ${CHU_DE[dh.ten]}; Hóa Lộc của đại hạn vào ${dh.hoaLoc}, Hóa Kỵ vào ${dh.hoaKy}, nên ${dh.hoaLoc === dh.hoaKy ? `cung ${dh.hoaLoc} vừa có lộc vừa có vướng` : `chuyện ${CHU_DE[dh.hoaLoc]} dễ có lộc, còn chuyện ${CHU_DE[dh.hoaKy]} hay phải bận tâm`}.</p>`
+      : `<p>Năm ${nam} chưa vào đại hạn đầu tiên (bắt đầu từ ${v.daiHan[0].tu} tuổi); vận hạn lúc nhỏ xem theo tiểu hạn và cung Mệnh.</p>`);
+    h.push(bangDaiHan(v));
+    h.push(`<h4>Tiểu hạn: vận của năm</h4><p>Tiểu hạn năm ${nam} ở cung <b>${v.tieuHan.cung}</b>, mức ${v.tieuHan.muc.toLowerCase()}. Cung này làm Mệnh của năm: chuyện ${CHU_DE[cungTai(L, v.tieuHan.so).ten]} là trọng tâm, và các cung khác của năm được tính từ đây.</p>`);
+    h.push(`<h4>Lưu niên: sao lưu năm ${nam}</h4><ul class="vh-luu">${v.luu.map(x => `<li><b>${x.ten}</b> tại ${x.cung}: ${x.y}.</li>`).join('')}</ul>`);
+    h.push(`<h4>Phân tích năm ${nam}</h4>${phanTichNam(v)}`);
+    h.push(`<h4>Lưu nguyệt: diễn biến theo tháng âm lịch</h4><div class="vh-cuon"><table class="vh-bang"><thead><tr><th>Tháng</th><th>Cung</th><th>Mức</th><th>Sao lưu trong cung</th></tr></thead><tbody>${v.luuNguyet.map(x =>
+      `<tr${v.luuNhat && v.luuNhat.am.endsWith('/' + x.thang) ? ' class="now"' : ''}><td>Tháng ${x.thang}</td><td>${x.cung}</td><td>${x.muc}</td><td>${x.sao.join(', ') || 'Không có'}</td></tr>`).join('')}</tbody></table></div>`);
+    h.push('<p class="lg-intro">Tháng Giêng tính theo Đẩu Quân: từ cung lưu Thái Tuế đếm nghịch đến tháng sinh, rồi đếm thuận đến giờ sinh; mỗi tháng sau tiến một cung.</p>');
+    h.push(`<h4>Lưu nhật</h4><p>${v.luuNhat ? `Hôm nay (ngày ${v.luuNhat.am} âm lịch) lưu nhật ở cung <b>${v.luuNhat.cung}</b>, mức ${v.luuNhat.muc.toLowerCase()}. Ngày mùng 1 bắt đầu từ cung của tháng, mỗi ngày sau tiến một cung.`
+      : `Lưu nhật chỉ hiện cho năm âm lịch đang diễn ra. Cách tính: ngày mùng 1 bắt đầu từ cung của tháng trong bảng trên, mỗi ngày sau tiến một cung.`}</p>`);
+    return h.join('\n');
+  }
+
+  /** Báo cáo cá nhân: tổng quan, sao quan trọng, điểm mạnh và cần lưu ý, đại hạn, tiểu hạn năm, 12 cung */
+  function baoCao(L, nam, homNay) {
+    const T = TV(), v = vanHan(L, nam, homNay), menh = cungTai(L, L.menh), than = cungTai(L, L.than);
+    const xep = L.cung.map(c => ({ c, d: diemCung(L, c.so) })).sort((a, b) => b.d.diem - a.d.diem);
+    const RIENG = { 52: 'cạnh tranh, va chạm, nóng nảy', 51: 'trì hoãn, vướng víu, dây dưa' };
+    const nghia = id => RIENG[id] || (PHU.find(g => g[0].includes(id)) || [])[2];
+    const viTri = ids => ids.filter(id => L.pos[id]).map(id => `<li><b>${T.SAO[id][0]}</b> tại ${tenCung(L, L.pos[id])}${nghia(id) ? `: ${nghia(id)}` : ''}.</li>`).join('');
+    const h = [`<header class="bc-dau"><h2>Báo cáo lá số${L.ten ? ` của ${esc(L.ten)}` : ''}</h2>
+      <p>${L.namGioi ? 'Nam' : 'Nữ'}, sinh ${L.duong.ngay}/${L.duong.thang}/${L.duong.nam} dương lịch (${L.am.ngay}/${L.am.thang}${L.am.nhuan ? ' nhuận' : ''}/${L.am.nam} âm lịch), năm ${L.canChi.nam}, tháng ${L.canChi.thang}, ngày ${L.canChi.ngay}, giờ ${L.canChi.gio}.</p>
+      <p>${L.amDuong}, ${L.thuanLy.toLowerCase()}. Bản mệnh ${L.banMenh}, ${L.cuc} (${L.sinhKhac.toLowerCase()}). Mệnh tại ${menh.chi}, Thân tại ${than.chi} (cung ${than.ten}). Mệnh chủ ${L.menhChu}, Thân chủ ${L.thanChu}.</p></header>`];
+    h.push(`<section><h3>Tổng quan lá số</h3><p>Cung Mệnh có ${dsChinh(menh)}, mức ${diemCung(L, L.menh).muc.toLowerCase()}. ${THAN_CU[than.ten] || ''} Bản mệnh và cục: ${SINH_KHAC[L.sinhKhac]}.</p></section>`);
+    h.push(`<section><h3>Các sao quan trọng</h3><ul>${viTri([94, 93, 92, 95])}${viTri([27, 61, 62, 57, 58, 59, 60])}${viTri([52, 51, 53, 54, 56, 55])}</ul></section>`);
+    h.push(`<section><h3>Điểm mạnh và điểm cần lưu ý</h3><p><b>Mạnh nhất:</b></p><ul>${xep.slice(0, 3).map(x => `<li>Cung ${x.c.ten} (${x.d.muc.toLowerCase()}): ${CHU_DE[x.c.ten]}; nhờ ${x.d.cong.slice(0, 4).join(', ') || 'chính tinh vững'}.</li>`).join('')}</ul>
+      <p><b>Cần lưu ý:</b></p><ul>${xep.slice(-3).reverse().map(x => `<li>Cung ${x.c.ten} (${x.d.muc.toLowerCase()}): ${CHU_DE[x.c.ten]}; vì ${x.d.tru.slice(0, 4).join(', ') || 'thiếu sao hỗ trợ'}. ${LOI_KHUYEN[x.c.ten][1]}</li>`).join('')}</ul></section>`);
+    h.push(`<section><h3>Đại hạn</h3>${bangDaiHan(v)}</section>`);
+    h.push(`<section><h3>Tiểu hạn năm ${nam} (${v.canChi})</h3><p>Tiểu hạn ở cung <b>${v.tieuHan.cung}</b>, mức ${v.tieuHan.muc.toLowerCase()}.${v.dhHienTai ? ` Đang trong đại hạn ${v.dhHienTai.tu}–${v.dhHienTai.den} tuổi tại cung ${v.dhHienTai.ten}.` : ''}</p>${phanTichNam(v)}</section>`);
+    h.push(`<section><h3>Phân tích 12 cung</h3>${THU_TU.map(t => `<article class="bc-cung">${luanGiai(L, L.cung.find(c => c.ten === t).so, nam)}</article>`).join('')}</section>`);
+    h.push('<p class="lg-intro">Lá số an theo phái Việt, lịch âm theo thuật toán Hồ Ngọc Đức. Điểm và mức đánh giá chỉ là chỉ số tham khảo. Nội dung chỉ để tham khảo.</p>');
     return h.join('\n');
   }
 
@@ -409,6 +550,6 @@
     PHU.forEach((p, i) => { p[2] = lay(`phu.${i}`, MAC_DINH.PHU[i][2]); });
   }
 
-  const LuanGiai = { luanGiai, THU_TU, danhMuc, apDung };
+  const LuanGiai = { luanGiai, diemCung, luuNien, vanHan, htmlVanHan, baoCao, THU_TU, danhMuc, apDung };
   if (typeof module !== 'undefined' && module.exports) module.exports = LuanGiai; else root.LuanGiai = LuanGiai;
 })(typeof window !== 'undefined' ? window : globalThis);

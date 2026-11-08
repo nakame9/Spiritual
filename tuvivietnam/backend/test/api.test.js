@@ -23,6 +23,14 @@ test('lập lá số hợp lệ trả về lá số và luận giải 12 cung', 
   assert.match(j.luanGiai[0].html, /<h3>Cung Mệnh/);
 });
 
+test('năm xem hạn: trả vận hạn của năm, sai năm thì 400', async () => {
+  const j = await (await post({ ngay: 30, thang: 8, nam: 2008, gio: 4, gioiTinh: 'nam', namXem: 2030 })).json();
+  assert.strictEqual(j.vanHan.nam, 2030);
+  assert.strictEqual(j.vanHan.luuNguyet.length, 12);
+  assert.match(j.luanGiai[0].html, /gần nhất là năm 20(3[0-9]|4[01])/);
+  assert.strictEqual((await post({ ngay: 30, thang: 8, nam: 2008, gio: 4, gioiTinh: 'nam', namXem: 'abc' })).status, 400);
+});
+
 test('âm lịch tháng nhuận không tồn tại bị từ chối', async () => {
   const r = await post({ ngay: 1, thang: 3, nam: 2024, gio: 1, gioiTinh: 'nu', amLich: true, nhuan: true });
   assert.strictEqual(r.status, 400);

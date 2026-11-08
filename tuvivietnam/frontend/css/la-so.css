@@ -82,7 +82,7 @@ form { display: flex; flex-wrap: wrap; gap: var(--space-md) var(--space-md); ali
 .lg-card header { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2xs) var(--space-md); }
 .lg-card h3 { font-family: var(--f-display); font-weight: 500; font-size: 24px; margin: 0; display: flex; align-items: center; gap: var(--space-xs); }
 .lg-pos { color: var(--soft); font-size: 13px; }
-.lg-card h4 { margin: var(--space-lg) 0 var(--space-xs); font-size: 12px; font-weight: 600; color: var(--soft); }
+.lg-card h4 { margin: var(--space-lg) 0 var(--space-xs); font-size: 14px; font-weight: 600; color: var(--ink); border-bottom: 1px solid var(--line); padding-bottom: var(--space-2xs); }
 .lg-card p, .lg-card li { font-size: 15px; line-height: 1.7; }
 .lg-card p { margin: var(--space-xs) 0 0; }
 .lg-card p.lg-intro { color: var(--soft); font-style: italic; }
@@ -93,3 +93,33 @@ form { display: flex; flex-wrap: wrap; gap: var(--space-md) var(--space-md); ali
 .lg-tp b { color: var(--ink); }
 @media (max-width: 759.98px) { .lg-card { padding: var(--space-md); } }
 @media (prefers-reduced-motion: reduce) { .cell { transition: none; } }
+
+/* Vận hạn, báo cáo, hồ sơ */
+.vh-chon, .bc-nut, .hs-luu { display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-sm) var(--space-lg); }
+.vh-chon input { width: 110px; }
+.hs-luu select { max-width: 100%; }
+.bc-tb { color: var(--soft); font-size: 14px; }
+.lg-card h5 { margin: 0; font-size: 15px; display: flex; flex-wrap: wrap; gap: var(--space-xs); align-items: center; }
+.vh-cuon { overflow-x: auto; margin-top: var(--space-xs); }
+.vh-bang { border-collapse: collapse; width: 100%; font-size: 14px; }
+.vh-bang th, .vh-bang td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.vh-bang th { color: var(--soft); font-weight: 600; white-space: nowrap; }
+.vh-bang tr.now td { background: var(--hl); font-weight: 600; }
+.vh-mat { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-sm); margin-top: var(--space-xs); }
+.vh-o { border: 1px solid var(--line); border-top: 2px solid var(--soft); padding: var(--space-sm); min-width: 0; }
+.vh-o.m0 { border-top-color: var(--moc); } .vh-o.m2 { border-top-color: var(--tu); }
+.vh-o p { font-size: 14px; }
+.vh-sao { color: var(--soft); }
+.vh-luu { columns: 2 280px; }
+.bao-cao { max-width: 860px; }
+.bao-cao section { margin-top: var(--space-lg); }
+.bao-cao h2 { font-family: var(--f-display); font-weight: 500; font-size: 27px; margin: var(--space-sm) 0 0; }
+.bc-cung { border-top: 1px solid var(--line); padding-top: var(--space-md); margin-top: var(--space-md); }
+@media (max-width: 759.98px) { .vh-mat { grid-template-columns: minmax(0, 1fr); } }
+@media print {
+  body.co-bc .wrap > :not(#bao-cao) { display: none !important; }
+  .bao-cao .bc-nut { display: none; }
+  .bao-cao { border: 0; padding: 0; max-width: none; background: none; }
+  .bao-cao h3, .bao-cao h4 { break-after: avoid; }
+  .vh-bang tr, .vh-o, .bao-cao li { break-inside: avoid; }
+}

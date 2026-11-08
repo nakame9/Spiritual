@@ -54,19 +54,23 @@ function docVao(b) {
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
-// Lập lá số: trả về lá số đầy đủ và luận giải 12 cung (HTML từng cung)
+// Lập lá số: trả về lá số đầy đủ, luận giải 12 cung (HTML từng cung) và vận hạn của năm xem
 app.post('/api/la-so', (req, res) => {
-  let laSo;
+  let laSo, namXem = new Date().getFullYear();
   try {
     laSo = TuVi.lapLaSo(docVao(req.body || {}));
+    if (req.body.namXem !== undefined) {
+      namXem = Number(req.body.namXem);
+      if (!Number.isInteger(namXem) || namXem < 1900 || namXem > 2200) throw new Error('namXem cần là số nguyên từ 1900 đến 2200.');
+    }
   } catch (e) {
     return res.status(400).json({ error: e.message });
   }
   const luanGiai = LuanGiai.THU_TU.map(ten => {
     const c = laSo.cung.find(x => x.ten === ten);
-    return { cung: ten, so: c.so, chi: c.chi, html: LuanGiai.luanGiai(laSo, c.so) };
+    return { cung: ten, so: c.so, chi: c.chi, html: LuanGiai.luanGiai(laSo, c.so, namXem) };
   });
-  res.json({ laSo, luanGiai });
+  res.json({ laSo, luanGiai, vanHan: LuanGiai.vanHan(laSo, namXem) });
 });
 
 // Tử vi 12 con giáp: /api/con-giap?tuoi=1..12&ky=ngay|tuan|thang|nam&ngay=YYYY-MM-DD[&namSinh=1990&gioiTinh=nam]

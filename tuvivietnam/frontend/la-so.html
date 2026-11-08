@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lập lá số · Lá Số Tử Vi</title>
-<meta name="description" content="Lập lá số tử vi 12 cung theo cách an sao phái Việt, kèm luận giải từng cung, đại hạn và tiểu hạn.">
+<meta name="description" content="Lập lá số tử vi 12 cung theo cách an sao phái Việt: luận giải chuyên sâu từng cung, đại hạn, tiểu hạn, lưu niên, lưu nguyệt, báo cáo lá số in PDF.">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="../../shared/site.css">
 <link rel="stylesheet" href="css/la-so.css">
@@ -18,7 +18,7 @@
   </header>
   <header>
     <h1>Lập lá số tử vi</h1>
-    <p class="lede">Nhập ngày giờ sinh để lập lá số 12 cung theo cách an sao phái Việt. Bấm vào một cung để xem tam phương tứ chính của cung đó.</p>
+    <p class="lede">Nhập ngày giờ sinh để lập lá số 12 cung theo cách an sao phái Việt. Bấm vào một cung để đọc luận giải chuyên sâu; chọn năm để xem đại hạn, tiểu hạn, lưu niên.</p>
   </header>
 
   <form id="form" novalidate>
@@ -48,6 +48,10 @@
     <button class="go" type="submit">Lập lá số</button>
   </form>
   <p class="err" id="err" role="alert" hidden></p>
+  <div class="hs-luu" id="hs-wrap" hidden>
+    <label class="f"><span>Hồ sơ đã lưu</span><select id="hs-chon"></select></label>
+    <button type="button" class="btn2" id="hs-xoa">Xóa hồ sơ này</button>
+  </div>
 
   <p class="empty" id="empty">Nhập ngày giờ sinh rồi bấm <b>Lập lá số</b> để xem lá số 12 cung và luận giải.</p>
   <section class="board" id="board" aria-label="Lá số 12 cung" hidden></section>
@@ -59,6 +63,39 @@
     </div>
     <div class="lg-tabs" id="lg-tabs" role="group" aria-label="Chọn cung"></div>
     <article class="lg-card" id="lg-card" aria-live="polite"></article>
+  </section>
+
+  <section class="lg" id="van-han" aria-labelledby="h-vh" hidden>
+    <div class="lg-head">
+      <h2 id="h-vh">Đại hạn, tiểu hạn và lưu niên</h2>
+      <p>Chọn một năm bất kỳ để xem xu hướng mười năm, vận của năm, sao lưu, diễn biến từng tháng và phân tích công việc, tài chính, tình cảm, gia đình.</p>
+    </div>
+    <div class="vh-chon">
+      <button type="button" class="btn2" id="vh-truoc">Năm trước</button>
+      <label class="f"><span>Năm xem</span><input type="number" id="vh-nam" inputmode="numeric" min="1900" max="2200"></label>
+      <button type="button" class="btn2" id="vh-sau">Năm sau</button>
+    </div>
+    <article class="lg-card vh" id="vh-card" aria-live="polite"></article>
+  </section>
+
+  <section class="lg" id="bc-khu" aria-labelledby="h-bc" hidden>
+    <div class="lg-head">
+      <h2 id="h-bc">Báo cáo và hồ sơ</h2>
+      <p>Báo cáo gom tổng quan lá số, các sao quan trọng, điểm mạnh và điểm cần lưu ý, đại hạn, tiểu hạn năm đang xem và luận giải đủ 12 cung. Hồ sơ lưu trong trình duyệt này, không gửi đi đâu.</p>
+    </div>
+    <div class="bc-nut">
+      <button type="button" class="btn2" id="bc-mo">Xem báo cáo lá số</button>
+      <button type="button" class="btn2" id="hs-luu">Lưu hồ sơ</button>
+      <span class="bc-tb" id="hs-tb" role="status"></span>
+    </div>
+  </section>
+
+  <section class="lg-card bao-cao" id="bao-cao" aria-label="Báo cáo lá số" hidden>
+    <div class="bc-nut">
+      <button type="button" class="btn2" id="bc-in">In hoặc lưu PDF</button>
+      <button type="button" class="btn2" id="bc-dong">Đóng báo cáo</button>
+    </div>
+    <div id="bc-noi"></div>
   </section>
 
   <section class="legend" aria-label="Chú giải">
@@ -127,7 +164,9 @@
     return v;
   }
 
-  let L = null, sel = null;
+  let L = null, sel = null, xem = null;
+  const [hy, hm, hd] = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date()).split('-').map(Number);
+  const HOM_NAY = { y: hy, m: hm, d: hd };
   const dtTag = s => s.dacTinh ? `<span class="dt">${s.dacTinh}</span>` : '';
   const hoaTag = s => s.hoa ? `<span class="hoa-tag${s.hoa === 'Hóa Kỵ' ? ' ky' : ''}">${s.hoa.split(' ')[1]}</span>` : '';
   const HANH_CLASS = { Kim: 'K', Mộc: 'M', Thủy: 'T', Hỏa: 'H', Thổ: 'O' };
@@ -181,6 +220,7 @@
         <dt>Âm dương</dt><dd>${L.amDuong} <span class="sub">· ${L.thuanLy}</span></dd>
         <dt>Bản mệnh</dt><dd>${L.banMenh}</dd>
         <dt>Cục</dt><dd>${L.cuc} <span class="sub">· ${L.sinhKhac}</span></dd>
+        <dt>Mệnh, Thân</dt><dd>Mệnh tại ${L.cung[L.menh - 1].chi} <span class="sub">· Thân tại ${L.cung[L.than - 1].chi} (${L.cung[L.than - 1].ten})</span></dd>
         <dt>Mệnh chủ</dt><dd>${L.menhChu} <span class="sub">· Thân chủ ${L.thanChu}</span></dd>
         <dt>Năm xem</dt><dd>${v.xem} (${namXem}) · ${tuoi > 0 ? tuoi + ' tuổi' : 'chưa sinh'}
           ${tuoi > 0 ? `<span class="sub">· đại hạn ${dh ? 'cung ' + dh.ten : 'chưa vào'} · tiểu hạn cung ${th.ten}</span>` : ''}</dd>
@@ -201,7 +241,7 @@
     const name = c => `${L.cung[c - 1].ten} (${CHI[c]})`;
     $('rel').innerHTML = `Cung <b>${name(so)}</b>: tam hợp <b>${name(rel[0])}</b>, <b>${name(rel[1])}</b> · xung chiếu <b>${name(rel[2])}</b>`;
     document.querySelectorAll('#lg-tabs button').forEach(b => b.setAttribute('aria-pressed', Number(b.dataset.c) === so));
-    $('lg-card').innerHTML = LuanGiai.luanGiai(L, so);
+    $('lg-card').innerHTML = LuanGiai.luanGiai(L, so, xem);
   }
 
   function draw(fromUser) {
@@ -219,6 +259,10 @@
     $('board').innerHTML = midHTML(v) + L.cung.map(c => cellHTML(c, v)).join('');
     $('mid-ten').textContent = v.ten || 'Lá số';
     $('empty').hidden = true; $('board').hidden = false; $('luan-giai').hidden = false;
+    xem = v.xem; $('vh-nam').value = v.xem;
+    $('vh-card').innerHTML = LuanGiai.htmlVanHan(L, v.xem, HOM_NAY);
+    $('van-han').hidden = false; $('bc-khu').hidden = false;
+    if (!$('bao-cao').hidden) $('bc-noi').innerHTML = LuanGiai.baoCao(L, v.xem, HOM_NAY);
     $('lg-tabs').innerHTML = LuanGiai.THU_TU.map(t => {
       const c = L.cung.find(x => x.ten === t);
       return `<button type="button" data-c="${c.so}">${t}${c.than ? ' · Thân' : ''}</button>`;
@@ -238,6 +282,51 @@
     const el = e.target.closest('.cell');
     if (el && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); select(Number(el.dataset.c)); }
   });
+  // Năm xem hạn: đổi ở đây cũng đổi ô trong form và vẽ lại lá số (đại hạn, tiểu hạn đang chạy)
+  const doiNam = y => { if (!Number.isInteger(y) || y < 1900 || y > 2200) return; $('xem').value = y; draw(false); };
+  $('vh-nam').addEventListener('change', () => doiNam(Number($('vh-nam').value)));
+  $('vh-truoc').addEventListener('click', () => doiNam(xem - 1));
+  $('vh-sau').addEventListener('click', () => doiNam(xem + 1));
+
+  // Báo cáo: in bằng hộp thoại in của trình duyệt (chọn "Lưu dưới dạng PDF")
+  const dongBC = () => { $('bao-cao').hidden = true; document.body.classList.remove('co-bc'); };
+  $('bc-mo').addEventListener('click', () => {
+    $('bc-noi').innerHTML = LuanGiai.baoCao(L, xem, HOM_NAY);
+    $('bao-cao').hidden = false; document.body.classList.add('co-bc');
+    $('bao-cao').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+  });
+  $('bc-in').addEventListener('click', () => print());
+  $('bc-dong').addEventListener('click', dongBC);
+
+  // Hồ sơ đã lưu: danh sách trong localStorage của trình duyệt
+  const HS = 'laso-ho-so';
+  const docHS = () => { try { return JSON.parse(localStorage.getItem(HS)) || []; } catch (e) { return []; } };
+  const nhanHS = v => `${v.ten || 'Không tên'}, ${v.nam ? 'nam' : 'nữ'}, ${v.ngay}/${v.thang}/${v.namSinh}${v.am ? ' âm lịch' : ''}, giờ ${CHI[v.gio]}`;
+  function veHS() {
+    const ds = docHS();
+    $('hs-wrap').hidden = !ds.length;
+    $('hs-chon').innerHTML = '<option value="">Chọn hồ sơ để mở</option>' + ds.map((h, i) => `<option value="${i}">${nhanHS(h).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))}</option>`).join('');
+  }
+  $('hs-luu').addEventListener('click', () => {
+    let v; try { v = readForm(); } catch (e) { return; }
+    const ds = docHS().filter(h => nhanHS(h) !== nhanHS(v)); ds.unshift(v);
+    try { localStorage.setItem(HS, JSON.stringify(ds.slice(0, 30))); $('hs-tb').textContent = 'Đã lưu hồ sơ.'; } catch (e) { $('hs-tb').textContent = 'Trình duyệt không cho lưu.'; }
+    veHS();
+  });
+  $('hs-chon').addEventListener('change', () => {
+    const h = docHS()[Number($('hs-chon').value)]; if (!h) return;
+    $('ten').value = h.ten || ''; $('gt-' + (h.nam ? 'nam' : 'nu')).checked = true; $('lich-' + (h.am ? 'am' : 'duong')).checked = true;
+    $('nhuan').checked = !!h.nhuan; $('ngay').value = h.ngay; $('thang').value = h.thang; $('nam').value = h.namSinh; $('gio').value = h.gio;
+    syncNhuan(); draw(true);
+  });
+  $('hs-xoa').addEventListener('click', () => {
+    const i = $('hs-chon').value; if (i === '') return;
+    const ds = docHS(); ds.splice(Number(i), 1);
+    try { localStorage.setItem(HS, JSON.stringify(ds)); } catch (e) { /* bỏ qua */ }
+    veHS();
+  });
+  veHS();
+
   if (saved) draw(false); // mở lại lá số đã lập trước đó
   // Có backend thì dùng các đoạn luận giải đã sửa trong trang quản trị
   layApi('/api/luan-giai/ghi-de').then(g => { LuanGiai.apDung(g); if (L && sel) select(sel); }).catch(() => {});

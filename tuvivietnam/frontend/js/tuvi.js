@@ -160,6 +160,10 @@
     54: 'HHĐHHĐHHĐHHĐ', 95: '.Đ..Đ..Đ..Đ.', 36: '..ĐĐ....ĐĐ..', 30: '..ĐĐ....ĐĐ..', 69: 'ĐĐ.Đ..ĐĐ.Đ..',
     70: 'ĐĐ.Đ..ĐĐ.Đ..', 98: '..Đ..Đ......', 73: '..ĐĐ....ĐĐ..', 74: '..ĐĐ.....ĐĐ.',
   };
+  // Tứ Hóa [Lộc, Quyền, Khoa, Kỵ] theo can (id sao); vị trí Lộc Tồn theo can. Dùng cả cho lưu niên, đại hạn
+  const TU_HOA_CAN = [null, [2, 14, 4, 5], [6, 12, 1, 8], [3, 6, 57, 2], [8, 3, 6, 10], [9, 8, 62, 6],
+    [4, 9, 12, 58], [5, 4, 3, 8], [10, 5, 58, 57], [12, 1, 7, 4], [14, 10, 8, 9]];
+  const LOC_TON = [0, 3, 4, 6, 7, 6, 7, 9, 10, 12, 1];
   const VONG_TRANG_SINH = [39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50];
 
   const dc = (c, ...d) => { const x = ((d.reduce((s, v) => s + v, c) % 12) + 12) % 12; return x || 12; };
@@ -234,7 +238,7 @@
     an(tp, 7); [8, 9, 10, 11, 12, 13].forEach((id, i) => an(dc(tp, i + 1), id)); an(dc(tp, 10), 14);
 
     // Vòng Lộc Tồn
-    const lt = [0, 3, 4, 6, 7, 6, 7, 9, 10, 12, 1][canNam];
+    const lt = LOC_TON[canNam];
     an(lt, 27, 109);
     [28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38].forEach((id, i) => an(dc(lt, (i + 1) * thuan), id));
     // Vòng Thái Tuế
@@ -274,9 +278,7 @@
     an([10, 6, 2][chiNam % 3], 99); // Phá Toái: Tý Ngọ Mão Dậu→Tỵ, Dần Thân Tỵ Hợi→Dậu, Thìn Tuất Sửu Mùi→Sửu
     an(dc(chiNam, -tt + gio), 107);
 
-    // Tứ Hóa [Lộc, Quyền, Khoa, Kỵ] theo id sao
-    const TU_HOA = [null, [2, 14, 4, 5], [6, 12, 1, 8], [3, 6, 57, 2], [8, 3, 6, 10], [9, 8, 62, 6],
-      [4, 9, 12, 58], [5, 4, 3, 8], [10, 5, 58, 57], [12, 1, 7, 4], [14, 10, 8, 9]][canNam];
+    const TU_HOA = TU_HOA_CAN[canNam];
     const hoa = {};
     [94, 93, 92, 95].forEach((id, i) => { hoa[TU_HOA[i]] = SAO[id][0]; an(pos[TU_HOA[i]], id); });
     for (let i = 1; i <= 12; i++) cung[i].sao.forEach(s => { if (hoa[s.id]) s.hoa = hoa[s.id]; });
@@ -303,11 +305,11 @@
       banMenh: banMenh.ten, hanhMenh: HANH[banMenh.hanh],
       cuc: TEN_CUC[cucSo], cucSo, hanhCuc: HANH[hanhCuc], sinhKhac: sinhKhac(banMenh.hanh, hanhCuc),
       menhChu: MENH_CHU[menh], thanChu: THAN_CHU[chiNam],
-      menh, than, chiNam, canNam, tuan, triet, pos,
+      menh, than, chiNam, canNam, gio, thuan, tuan, triet, pos,
       cung: cung.slice(1),
     };
   }
 
-  const TuVi = { lapLaSo, solar2lunar, lunar2solar, jdFromDate, jdToDate, kinhDoMatTroi, CHI, CAN };
+  const TuVi = { lapLaSo, solar2lunar, lunar2solar, jdFromDate, jdToDate, kinhDoMatTroi, CHI, CAN, TU_HOA_CAN, LOC_TON, SAO, dc };
   if (typeof module !== 'undefined' && module.exports) module.exports = TuVi; else root.TuVi = TuVi;
 })(typeof window !== 'undefined' ? window : globalThis);
