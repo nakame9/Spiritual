@@ -1,6 +1,6 @@
 # Lá Số Tử Vi · kiến trúc
 
-Website tâm linh tiếng Việt gồm 5 phần: **tử vi** phái Việt, **xem ngày tốt xấu**, **Tarot**, **cung hoàng đạo** và **số chủ đạo**. Trang chủ kết hợp tử vi, hoàng đạo và số chủ đạo để dự đoán may mắn, tình cảm, sự nghiệp.
+Website tâm linh tiếng Việt gồm 5 phần: **tử vi** phái Việt, **xem ngày tốt xấu**, **Tarot**, **cung hoàng đạo** và **số chủ đạo**. Trang chủ là bảng điều khiển cá nhân: nhập ngày giờ sinh, nơi sinh, múi giờ một lần để xem hồ sơ ba hệ và tổng quan vận trình (tổng quan, công việc, tài chính, tình cảm, sức khỏe, vận may) theo hôm nay, tuần này, tháng này, năm nay, hoặc mở thẳng lá số, bản đồ sao, số chủ đạo.
 
 - Web công khai: https://nakame9.github.io/Spiritual/ (GitHub Pages, phục vụ thẳng từ gốc kho)
 - Toàn bộ tính toán chạy trên trình duyệt, nên trang tĩnh chạy được không cần máy chủ. Backend chỉ cần cho trang quản trị bài viết, hoặc khi muốn gọi API.

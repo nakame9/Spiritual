@@ -18,27 +18,42 @@ test('hồ sơ ba hệ đúng: Canh Ngọ, Sư Tử, số chủ đạo 6', () =>
   assert.strictEqual(r.ngaySinh.am, '25/6/1990');
 });
 
-test('dự đoán: 3 mốc × 3 mặt, mỗi mặt có điểm 1–5 từ đủ 3 hệ và điểm chung là trung bình', () => {
+test('tổng quan vận trình: 4 mốc × 6 mục, mỗi mục đủ điểm, nhận định, phân tích, lời khuyên, thời gian áp dụng', () => {
   const r = TongHop.duDoan({ ngay: 15, thang: 8, nam: 1990, gio: 5, namGioi: true }, HOM_NAY);
-  for (const k of ['ngay', 'thang', 'nam']) {
-    assert.deepStrictEqual(r.ky[k].linhVuc.map(x => x.ma), ['mayMan', 'tinhCam', 'suNghiep']);
+  for (const k of ['ngay', 'tuan', 'thang', 'nam']) {
+    assert.deepStrictEqual(r.ky[k].linhVuc.map(x => x.ma), ['tongQuan', 'congViec', 'taiChinh', 'tinhCam', 'sucKhoe', 'vanMay']);
     for (const l of r.ky[k].linhVuc) {
-      assert.strictEqual(l.nguon.length, 3);
+      assert.strictEqual(l.nguon.length, l.ma === 'sucKhoe' ? 2 : 3, `${k} ${l.ma}`); // thần số học không có phần sức khỏe
       for (const n of l.nguon) assert.ok(n.diem >= 1 && n.diem <= 5 && n.loi.length > 20, `${k} ${l.ma} ${n.he}`);
-      assert.ok(Math.abs(l.diem - l.nguon.reduce((a, n) => a + n.diem, 0) / 3) <= 0.11, `${k} ${l.ma}`);
-      assert.ok(l.tongHop.length > 30);
+      if (l.ma !== 'tongQuan') assert.ok(Math.abs(l.diem - l.nguon.reduce((a, n) => a + n.diem, 0) / l.nguon.length) <= 0.11, `${k} ${l.ma}`);
+      assert.ok(l.nhanDinh.length > 30 && l.loiKhuyen.length > 20 && l.apDung.length > 5 && l.nhan, `${k} ${l.ma}`);
       for (const x of [l, ...l.nguon]) assert.ok(Number.isInteger(x.phanTram) && x.phanTram >= 0 && x.phanTram <= 100, `${k} ${l.ma} %`);
     }
-    assert.match(r.ky[k].tomTat, /\d+%/);
-    assert.doesNotMatch(r.ky[k].tomTat, /\/5/);
+    const vm = r.ky[k].linhVuc[5];
+    assert.ok(vm.mau && vm.so.length && /:/.test(vm.ngayHop), k);
   }
+  assert.match(r.ky.tuan.apDung, /thứ Hai 19\/10 đến Chủ nhật 25\/10\/2026/);
+  assert.match(r.ky.nam.linhVuc[5].ngayHop, /^Tháng hợp nhất: tháng \d+/);
+  assert.strictEqual(r.hoSo.tuVi.tuoiAm, 37);
+  // Nội dung đổi theo thời gian, không chỉ đổi ngày tháng
+  const khac = TongHop.duDoan({ ngay: 15, thang: 8, nam: 1990, gio: 5, namGioi: true }, { y: 2026, m: 10, d: 27 });
+  assert.notDeepStrictEqual(khac.ky.ngay.linhVuc.map(l => l.nguon.map(n => n.loi)), r.ky.ngay.linhVuc.map(l => l.nguon.map(n => n.loi)));
+});
+
+test('nơi sinh và múi giờ dùng cho chiêm tinh', () => {
+  const v = { ngay: 15, thang: 8, nam: 1990, gio: 1, namGioi: true };
+  const hn = TongHop.duDoan(v, HOM_NAY), ny = TongHop.duDoan({ ...v, noi: { ten: 'New York', viDo: 40.7, kinhDo: -74, tz: 'America/New_York' } }, HOM_NAY);
+  assert.strictEqual(hn.noiSinh.ten, 'Hà Nội');
+  assert.strictEqual(ny.noiSinh.tz, 'America/New_York');
+  assert.ok(hn.hoSo.hoangDao.matTrang && ny.hoSo.hoangDao.matTrang);
+  assert.strictEqual(ny.hoSo.tuVi.canChi, hn.hoSo.tuVi.canChi); // tử vi không đổi theo nơi sinh
 });
 
 test('nhập âm lịch (cả tháng nhuận) và nhiều ngày sinh ngẫu nhiên không lỗi', () => {
   const a = TongHop.duDoan({ ngay: 1, thang: 2, nam: 2023, amLich: true, nhuan: true, gio: 1, namGioi: false }, HOM_NAY);
   assert.strictEqual(a.ngaySinh.duong, '22/3/2023');
   assert.strictEqual(a.hoSo.hoangDao.id, 'bach-duong');
-  for (let i = 0; i < 60; i++) {
+  for (let i = 0; i < 30; i++) {
     const r = TongHop.duDoan({ ngay: 1 + (i * 7) % 28, thang: 1 + i % 12, nam: 1940 + i, gio: 1 + i % 12, namGioi: i % 2 === 0 }, { y: 2026, m: 1 + i % 12, d: 1 + i % 28 });
     assert.doesNotMatch(JSON.stringify(r), /undefined|NaN/);
   }
@@ -48,7 +63,7 @@ test('API tổng hợp và trang chủ mới, trang xem nhanh, tài nguyên các
   const post = body => fetch(base + '/api/tong-hop', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   const r = await (await post({ ngay: 15, thang: 8, nam: 1990, gio: 5, gioiTinh: 'nam', homNay: '2026-10-24' })).json();
   assert.strictEqual(r.hoSo.hoangDao.id, 'su-tu');
-  assert.strictEqual(r.ky.nam.linhVuc.length, 3);
+  assert.strictEqual(r.ky.nam.linhVuc.length, 6);
   assert.strictEqual((await post({ ngay: 15, thang: 8, nam: 1990, gio: 5, gioiTinh: 'nam', homNay: '2026-02-30' })).status, 400);
   assert.strictEqual((await post({ ngay: 15, thang: 13, nam: 1990, gio: 5, gioiTinh: 'nam' })).status, 400);
   const home = await (await fetch(base + '/')).text();

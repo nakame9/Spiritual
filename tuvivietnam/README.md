@@ -5,7 +5,7 @@ Website lập lá số tử vi theo phái Việt, có luận giải từng cung,
 ```
 tuvivietnam/
 ├── frontend/            Trang web tĩnh, chạy được ngay trên GitHub Pages
-│   ├── index.html       Trang chủ: kết hợp tử vi, cung hoàng đạo, số chủ đạo để dự đoán may mắn, tình cảm, sự nghiệp; công cụ, bài viết mới
+│   ├── index.html       Trang chủ: nhập ngày giờ sinh, nơi sinh, múi giờ; hồ sơ ba hệ và tổng quan vận trình 6 mục × 4 mốc; nút mở lá số, bản đồ sao, số chủ đạo; công cụ, bài viết mới
 │   ├── la-so.html       Lập lá số 12 cung + luận giải
 │   ├── con-giap.html    Tử vi 12 con giáp theo ngày, tuần, tháng, năm
 │   ├── bai-viet.html    Bài viết
@@ -16,7 +16,7 @@ tuvivietnam/
 │       │                phụ tinh, Tuần Triệt, vòng Tràng Sinh, sao chiếu từ tam phương, đánh giá chung kèm điểm cộng/trừ và lời khuyên
 │       │                (ý nghĩa cung, chính tinh, phụ tinh sửa được từ trang quản trị)
 │       ├── congiap.js   Tử vi 12 con giáp
-│       ├── tong-hop.js  Dự đoán kết hợp ba hệ cho trang chủ (dùng thêm ../../zodiac và ../../numerology)
+│       ├── tong-hop.js  Tổng quan vận trình kết hợp ba hệ cho trang chủ (dùng thêm ../../zodiac và ../../numerology)
 │       ├── trang-chu.js Giao diện trang chủ
 │       ├── markdown.js  Hiển thị bài viết viết bằng Markdown rút gọn
 │       └── api.js       Địa chỉ backend (TUVI_API) cho web công khai

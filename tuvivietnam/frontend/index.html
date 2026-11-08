@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lá Số Tử Vi · Tử vi, cung hoàng đạo, số chủ đạo</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Kết hợp tử vi phái Việt, cung hoàng đạo và số chủ đạo để dự đoán may mắn, tình cảm, sự nghiệp hôm nay, tháng này và năm nay.">
+<meta name="description" content="Nhập ngày giờ sinh một lần để xem tổng quan vận trình theo tử vi phái Việt, cung hoàng đạo và số chủ đạo: công việc, tài chính, tình cảm, sức khỏe, vận may hôm nay, tuần này, tháng này, năm nay.">
 <link rel="stylesheet" href="../../shared/site.css">
 <link rel="stylesheet" href="css/trang-chu.css">
 
@@ -18,7 +18,7 @@
   <section class="hero-tc" aria-labelledby="h-hero">
     <div class="hero-chu">
       <h1 id="h-hero">Một ngày sinh, ba góc nhìn</h1>
-      <p class="lead">Ba hệ cùng đọc may mắn, tình cảm, sự nghiệp của bạn.</p>
+      <p class="lead">Nhập ngày giờ sinh một lần, rồi xem tổng quan vận trình, lá số, bản đồ sao hay số chủ đạo.</p>
     </div>
     <div class="quick">
       <form id="q-form" novalidate aria-label="Xem dự đoán của bạn">
@@ -43,21 +43,29 @@
           </div>
         </fieldset>
         <label class="f f-gio"><span>Giờ sinh</span><select id="q-gio"></select></label>
-        <button class="go" type="submit">Xem dự đoán</button>
+        <label class="f f-noi"><span>Nơi sinh</span><select id="q-noi"></select></label>
+        <label class="f f-tz"><span>Múi giờ</span><select id="q-tz"></select></label>
+        <button class="go" type="submit">Xem tổng quan vận mệnh</button>
+        <div class="nut-phu" role="group" aria-label="Mở công cụ với ngày sinh này">
+          <button type="button" class="btn2" data-di="la-so">Lập lá số tử vi</button>
+          <button type="button" class="btn2" data-di="ban-do">Xem bản đồ sao</button>
+          <button type="button" class="btn2" data-di="so-hoc">Tính số chủ đạo</button>
+        </div>
       </form>
+      <p class="ghi-chu">Nơi sinh và múi giờ chỉ dùng cho chiêm tinh phương Tây. Tử vi tính theo giờ Việt Nam, số chủ đạo chỉ cần ngày sinh.</p>
       <p class="err" id="q-err" role="alert" hidden></p>
     </div>
   </section>
 
   <section class="kq" id="kq" hidden aria-labelledby="h-kq">
-    <h2 id="h-kq">Dự đoán của bạn</h2>
+    <h2 id="h-kq">Tổng quan vận trình của bạn</h2>
     <p class="ky-info" id="sinh"></p>
     <div class="ho-so" id="ho-so"></div>
-    <div class="ky-tab" id="ky-tab" role="group" aria-label="Mốc thời gian"><button type="button" data-ky="ngay" aria-pressed="true">Hôm nay</button><button type="button" data-ky="thang" aria-pressed="false">Tháng này</button><button type="button" data-ky="nam" aria-pressed="false">Năm nay</button></div>
+    <div class="ky-tab" id="ky-tab" role="group" aria-label="Mốc thời gian"><button type="button" data-ky="ngay" aria-pressed="true">Hôm nay</button><button type="button" data-ky="tuan" aria-pressed="false">Tuần này</button><button type="button" data-ky="thang" aria-pressed="false">Tháng này</button><button type="button" data-ky="nam" aria-pressed="false">Năm nay</button></div>
     <p class="ky-info" id="ky-info"></p>
-    <p class="tom-tat" id="tom-tat"></p>
     <div class="du-doan" id="du-doan" aria-live="polite"></div>
-    <p class="cach-tinh"><b>Cách tính:</b> mỗi hệ cho điểm từ 0% đến 100%, 50% là mức trung bình. Tử vi lấy 40% từ nền lá số (Tài Bạch và Phúc Đức cho may mắn, Phu Thê cho tình cảm, Quan Lộc cho sự nghiệp) và 60% từ vận của tuổi trong ngày, tháng âm lịch, năm âm lịch. Cung hoàng đạo dựa trên vị trí thật của các hành tinh so với cung Mặt Trời của bạn. Số chủ đạo dựa trên ngày, tháng, năm cá nhân và thiên hướng của con số. Điểm chung là trung bình ba hệ. Nội dung chỉ để tham khảo.</p>
+    <p class="cach-tinh"><b>Cách tính:</b> mỗi hệ dùng phương pháp riêng và cho điểm từ 0% đến 100%, 50% là mức trung bình. Tử vi lấy 40% từ nền lá số (Quan Lộc cho công việc, Tài Bạch và Điền Trạch cho tài chính, Phu Thê cho tình cảm, Tật Ách cho sức khỏe, Phúc Đức cho vận may) và 60% từ vận của tuổi theo ngày, tuần, tháng và năm âm lịch. Cung hoàng đạo dựa trên vị trí thật của các hành tinh so với cung Mặt Trời của bạn. Số chủ đạo dựa trên ngày, tháng, năm cá nhân và thiên hướng của con số; thần số học không có phần sức khỏe nên mục này chỉ dùng hai hệ. Điểm chung là trung bình các hệ, tổng quan là trung bình năm mặt.</p>
+    <p class="cach-tinh"><b>Lưu ý:</b> điểm số chỉ là chỉ số tham khảo theo quan niệm của từng hệ, không phải kết quả khoa học hay xác suất chắc chắn.</p>
   </section>
 
   <section class="ban-do" aria-labelledby="h-map">
@@ -69,7 +77,7 @@
       <div class="nhom" role="listitem">
         <p class="vao">Ngày giờ sinh</p>
         <ul class="nhanh">
-          <li><a href="#q-form">Dự đoán tổng hợp</a><span>may mắn, tình cảm, sự nghiệp theo ngày, tháng, năm</span></li>
+          <li><a href="#q-form">Tổng quan vận trình</a><span>công việc, tài chính, tình cảm, sức khỏe, vận may theo ngày, tuần, tháng, năm</span></li>
           <li><a href="la-so.html">Lập lá số tử vi</a><span>12 cung, chính tinh, đại hạn và tiểu hạn</span></li>
           <li><a href="con-giap.html">Tử vi 12 con giáp</a><span>vận theo tuổi, giờ hoàng đạo</span></li>
           <li><a href="../../zodiac/frontend/index.html">Cung hoàng đạo</a><span>tính cách, độ tương hợp, bản đồ sao</span></li>
@@ -122,11 +130,11 @@
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Candle_light_projected_through_a_glass_orb.jpg/1280px-Candle_light_projected_through_a_glass_orb.jpg" srcset="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Candle_light_projected_through_a_glass_orb.jpg/960px-Candle_light_projected_through_a_glass_orb.jpg 960w, https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Candle_light_projected_through_a_glass_orb.jpg/1280px-Candle_light_projected_through_a_glass_orb.jpg 1280w, https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Candle_light_projected_through_a_glass_orb.jpg/1920px-Candle_light_projected_through_a_glass_orb.jpg 1920w" sizes="(max-width: 60rem) 100vw, 58vw" width="4724" height="2657" alt="Ngọn nến trong chân đèn đồng bên quả cầu thủy tinh, ánh sáng hắt qua quả cầu" loading="lazy" onerror="this.closest('figure').hidden = true">
     </figure>
     <div class="ba-chu">
-      <h2 id="h-ba">Ba&nbsp;hệ, ba&nbsp;mặt, ba&nbsp;mốc</h2>
+      <h2 id="h-ba">Ba&nbsp;hệ, sáu&nbsp;mặt, bốn&nbsp;mốc</h2>
       <dl class="so-ba">
         <div><dt>Ba hệ</dt><dd>tử vi phái Việt, chiêm tinh phương Tây, thần số học</dd></div>
-        <div><dt>Ba mặt</dt><dd>may mắn, tình cảm, sự nghiệp</dd></div>
-        <div><dt>Ba mốc</dt><dd>hôm nay, tháng này, năm nay</dd></div>
+        <div><dt>Sáu mặt</dt><dd>tổng quan, công việc, tài chính, tình cảm, sức khỏe, vận may</dd></div>
+        <div><dt>Bốn mốc</dt><dd>hôm nay, tuần này, tháng này, năm nay</dd></div>
       </dl>
       <p>Mỗi hệ cho một điểm riêng; khi cả ba cùng thuận hoặc cùng nghịch, tín hiệu càng rõ ràng.</p>
     </div>
@@ -157,6 +165,7 @@
 <script src="../../zodiac/frontend/js/thien-van.js"></script>
 <script src="../../zodiac/frontend/js/cung-hoang-dao.js"></script>
 <script src="../../zodiac/frontend/js/luan-giai.js"></script>
+<script src="../../zodiac/frontend/js/dia-diem.js"></script>
 <script src="../../numerology/frontend/js/so-hoc.js"></script>
 <script src="js/tong-hop.js"></script>
 <script src="js/trang-chu.js"></script>

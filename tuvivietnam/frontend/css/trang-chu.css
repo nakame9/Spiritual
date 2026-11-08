@@ -21,11 +21,14 @@
 .hero-chu h1 { font-size: var(--text-display); max-width: 12ch; }
 .hero-chu .lead { margin-top: var(--space-lg); color: var(--color-ink-2); max-width: 30em; }
 .quick { padding: var(--space-xl); display: flex; flex-direction: column; gap: var(--space-md); }
-.quick form { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "gt lich" "ngay ngay" "gio gio" "nut nut"; gap: var(--space-md); align-items: end; }
+.quick form { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "gt lich" "ngay ngay" "gio gio" "noi noi" "tz tz" "nut nut" "phu phu"; gap: var(--space-md); align-items: end; }
 .quick form > :nth-child(1) { grid-area: gt; } .quick form > :nth-child(2) { grid-area: lich; }
 .quick form > :nth-child(3) { grid-area: ngay; } .quick .f-gio { grid-area: gio; } .quick button.go { grid-area: nut; }
 .quick .date input { width: 72px; } .quick .date input.y { width: 96px; }
 .quick .f-gio select { width: 100%; }
+.quick .f-noi { grid-area: noi; } .quick .f-tz { grid-area: tz; } .quick .f-noi select, .quick .f-tz select { width: 100%; min-width: 0; }
+.quick .nut-phu { grid-area: phu; display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-lg); }
+.quick .ghi-chu { margin: 0; color: var(--color-muted); font-size: var(--text-sm); }
 
 /* Kết quả kết hợp ba hệ */
 .kq { display: flex; flex-direction: column; gap: var(--space-md); padding-top: var(--space-2xl); }
@@ -61,6 +64,12 @@
 .nguon .pt { white-space: nowrap; }
 .thanh.mini { height: 4px; margin-bottom: var(--space-3xs); }
 .them { margin: 0; padding: var(--space-sm); background: var(--color-paper-3); font-size: var(--text-sm); line-height: 1.6; }
+.lv-the.rong { grid-column: 1 / -1; }
+.lv-the .muc-nhan { font: 600 var(--text-sm) var(--font-outlier); color: var(--color-muted); }
+.lv-the.cao .muc-nhan { color: var(--moc); } .lv-the.thap .muc-nhan { color: var(--color-accent); }
+.lv-the .ap-dung { margin: 0; color: var(--color-muted); font-size: var(--text-sm); }
+.lv-the .loi-khuyen { margin: 0; font-size: var(--text-sm); line-height: 1.6; border-left: var(--rule-bar) solid var(--color-gold); padding-left: var(--space-sm); }
+.chi-tiet summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font: 600 var(--text-sm) var(--font-outlier); color: var(--color-ink); text-decoration: underline; text-underline-offset: 0.2em; }
 .cach-tinh { margin: 0; color: var(--color-muted); font-size: var(--text-sm); max-width: 90ch; }
 
 /* Bản đồ: điều bạn mang đến (trái) nối bằng chỉ vàng sang công cụ đọc nó và điều bạn nhận (phải) */
@@ -128,7 +137,7 @@
 }
 @media (max-width: 40rem) {
   .quick { padding: var(--space-lg); }
-  .quick form { grid-template-columns: minmax(0, 1fr); grid-template-areas: "gt" "lich" "ngay" "gio" "nut"; }
+  .quick form { grid-template-columns: minmax(0, 1fr); grid-template-areas: "gt" "lich" "ngay" "gio" "noi" "tz" "nut" "phu"; }
   .quick .date input { width: 64px; } .quick .date input.y { width: 88px; }
   .nhanh { padding-left: var(--space-lg); }
   .nhanh li::before { left: calc(-1 * var(--space-lg)); width: var(--space-md); }

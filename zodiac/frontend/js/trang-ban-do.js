@@ -37,6 +37,23 @@
     $('kq').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
   });
 
+  // Trang chủ mở trang này với #ngay=YYYY-MM-DD&gio=HH:MM&noi=vn-0&tz=...: điền sẵn rồi vẽ luôn. Giờ là giữa canh giờ, sửa được.
+  const q = new URLSearchParams(location.hash.slice(1)), ngayQ = /^(\d{4})-(\d{2})-(\d{2})$/.exec(q.get('ngay') || '');
+  if (ngayQ) {
+    [$('y').value, $('m').value, $('d').value] = [ngayQ[1], String(+ngayQ[2]), String(+ngayQ[3])];
+    const g = /^(\d{2}):(\d{2})$/.exec(q.get('gio') || '');
+    if (g) { $('h').value = String(+g[1]); $('mi').value = g[2]; }
+    const ma = q.get('noi'), tz = q.get('tz');
+    if (ma && $('noi').querySelector(`option[value="${CSS.escape(ma)}"]`)) {
+      $('noi').value = ma;
+      const n = noiSinh();
+      if (tz && tz !== n.tz && MUI_GIO.some(x => x[0] === tz)) { // múi giờ khác mặc định của nơi sinh: chuyển sang tự nhập tọa độ
+        $('noi').value = 'khac'; $('tu-nhap').hidden = false; $('vi-do').value = n.viDo; $('kinh-do').value = n.kinhDo; $('mui-gio').value = tz;
+      }
+    }
+    setTimeout(() => $('form').requestSubmit(), 0);
+  }
+
   function ve(bd, n, noi, khongGio) {
     $('tom-tat').textContent = `Sinh ngày ${hai(n.d)}/${hai(n.m)}/${n.y}${khongGio ? ' (không rõ giờ)' : ` lúc ${hai(n.h)}:${hai(n.mi)}`} tại ${noi.ten}, ${bd.thoiDiem.lech}.`;
     const b3 = bd.bigThree, the = (nhan, kyHieu, x, them) => {
