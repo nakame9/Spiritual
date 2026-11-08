@@ -5,6 +5,7 @@ const express = require('express');
 const TuVi = require('../frontend/js/tuvi.js');
 const LuanGiai = require('../frontend/js/luangiai.js');
 const ConGiap = require('../frontend/js/congiap.js');
+const ConGiapHoSo = require('../frontend/js/con-giap-ho-so.js');
 const Markdown = require('../frontend/js/markdown.js');
 // Trang chủ kết hợp tử vi, cung hoàng đạo (../../zodiac) và số chủ đạo (../../numerology)
 const TongHop = require('../frontend/js/tong-hop.js');
@@ -71,6 +72,19 @@ app.post('/api/la-so', (req, res) => {
     return { cung: ten, so: c.so, chi: c.chi, html: LuanGiai.luanGiai(laSo, c.so, namXem) };
   });
   res.json({ laSo, luanGiai, vanHan: LuanGiai.vanHan(laSo, namXem) });
+});
+
+// Hồ sơ một con giáp: /api/con-giap/ho-so?tuoi=1..12 (năm sinh 1900–2100, nạp âm, tính cách, tuổi hợp, tuổi xung)
+app.get('/api/con-giap/ho-so', (req, res) => {
+  const tuoi = Number(req.query.tuoi);
+  if (!Number.isInteger(tuoi) || tuoi < 1 || tuoi > 12) return res.status(400).json({ error: 'tuoi cần từ 1 (Tý) đến 12 (Hợi).' });
+  res.json(ConGiapHoSo.hoSo(tuoi));
+});
+// Tra tuổi hợp: /api/tuoi-hop?a=1990&b=1992 (năm sinh âm lịch; a là mình, b là người cần xem)
+app.get('/api/tuoi-hop', (req, res) => {
+  const a = Number(req.query.a), b = Number(req.query.b);
+  if ([a, b].some(y => !Number.isInteger(y) || y < 1900 || y > 2100)) return res.status(400).json({ error: 'a và b cần là năm sinh từ 1900 đến 2100.' });
+  res.json(ConGiapHoSo.hopTuoi(a, b));
 });
 
 // Tử vi 12 con giáp: /api/con-giap?tuoi=1..12&ky=ngay|tuan|thang|nam&ngay=YYYY-MM-DD[&namSinh=1990&gioiTinh=nam]

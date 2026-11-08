@@ -310,6 +310,6 @@
     };
   }
 
-  const TuVi = { lapLaSo, solar2lunar, lunar2solar, jdFromDate, jdToDate, kinhDoMatTroi, CHI, CAN, TU_HOA_CAN, LOC_TON, SAO, dc };
+  const TuVi = { lapLaSo, solar2lunar, lunar2solar, jdFromDate, jdToDate, kinhDoMatTroi, napAm, CHI, CAN, TU_HOA_CAN, LOC_TON, SAO, dc };
   if (typeof module !== 'undefined' && module.exports) module.exports = TuVi; else root.TuVi = TuVi;
 })(typeof window !== 'undefined' ? window : globalThis);

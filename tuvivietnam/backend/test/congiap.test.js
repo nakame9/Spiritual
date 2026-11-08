@@ -52,3 +52,38 @@ test('mọi tuổi, mọi kỳ đều ra nội dung đầy đủ', () => {
     }
   }
 });
+
+const H = require('../../frontend/js/con-giap-ho-so.js');
+
+test('hồ sơ con giáp: đủ 12 tuổi, năm sinh đúng chi, nạp âm đúng sách', () => {
+  for (let t = 1; t <= 12; t++) {
+    const h = H.hoSo(t);
+    assert.ok(h.nam.length >= 16 && h.nam.every(x => (x.nam + 8) % 12 + 1 === t), `tuổi ${t}`);
+    for (const k of ['manh', 'han', 'giaoTiep', 'lamViec', 'tinhCam', 'suNghiep', 'taiChinh', 'tinhDuyen', 'giaDinh', 'xaHoi']) assert.ok(h.tinhCach[k].length > 20, `${t} ${k}`);
+    assert.strictEqual(h.tamHop.length, 2); assert.strictEqual(h.tuHanhXung.length, 3);
+  }
+  assert.strictEqual(H.hoSo(4).con, 'Mèo');
+  assert.strictEqual(H.theoNam(1960).napAm, 'Bích Thượng Thổ');   // Canh Tý
+  assert.strictEqual(H.theoNam(1984).napAm, 'Hải Trung Kim');     // Giáp Tý
+  assert.strictEqual(H.theoNam(1990).napAm, 'Lộ Bàng Thổ');       // Canh Ngọ
+  assert.notStrictEqual(H.theoNam(1960).loi, H.theoNam(1984).loi); // cùng tuổi Tý, khác can và nạp âm
+});
+
+test('tuổi hợp: xét đủ yếu tố và đánh giá khác nhau theo mục đích', () => {
+  const tamHop = H.hopTuoi(1984, 1988);                           // Tý – Thìn tam hợp
+  assert.ok(tamHop.quanHe.tamHop && !tamHop.quanHe.xung);
+  const xung = H.hopTuoi(1990, 1996);                             // Ngọ – Tý lục xung
+  assert.ok(xung.quanHe.xung && xung.quanHe.cungNhomXung);
+  assert.deepStrictEqual(xung.mucDich.map(m => m.ma), ['ketHon', 'lamAn', 'sinhCon', 'ketGiao', 'doiTac']);
+  assert.ok(xung.mucDich.every(m => m.diem < 0 && m.nghich.length));
+  assert.match(H.hopTuoi(1990, 1985).quanHe.can, /ngũ hợp/);     // Canh – Ất ngũ hợp
+  assert.match(H.hopTuoi(1990, 1994).quanHe.can, /Canh .*khắc can Giáp/);
+  // Cùng một cặp tuổi có thể hợp việc này mà không hợp việc kia
+  let khac = 0;
+  for (let a = 1950; a < 2010; a += 3) for (let b = 1950; b < 2010; b += 7) {
+    const ds = H.hopTuoi(a, b).mucDich.map(m => m.muc);
+    if (new Set(ds).size > 1) khac++;
+    assert.doesNotMatch(JSON.stringify(H.hopTuoi(a, b)), /undefined|NaN/);
+  }
+  assert.ok(khac > 50);
+});

@@ -66,3 +66,12 @@ test('phục vụ frontend và API không tồn tại', async () => {
   assert.strictEqual((await fetch(base + '/api/khong-co')).status, 404);
   assert.deepStrictEqual(await (await fetch(base + '/api/health')).json(), { ok: true });
 });
+
+test('hồ sơ con giáp và tra tuổi hợp', async () => {
+  const h = await (await fetch(base + '/api/con-giap/ho-so?tuoi=4')).json();
+  assert.strictEqual(h.con, 'Mèo');
+  assert.strictEqual((await fetch(base + '/api/con-giap/ho-so?tuoi=13')).status, 400);
+  const r = await (await fetch(base + '/api/tuoi-hop?a=1984&b=1988')).json();
+  assert.strictEqual(r.mucDich.length, 5);
+  assert.strictEqual((await fetch(base + '/api/tuoi-hop?a=1984&b=abc')).status, 400);
+});

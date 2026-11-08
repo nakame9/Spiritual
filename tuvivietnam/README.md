@@ -7,7 +7,8 @@ tuvivietnam/
 ├── frontend/            Trang web tĩnh, chạy được ngay trên GitHub Pages
 │   ├── index.html       Trang chủ: nhập ngày giờ sinh, nơi sinh, múi giờ; hồ sơ ba hệ và tổng quan vận trình 6 mục × 4 mốc; nút mở lá số, bản đồ sao, số chủ đạo; công cụ, bài viết mới
 │   ├── la-so.html       Lập lá số 12 cung; luận giải 6 phần từng cung; đại hạn, tiểu hạn, lưu niên, lưu nguyệt, lưu nhật theo năm chọn; báo cáo in PDF; hồ sơ đã lưu
-│   ├── con-giap.html    Tử vi 12 con giáp theo ngày, tuần, tháng, năm
+│   ├── con-giap.html    12 con giáp: trang riêng từng tuổi (#ty … #hoi) với năm sinh, can, nạp âm, tính cách, khía cạnh cuộc sống,
+│   │                    tử vi ngày, tuần, tháng, năm; công cụ tra tuổi hợp, tuổi xung theo 5 mục đích
 │   ├── bai-viet.html    Bài viết
 │   ├── admin/index.html Trang quản trị (chỉ chạy khi mở qua backend)
 │   └── js/
@@ -16,6 +17,7 @@ tuvivietnam/
 │       │                vận hạn theo năm và báo cáo lá số; chi tiết: chính tinh và độ sáng, cách đồng cung, ngũ hành sao với cung, Tứ Hóa theo lĩnh vực,
 │       │                phụ tinh, Tuần Triệt, vòng Tràng Sinh, sao chiếu từ tam phương, đánh giá chung kèm điểm cộng/trừ và lời khuyên
 │       │                (ý nghĩa cung, chính tinh, phụ tinh sửa được từ trang quản trị)
+│       ├── con-giap-ho-so.js  Hồ sơ 12 con giáp, nét riêng theo năm sinh, tra tuổi hợp theo mục đích
 │       ├── congiap.js   Tử vi 12 con giáp
 │       ├── tong-hop.js  Tổng quan vận trình kết hợp ba hệ cho trang chủ (dùng thêm ../../zodiac và ../../numerology)
 │       ├── trang-chu.js Giao diện trang chủ
@@ -81,6 +83,14 @@ Trang quản trị cần backend chạy trên một máy chủ (Render, Railway,
 - Khi web công khai vẫn đặt ở GitHub Pages, sửa `frontend/js/api.js`: điền địa chỉ backend vào `TUVI_API` để trang Bài viết, trang chủ và luận giải lấy nội dung từ trang quản trị. Để trống thì GitHub Pages dùng nội dung có sẵn trong file HTML.
 
 ## API
+
+### `GET /api/con-giap/ho-so?tuoi=1..12`
+
+Hồ sơ một con giáp (1 = Tý … 12 = Hợi): các năm sinh 1900–2100 với can chi, nạp âm, mệnh; tính cách và các khía cạnh cuộc sống; tam hợp, lục hợp, tứ hành xung.
+
+### `GET /api/tuoi-hop?a=1990&b=1992`
+
+Tra tuổi hợp giữa năm sinh âm lịch `a` (mình) và `b` (người cần xem): quan hệ địa chi, thiên can, ngũ hành nạp âm, và đánh giá riêng cho kết hôn, làm ăn, sinh con (`b` là năm sinh của con), kết giao, chọn đối tác.
 
 ### `POST /api/la-so`
 

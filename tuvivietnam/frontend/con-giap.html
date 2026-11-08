@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Tử vi 12 con giáp · Lá Số Tử Vi</title>
+<title>12 con giáp · Lá Số Tử Vi</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Tử vi 12 con giáp hôm nay, tuần này, tháng này và năm nay theo tuổi: công việc, tài lộc, tình cảm, sức khỏe, giờ hoàng đạo, sao chiếu mệnh.">
+<meta name="description" content="12 con giáp: năm sinh, thiên can, nạp âm, tính cách, sự nghiệp, tài chính, tình duyên của từng tuổi; tử vi hôm nay, tuần, tháng, năm; tra tuổi hợp, tuổi xung theo mục đích kết hôn, làm ăn, sinh con.">
 <link rel="stylesheet" href="../../shared/site.css">
 <link rel="stylesheet" href="css/con-giap.css">
 </head>
@@ -17,12 +17,16 @@
   </header>
 
   <header>
-    <h1>Tử vi 12 con giáp</h1>
-    <p class="lede">Chọn tuổi của bạn để xem tử vi hôm nay, tuần này, tháng này và năm nay: công việc, tài lộc, tình cảm, sức khỏe, giờ hoàng đạo và sao chiếu mệnh.</p>
+    <h1>12 con giáp</h1>
+    <p class="lede">Chọn tuổi để xem thông tin cơ bản, năm sinh và nạp âm, tính cách, các khía cạnh cuộc sống và tử vi hôm nay, tuần này, tháng này, năm nay. Bên dưới có công cụ tra tuổi hợp, tuổi xung.</p>
   </header>
 
-  <div class="picker" id="picker" role="group" aria-label="Chọn con giáp"></div>
+  <nav class="picker" id="picker" aria-label="12 con giáp"></nav>
 
+  <article class="cg" id="cg" aria-live="polite"></article>
+
+  <section class="cg-van" aria-labelledby="h-van">
+  <h2 id="h-van">Vận trình</h2>
   <div class="bar">
     <fieldset class="f"><legend>Xem theo</legend>
       <div class="seg" id="ky">
@@ -37,8 +41,21 @@
   </div>
 
   <article class="card" id="out" aria-live="polite"></article>
+  </section>
 
-  <p class="note">Nội dung được tạo tự động từ quan hệ can chi giữa tuổi của bạn với ngày, tháng, năm (tam hợp, lục hợp, xung, hình, hại, phá), cùng ngày giờ hoàng đạo, Thái Tuế, Tam tai và sao chiếu mệnh theo quan niệm dân gian. Chỉ để tham khảo.</p>
+  <section class="hop" id="tuoi-hop" aria-labelledby="h-hop">
+    <h2 id="h-hop">Tra tuổi hợp, tuổi xung</h2>
+    <p class="muted">Nhập năm sinh âm lịch của bạn và của người cần xem (sinh trước Tết âm lịch thì lấy năm trước). Kết quả xét tam hợp, lục hợp, tứ hành xung, thiên can hợp khắc, ngũ hành nạp âm sinh khắc, rồi đánh giá riêng cho từng mục đích.</p>
+    <form class="hop-form" id="hop-form" novalidate>
+      <label class="f"><span>Năm sinh của bạn</span><input type="number" id="hop-a" inputmode="numeric" min="1900" max="2100"></label>
+      <label class="f"><span>Năm sinh người cần xem</span><input type="number" id="hop-b" inputmode="numeric" min="1900" max="2100"></label>
+      <button class="go" type="submit">Tra cứu</button>
+    </form>
+    <p class="err" id="hop-err" role="alert" hidden></p>
+    <div id="hop-kq" aria-live="polite"></div>
+  </section>
+
+  <p class="note">Tính cách, các khía cạnh cuộc sống và đánh giá tuổi hợp theo quan niệm dân gian, không áp dụng giống nhau cho mọi người cùng tuổi. Tử vi theo kỳ được tạo tự động từ quan hệ can chi giữa tuổi của bạn với ngày, tháng, năm (tam hợp, lục hợp, xung, hình, hại, phá), cùng ngày giờ hoàng đạo, Thái Tuế, Tam tai và sao chiếu mệnh theo quan niệm dân gian. Chỉ để tham khảo.</p>
   <footer class="foot">
     <p class="foot-loi">Lá Số Tử Vi: tử vi phái Việt, chiêm tinh phương Tây, thần số học, Tarot và lịch vạn niên.</p>
     <nav aria-label="Chân trang"><a href="index.html">Trang chủ</a><a href="la-so.html">Lập lá số</a><a href="con-giap.html">12 con giáp</a><a href="../../xemngay/frontend/index.html">Xem ngày</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="../../numerology/frontend/index.html">Số chủ đạo</a><a href="bai-viet.html">Bài viết</a></nav>
@@ -48,6 +65,7 @@
 
 <script src="js/tuvi.js"></script>
 <script src="js/congiap.js"></script>
+<script src="js/con-giap-ho-so.js"></script>
 <script>
 (function () {
   'use strict';
@@ -67,17 +85,48 @@
   $('ngay').value = homNay();
 
   const now = new Date().getFullYear();
-  const namGan = t => { const out = []; for (let y = now - 1; out.length < 2; y--) if (chiNam(y) === t) out.unshift(y); return out.join(' · '); };
+  const namGan = t => { const out = []; for (let y = now - 1; out.length < 2; y--) if (chiNam(y) === t) out.unshift(y); return out.join(', '); };
+  const MA = ConGiapHoSo.MA;
   $('picker').innerHTML = [...Array(12).keys()].map(i => {
     const c = ConGiap.conGiap(i + 1);
-    return `<button type="button" data-t="${i + 1}" aria-label="Tuổi ${c.chi}, con ${c.con}"><span class="g" aria-hidden="true">${c.han}</span><b>${c.chi} · ${c.con}</b><small>${namGan(i + 1)}</small></button>`;
+    return `<a href="#${MA[i + 1]}" data-t="${i + 1}"><span class="g" aria-hidden="true">${c.han}</span><b>${c.chi}, ${c.con}</b><small>${namGan(i + 1)}</small></a>`;
   }).join('');
+
+  // Trang riêng của từng con giáp: thông tin cơ bản, năm sinh và nạp âm, tính cách, các khía cạnh
+  let namChon = null;
+  function veCG() {
+    const h = ConGiapHoSo.hoSo(st.tuoi), tc = h.tinhCach;
+    document.title = `Tuổi ${h.chi} (${h.con}) · 12 con giáp · Lá Số Tử Vi`;
+    if (!namChon || chiNam(namChon) !== st.tuoi) namChon = st.namSinh && chiNam(Number(st.namSinh)) === st.tuoi ? Number(st.namSinh) : h.nam.filter(x => x.nam <= now).pop().nam;
+    const y = ConGiapHoSo.theoNam(namChon);
+    const muc = ds => `<dl class="cg-dl">${ds.map(([k, t]) => `<div><dt>${t}</dt><dd>${tc[k]}</dd></div>`).join('')}</dl>`;
+    $('cg').innerHTML = `
+      <header class="cg-dau"><span class="cg-g" aria-hidden="true">${h.han}</span><div><h2>Tuổi ${h.chi}, con ${h.con}</h2><p>${tc.tom}</p></div></header>
+      <section><h3>Thông tin cơ bản</h3>
+        <dl class="cg-co-ban"><div><dt>Biểu tượng</dt><dd>${h.han} (${h.con})</dd></div><div><dt>Địa chi</dt><dd>${h.chi}, thứ ${h.thuTu} trong 12 chi, ${h.amDuong.toLowerCase()}, hành ${h.hanh}</dd></div>
+          <div><dt>Tam hợp</dt><dd>${h.chi}, ${h.tamHop.join(', ')}</dd></div><div><dt>Lục hợp</dt><dd>${h.lucHop}</dd></div>
+          <div><dt>Tứ hành xung</dt><dd>${h.chi}, ${h.tuHanhXung.join(', ')} (xung trực tiếp với ${h.xung})</dd></div></dl>
+        <p class="muted">Các năm sinh tuổi ${h.chi} với thiên can và ngũ hành nạp âm. Bấm một năm để xem nét riêng của tuổi đó; người sinh trước Tết âm lịch thuộc tuổi năm trước.</p>
+        <div class="cg-cuon"><table class="cg-bang"><thead><tr><th>Năm sinh</th><th>Can chi</th><th>Thiên can</th><th>Nạp âm</th><th>Mệnh</th></tr></thead><tbody>${h.nam.map(x =>
+          `<tr${x.nam === namChon ? ' class="chon"' : ''}><td><button type="button" class="nam-btn" data-y="${x.nam}" aria-pressed="${x.nam === namChon}">${x.nam}</button></td><td>${x.canChi}</td><td>${x.can} (${x.canHanh} ${x.amDuong.toLowerCase()})</td><td>${x.napAm}</td><td>${x.menh}</td></tr>`).join('')}</tbody></table></div>
+        <div class="cg-nam"><h4>Tuổi ${y.canChi} (${y.nam})</h4><p>${y.loi}</p><p><b>Màu hợp:</b> ${y.mau}.</p>
+          <p class="muted">Cùng tuổi ${h.chi} nhưng khác thiên can và nạp âm nên mỗi năm sinh có nét riêng; nội dung tính cách bên dưới là nét chung của con giáp.</p></div></section>
+      <section><h3>Đặc điểm tính cách</h3>${muc([['manh', 'Điểm mạnh'], ['han', 'Điểm hạn chế'], ['giaoTiep', 'Phong cách giao tiếp'], ['lamViec', 'Khả năng làm việc'], ['tinhCam', 'Quan điểm về tình cảm']])}</section>
+      <section><h3>Các khía cạnh cuộc sống</h3>${muc([['suNghiep', 'Sự nghiệp'], ['taiChinh', 'Tài chính'], ['tinhDuyen', 'Tình duyên'], ['giaDinh', 'Gia đình'], ['xaHoi', 'Quan hệ xã hội']])}</section>`;
+    const hang = $('cg').querySelector('tr.chon'), khung = $('cg').querySelector('.cg-cuon');
+    if (hang) khung.scrollTop = hang.offsetTop - khung.clientHeight / 2; // đưa năm đang chọn vào giữa bảng
+  }
+  $('cg').addEventListener('click', e => {
+    const b = e.target.closest('.nam-btn'); if (!b) return;
+    namChon = Number(b.dataset.y); st.namSinh = namChon; save(); veCG(); render();
+    $('hop-a').value = namChon;
+  });
 
   const THU = { 'Thứ Hai': 'T2', 'Thứ Ba': 'T3', 'Thứ Tư': 'T4', 'Thứ Năm': 'T5', 'Thứ Sáu': 'T6', 'Thứ Bảy': 'T7', 'Chủ nhật': 'CN' };
   const pips = n => `<span class="pips" aria-hidden="true">${[1, 2, 3, 4, 5].map(i => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</span>`;
 
   function render() {
-    document.querySelectorAll('#picker button').forEach(b => b.setAttribute('aria-pressed', Number(b.dataset.t) === st.tuoi));
+    document.querySelectorAll('#picker a').forEach(b => { if (Number(b.dataset.t) === st.tuoi) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
     $('date-label').textContent = { ngay: 'Ngày xem', tuan: 'Tuần có ngày', thang: 'Tháng có ngày', nam: 'Năm có ngày' }[st.ky];
     const [y, m, d] = ($('ngay').value || homNay()).split('-').map(Number);
     const jd = TuVi.jdFromDate(d, m, y);
@@ -103,12 +152,17 @@
     $('out').innerHTML = h.join('\n');
   }
 
-  $('picker').addEventListener('click', e => {
-    const b = e.target.closest('button'); if (!b) return;
-    st.tuoi = Number(b.dataset.t);
-    if (st.namSinh && chiNam(Number(st.namSinh)) !== st.tuoi) st.namSinh = ''; // năm sinh cũ không còn đúng tuổi
-    save(); render();
-  });
+  // Mỗi con giáp một đường dẫn riêng: con-giap.html#ty … #hoi
+  function theoHash() {
+    const t = MA.indexOf(location.hash.slice(1));
+    if (t > 0 && t !== st.tuoi) {
+      st.tuoi = t;
+      if (st.namSinh && chiNam(Number(st.namSinh)) !== st.tuoi) st.namSinh = ''; // năm sinh cũ không còn đúng tuổi
+      save();
+    }
+    veCG(); render();
+  }
+  addEventListener('hashchange', theoHash);
   $('ky').addEventListener('change', e => { st.ky = e.target.value; save(); render(); });
   $('ngay').addEventListener('change', render);
   $('today').addEventListener('click', () => { $('ngay').value = homNay(); render(); });
@@ -117,10 +171,34 @@
     const y = Number($('nam-sinh').value);
     if (!Number.isInteger(y) || y < 1900 || y > 2100) { $('nam-sinh').setCustomValidity('Năm sinh từ 1900 đến 2100'); $('nam-sinh').reportValidity(); return; }
     Object.assign(st, { namSinh: y, gioiTinh: $('sao-nu').checked ? 'nu' : 'nam', tuoi: chiNam(y) });
-    save(); render();
+    save(); namChon = y;
+    if (location.hash !== '#' + MA[st.tuoi]) location.hash = MA[st.tuoi]; else { veCG(); render(); }
   });
   $('out').addEventListener('input', e => { if (e.target.id === 'nam-sinh') e.target.setCustomValidity(''); });
-  render();
+
+  // Tra tuổi hợp, tuổi xung theo mục đích
+  const kq = r => `<div class="hop-hai">${[['Bạn', r.a], ['Người cần xem', r.b]].map(([n, x]) => `<div><span class="muted">${n}</span><b>${x.canChi} (${x.nam})</b><span>${x.napAm}, mệnh ${x.menh}</span></div>`).join('')}</div>
+    <h3>Quan hệ giữa hai tuổi</h3>
+    <dl class="cg-dl"><div><dt>Địa chi</dt><dd>${r.quanHe.chi.join('; ').replace(/^./, c => c.toUpperCase())}.${r.quanHe.cungNhomXung && !r.quanHe.xung ? ' Hai tuổi cùng nhóm tứ hành xung nhưng không đối xung trực tiếp.' : ''}</dd></div>
+      <div><dt>Tam hợp</dt><dd>${r.quanHe.tamHop ? 'Có' : 'Không'}</dd></div><div><dt>Lục hợp</dt><dd>${r.quanHe.lucHop ? 'Có' : 'Không'}</dd></div>
+      <div><dt>Tứ hành xung</dt><dd>${r.quanHe.xung ? 'Có, hai tuổi xung trực tiếp' : r.quanHe.cungNhomXung ? 'Cùng nhóm, không xung trực tiếp' : 'Không'}</dd></div>
+      <div><dt>Thiên can</dt><dd>${r.quanHe.can}</dd></div><div><dt>Ngũ hành nạp âm</dt><dd>${r.quanHe.menh}</dd></div></dl>
+    <h3>Đánh giá theo mục đích</h3>
+    <p class="muted">Mỗi mục đích coi trọng các yếu tố khác nhau, nên cùng một cặp tuổi có thể hợp việc này mà không hợp việc kia.</p>
+    <div class="hop-md">${r.mucDich.map(m => `<section class="md m-${m.diem >= 1 ? 'tot' : m.diem > -1 ? 'vua' : 'xau'}"><h4>${m.ten}</h4><p class="md-muc">${m.muc}</p>${m.ghiChu ? `<p class="muted">${m.ghiChu}</p>` : ''}
+      ${m.thuan.length ? `<p><b>Thuận:</b> ${m.thuan.join('; ')}.</p>` : ''}${m.nghich.length ? `<p><b>Cần lưu ý:</b> ${m.nghich.join('; ')}.</p>` : ''}
+      ${!m.thuan.length && !m.nghich.length ? '<p>Không có yếu tố hợp hay xung đáng kể.</p>' : ''}<p class="md-khuyen">${m.loiKhuyen}</p></section>`).join('')}</div>`;
+  $('hop-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const a = Number($('hop-a').value), b = Number($('hop-b').value);
+    const loi = [a, b].some(y => !Number.isInteger(y) || y < 1900 || y > 2100) ? 'Năm sinh cần là số từ 1900 đến 2100.' : '';
+    $('hop-err').textContent = loi; $('hop-err').hidden = !loi;
+    $('hop-kq').innerHTML = loi ? '' : kq(ConGiapHoSo.hopTuoi(a, b));
+  });
+  if (st.namSinh) $('hop-a').value = st.namSinh;
+
+  if (MA.indexOf(location.hash.slice(1)) < 1) history.replaceState(null, '', '#' + MA[st.tuoi]);
+  theoHash();
 })();
 </script>
 </body>
