@@ -67,13 +67,21 @@ app.get('/api/tu-vi/:cung', boc(req => {
 // 6, 7. Độ tương hợp hai cung
 app.get('/api/tuong-hop', boc(req => LG.tuongHop(cungSo(req.query.a), cungSo(req.query.b))));
 // 9, 10. Bản đồ sao và Big Three
-app.post('/api/ban-do-sao', boc(req => {
-  const b = req.body || {}, n = docNgay(b.ngay), coGio = b.gio !== undefined && b.gio !== null && b.gio !== '';
+function lapBanDo(b) {
+  b = b || {};
+  const n = docNgay(b.ngay), coGio = b.gio !== undefined && b.gio !== null && b.gio !== '';
   const g = coGio ? docGio(b.gio) : {}, tz = docTz(b.tz);
   const coToaDo = b.viDo !== undefined || b.kinhDo !== undefined;
   if (coToaDo && !(typeof b.viDo === 'number' && typeof b.kinhDo === 'number' && Math.abs(b.viDo) <= 66 && Math.abs(b.kinhDo) <= 180))
     throw new Loi('viDo cần là số từ -66 đến 66, kinhDo là số từ -180 đến 180.');
   return LG.banDoSao({ ...n, ...g, coGio, tz, viDo: coToaDo ? b.viDo : undefined, kinhDo: coToaDo ? b.kinhDo : undefined });
+}
+app.post('/api/ban-do-sao', boc(req => lapBanDo(req.body)));
+// Hợp đôi (synastry): { a: {thông tin như /api/ban-do-sao}, b: {...} }
+app.post('/api/hop-doi', boc(req => {
+  const b = req.body || {};
+  if (!b.a || !b.b || typeof b.a !== 'object' || typeof b.b !== 'object') throw new Loi('Cần a và b, mỗi bên có ngay, gio, tz, viDo, kinhDo như /api/ban-do-sao.');
+  return LG.hopDoi(lapBanDo(b.a), lapBanDo(b.b));
 }));
 app.get('/api/dia-diem', (req, res) => res.json(DD));
 

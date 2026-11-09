@@ -6,19 +6,20 @@ Chức năng cung hoàng đạo (chiêm tinh phương Tây) của website Lá S�
 |---|---|---|---|
 | 1 | Xác định cung hoàng đạo | `index.html` | Nhập ngày sinh (giờ sinh không bắt buộc) để biết cung Mặt Trời. Ngày giao cung thì báo đúng giờ Mặt Trời đổi cung. |
 | 2 | Tổng quan 12 cung | `index.html`, `cung.html` | Biểu tượng, nguyên tố, tính chất, hành tinh chủ quản, bộ phận cơ thể, màu, đá, ngày trong tuần. |
-| 3 | Tử vi hằng ngày | `tu-vi.html` | Tình yêu, công việc, tài chính, sức khỏe (1–5 sao), việc nên làm, màu hợp. |
+| 3 | Tử vi hằng ngày | `tu-vi.html` | Tổng quan, tình yêu, công việc, tài chính, sức khỏe (1–5 sao), lời khuyên, việc nên làm, màu hợp; chọn ngày bất kỳ để xem lại. |
 | 4 | Tử vi tuần, tháng, năm | `tu-vi.html` | Ngày nổi bật, trăng non, trăng tròn, hành tinh đổi cung, nghịch hành, Sao Mộc, Sao Thổ, nhật thực, nguyệt thực. |
 | 5 | Giải mã tính cách | `cung.html` | Điểm mạnh, điểm yếu, xu hướng giao tiếp, cảm xúc. |
-| 6 | Độ tương hợp | `tuong-hop.html` | Điểm tình yêu, tình bạn, công việc giữa hai cung, bảng hợp với cả 12 cung. |
+| 6 | Độ tương hợp | `tuong-hop.html`, `cung.html` | Điểm tình yêu, tình bạn, công việc giữa hai cung; trang mỗi cung có bảng tương hợp với cả 12 cung. |
 | 7 | Tình yêu và mối quan hệ | `cung.html`, `tuong-hop.html` | Phong cách yêu, điều cần, điều nên lưu ý, cung dễ hợp nhất. |
 | 8 | Sự nghiệp và công việc | `cung.html` | Đặc điểm làm việc, kỹ năng, môi trường phù hợp, nghề gợi ý. |
-| 9 | Bản đồ sao (birth chart) | `ban-do-sao.html` | Vị trí 10 thiên thể, cung Mọc, thiên đỉnh, 12 nhà, góc chiếu, cân bằng nguyên tố. Vẽ vòng bản đồ sao bằng SVG. |
-| 10 | Big Three | `ban-do-sao.html` | Phân tích Mặt Trời, Mặt Trăng, cung Mọc và cách ba yếu tố kết hợp. |
+| 9 | Bản đồ sao (birth chart) | `ban-do-sao.html` | Vị trí 10 thiên thể, cung Mọc, thiên đỉnh, bảng 12 nhà, góc chiếu, nguyên tố và tính chất trội. Vẽ vòng bản đồ sao bằng SVG. |
+| 10 | Luận giải bản đồ sao | `ban-do-sao.html` | Big Three, rồi năm phần: tính cách, tình cảm, công việc, giao tiếp, phát triển; ghép từ cung, nhà và góc chiếu của từng hành tinh. |
+| 11 | Hợp đôi (synastry) | `hop-doi.html` | Đối chiếu hai bản đồ sao: góc chiếu chéo giữa Mặt Trời, Mặt Trăng, Sao Thủy, Sao Kim, Sao Hỏa, cung Mọc; so nguyên tố; điểm tham khảo và nhận xét. |
 
 ```
 zodiac/
 ├── frontend/                   Trang web tĩnh, chạy được ngay trên GitHub Pages
-│   ├── index.html, cung.html, tu-vi.html, tuong-hop.html, ban-do-sao.html
+│   ├── index.html, cung.html, tu-vi.html, tuong-hop.html, ban-do-sao.html, hop-doi.html
 │   ├── css/zodiac.css          Giao diện cung hoàng đạo, màu bốn nguyên tố
 │   └── js/
 │       ├── vendor/astronomy.browser.min.js   Astronomy Engine 2.1.19 (MIT, Don Cross)
@@ -47,6 +48,8 @@ Backend dùng chung các file trong `frontend/js`, nên API và trang web luôn 
   - Tử vi năm: dựa vào Sao Mộc và Sao Thổ đi qua nhà nào.
 
   Câu chữ được chọn cố định theo ngày và cung, nên ai xem cũng thấy giống nhau.
+- **Luận giải bản đồ sao:** mỗi phần ghép nội dung của cung theo hành tinh liên quan: tính cách (Mặt Trời, cung Mọc, Mặt Trăng, Sao Hỏa, nguyên tố và tính chất trội), tình cảm (Sao Kim, Mặt Trăng, cung nhà 7, góc Kim–Hỏa), công việc (thiên đỉnh, Mặt Trời, Sao Hỏa, Sao Thổ, nhà 10 và 6), giao tiếp (Sao Thủy, nguyên tố, nghịch hành, góc chiếu), phát triển (Sao Mộc, Sao Thổ, góc căng, nguyên tố thiếu).
+- **Hợp đôi:** góc chiếu chéo giữa các điểm cá nhân của hai người, mỗi cặp có trọng số (Mặt Trời–Mặt Trăng, Sao Kim–Sao Hỏa nặng nhất), cộng thêm so sánh nguyên tố. Người không rõ giờ sinh thì bỏ Mặt Trăng và cung Mọc.
 - **Tương hợp:** điểm nền được tính theo khoảng cách giữa hai cung trên vòng hoàng đạo: cùng cung, liền kề, lục hợp, vuông, tam hợp, lệch 150° hoặc xung đối. Sau đó cộng trừ theo cặp nguyên tố (với tình yêu), nguyên tố Khí (với tình bạn), nguyên tố Đất và cặp tính chất (với công việc).
 
 ## Chạy trên máy
@@ -73,6 +76,7 @@ npm test
 | `GET` | `/api/tu-vi/:cung?ky=ngay\|tuan\|thang\|nam&ngay=2026-10-24` | Tử vi theo kỳ. Mặc định là hôm nay theo giờ Việt Nam |
 | `GET` | `/api/tuong-hop?a=bach-duong&b=thien-binh` | Điểm tình yêu, tình bạn, công việc và nhận xét |
 | `POST` | `/api/ban-do-sao` | Gửi `{ "ngay": "1990-04-10", "gio": "10:30", "tz": "Asia/Bangkok", "viDo": 21.03, "kinhDo": 105.85 }`. Bỏ `gio` khi không rõ giờ sinh. Trả về vị trí các thiên thể, cung Mọc, góc chiếu, cân bằng nguyên tố, Big Three |
+| `POST` | `/api/hop-doi` | Gửi `{ "a": {như /api/ban-do-sao}, "b": {...} }`. Trả về điểm, nhận xét, góc chiếu chéo, so sánh nguyên tố |
 | `GET` | `/api/dia-diem` | Danh sách nơi sinh và múi giờ |
 | `GET` | `/api/health` | `{ "ok": true }` |
 

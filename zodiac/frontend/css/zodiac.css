@@ -172,3 +172,24 @@
   .chon-cung { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .nt-list { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Tương hợp trên trang cung, lời khuyên, luận giải theo phần, hợp đôi */
+.bang-th { width: 100%; border-collapse: collapse; font-size: 14px; }
+.bang-th th { text-align: left; color: var(--soft); font-weight: 600; padding: 6px 8px; border-bottom: 2px solid var(--line); white-space: nowrap; }
+.bang-th td { padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.bang-th a { color: var(--ink); text-decoration: none; font-weight: 600; white-space: nowrap; }
+.th-o { display: inline-flex; align-items: center; gap: 6px; min-width: 110px; }
+.th-o i { display: block; height: 6px; background: var(--tu); max-width: 70px; }
+.th-o b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.tv-muc { margin: 0; font-size: 14px; color: var(--soft); }
+.loi-khuyen { border-left: var(--rule-bar) solid var(--color-gold); }
+.lg-tab { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin: var(--space-sm) 0; }
+.lg-tab button, .lg-tab a { min-height: 40px; padding: 0 var(--space-md); display: inline-flex; align-items: center; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font: 500 14px var(--f-ui); cursor: pointer; text-decoration: none; }
+.lg-tab button[aria-pressed="true"] { background: var(--tu); border-color: var(--tu); color: var(--cell); }
+#lg-noi h3 { margin: var(--space-sm) 0 0; }
+.hd-hai { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-lg); }
+.hd-hai fieldset { border: 1px solid var(--line); padding: var(--space-md); margin: 0; display: flex; flex-direction: column; gap: var(--space-sm); min-width: 0; }
+.hd-hai legend { font-weight: 600; padding: 0 var(--space-xs); }
+.hd-diem { display: flex; align-items: baseline; gap: var(--space-sm); }
+.hd-diem b { font: 500 44px var(--f-display); color: var(--tu); }
+@media (max-width: 760px) { .hd-hai { grid-template-columns: minmax(0, 1fr); } }

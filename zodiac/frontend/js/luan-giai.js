@@ -7,6 +7,7 @@
   const HD = node ? require('./cung-hoang-dao.js') : root.HoangDao;
   const { CUNG, NGUYEN_TO, TINH_CHAT, HANH_TINH, NHA } = HD;
   const VN = 'Asia/Ho_Chi_Minh';
+  const thuong = x => x.charAt(0).toLowerCase() + x.slice(1);
   const THU = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
   const hai = n => String(n).padStart(2, '0');
   const ngayVN = t => { const x = TV.ngayTai(t, VN); return { ...x, chu: `${hai(x.d)}/${hai(x.m)}/${x.y}`, gio: `${hai(x.h)}:${hai(x.mi)}`, ngan: `${hai(x.d)}/${hai(x.m)}` }; };
@@ -166,9 +167,27 @@
       linhVuc: Object.keys(LINH_VUC).map(k => ({ ma: k, ten: LINH_VUC[k], sao: diem[k], loi: chon(LOI_NGAY[k][muc(diem[k])], khoa + k) })),
       tong: Math.round(tong * 10) / 10,
       nenLam: NHA[n].nenLam,
+      loiKhuyen: loiKhuyenNgay(diem, n, khoa),
       mau: chon(MAU[mt.nguyenTo], khoa + 'mau'),
       luuY: v.thuy.nghich ? THUY_NGHICH : null,
     };
+  }
+
+  // Lời khuyên trong ngày: dựa vào lĩnh vực mạnh nhất và yếu nhất, cộng nhà Mặt Trăng đang đi qua
+  const KHUYEN = {
+    tinhYeu: ['chủ động bày tỏ tình cảm, hẹn gặp người thương', 'nói chậm và lắng nghe nhiều hơn trong chuyện tình cảm'],
+    congViec: ['dồn sức cho việc quan trọng nhất, mạnh dạn đề xuất ý tưởng', 'làm chắc từng việc, kiểm tra kỹ trước khi gửi đi'],
+    taiChinh: ['lên kế hoạch tiền bạc hoặc chốt khoản đã cân nhắc kỹ', 'hoãn khoản chi lớn, tránh mua sắm theo cảm hứng'],
+    sucKhoe: ['vận động, ra ngoài hít thở cho khỏe người', 'nghỉ ngơi sớm, ăn uống nhẹ nhàng'],
+  };
+  function loiKhuyenNgay(diem, n, khoa) {
+    const xep = Object.entries(diem).sort((a, b) => b[1] - a[1]), [manh, dm] = xep[0], [yeu, dy] = xep[xep.length - 1];
+    const cau = [];
+    if (dm >= 4) cau.push(`Hôm nay thuận nhất cho ${LINH_VUC[manh].toLowerCase()}: hãy ${KHUYEN[manh][0]}.`);
+    if (dy <= 2) cau.push(`Với ${LINH_VUC[yeu].toLowerCase()}, nên ${KHUYEN[yeu][1]}.`);
+    if (!cau.length) cau.push(`Một ngày cân bằng: giữ nhịp đều, ưu tiên chuyện ${NHA[n].linhVuc.split(',')[0]}.`);
+    cau.push(`Mặt Trăng đi qua nhà ${NHA[n].ten.toLowerCase()} của bạn, nên ${thuong(chon(NHA[n].nenLam, khoa + 'lk'))}.`);
+    return cau.join(' ');
   }
 
   const ngayCong = (y, m, d, k) => { const x = new Date(Date.UTC(y, m - 1, d + k)); return [x.getUTCFullYear(), x.getUTCMonth() + 1, x.getUTCDate()]; };
@@ -278,7 +297,7 @@
     ['Lệch nhau (150°)', 'Ít điểm chung, cần nhiều điều chỉnh để bắt nhịp với nhau.', 48],
     ['Xung đối (180°)', 'Hút nhau mạnh mẽ như hai mặt của một đồng xu, bổ sung cho nhau nếu biết cân bằng.', 72],
   ];
-  const thuong = x => x.charAt(0).toLowerCase() + x.slice(1);
+
   const NHAN_XET = d => d >= 85 ? 'Rất hợp' : d >= 72 ? 'Hợp' : d >= 58 ? 'Khá hợp, cần vun đắp' : 'Nhiều thử thách';
   function tuongHop(a, b) {
     const A = CUNG[a], B = CUNG[b], k = Math.min((a - b + 12) % 12, (b - a + 12) % 12);
@@ -355,8 +374,107 @@
     const ntTroi = Object.entries(nt).sort((a, b) => b[1] - a[1])[0][0], tcTroi = Object.entries(tc).sort((a, b) => b[1] - a[1])[0][0];
     out.canBang = { nguyenTo: nt, tinhChat: tc,
       loi: [NGUYEN_TO[ntTroi].troi, TINH_CHAT[tcTroi].troi].concat(Object.entries(nt).filter(([, x]) => x / tongNT < 0.1).map(([k]) => NGUYEN_TO[k].thieu)) };
+    out.canBang.nguyenToTroi = NGUYEN_TO[ntTroi].ten; out.canBang.tinhChatTroi = TINH_CHAT[tcTroi].ten;
     out.bigThree = bigThree(v.matTroi.cung, v.matTrang.cung, cungMoc, out.sao.find(x => x.ma === 'matTrang').chuaChac);
+    // 12 nhà (Whole Sign): cung, lĩnh vực, hành tinh nằm trong nhà
+    out.nha = tr ? NHA.map((h, i) => { const cs = (cungMoc + i) % 12;
+      return { so: i + 1, ten: h.ten, linhVuc: h.linhVuc, cung: CUNG[cs].id, tenCung: CUNG[cs].ten, sao: out.sao.filter(x => x.nha === i + 1).map(x => x.ten) }; }) : null;
+    out.luanGiai = luanGiaiBanDo(out, v, cungMoc, tr, ntTroi, tcTroi, nt, tongNT);
     return out;
+  }
+
+  // ---------- Luận giải bản đồ sao theo phần ----------
+  const NT_NOI = { lua: 'nói nhanh, thẳng và đầy nhiệt huyết, dễ truyền cảm hứng', dat: 'nói chắc chắn, thực tế, cân nhắc kỹ trước khi nói',
+    khi: 'ham trao đổi, lý luận nhanh, thích tranh luận ý tưởng', nuoc: 'nói bằng cảm nhận và trực giác, tinh ý với điều người khác không nói ra' };
+  /** Năm phần sau Big Three: tính cách, tình cảm, công việc, giao tiếp, phát triển. Mỗi phần là danh sách đoạn văn. */
+  function luanGiaiBanDo(bd, v, cungMoc, tr, ntTroi, tcTroi, nt, tongNT) {
+    const C = ma => CUNG[v[ma].cung], nhaCua = ma => tr ? ` (nhà ${nha(v[ma].cung, cungMoc) + 1}: ${NHA[nha(v[ma].cung, cungMoc)].linhVuc})` : '';
+    const S = C('matTroi'), M = C('matTrang'), Me = C('thuy'), V = C('kim'), Ma = C('hoa'), J = C('moc'), Sa = C('tho');
+    const R = tr ? CUNG[cungMoc] : null, D = tr ? CUNG[(cungMoc + 6) % 12] : null, MC = tr ? CUNG[TV.cungCua(tr.mc)] : null;
+    const goc = (a, b) => bd.gocChieu.find(g => (g.a === a && g.b === b) || (g.a === b && g.b === a));
+    const coSao = ma => bd.gocChieu.filter(g => g.a === ma || g.b === ma);
+    const trongNha = n => bd.sao.filter(x => x.nha === n).map(x => x.ten);
+    const out = {};
+
+    out.tinhCach = [
+      `Cách bạn thể hiện ra ngoài: Mặt Trời ở ${S.ten}${nhaCua('matTroi')} cho thấy bạn ${S.phongCach}.${R ? ` Cung Mọc ${R.ten} khiến người khác thấy bạn ${R.phongCach} ngay từ lần gặp đầu.` : ''}`,
+      `Cách bạn phản ứng: Mặt Trăng ở ${M.ten}. ${M.camXuc}`,
+      `Khi hành động: Sao Hỏa ở ${Ma.ten}${nhaCua('hoa')}, bạn theo đuổi mục tiêu theo kiểu ${Ma.phongCach}.`,
+      `${NGUYEN_TO[ntTroi].troi} ${TINH_CHAT[tcTroi].troi}`,
+      `Điểm mạnh dễ thấy: ${thuong(S.diemManh[0])}; ${thuong(S.diemManh[1])}. Điểm cần để ý: ${thuong(S.diemYeu[0])}.`,
+    ];
+    const vm = goc('kim', 'hoa');
+    out.tinhCam = [
+      `Cách bạn yêu: Sao Kim ở ${V.ten}${nhaCua('kim')}. ${V.tinhYeu.phongCach}`,
+      `Nhu cầu cảm xúc: Mặt Trăng ở ${M.ten}, trong tình cảm bạn cần ${M.tinhYeu.canGi.replace(/^Họ cần /, '').replace(/ họ(?=[ ,.;])/g, ' bạn')}`,
+      D ? `Nhà 7 (quan hệ đôi lứa) ở ${D.ten}: bạn thường bị thu hút bởi người ${D.phongCach}, như một mảnh ghép bù cho cung Mọc ${R.ten} của bạn.` : null,
+      vm ? `Sao Kim ${GOC[vm.loai][0]} Sao Hỏa: ${/tamHop|lucHop|hop/.test(vm.loai) ? 'điều bạn muốn trong tình yêu và cách bạn theo đuổi đi cùng nhịp, nên bạn dễ bày tỏ và dễ thu hút' : 'mong muốn và cách theo đuổi trong tình yêu hay giằng co, nên bạn có sức hút mạnh nhưng dễ nóng lạnh thất thường'}.` : null,
+      `Điều nên lưu ý: ${thuong(V.tinhYeu.luuY)}`,
+    ].filter(Boolean);
+    const sao10 = tr ? trongNha(10) : [], sao6 = tr ? trongNha(6) : [];
+    const nghe = [...new Set([...(MC ? MC.suNghiep.nghe.slice(0, 3) : []), ...S.suNghiep.nghe.slice(0, 3)])];
+    out.congViec = [
+      MC ? `Thiên đỉnh (MC) ở ${MC.ten}, hướng sự nghiệp bạn muốn được biết tới: ${MC.suNghiep.dacDiem}` : `Mặt Trời ở ${S.ten}: ${S.suNghiep.dacDiem}`,
+      `Năng lực nổi bật: ${S.suNghiep.kyNang.slice(0, 3).map(thuong).join('; ')}.`,
+      `Động lực: Sao Hỏa ở ${Ma.ten} cho thấy bạn làm tốt nhất trong môi trường như sau: ${thuong(Ma.suNghiep.moiTruong)}`,
+      `Sao Thổ ở ${Sa.ten}${nhaCua('tho')}: bài học nghề nghiệp của bạn là kỷ luật và kiên nhẫn; thành quả đến chậm nhưng bền.`,
+      sao10.length ? `Nhà 10 (sự nghiệp) có ${sao10.join(', ')}: sự nghiệp là phần nổi bật trong đời bạn.` : null,
+      sao6.length ? `Nhà 6 (công việc hằng ngày) có ${sao6.join(', ')}: bạn đặt nhiều tâm sức vào cách làm việc mỗi ngày.` : null,
+      `Nghề gợi ý theo chiêm tinh truyền thống: ${nghe.join(', ')}.`,
+    ].filter(Boolean);
+    out.giaoTiep = [
+      `Sao Thủy ở ${Me.ten}${nhaCua('thuy')}. ${Me.giaoTiep}`,
+      `Sao Thủy thuộc nguyên tố ${NGUYEN_TO[Me.nguyenTo].ten}: bạn ${NT_NOI[Me.nguyenTo]}.`,
+      v.thuy.nghich ? 'Sao Thủy nghịch hành lúc bạn sinh ra: bạn hay nghĩ kỹ, nghĩ lại trước khi nói, đôi khi diễn đạt bằng chữ viết dễ hơn lời nói.' : null,
+      ...coSao('thuy').slice(0, 2).map(g => g.loi),
+    ].filter(Boolean);
+    const cang = bd.gocChieu.filter(g => /vuong|xung/.test(g.loai)).slice(0, 2);
+    out.phatTrien = [
+      `Sao Mộc ở ${J.ten}${nhaCua('moc')}: đây là nơi bạn dễ mở rộng và gặp may; hãy đầu tư vào ${tr ? NHA[nha(v.moc.cung, cungMoc)].linhVuc : `những điều mang màu sắc ${J.phongCach}`}.`,
+      `Sao Thổ ở ${Sa.ten}${nhaCua('tho')}: vùng cần rèn luyện lâu dài; càng kiên trì ở đây, bạn càng vững.`,
+      ...cang.map(g => `Góc căng ${g.loi} Đây là chỗ để luyện tập, không phải điểm yếu cố định.`),
+      ...Object.entries(nt).filter(([, x]) => x / tongNT < 0.1).map(([k]) => NGUYEN_TO[k].thieu),
+      `Hướng phát triển từ cung Mặt Trời: ${thuong(S.diemYeu[1] || S.diemYeu[0])} là điều bạn có thể dần cải thiện.`,
+    ];
+    return out;
+  }
+
+  // ---------- Synastry: đối chiếu hai bản đồ sao ----------
+  const SYN_GOC = { hop: ['hợp', 'hòa quyện mạnh, khó bỏ qua nhau', 2], tamHop: ['tam hợp', 'chảy trôi dễ chịu, tự nhiên hiểu nhau', 2],
+    lucHop: ['lục hợp', 'hỗ trợ nhẹ nhàng, cần chủ động vun đắp', 1], vuong: ['vuông', 'cọ xát, vừa hấp dẫn vừa dễ va chạm', -1.5], xung: ['xung đối', 'đối cực, hút nhau nhưng dễ giằng co', -1] };
+  const SYN_CAP = { 'matTroi-matTrang': 3, 'matTrang-matTroi': 3, 'matTrang-matTrang': 2.5, 'kim-hoa': 3, 'hoa-kim': 3, 'kim-kim': 2, 'matTroi-matTroi': 1.5,
+    'thuy-thuy': 2, 'cungMoc-matTroi': 2, 'matTroi-cungMoc': 2, 'cungMoc-matTrang': 2, 'matTrang-cungMoc': 2, 'kim-matTroi': 1.5, 'matTroi-kim': 1.5, 'kim-matTrang': 1.5, 'matTrang-kim': 1.5 };
+  const SYN_NGAN = { matTroi: 'bản ngã', matTrang: 'cảm xúc', thuy: 'cách nói chuyện', kim: 'cách yêu', hoa: 'đam mê và hành động', cungMoc: 'vẻ ngoài và cách tiếp cận' };
+  /** Đối chiếu hai bản đồ sao (kết quả của banDoSao): góc chiếu chéo giữa các điểm cá nhân, điểm tham khảo, nhận xét theo chủ đề */
+  function hopDoi(A, B) {
+    const diemCua = bd => { const o = {}; bd.sao.filter(x => SYN_NGAN[x.ma] && !(x.ma === 'matTrang' && !bd.coGio)).forEach(x => { o[x.ma] = { lon: x.lon, ten: x.ten, cung: x.tenCung }; });
+      if (bd.cungMoc) o.cungMoc = { lon: bd.cungMoc.lon, ten: 'Cung Mọc', cung: bd.cungMoc.tenCung }; return o; };
+    const a = diemCua(A), b = diemCua(B), goc = [];
+    let tong = 0, trongSo = 0;
+    for (const [ka, pa] of Object.entries(a)) for (const [kb, pb] of Object.entries(b)) {
+      const w = SYN_CAP[`${ka}-${kb}`] || 0.75, g = TV.gocChieu(pa.lon, pb.lon, /matTroi|matTrang/.test(ka + kb));
+      if (!g) continue;
+      tong += SYN_GOC[g.ma][2] * w; trongSo += w;
+      goc.push({ a: ka, b: kb, loai: g.ma, sai: Math.round(g.sai * 10) / 10, quanTrong: w >= 2,
+        loi: `${pa.ten} (${pa.cung}) của người A ${SYN_GOC[g.ma][0]} ${pb.ten} (${pb.cung}) của người B: ${SYN_NGAN[ka]} của A và ${SYN_NGAN[kb]} của B ${SYN_GOC[g.ma][1]}.` });
+    }
+    goc.sort((x, y) => (y.quanTrong - x.quanTrong) || x.sai - y.sai);
+    const ntOf = (bd, ma) => { const x = bd.sao.find(s => s.ma === ma); return CUNG.find(c => c.id === x.cung).nguyenTo; };
+    const capNT = (x, y) => x === y ? 'cùng nguyên tố' : hop(x, y) ? 'hai nguyên tố hỗ trợ nhau' : 'hai nguyên tố khác nhịp';
+    const nguyenTo = [['Mặt Trời', 'matTroi', 'matTroi'], ['Mặt Trăng', 'matTrang', 'matTrang'], ['Sao Kim của A với Sao Hỏa của B', 'kim', 'hoa'], ['Sao Hỏa của A với Sao Kim của B', 'hoa', 'kim']]
+      .map(([ten, x, y]) => { const p = ntOf(A, x), q = ntOf(B, y);
+        return { ten, a: NGUYEN_TO[p].ten, b: NGUYEN_TO[q].ten, loi: capNT(p, q), diem: p === q || hop(p, q) ? 1 : 0 }; });
+    const diem = Math.max(5, Math.min(95, Math.round(55 + (trongSo ? tong / trongSo : 0) * 12 + nguyenTo.reduce((s, x) => s + x.diem, 0) * 4)));
+    const co = (k1, k2, tot) => goc.some(g => ((g.a === k1 && g.b === k2) || (g.a === k2 && g.b === k1)) && (tot === undefined || /hop|tamHop|lucHop/.test(g.loai) === tot));
+    const nhanXet = [
+      co('matTroi', 'matTrang', true) ? 'Mặt Trời của người này hài hòa với Mặt Trăng của người kia: một dấu hiệu kinh điển của sự thấu hiểu và gắn bó.' : co('matTroi', 'matTrang', false) ? 'Mặt Trời và Mặt Trăng giữa hai người tạo góc căng: hiểu nhau cần thời gian, nhưng mối quan hệ có nhiều điều để học.' : null,
+      co('kim', 'hoa', true) ? 'Sao Kim và Sao Hỏa giữa hai người hài hòa: có sức hút tự nhiên và dễ cùng nhịp.' : co('kim', 'hoa', false) ? 'Sao Kim và Sao Hỏa giữa hai người tạo góc căng: sức hút mạnh nhưng dễ nóng lạnh.' : null,
+      co('matTrang', 'matTrang', true) ? 'Hai Mặt Trăng hòa hợp: nhu cầu cảm xúc giống nhau, dễ cảm thấy an toàn bên nhau.' : co('matTrang', 'matTrang', false) ? 'Hai Mặt Trăng khác nhịp: cách mỗi người cần được an ủi khác nhau, nên hỏi nhau thay vì đoán.' : null,
+      co('thuy', 'thuy', true) ? 'Hai Sao Thủy hài hòa: dễ nói chuyện, ít hiểu lầm.' : co('thuy', 'thuy', false) ? 'Hai Sao Thủy tạo góc căng: dễ hiểu lầm khi trao đổi, nên nói rõ ràng.' : null,
+    ].filter(Boolean);
+    if (!nhanXet.length) nhanXet.push('Giữa các điểm quan trọng nhất (Mặt Trời, Mặt Trăng, Sao Kim, Sao Hỏa) không có góc chiếu chặt; mối quan hệ phụ thuộc nhiều vào cách hai người vun đắp hơn là "duyên" sẵn có.');
+    return { diem, nhan: diem >= 75 ? 'Rất hòa hợp' : diem >= 60 ? 'Hòa hợp' : diem >= 45 ? 'Cần vun đắp' : 'Nhiều thử thách', gocChieu: goc, nguyenTo, nhanXet,
+      ghiChu: (A.coGio && B.coGio) ? null : 'Một trong hai người không rõ giờ sinh nên không tính Mặt Trăng và cung Mọc của người đó.' };
   }
 
   function bigThree(sS, sM, sR, moonChuaChac) {
@@ -379,6 +497,6 @@
     return out;
   }
 
-  const LuanGiai = { VN, THU, LINH_VUC, cungTheoBang, xacDinhCung, diemNgay, tuViNgay, tuViTuan, tuViThang, tuViNam, tuongHop, banDoSao, bigThree };
+  const LuanGiai = { VN, THU, LINH_VUC, cungTheoBang, xacDinhCung, diemNgay, tuViNgay, tuViTuan, tuViThang, tuViNam, tuongHop, banDoSao, bigThree, hopDoi };
   if (node) module.exports = LuanGiai; else root.ChiemTinh = LuanGiai; // tên ChiemTinh để không trùng LuanGiai của phần tử vi
 })(typeof window !== 'undefined' ? window : globalThis);

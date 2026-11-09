@@ -23,8 +23,9 @@
     if (st.ky === 'ngay') {
       const r = ChiemTinh.tuViNgay(s, y, m, d), dc = r.matTrang.doiCung;
       tieuDe = `${r.thu}, ${r.ngay}`;
-      than = `<p class="chu-de">${r.chuDe}${dc ? ` Mặt Trăng vào ${dc.cung} (nhà ${dc.nha} của bạn) lúc ${dc.luc}.` : ` Mặt Trăng ở ${r.matTrang.cung} cả ngày.`}</p>
+      than = `<h3 class="tv-muc">Tổng quan</h3><p class="chu-de">${r.chuDe}${dc ? ` Mặt Trăng vào ${dc.cung} (nhà ${dc.nha} của bạn) lúc ${dc.luc}.` : ` Mặt Trăng ở ${r.matTrang.cung} cả ngày.`}</p>
         ${r.luuY ? `<p class="canh-bao">${r.luuY}</p>` : ''}${lvGrid(r.linhVuc)}
+        <div class="o-nho loi-khuyen"><h3>Lời khuyên</h3><p>${r.loiKhuyen}</p></div>
         <div class="hai-cot"><div class="o-nho"><h3>Nên làm</h3><ul>${r.nenLam.map(x => `<li>${x}</li>`).join('')}</ul></div>
         <div class="o-nho"><h3>Màu hợp hôm nay</h3><p>${r.mau.charAt(0).toUpperCase() + r.mau.slice(1)}, theo nguyên tố của cung Mặt Trăng đang đi qua (${r.matTrang.cung}).</p></div></div>`;
       tieuDe += ` <span class="muted" style="font-family: var(--f-ui); font-size: 14px; font-weight: 500">Tổng quan</span> ${sao(Math.round(r.tong))}`;

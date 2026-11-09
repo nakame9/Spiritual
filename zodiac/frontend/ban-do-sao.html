@@ -15,10 +15,10 @@
     <a class="brand" href="../../tuvivietnam/frontend/index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi</a>
     <nav aria-label="Menu chính"><a href="../../tuvivietnam/frontend/index.html">Trang chủ</a><a href="../../tuvivietnam/frontend/la-so.html">Lập lá số</a><a href="../../tuvivietnam/frontend/con-giap.html">12 con giáp</a><a href="../../xemngay/frontend/index.html">Xem ngày</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="index.html" aria-current="page">Hoàng đạo</a><a href="../../numerology/frontend/index.html">Số chủ đạo</a><a href="../../tuvivietnam/frontend/bai-viet.html">Bài viết</a></nav>
   </header>
-  <nav class="subnav" aria-label="Cung hoàng đạo"><a href="index.html">Tổng quan 12 cung</a><a href="tu-vi.html">Tử vi</a><a href="tuong-hop.html">Độ tương hợp</a><a href="ban-do-sao.html" aria-current="page">Bản đồ sao & Big Three</a></nav>
+  <nav class="subnav" aria-label="Cung hoàng đạo"><a href="index.html">Tổng quan 12 cung</a><a href="tu-vi.html">Tử vi</a><a href="tuong-hop.html">Độ tương hợp</a><a href="ban-do-sao.html" aria-current="page">Bản đồ sao & Big Three</a><a href="hop-doi.html">Hợp đôi bản đồ sao</a></nav>
   <section>
     <h1>Bản đồ sao và Big Three</h1>
-    <p class="lede">Bản đồ sao (birth chart) là bức ảnh bầu trời đúng lúc bạn chào đời: Mặt Trời, Mặt Trăng và tám hành tinh nằm ở cung nào, cung nào đang mọc ở chân trời phía đông. Bộ ba Mặt Trời, Mặt Trăng và cung Mọc (Big Three) cho biết bản chất, cảm xúc và ấn tượng bạn tạo ra.</p>
+    <p class="lede">Bản đồ sao (birth chart) là bức ảnh bầu trời đúng lúc bạn chào đời: Mặt Trời, Mặt Trăng và tám hành tinh nằm ở cung nào, cung nào đang mọc ở chân trời phía đông. Nhập ngày sinh, giờ sinh chính xác và thành phố sinh để có vòng bản đồ, 12 nhà, góc chiếu, nguyên tố và tính chất trội, cùng luận giải theo Big Three, tính cách, tình cảm, công việc, giao tiếp và phát triển.</p>
   </section>
   <form class="panel" id="form" novalidate>
     <h2>Thông tin lúc sinh</h2>
@@ -39,6 +39,10 @@
   <div id="kq" hidden>
     <section class="panel" aria-labelledby="h-b3"><h2 id="h-b3">Big Three</h2><p class="muted" id="tom-tat"></p><div class="big3" id="big3"></div><div class="ket-hop" id="ket-hop"></div></section>
     <section class="panel" aria-labelledby="h-bd" style="margin-top: 20px"><h2 id="h-bd">Bản đồ sao</h2><div class="bd-luoi"><div id="vong"></div><div style="min-width: 0"><div style="overflow-x: auto"><table class="bang-sao" id="bang-sao"></table></div><p class="muted" id="ghi-chu-nha" style="margin-top: 10px"></p></div></div></section>
+    <section class="panel" aria-labelledby="h-lg" style="margin-top: 20px"><h2 id="h-lg">Luận giải bản đồ sao</h2>
+      <nav class="lg-tab" id="lg-tab" aria-label="Các phần luận giải"></nav><div id="lg-noi"></div>
+      <p class="muted">Luận giải ghép từ vị trí các hành tinh, nhà và góc chiếu của riêng bạn, theo chiêm tinh phương Tây truyền thống; chỉ để tham khảo. Muốn xem hai người tương tác ra sao? <a href="hop-doi.html" style="color: var(--tu)">Đối chiếu hai bản đồ sao</a>.</p></section>
+    <section class="panel" aria-labelledby="h-nha" style="margin-top: 20px" id="khu-nha"><h2 id="h-nha">12 nhà chiêm tinh</h2><div style="overflow-x: auto"><table class="bang-sao" id="bang-nha"></table></div></section>
     <section class="panel" aria-labelledby="h-hn" style="margin-top: 20px"><h2 id="h-hn">Các hành tinh trong bản đồ của bạn</h2><ul class="giai" id="giai-sao"></ul></section>
     <section class="panel" aria-labelledby="h-gc" style="margin-top: 20px"><h2 id="h-gc">Góc chiếu chính</h2><p class="muted">Góc giữa hai hành tinh cho biết hai mặt trong con người bạn phối hợp với nhau ra sao. Màu xanh là hài hòa, màu đỏ là căng thẳng thúc đẩy.</p><ul class="giai" id="giai-goc"></ul></section>
     <section class="panel" aria-labelledby="h-cb" style="margin-top: 20px"><h2 id="h-cb">Cân bằng nguyên tố và tính chất</h2><div class="can-bang" id="can-bang"></div><div class="ket-hop" id="cb-loi"></div></section>

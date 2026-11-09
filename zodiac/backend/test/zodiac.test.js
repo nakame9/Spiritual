@@ -124,5 +124,33 @@ test('API', async () => {
   assert.strictEqual(bd.cungMoc.cung, 'cu-giai');
   for (const body of [{ ngay: '1990-04-10', tz: 'Sao/Hoa' }, { ngay: '1990-04-10', gio: '25:00' }, { ngay: '1990-04-10', viDo: 95, kinhDo: 10 }]) assert.strictEqual((await post(body)).status, 400, JSON.stringify(body));
   assert.strictEqual((await get('/api/dia-diem'))[1].VIET_NAM.length > 60, true);
-  for (const p of ['/', '/cung.html', '/tu-vi.html', '/tuong-hop.html', '/ban-do-sao.html', '/js/vendor/astronomy.browser.min.js']) assert.strictEqual((await fetch(base + p)).status, 200, p);
+  for (const p of ['/', '/cung.html', '/tu-vi.html', '/tuong-hop.html', '/ban-do-sao.html', '/hop-doi.html', '/js/trang-hop-doi.js', '/js/vendor/astronomy.browser.min.js']) assert.strictEqual((await fetch(base + p)).status, 200, p);
+});
+
+test('bản đồ sao: 12 nhà, nguyên tố và tính chất trội, luận giải 5 phần', () => {
+  const b = LG.banDoSao({ y: 1990, m: 8, d: 15, h: 10, mi: 30, tz: 'Asia/Bangkok', viDo: 21.03, kinhDo: 105.85 });
+  assert.strictEqual(b.nha.length, 12);
+  assert.strictEqual(b.nha[0].tenCung, b.cungMoc.tenCung);
+  assert.strictEqual(b.nha.reduce((s, n) => s + n.sao.length, 0), 10); // mỗi thiên thể nằm đúng một nhà
+  assert.ok(b.canBang.nguyenToTroi && b.canBang.tinhChatTroi);
+  for (const k of ['tinhCach', 'tinhCam', 'congViec', 'giaoTiep', 'phatTrien']) assert.ok(b.luanGiai[k].length >= 3 && b.luanGiai[k].every(x => x.length > 30 && !/undefined|NaN/.test(x)), k);
+  assert.match(b.luanGiai.tinhCam.join(' '), /Nhà 7/);
+  const k = LG.banDoSao({ y: 1990, m: 8, d: 15, coGio: false });
+  assert.strictEqual(k.nha, null);
+  assert.ok(!/Nhà 7|undefined/.test(JSON.stringify(k.luanGiai)));
+});
+
+test('hợp đôi bản đồ sao và lời khuyên tử vi ngày', async () => {
+  const a = LG.banDoSao({ y: 1990, m: 8, d: 15, h: 10, mi: 30, tz: 'Asia/Bangkok', viDo: 21.03, kinhDo: 105.85 });
+  const r = LG.hopDoi(a, a); // cùng một bản đồ: mọi điểm đều trùng nhau
+  assert.ok(r.gocChieu.some(g => g.a === 'matTroi' && g.b === 'matTroi' && g.loai === 'hop'));
+  assert.ok(r.diem >= 5 && r.diem <= 95 && r.nhanXet.length);
+  const k = LG.hopDoi(a, LG.banDoSao({ y: 1992, m: 3, d: 2, coGio: false }));
+  assert.ok(!k.gocChieu.some(g => g.b === 'matTrang' || g.b === 'cungMoc') && k.ghiChu);
+  assert.ok(LG.tuViNgay(5, 2026, 11, 10).loiKhuyen.length > 40);
+  const post = body => fetch(base + '/api/hop-doi', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const x = { ngay: '1990-08-15', gio: '10:30', tz: 'Asia/Bangkok', viDo: 21.03, kinhDo: 105.85 };
+  assert.strictEqual((await (await post({ a: x, b: { ngay: '1992-03-02' } })).json()).nguyenTo.length, 4);
+  assert.strictEqual((await post({ a: x })).status, 400);
+  assert.strictEqual((await post({ a: x, b: { ngay: '1992-13-02' } })).status, 400);
 });

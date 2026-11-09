@@ -77,9 +77,22 @@
     $('giai-goc').innerHTML = bd.gocChieu.length ? bd.gocChieu.map(x => `<li class="${/tamHop|lucHop/.test(x.loai) ? 'hai-hoa' : /vuong|xung/.test(x.loai) ? 'cang' : ''}"><span class="ky" aria-hidden="true">${KY_GOC[x.loai]}&#xFE0E;</span>${x.loi} <span class="muted">(lệch ${x.sai}°)</span></li>`).join('')
       : '<li>Không có góc chiếu chính nào trong biên độ cho phép.</li>';
 
+    // Luận giải theo phần: Big Three ở trên; 5 phần còn lại theo tab
+    const PHAN = [['tinhCach', 'Tính cách', 'Cách thể hiện và phản ứng'], ['tinhCam', 'Tình cảm', 'Cách yêu, nhu cầu cảm xúc'], ['congViec', 'Công việc', 'Năng lực, động lực nghề nghiệp'],
+      ['giaoTiep', 'Giao tiếp', 'Cách tư duy và truyền đạt'], ['phatTrien', 'Phát triển', 'Những xu hướng cần khám phá']];
+    const moPhan = ma => { const [, ten, mo] = PHAN.find(p => p[0] === ma);
+      $('lg-tab').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.p === ma)));
+      $('lg-noi').innerHTML = `<h3>${ten}</h3><p class="muted">${mo}</p><ul class="giai">${bd.luanGiai[ma].map(x => `<li>${x}</li>`).join('')}</ul>`; };
+    $('lg-tab').innerHTML = `<a href="#h-b3">Big Three</a>` + PHAN.map(([ma, ten]) => `<button type="button" data-p="${ma}">${ten}</button>`).join('');
+    $('lg-tab').onclick = e => { const b = e.target.closest('button'); if (b) moPhan(b.dataset.p); };
+    moPhan('tinhCach');
+    $('khu-nha').hidden = !bd.nha;
+    if (bd.nha) $('bang-nha').innerHTML = `<thead><tr><th>Nhà</th><th>Cung</th><th>Lĩnh vực</th><th>Hành tinh trong nhà</th></tr></thead><tbody>${bd.nha.map(n =>
+      `<tr><td><b>${n.so}</b> ${n.ten}</td><td class="${nt(theoId[n.cung])}"><span class="ky" style="color: var(--nt)">${theoId[n.cung].kyHieu}</span> ${n.tenCung}</td><td>${n.linhVuc}</td><td>${n.sao.join(', ') || '–'}</td></tr>`).join('')}</tbody>`;
+
     const tong = o => Object.values(o).reduce((a, b) => a + b, 0), cot = (o, ten, lop) => `<div class="cot-nt">${Object.entries(o).map(([k, v]) =>
       `<div class="${lop ? lop + k : ''}"><span>${ten[k].ten}</span><div class="thanh"><i style="width:${Math.round(v / tong(o) * 100)}%"></i></div><b>${v}</b></div>`).join('')}</div>`;
     $('can-bang').innerHTML = cot(bd.canBang.nguyenTo, NGUYEN_TO, 'nt-') + cot(bd.canBang.tinhChat, TINH_CHAT, '');
-    $('cb-loi').innerHTML = bd.canBang.loi.map(x => `<span>${x}</span>`).join('') + '<span class="muted">Điểm tính từ Mặt Trời, Mặt Trăng (2 điểm mỗi thiên thể), Sao Thủy đến Sao Thổ (1 điểm), và cung Mọc (2 điểm) nếu có giờ sinh.</span>';
+    $('cb-loi').innerHTML = `<span><b>Nguyên tố trội:</b> ${bd.canBang.nguyenToTroi}. <b>Tính chất trội:</b> ${bd.canBang.tinhChatTroi}.</span>` + bd.canBang.loi.map(x => `<span>${x}</span>`).join('') + '<span class="muted">Điểm tính từ Mặt Trời, Mặt Trăng (2 điểm mỗi thiên thể), Sao Thủy đến Sao Thổ (1 điểm), và cung Mọc (2 điểm) nếu có giờ sinh.</span>';
   }
 })();
