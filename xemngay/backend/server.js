@@ -24,22 +24,30 @@ function docNam(q, ten) {
   if (typeof q !== 'string' || !/^\d{4}$/.test(q) || Number(q) < 1900 || Number(q) > 2100) throw new Loi(`${ten} là năm 1900–2100.`);
   return Number(q);
 }
+function docTz(q) {
+  if (q === undefined) return undefined;
+  const t = Number(q);
+  if (!/^-?\d{1,2}$/.test(String(q)) || !XemNgay.MUI_GIO.some(x => x[0] === t)) throw new Loi(`tz chỉ nhận: ${XemNgay.MUI_GIO.map(x => x[0]).join(', ')}.`);
+  return t;
+}
 const docViec = v => { if (v !== undefined && !Object.hasOwn(XemNgay.VIEC, v)) throw new Loi(`viec chỉ nhận: ${Object.keys(XemNgay.VIEC).join(', ')}.`); return v; };
 const boc = fn => (req, res) => { try { res.json(fn(req)); } catch (e) { if (e instanceof Loi) res.status(400).json({ error: e.message }); else throw e; } };
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
-// Một ngày: ?ngay=2026-10-24&namSinh=1990&viec=cuoiHoi (namSinh, viec không bắt buộc)
-app.get('/api/ngay', boc(req => { const n = docNgay(req.query.ngay, 'ngay'); return XemNgay.xemNgay(n.d, n.m, n.y, { namSinh: docNam(req.query.namSinh, 'namSinh'), viec: docViec(req.query.viec) }); }));
+// Một ngày: ?ngay=2026-10-24&namSinh=1990&viec=cuoiHoi&tz=7 (namSinh, viec, tz không bắt buộc)
+app.get('/api/ngay', boc(req => { const n = docNgay(req.query.ngay, 'ngay'); return XemNgay.xemNgay(n.d, n.m, n.y, { namSinh: docNam(req.query.namSinh, 'namSinh'), viec: docViec(req.query.viec), tz: docTz(req.query.tz) }); }));
+// Đánh giá 7 việc trong một ngày: ?ngay=2026-10-24&namSinh=1990&tz=7
+app.get('/api/viec-ngay', boc(req => { const n = docNgay(req.query.ngay, 'ngay'); return XemNgay.danhGiaViec(n.d, n.m, n.y, { namSinh: docNam(req.query.namSinh, 'namSinh'), tz: docTz(req.query.tz) }); }));
 // Lịch tháng: ?nam=2026&thang=10&namSinh=1990
 app.get('/api/thang', boc(req => {
   const y = docNam(req.query.nam, 'nam'), m = Number(req.query.thang);
   if (y === undefined || !/^\d{1,2}$/.test(String(req.query.thang)) || m < 1 || m > 12) throw new Loi('Cần nam (1900–2100) và thang (1–12).');
-  return XemNgay.lichThang(y, m, { namSinh: docNam(req.query.namSinh, 'namSinh') });
+  return XemNgay.lichThang(y, m, { namSinh: docNam(req.query.namSinh, 'namSinh'), tz: docTz(req.query.tz) });
 }));
 // Chọn ngày: ?viec=khaiTruong&tu=2026-11-01&den=2026-12-31&namSinh=1990
 app.get('/api/chon-ngay', boc(req => {
   if (req.query.viec === undefined) throw new Loi('Cần viec.');
-  try { return XemNgay.chonNgay(docViec(req.query.viec), docNgay(req.query.tu, 'tu'), docNgay(req.query.den, 'den'), docNam(req.query.namSinh, 'namSinh')); }
+  try { return XemNgay.chonNgay(docViec(req.query.viec), docNgay(req.query.tu, 'tu'), docNgay(req.query.den, 'den'), docNam(req.query.namSinh, 'namSinh'), docTz(req.query.tz)); }
   catch (e) { throw e instanceof Loi ? e : new Loi(e.message); }
 }));
 app.get('/api/viec', (req, res) => res.json(XemNgay.VIEC));

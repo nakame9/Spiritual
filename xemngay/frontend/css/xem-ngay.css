@@ -59,8 +59,61 @@ input[type="date"] { width: 100%; }
 .ds-dau b { font-size: 16px; }
 .ds-dau .pt { font: 500 24px var(--f-display); color: var(--mau); white-space: nowrap; }
 
+/* Thông tin và đánh giá ngày */
+.hai-cot { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-lg); }
+.bang-tt { margin: 0; display: flex; flex-direction: column; }
+.bang-tt > div { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: var(--space-sm); padding: var(--space-xs) 0; border-bottom: 1px solid var(--line); }
+.bang-tt dt { font-size: 13px; font-weight: 600; color: var(--soft); }
+.bang-tt dd { margin: 0; font-size: 14.5px; line-height: 1.55; }
+.gio.tranh span { background: var(--paper); border: 1px solid var(--line); }
+.gio.tranh b { color: var(--xau); }
+.gio small { color: var(--soft); font-size: 12px; }
+.viec-luoi { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--space-sm); }
+.viec { border: 1px solid var(--line); border-top: var(--rule-bar) solid var(--mau); padding: var(--space-sm) var(--space-md); background: var(--paper); display: flex; flex-direction: column; gap: var(--space-xs); }
+.viec-dau { display: flex; justify-content: space-between; gap: var(--space-xs); align-items: baseline; }
+.nhan-viec { font-weight: 600; font-size: 13.5px; color: var(--mau); white-space: nowrap; }
+.viec p { margin: 0; font-size: 13.5px; line-height: 1.55; }
+.pp summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 600; font-size: 14px; }
+.pp p { font-size: 14px; line-height: 1.6; }
+
+/* Ô lịch: thêm can chi, trực, tiết khí, hoàng đạo */
+.lich-giua { text-align: center; } .lich-giua p { margin: 0; }
+.lich-chon { display: flex; gap: var(--space-sm); justify-content: center; align-items: flex-end; }
+.lich-chon select, .lich-chon input { width: 130px; }
+.lich .ngay { min-height: 96px; }
+.lich .o-dau { display: flex; align-items: center; gap: var(--space-2xs); }
+.lich .hd, .hd-mau { font-size: 10px; font-weight: 700; padding: 0 4px; border: 1px solid var(--tot); color: var(--tot); line-height: 14px; }
+.lich .cc, .lich .tr { font-size: 11.5px; color: var(--ink); line-height: 1.25; }
+.lich .tr { color: var(--soft); }
+.lich .tk { font-size: 11px; color: var(--tu); font-weight: 600; line-height: 1.2; text-align: center; }
+
+/* Kết quả chọn ngày */
+.tong-loai { display: flex; flex-wrap: wrap; gap: var(--space-sm) var(--space-lg); }
+.tong-loai span { color: var(--mau); font-weight: 600; } .tong-loai b { font: 500 26px var(--f-display); margin-right: var(--space-2xs); }
+.seg-tab { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.seg-tab button { min-height: 40px; padding: 0 var(--space-md); border: 1px solid var(--line); background: var(--paper); color: var(--ink); font: 500 14px var(--f-ui); cursor: pointer; }
+.seg-tab button[aria-pressed="true"] { background: var(--tu); border-color: var(--tu); color: var(--cell); }
+.cuon-bang { overflow-x: auto; }
+.bang-ngay { width: 100%; border-collapse: collapse; font-size: 14px; }
+.bang-ngay th { text-align: left; color: var(--soft); font-weight: 600; padding: var(--space-xs) var(--space-sm); border-bottom: 2px solid var(--line); }
+.bang-ngay td { padding: var(--space-sm); border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.55; }
+.bang-ngay td:first-child { border-left: var(--rule-bar) solid var(--mau); min-width: 150px; }
+.bang-ngay td > span, .bang-ngay td > a { display: block; }
+.bang-ngay .danh-gia { font-weight: 600; color: var(--mau); white-space: nowrap; }
+
 @media (max-width: 860px) {
-  .hero, .luoi-o { grid-template-columns: minmax(0, 1fr); }
+  .hero, .luoi-o, .hai-cot { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .lich .cc, .lich .tr, .lich .tk { display: none; }
+  .lich .ngay { min-height: 58px; }
+  .lich .hd { font-size: 9px; padding: 0 2px; }
+  .bang-tt > div { grid-template-columns: 96px minmax(0, 1fr); }
+  .bang-ngay thead { display: none; }
+  .bang-ngay tr, .bang-ngay td { display: block; }
+  .bang-ngay td { border-bottom: 0; padding: var(--space-2xs) var(--space-sm); }
+  .bang-ngay td:first-child { border-left: 0; border-top: var(--rule-bar) solid var(--mau); padding-top: var(--space-sm); }
+  .bang-ngay tr { border-bottom: 1px solid var(--line); padding-bottom: var(--space-xs); }
 }
 @media (max-width: 520px) {
   .ngay-dau { grid-template-columns: minmax(0, 1fr); }

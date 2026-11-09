@@ -20,12 +20,13 @@
   <section class="hero">
     <div>
       <h1>Xem ngày tốt xấu</h1>
-      <p class="lede">Chọn một ngày để xem âm lịch, can chi, ngày hoàng đạo hay hắc đạo, trực, sao, tiết khí, các ngày kỵ, giờ hoàng đạo và hướng xuất hành. Nhập năm sinh để biết ngày đó hợp hay xung với tuổi của bạn.</p>
+      <p class="lede">Lịch vạn niên âm dương song song. Chọn một ngày để xem can chi, ngũ hành, tiết khí, trực, sao tốt sao xấu, giờ tốt giờ cần tránh, và đánh giá ngày đó cho khai trương, cưới hỏi, động thổ, nhập trạch, xuất hành, ký kết, khởi công. Nhập năm sinh để biết ngày hợp hay xung với tuổi của bạn.</p>
     </div>
     <form class="panel" id="form" novalidate>
       <h2>Chọn ngày</h2>
       <label class="f"><span>Ngày dương lịch</span><input type="date" id="ngay" min="1900-01-01" max="2100-12-31" required></label>
       <label class="f"><span>Năm sinh âm lịch (không bắt buộc)</span><input type="text" inputmode="numeric" id="nam" maxlength="4" placeholder="Ví dụ: 1990" autocomplete="off"></label>
+      <label class="f"><span>Múi giờ tính lịch âm</span><select id="tz"></select></label>
       <p class="err" id="loi" role="alert" hidden></p>
       <div class="row"><button class="go" type="submit">Xem ngày</button><button class="btn2" type="button" id="hom-nay">Hôm nay</button></div>
     </form>
@@ -35,13 +36,16 @@
   <section class="panel" id="chi-tiet" aria-live="polite" aria-labelledby="h-ngay"></section>
 
   <section class="panel" aria-labelledby="h-lich">
-    <div class="lich-dau"><button class="btn2" type="button" id="truoc" aria-label="Tháng trước"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg></button><h2 id="h-lich"></h2><button class="btn2" type="button" id="sau" aria-label="Tháng sau"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg></button></div>
+    <div class="lich-dau"><button class="btn2" type="button" id="truoc" aria-label="Tháng trước"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+      <div class="lich-giua"><h2 id="h-lich"></h2><p class="muted" id="lich-am"></p></div>
+      <button class="btn2" type="button" id="sau" aria-label="Tháng sau"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg></button></div>
+    <div class="lich-chon"><label class="f"><span>Tháng</span><select id="chon-thang"></select></label><label class="f"><span>Năm</span><input type="number" id="chon-nam" inputmode="numeric" min="1900" max="2100"></label></div>
     <div class="lich" id="lich" role="grid" aria-labelledby="h-lich"></div>
-    <p class="chu-giai"><span class="cham Tot"></span>Tốt <span class="cham Kha"></span>Khá <span class="cham Binh"></span>Bình thường <span class="cham Xau"></span>Xấu</p>
-    <p class="muted">Số nhỏ là ngày âm lịch. Bấm vào một ngày để xem chi tiết.</p>
+    <p class="chu-giai"><span class="cham Tot"></span>Tốt <span class="cham Kha"></span>Khá <span class="cham Binh"></span>Bình thường <span class="cham Xau"></span>Xấu <span class="hd-mau">HĐ</span> ngày hoàng đạo</p>
+    <p class="muted">Mỗi ô: ngày dương, ngày âm, can chi ngày, trực và tiết khí (khi bắt đầu tiết). Rê chuột hoặc bấm vào một ngày để xem sao tốt xấu và giờ hoàng đạo.</p>
   </section>
 
-  <p class="note">Nội dung xem ngày do Lá Số Tử Vi biên soạn theo lịch vạn niên dân gian Việt Nam: ngày hoàng đạo theo tháng âm lịch, thập nhị trực theo tiết khí, nhị thập bát tú, các ngày kỵ phổ biến. Các sách lịch có thể khác nhau ở một vài chi tiết; nội dung chỉ để tham khảo.</p>
+  <p class="note">Nội dung xem ngày do Lá Số Tử Vi biên soạn theo lịch vạn niên dân gian Việt Nam: ngày hoàng đạo theo tháng âm lịch, thập nhị trực theo tiết khí, nhị thập bát tú, thần sát theo Ngọc Hạp Thông Thư, các ngày kỵ phổ biến. Xem mục "Phương pháp tính" trong chi tiết ngày. Các sách lịch có thể khác nhau ở một vài chi tiết; nội dung chỉ để tham khảo.</p>
   <footer class="foot">
     <p class="foot-loi">Lá Số Tử Vi: tử vi phái Việt, chiêm tinh phương Tây, thần số học, Tarot và lịch vạn niên.</p>
     <nav aria-label="Chân trang"><a href="../../tuvivietnam/frontend/index.html">Trang chủ</a><a href="../../tuvivietnam/frontend/la-so.html">Lập lá số</a><a href="../../tuvivietnam/frontend/con-giap.html">12 con giáp</a><a href="index.html">Xem ngày</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="../../numerology/frontend/index.html">Số chủ đạo</a><a href="../../tuvivietnam/frontend/bai-viet.html">Bài viết</a></nav>

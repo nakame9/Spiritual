@@ -20,15 +20,16 @@
   <section class="hero">
     <div>
       <h1>Chọn ngày tốt theo việc</h1>
-      <p class="lede">Chọn việc định làm và khoảng thời gian, trang sẽ lọc ra những ngày hoàng đạo, không phạm ngày kỵ, có trực và sao không kỵ việc đó, rồi xếp từ tốt nhất. Nhập năm sinh để tránh những ngày xung với tuổi.</p>
+      <p class="lede">Chọn việc định làm và khoảng thời gian. Trang đánh giá từng ngày theo tiêu chí của việc đó: tốt theo tiêu chí, trung bình hay cần lưu ý, kèm lý do. Nhập ngày sinh hoặc năm sinh để xét thêm tuổi người thực hiện.</p>
     </div>
     <form class="panel" id="form" novalidate>
       <h2>Bạn định làm gì?</h2>
-      <label class="f"><span>Việc</span><select id="viec"></select></label>
+      <label class="f"><span>Việc cần làm</span><select id="viec" required></select></label>
       <div class="hai"><label class="f"><span>Từ ngày</span><input type="date" id="tu" min="1900-01-01" max="2100-12-31"></label><label class="f"><span>Đến ngày</span><input type="date" id="den" min="1900-01-01" max="2100-12-31"></label></div>
-      <label class="f"><span>Năm sinh âm lịch (không bắt buộc)</span><input type="text" inputmode="numeric" id="nam" maxlength="4" placeholder="Ví dụ: 1990" autocomplete="off"></label>
+      <label class="f"><span>Ngày sinh hoặc năm sinh âm lịch của người thực hiện (không bắt buộc)</span><input type="text" id="nam" maxlength="10" placeholder="15/8/1990 hoặc 1990" autocomplete="off"></label>
+      <label class="f"><span>Khu vực, múi giờ</span><select id="tz"></select></label>
       <p class="err" id="loi" role="alert" hidden></p>
-      <div class="row"><button class="go" type="submit">Tìm ngày tốt</button><span class="muted">Tối đa 190 ngày.</span></div>
+      <div class="row"><button class="go" type="submit">Đánh giá các ngày</button><span class="muted">Tối đa 190 ngày.</span></div>
     </form>
   </section>
 
