@@ -55,7 +55,8 @@ test('so sánh hai số chủ đạo: đối xứng, theo lưới 3 × 3', () =>
   assert.deepStrictEqual(muc(22, 7), ['Hợp tự nhiên', 85]);
   const cac = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 22];
   for (const a of cac) for (const b of cac) { const r = S.tuongHop(a, b); assert.strictEqual(r.phanTram, S.tuongHop(b, a).phanTram); assert.ok(r.moTa.length > 60 && r.loiKhuyen, `${a}-${b}`); }
-  assert.strictEqual(S.tuongHop(1, 5), null);
+  assert.strictEqual(S.tuongHop(12, 5), null);
+  assert.strictEqual(S.tuongHop(33, 6).muc, 'Đồng điệu'); // 33/6 xét theo gốc 6
 });
 
 test('chỉ số ngày sinh, thái độ, năm/tháng/ngày cá nhân', () => {
@@ -90,13 +91,43 @@ test('API', async () => {
   assert.strictEqual((await get('/api/so-chu-dao?ngaySinh=1990-02-30'))[0], 400);
   assert.strictEqual((await get('/api/so-chu-dao'))[0], 400);
   assert.strictEqual((await get('/api/y-nghia/22'))[1].hien, '22/4');
-  assert.strictEqual((await get('/api/y-nghia/1'))[0], 404);
+  assert.strictEqual((await get('/api/y-nghia/12'))[0], 404);
+  assert.strictEqual((await get('/api/y-nghia/33'))[1].ten, 'Người thầy chữa lành');
+  assert.strictEqual((await get('/api/so-chu-dao?ngaySinh=1995-07-14&phai=quocTe'))[1].soChuDao.so, 9);
+  assert.strictEqual((await get('/api/so-chu-dao?ngaySinh=1995-07-14&phai=abc'))[0], 400);
   assert.strictEqual(Object.keys((await get('/api/chu-ky'))[1]).length, 9);
   assert.strictEqual((await get('/api/so-chu-dao?ngaySinh=1990-12-15&homNay=2026-10-24&truongPhai=sinhNhat'))[1].namCaNhan.nam, 2025);
   assert.strictEqual((await get('/api/so-chu-dao?ngaySinh=1990-12-15&truongPhai=abc'))[0], 400);
   assert.strictEqual((await get('/api/so-chu-dao?ngaySinh=1990-12-15&truongPhai=toString'))[0], 400);
   const [s2, th] = await get('/api/tuong-hop?a=6&b=9');
   assert.strictEqual(s2, 200); assert.strictEqual(th.phanTram, 85);
-  for (const q of ['a=1&b=9', 'a=6', 'a=6&b=x', 'a=06&b=9']) assert.strictEqual((await get('/api/tuong-hop?' + q))[0], 400, q);
+  for (const q of ['a=12&b=9', 'a=6', 'a=6&b=x', 'a=06&b=9']) assert.strictEqual((await get('/api/tuong-hop?' + q))[0], 400, q);
   for (const p of ['/', '/tuong-hop.html', '/js/so-hoc.js', '/js/trang-so-hoc.js', '/js/trang-tuong-hop.js']) assert.strictEqual((await fetch(base + p)).status, 200, p);
+});
+
+test('hai trường phái: ví dụ 14/07/1995 ra 9; số 10 chỉ có ở cách Việt Nam; 33 chỉ có ở cách quốc tế', () => {
+  for (const p of ['vn', 'quocTe']) assert.strictEqual(S.soChuDao(14, 7, 1995, p).so, 9);
+  assert.match(S.buocSoChuDao(14, 7, 1995, 'quocTe').join(' '), /1 \+ 4 \+ 7 \+ 1 \+ 9 \+ 9 \+ 5 = 36.*3 \+ 6 = 9/);
+  assert.strictEqual(S.soChuDao(1, 1, 2006).so, 10);              // 1+1+2+0+0+6 = 10
+  assert.strictEqual(S.soChuDao(1, 1, 2006, 'quocTe').so, 1);
+  assert.strictEqual(S.soChuDao(19, 8, 1950, 'quocTe').so, 33);   // 1+9+8+1+9+5+0 = 33
+  assert.strictEqual(S.soChuDao(19, 8, 1950).so, 6);              // cách Việt Nam rút gọn 33 thành 6
+});
+
+test('nội dung đủ cho mọi số; số trưởng thành; chu kỳ năm sau, 12 tháng, 3 giai đoạn', () => {
+  for (const n of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 22, 33]) {
+    const c = S.SO_CHU_DAO[n];
+    for (const k of ['tongQuan', 'tinhYeu', 'suNghiep', 'giaoTiep', 'camXuc', 'lamViec', 'baiHoc', 'loiKhuyen', 'suMenh', 'khaNang']) assert.ok(c[k] && c[k].length > 20, `${n} ${k}`);
+    assert.ok(c.diemManh.length >= 3 && c.diemYeu.length >= 3 && c.nghe.length >= 3 && c.cauHoi.length === 3, n);
+  }
+  const r = S.tinh({ d: 14, m: 7, y: 1995 }, { y: 2026, m: 11, d: 10 }, 'Nguyễn Thị Lan');
+  assert.strictEqual(r.truongThanh.so, S.rutGon(9 + r.ten.suMenh.so, [11, 22]));
+  assert.strictEqual(S.tinh({ d: 14, m: 7, y: 1995 }, { y: 2026, m: 11, d: 10 }).truongThanh, null); // cần họ tên
+  assert.strictEqual(r.namSau.nam, r.namCaNhan.nam + 1);
+  assert.strictEqual(r.namSau.so, r.namCaNhan.so % 9 + 1);
+  assert.strictEqual(r.thangTrongNam.length, 12);
+  assert.strictEqual(r.thangTrongNam[10].so, r.thangCaNhan.so);   // tháng 11
+  assert.ok(r.thangTrongNam[10].hienTai);
+  assert.strictEqual(r.namCaNhan.giaiDoan.length, 3);
+  assert.strictEqual(r.quyTacTen.length, 4);
 });

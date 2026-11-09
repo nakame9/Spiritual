@@ -1,4 +1,5 @@
-/* Thần số học Pythagoras theo cách phổ biến ở Việt Nam: số chủ đạo (2–11, 22/4), các chỉ số ngày sinh, thái độ, tên,
+/* Thần số học Pythagoras, hai trường phái: phổ biến ở Việt Nam (số chủ đạo 2–11, 22/4) và quốc tế (1–9, giữ 11, 22, 33).
+ * Các chỉ số ngày sinh, thái độ, tên, trưởng thành,
  * biểu đồ ngày sinh với 8 mũi tên, năm/tháng/ngày cá nhân. Nội dung tự biên soạn, chỉ để tham khảo.
  * Dùng chung cho trình duyệt (global SoHoc) và backend (require). */
 (function (root) {
@@ -6,10 +7,24 @@
   const tongChuSo = n => String(n).split('').reduce((s, c) => s + Number(c), 0);
   /** Rút gọn tới 1–9, giữ lại các số trong `giu` (ví dụ 11, 22) */
   function rutGon(n, giu = []) { while (n > 9 && !giu.includes(n)) n = tongChuSo(n); return n; }
-  const hienSo = n => n === 22 ? '22/4' : String(n);
+  const hienSo = n => n === 22 ? '22/4' : n === 33 ? '33/6' : String(n);
 
   // ---------- Số chủ đạo ----------
   const SO_CHU_DAO = {
+    1: { ten: 'Người tiên phong', tuKhoa: 'độc lập, tiên phong, ý chí, tự tin',
+      tongQuan: 'Số 1 là con số của sự khởi đầu và ý chí cá nhân. Bạn thích tự quyết, dám đi đầu và có nhu cầu tự khẳng định mình. Bạn làm tốt nhất khi được tự chủ và có mục tiêu rõ ràng để theo đuổi.',
+      diemManh: ['Độc lập, tự quyết', 'Dám đi đầu, dám chịu trách nhiệm', 'Ý chí mạnh, bền bỉ với mục tiêu', 'Nhiều sáng kiến'],
+      diemYeu: ['Dễ cứng đầu, khó nghe góp ý', 'Thiếu kiên nhẫn với người chậm hơn', 'Ngại nhờ giúp đỡ', 'Có lúc cô độc vì muốn tự làm hết'],
+      tinhYeu: 'Số 1 yêu thẳng thắn và chủ động. Bạn cần một người tôn trọng sự độc lập của mình, đồng thời đủ vững để không bị bạn lấn át.',
+      suNghiep: 'Bạn hợp với vai trò tự chủ: khởi nghiệp, lãnh đạo nhóm, phụ trách mảng riêng. Môi trường quá nhiều thứ bậc và quy trình dễ làm bạn ngột ngạt.',
+      nghe: ['Khởi nghiệp, kinh doanh', 'Quản lý, lãnh đạo nhóm', 'Thiết kế, sáng tạo độc lập', 'Bán hàng, phát triển thị trường', 'Thể thao'],
+      loiKhuyen: 'Đi đầu không có nghĩa là đi một mình; nhờ giúp đỡ đúng lúc sẽ giúp bạn đi xa hơn.',
+      giaoTiep: 'Bạn nói ngắn gọn, thẳng vào việc và có sức thuyết phục. Đôi khi bạn ra quyết định trước khi người khác kịp nói xong.',
+      camXuc: 'Bạn ít để lộ cảm xúc yếu đuối và thích tự xử lý mọi chuyện. Khi bị cản trở, bạn dễ bực bội nhưng cũng nhanh lấy lại tinh thần.',
+      lamViec: 'Bạn làm việc nhanh, quyết đoán, thích khởi động và dẫn dắt. Bạn cần quyền tự quyết và một mục tiêu đủ thách thức.',
+      baiHoc: 'Bài học của số 1 là hợp tác: tự tin vào mình nhưng vẫn biết lắng nghe và cùng người khác làm việc.',
+      cauHoi: ['Gần đây mình có bỏ qua góp ý nào chỉ vì không muốn thấy mình sai?', 'Việc nào mình đang ôm một mình mà có thể nhờ người khác?', 'Mục tiêu nào thật sự là của mình, không phải để chứng tỏ?'],
+      thienHuong: { tinhCam: 0, suNghiep: 1, mayMan: 0 } },
     2: { ten: 'Người kết nối', tuKhoa: 'trực giác, nhạy cảm, hợp tác, hòa giải',
       tongQuan: 'Số 2 mang năng lượng của sự kết nối và cảm nhận. Bạn có trực giác tốt, đọc được cảm xúc của người khác và thường là người giữ hòa khí trong tập thể. Bạn làm việc tốt nhất khi có người đồng hành, và thành công đến từ sự kiên nhẫn hơn là sự vội vàng.',
       diemManh: ['Trực giác nhạy bén, hiểu người khác nhanh', 'Hòa nhã, giỏi hợp tác và hòa giải', 'Chu đáo, để ý chi tiết', 'Kiên nhẫn, biết lắng nghe'],
@@ -167,6 +182,62 @@
   };
 
   // Tính chất chung của các con số, dùng cho chỉ số ngày sinh, thái độ và các chỉ số theo tên
+  // Số bậc thầy 33/6 (chỉ có trong trường phái quốc tế)
+  SO_CHU_DAO[33] = { ten: 'Người thầy chữa lành', tuKhoa: 'yêu thương, phụng sự, chữa lành, trách nhiệm',
+    tongQuan: 'Số 33/6 là con số bậc thầy hiếm gặp, nhân đôi năng lượng yêu thương và trách nhiệm của số 6. Bạn có khả năng nâng đỡ, chữa lành và truyền cảm hứng cho người khác bằng lòng tốt. Đi kèm là áp lực lớn: bạn dễ gánh vác quá sức.',
+    diemManh: ['Giàu lòng trắc ẩn, biết nâng đỡ người khác', 'Có trách nhiệm, tận tụy', 'Truyền cảm hứng bằng việc làm', 'Nhạy cảm với cái đẹp và sự hài hòa'],
+    diemYeu: ['Hy sinh quá mức, quên bản thân', 'Cầu toàn, tự trách khi không giúp được ai', 'Dễ ôm việc của người khác', 'Khó từ chối'],
+    tinhYeu: 'Số 33/6 yêu bằng cả trái tim và sự chăm sóc. Bạn cần một người biết đáp lại, chăm lo cho bạn như bạn chăm lo cho họ.',
+    suNghiep: 'Bạn hợp với công việc chăm sóc, giáo dục, chữa lành và phục vụ cộng đồng, nơi lòng tốt của bạn tạo ra thay đổi thật.',
+    nghe: ['Giáo dục, đào tạo', 'Y tế, chăm sóc sức khỏe', 'Tư vấn, trị liệu tâm lý', 'Công tác xã hội', 'Nghệ thuật chữa lành'],
+    loiKhuyen: 'Chăm sóc bản thân trước rồi mới chăm sóc người khác; một chiếc bình cạn không rót được cho ai.',
+    giaoTiep: 'Bạn nói ấm áp, kiên nhẫn và biết động viên. Người khác dễ tìm đến bạn để tâm sự, nhưng bạn ít khi nói về khó khăn của chính mình.',
+    camXuc: 'Cảm xúc của bạn sâu và dễ cảm nhận nỗi đau của người khác như của mình. Bạn cần khoảng lặng để không kiệt sức.',
+    lamViec: 'Bạn làm việc tận tâm, chu đáo, đặt con người lên trước. Bạn hợp với vai trò hướng dẫn, chăm sóc và gắn kết tập thể.',
+    baiHoc: 'Bài học của số 33/6 là yêu thương có ranh giới: giúp người khác mà không đánh mất bản thân.',
+    cauHoi: ['Gần đây ai đã chăm sóc mình, và mình có cho phép họ làm vậy không?', 'Việc nào mình đang làm thay người khác mà họ có thể tự làm?', 'Mình cần ranh giới nào để không kiệt sức?'],
+    thienHuong: { tinhCam: 1, suNghiep: 0, mayMan: 0 } };
+  // Sứ mệnh và khả năng nổi bật của từng số chủ đạo
+  const SU_MENH = {
+    1: ['Mở đường: dám bắt đầu điều mới và cho người khác thấy có thể làm khác đi.', 'Khởi xướng, ra quyết định nhanh, tự đứng vững một mình.'],
+    2: ['Kết nối: làm cầu nối giữa người với người, mang lại sự hòa hợp.', 'Đọc cảm xúc, hòa giải, phối hợp và hỗ trợ tập thể.'],
+    3: ['Biểu đạt: dùng lời nói, ý tưởng và sự sáng tạo để mang niềm vui và cảm hứng.', 'Giao tiếp, sáng tạo nội dung, ngôn ngữ, khơi dậy tinh thần.'],
+    4: ['Xây nền: tạo ra những điều vững chắc, có trật tự, dùng được lâu dài.', 'Tổ chức, lập kế hoạch, làm việc tỉ mỉ và bền bỉ.'],
+    5: ['Trải nghiệm: khám phá, thay đổi và cho thấy tự do mang lại gì.', 'Thích nghi, học nhanh, xoay xở trong hoàn cảnh mới, thuyết phục.'],
+    6: ['Yêu thương: chăm sóc gia đình, cộng đồng và tạo ra sự hài hòa.', 'Chăm sóc, dạy dỗ, giữ trách nhiệm, cảm nhận cái đẹp.'],
+    7: ['Tìm kiếm sự thật: đi sâu vào bản chất và chia sẻ hiểu biết.', 'Phân tích, nghiên cứu, trực giác, suy nghĩ độc lập.'],
+    8: ['Làm chủ vật chất: tạo ra thành tựu, của cải và dùng nó một cách công bằng.', 'Quản lý, tài chính, ra quyết định lớn, điều hành tổ chức.'],
+    9: ['Phụng sự: sống vì lý tưởng, đóng góp cho cộng đồng bằng lòng nhân ái và cái nhìn rộng.', 'Nhìn vấn đề ở tầm rộng, bao dung, truyền cảm hứng, dẫn dắt vì mục tiêu chung.'],
+    10: ['Thích nghi và làm lại: cho thấy mỗi lần vấp ngã là một khởi đầu mới.', 'Xoay xở, học nhanh, làm được nhiều việc, lạc quan.'],
+    11: ['Soi đường: dùng trực giác và cảm hứng để giúp người khác thấy hướng đi.', 'Trực giác, truyền cảm hứng, thấu hiểu tinh thần người khác.'],
+    22: ['Kiến tạo: biến tầm nhìn lớn thành công trình bền vững cho nhiều người.', 'Tầm nhìn chiến lược, xây dựng hệ thống, thực hiện dự án lớn.'],
+    33: ['Chữa lành: nâng đỡ và dạy dỗ người khác bằng tình yêu thương vô điều kiện.', 'Chăm sóc, dạy dỗ, động viên, tạo sự hài hòa.'],
+  };
+  Object.entries(SU_MENH).forEach(([n, [a, b]]) => { SO_CHU_DAO[n].suMenh = a; SO_CHU_DAO[n].khaNang = b; });
+  const PHAI = {
+    vn: { ten: 'Pythagoras, cách phổ biến ở Việt Nam', moTa: 'Cộng tất cả chữ số của ngày sinh, rút gọn cho tới khi còn từ 2 đến 11; giữ 22 (viết 22/4). Kết quả: 2–11 hoặc 22/4.' },
+    quocTe: { ten: 'Pythagoras quốc tế', moTa: 'Cộng tất cả chữ số của ngày sinh, rút gọn về 1–9; giữ nguyên các số bậc thầy 11, 22, 33 (viết 22/4, 33/6). Kết quả: 1–9, 11, 22/4 hoặc 33/6.' },
+  };
+  const GIU = { vn: [10, 11, 22], quocTe: [11, 22, 33] };
+  // Gợi ý theo ba giai đoạn trong năm cá nhân: [tháng 1–4, tháng 5–8, tháng 9–12]
+  const GIAI_DOAN = {
+    1: ['Đặt mục tiêu rõ cho cả năm và bắt tay ngay vào việc quan trọng nhất.', 'Giữ đà, chấp nhận vấp váp nhỏ; đây là lúc học bằng cách làm.', 'Nhìn lại những gì đã gieo, chọn giữ lại hạt giống tốt nhất cho năm sau.'],
+    2: ['Đi chậm, quan sát và lắng nghe; đừng ép mọi việc nhanh hơn.', 'Vun đắp quan hệ, tìm người cùng làm; hợp tác cho kết quả tốt hơn tự làm.', 'Kiên nhẫn chờ thành quả; chăm sóc sức khỏe tinh thần và các mối quan hệ thân.'],
+    3: ['Mở rộng giao lưu, thử những ý tưởng mới, thể hiện bản thân.', 'Chọn vài dự án sáng tạo đáng theo đuổi, tránh tản mát.', 'Chia sẻ thành quả, ăn mừng và ghi lại những ý tưởng cho năm làm việc sắp tới.'],
+    4: ['Lập kế hoạch chi tiết, sắp xếp lại tài chính và nếp sinh hoạt.', 'Làm việc đều đặn, chú ý sức khỏe; đừng bỏ cuộc giữa chừng.', 'Hoàn thiện những việc dang dở, củng cố nền móng trước một năm nhiều thay đổi.'],
+    5: ['Mở lòng với thay đổi: đi lại, học điều mới, gặp người mới.', 'Cân nhắc kỹ trước quyết định lớn; tự do cần đi kèm trách nhiệm.', 'Chọn lọc những thay đổi đáng giữ, ổn định lại nhịp sống.'],
+    6: ['Dành thời gian cho gia đình và những người cần bạn.', 'Giải quyết các trách nhiệm trong nhà, trong quan hệ; làm đẹp không gian sống.', 'Cân bằng giữa chăm sóc người khác và chăm sóc bản thân.'],
+    7: ['Lùi lại để suy ngẫm, học sâu một lĩnh vực.', 'Dành thời gian một mình, đọc, nghiên cứu; tránh quyết định vội.', 'Đúc kết bài học của năm, chuẩn bị tinh thần cho một năm hành động mạnh.'],
+    8: ['Đặt mục tiêu tài chính và sự nghiệp cụ thể, chủ động nắm cơ hội.', 'Làm việc hết sức, quản lý tiền chặt chẽ; thành quả đến từ nỗ lực.', 'Đánh giá thành quả, chia sẻ lại cho người đã giúp mình.'],
+    9: ['Dọn dẹp: buông những gì không còn phù hợp, trả nợ cũ, khép việc dang dở.', 'Giúp đỡ người khác, làm việc thiện; tránh khởi đầu việc quá lớn.', 'Nghỉ ngơi, chuẩn bị cho chu kỳ 9 năm mới bắt đầu từ năm sau.'],
+  };
+  const QUY_TAC_TEN = [
+    'Dùng họ tên đầy đủ trên giấy khai sinh, không dùng tên thường gọi hay biệt danh. Người đã đổi tên vẫn dùng tên khai sinh cho chỉ số sứ mệnh; tên mới chỉ cho biết năng lượng bạn đang thể hiện.',
+    'Bỏ dấu tiếng Việt: Ă, Â về A; Ê về E; Ô, Ơ về O; Ư về U; Đ đổi thành D. Bỏ khoảng trắng và ký tự không phải chữ.',
+    'Quy đổi chữ cái theo bảng Pythagoras: A J S = 1, B K T = 2, C L U = 3, D M V = 4, E N W = 5, F O X = 6, G P Y = 7, H Q Z = 8, I R = 9.',
+    'Nguyên âm là A, E, I, O, U và Y (tên tiếng Việt luôn coi Y là nguyên âm); còn lại là phụ âm. Chỉ số theo tên rút gọn về 1–9, giữ 11 và 22.',
+  ];
+
   const SO = {
     1: ['độc lập, tiên phong, tự tin', 'Bạn thích tự quyết, dám đi đầu và có ý chí mạnh mẽ.'],
     2: ['hợp tác, nhạy cảm, hòa giải', 'Bạn tinh tế, giỏi lắng nghe và thường là người giữ hòa khí.'],
@@ -267,12 +338,14 @@
   /** Chuỗi rút gọn để hiển thị, ví dụ 24 → ", rút gọn 2 + 4 = 6" */
   function chuoiRutGon(n, giu = []) { let s = ''; while (n > 9 && !giu.includes(n)) { s += `, rút gọn ${cong(n)}`; n = tongChuSo(n); } return s; }
   /** Từng bước cộng và rút gọn số chủ đạo */
-  function buocSoChuDao(d, m, y) {
-    const cs = chuSoNgay(d, m, y);
+  function buocSoChuDao(d, m, y, phai = 'vn') {
+    const cs = chuSoNgay(d, m, y), giu = GIU[phai] || GIU.vn;
     let n = cs.reduce((a, b) => a + b, 0);
     const buoc = [`Viết ngày sinh ${d}/${m}/${y} thành dãy chữ số: ${cs.join(' ')}.`, `Cộng tất cả các chữ số: ${cs.join(' + ')} = ${n}.`];
-    while (n > 11 && n !== 22) { buoc.push(`${n} lớn hơn 11 nên cộng tiếp các chữ số: ${cong(n)}.`); n = tongChuSo(n); }
-    buoc.push(n === 22 ? 'Dừng ở 22 vì đây là số bậc thầy, viết là 22/4.' : n === 11 ? 'Dừng ở 11 vì đây là số bậc thầy.' : `Dừng ở ${n} vì kết quả đã nằm trong khoảng 2 đến 11.`);
+    while (n > 9 && !giu.includes(n)) { buoc.push(`${n} ${phai === 'quocTe' ? 'lớn hơn 9 và không phải số bậc thầy' : 'lớn hơn 11'} nên cộng tiếp các chữ số: ${cong(n)}.`); n = tongChuSo(n); }
+    buoc.push([11, 22, 33].includes(n) ? `Dừng ở ${n} vì đây là số bậc thầy${n > 11 ? `, viết là ${hienSo(n)}` : ''}.`
+      : n === 10 ? 'Dừng ở 10 vì theo cách phổ biến ở Việt Nam, kết quả nằm trong khoảng 2 đến 11.'
+      : `Dừng ở ${n} vì kết quả đã ${phai === 'quocTe' ? 'còn một chữ số' : 'nằm trong khoảng 2 đến 11'}.`);
     return buoc;
   }
   /** Năm đang xét: theo sinh nhật thì trước sinh nhật năm nay vẫn tính là năm trước */
@@ -308,11 +381,10 @@
     const nguoi = (n, c) => ({ so: n, hien: hienSo(n), ten: c.ten, tinhYeu: c.tinhYeu, giaoTiep: c.giaoTiep, matPhang: mp(rutGon(n))[1] });
     return { a: nguoi(a, A), b: nguoi(b, B), muc, phanTram, moTa, ghiChu, loiKhuyen: MUC_HOP[muc] };
   }
-  function soChuDao(d, m, y) {
+  /** phai: 'vn' (mặc định, 2–11 và 22/4) hoặc 'quocTe' (1–9, giữ 11, 22, 33) */
+  function soChuDao(d, m, y, phai = 'vn') {
     const tong = chuSoNgay(d, m, y).reduce((a, b) => a + b, 0);
-    let n = tong;
-    while (n > 11 && n !== 22) n = tongChuSo(n);
-    return { so: n, tong };
+    return { so: rutGon(tong, GIU[phai] || GIU.vn), tong };
   }
   const soNgaySinh = d => rutGon(d, [11, 22]);
   const soThaiDo = (d, m) => rutGon(tongChuSo(d) + tongChuSo(m), [11, 22]);
@@ -349,15 +421,28 @@
 
   /** Toàn bộ chỉ số. ngaySinh = { d, m, y } dương lịch; homNay = { y, m, d } để tính năm/tháng/ngày cá nhân; ten không bắt buộc;
    *  truongPhai = 'duongLich' (mặc định) hoặc 'sinhNhat' cho cách tính năm cá nhân. */
-  function tinh({ d, m, y }, homNay, ten, truongPhai = 'duongLich') {
-    const cd = soChuDao(d, m, y), t = ten && soTheoTen(ten), h = homNay, tp = TRUONG_PHAI[truongPhai] ? truongPhai : 'duongLich', nx = namXet(d, m, h, tp);
+  function tinh({ d, m, y }, homNay, ten, truongPhai = 'duongLich', phai = 'vn') {
+    phai = PHAI[phai] ? phai : 'vn';
+    const cd = soChuDao(d, m, y, phai), t = ten && soTheoTen(ten), h = homNay, tp = TRUONG_PHAI[truongPhai] ? truongPhai : 'duongLich', nx = namXet(d, m, h, tp);
+    const nn = namCaNhan(d, m, nx), nSau = namCaNhan(d, m, nx + 1);
+    // Số trưởng thành = số đường đời + số sứ mệnh (cần họ tên), rút gọn 1–9, giữ 11, 22
+    const goc = x => x === 10 ? 1 : x;
+    const tt = t && t.suMenh ? rutGon(goc(cd.so) + t.suMenh, [11, 22]) : null;
     return {
       ngaySinh: `${String(d).padStart(2, '0')}/${String(m).padStart(2, '0')}/${y}`,
-      soChuDao: Object.assign({ so: cd.so, hien: hienSo(cd.so), tong: cd.tong, cachTinh: `${chuSoNgay(d, m, y).join(' + ')} = ${cd.tong}${cd.tong !== cd.so ? ` → ${hienSo(cd.so)}` : ''}`, buoc: buocSoChuDao(d, m, y) }, SO_CHU_DAO[cd.so]),
+      phai, tenPhai: PHAI[phai].ten, moTaPhai: PHAI[phai].moTa,
+      soChuDao: Object.assign({ so: cd.so, hien: hienSo(cd.so), tong: cd.tong, cachTinh: `${chuSoNgay(d, m, y).join(' + ')} = ${cd.tong}${cd.tong !== cd.so ? ` → ${hienSo(cd.so)}` : ''}`, buoc: buocSoChuDao(d, m, y, phai) }, SO_CHU_DAO[cd.so]),
+      truongThanh: tt ? Object.assign(coBan(tt), { cachTinh: `Đường đời ${goc(cd.so) === 1 && cd.so === 10 ? '10 (tính là 1)' : hienSo(goc(cd.so))} + sứ mệnh ${t.suMenh} = ${goc(cd.so) + t.suMenh}${chuoiRutGon(goc(cd.so) + t.suMenh, [11, 22])}` }) : null,
+      quyTacTen: QUY_TAC_TEN,
       ngaySinhSo: coBan(soNgaySinh(d)), thaiDo: coBan(soThaiDo(d, m)),
       ten: t ? { suMenh: t.suMenh && coBan(t.suMenh), linhHon: t.linhHon && coBan(t.linhHon), nhanCach: t.nhanCach && coBan(t.nhanCach) } : null,
       bieuDo: bieuDo(d, m, y),
-      namCaNhan: Object.assign({ nam: nx, truongPhai: tp, moTaTruongPhai: TRUONG_PHAI[tp], cachTinh: buocNamCaNhan(d, m, nx) }, chuKy(namCaNhan(d, m, nx), 'năm nay')),
+      namCaNhan: Object.assign({ nam: nx, truongPhai: tp, moTaTruongPhai: TRUONG_PHAI[tp], cachTinh: buocNamCaNhan(d, m, nx),
+        giaiDoan: ['Tháng 1–4', 'Tháng 5–8', 'Tháng 9–12'].map((k, i) => ({ khoang: tp === 'sinhNhat' ? ['4 tháng đầu sau sinh nhật', '4 tháng giữa', '4 tháng cuối trước sinh nhật kế tiếp'][i] : k, loi: GIAI_DOAN[nn][i] })) },
+        chuKy(nn, 'năm nay')),
+      namSau: Object.assign({ nam: nx + 1, cachTinh: buocNamCaNhan(d, m, nx + 1) }, chuKy(nSau, 'năm sau')),
+      thangTrongNam: Array.from({ length: 12 }, (_, i) => { const so = thangCaNhan(d, m, nx, i + 1);
+        return { thang: i + 1, so, ten: CHU_KY[so].ten, goiY: CHU_KY[so].moTa, hienTai: i + 1 === h.m && nx === h.y }; }),
       thangCaNhan: Object.assign({ thang: h.m }, chuKy(thangCaNhan(d, m, nx, h.m), 'tháng này')),
       ngayCaNhan: chuKy(ngayCaNhan(d, m, nx, h.m, h.d), 'hôm nay'),
       chuKy9: Array.from({ length: 9 }, (_, i) => ({ nam: nx + i, so: namCaNhan(d, m, nx + i), ten: CHU_KY[namCaNhan(d, m, nx + i)].ten })),
@@ -365,6 +450,6 @@
     };
   }
 
-  const SoHoc = { SO_CHU_DAO, SO, CHU_KY, MUI_TEN, DINH, TRUONG_PHAI, rutGon, hienSo, soChuDao, buocSoChuDao, soNgaySinh, soThaiDo, namCaNhan, thangCaNhan, ngayCaNhan, soTheoTen, bieuDo, chuKy, dinhCao, tuongHop, tinh };
+  const SoHoc = { SO_CHU_DAO, SO, CHU_KY, MUI_TEN, DINH, TRUONG_PHAI, PHAI, GIAI_DOAN, QUY_TAC_TEN, rutGon, hienSo, soChuDao, buocSoChuDao, soNgaySinh, soThaiDo, namCaNhan, thangCaNhan, ngayCaNhan, soTheoTen, bieuDo, chuKy, dinhCao, tuongHop, tinh };
   if (typeof module !== 'undefined' && module.exports) module.exports = SoHoc; else root.SoHoc = SoHoc;
 })(typeof window !== 'undefined' ? window : globalThis);

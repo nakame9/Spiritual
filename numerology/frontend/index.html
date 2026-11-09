@@ -26,6 +26,7 @@
       <h2>Tính số chủ đạo</h2>
       <label class="f"><span>Họ và tên (không bắt buộc)</span><input type="text" id="ten" maxlength="60" autocomplete="off" placeholder="Ví dụ: Nguyễn Thị Lan"></label>
       <fieldset class="f"><legend>Ngày sinh dương lịch</legend><div class="date"><input type="text" inputmode="numeric" id="d" maxlength="2" placeholder="Ngày" aria-label="Ngày"><i>/</i><input type="text" inputmode="numeric" id="m" maxlength="2" placeholder="Tháng" aria-label="Tháng"><i>/</i><input type="text" inputmode="numeric" class="y" id="y" maxlength="4" placeholder="Năm" aria-label="Năm"></div></fieldset>
+      <label class="f"><span>Trường phái tính</span><select id="phai"><option value="vn">Pythagoras, cách phổ biến ở Việt Nam (2–11, 22/4)</option><option value="quocTe">Pythagoras quốc tế (1–9, giữ 11, 22, 33)</option></select></label>
       <p class="err" id="loi" role="alert" hidden></p>
       <div class="row"><button class="go" type="submit">Tính số chủ đạo</button><span class="muted">Tính ngay trên máy bạn, không gửi đi đâu.</span></div>
     </form>
@@ -35,20 +36,22 @@
     <section class="panel" aria-labelledby="h-scd">
       <div class="so-lon" id="so-lon"></div>
       <div class="o-nho buoc"><h3>Cách tính từng bước</h3><ol id="buoc"></ol>
-        <p class="muted">Quy tắc rút gọn: cộng các chữ số cho tới khi còn từ 2 đến 11. Riêng 11 và 22 là số bậc thầy nên được giữ nguyên; 22 viết là 22/4.</p></div>
-      <p class="doan" id="tong-quan"></p>
+        <p class="muted" id="quy-tac"></p></div>
+      <h3 class="tieu-muc">Đặc điểm tính cách</h3><p class="doan" id="tong-quan"></p>
       <div class="hai-cot" id="manh-yeu"></div>
+      <div class="hai-cot" id="su-menh"></div>
     </section>
     <section class="panel" aria-labelledby="h-ty"><h2 id="h-ty">Tình yêu và mối quan hệ</h2><div class="ba-cot" id="tinh-yeu"></div>
       <p class="muted"><a id="link-so-sanh" href="tuong-hop.html">So sánh với số chủ đạo của người ấy</a></p></section>
     <section class="panel" aria-labelledby="h-sn"><h2 id="h-sn">Công việc và sự nghiệp</h2><div class="hai-cot" id="su-nghiep"></div></section>
     <section class="panel" aria-labelledby="h-bh"><h2 id="h-bh">Bài học phát triển bản thân</h2><p class="doan" id="bai-hoc"></p>
       <div class="o-nho"><h3>Câu hỏi để tự suy ngẫm</h3><ol class="cau-hoi" id="cau-hoi"></ol></div><p class="ket" id="loi-khuyen"></p></section>
-    <section class="panel" aria-labelledby="h-cs"><h2 id="h-cs">Các chỉ số khác</h2><div class="chi-so" id="chi-so"></div></section>
+    <section class="panel" aria-labelledby="h-cs"><h2 id="h-cs">Các chỉ số mở rộng</h2><div class="chi-so" id="chi-so"></div>
+      <details class="quy-tac-ten"><summary>Quy tắc quy đổi họ tên tiếng Việt</summary><ol id="quy-tac-ten"></ol></details></section>
     <section class="panel" aria-labelledby="h-bd"><h2 id="h-bd">Biểu đồ ngày sinh</h2>
       <p class="muted">Mỗi chữ số trong ngày sinh được đặt vào ô của nó. Ba ô thẳng hàng cùng có số tạo thành mũi tên sức mạnh; ba ô cùng trống là mũi tên cần khắc phục.</p>
       <div class="bd-wrap"><div class="luoi" id="luoi" role="img"></div><ul class="mui-ten" id="mui-ten"></ul></div></section>
-    <section class="panel" aria-labelledby="h-nam"><div class="nam-dau"><h2 id="h-nam">Năm cá nhân</h2>
+    <section class="panel" aria-labelledby="h-nam"><div class="nam-dau"><h2 id="h-nam">Chu kỳ cá nhân</h2>
       <label class="f"><span>Cách tính</span><select id="truong-phai"><option value="duongLich">Theo năm dương lịch</option><option value="sinhNhat">Theo ngày sinh nhật</option></select></label></div>
       <div id="nam-ca-nhan"></div></section>
     <section class="panel" aria-labelledby="h-dc"><h2 id="h-dc">Bốn đỉnh cao cuộc đời</h2><p class="muted" id="dc-cach"></p><div class="dinh" id="dinh"></div></section>
@@ -56,12 +59,12 @@
 
   <section class="block" aria-labelledby="h-y">
     <h2 id="h-y">Ý nghĩa các số chủ đạo</h2>
-    <p class="lede" style="margin: -4px 0 0">Số chủ đạo gồm các số từ 2 đến 11 và 22/4. Bấm vào một số để đọc nhanh.</p>
+    <p class="lede" style="margin: -4px 0 0">Cách phổ biến ở Việt Nam có các số 2 đến 11 và 22/4; cách quốc tế có 1 đến 9 và các số bậc thầy 11, 22/4, 33/6. Bấm vào một số để đọc nhanh.</p>
     <div class="chon-so" id="chon-so" role="group" aria-label="Chọn số"></div>
     <div class="panel" id="y-nghia" aria-live="polite"></div>
   </section>
 
-  <p class="note">Nội dung thần số học do Lá Số Tử Vi biên soạn theo cách tính Pythagoras phổ biến ở Việt Nam, chỉ để tham khảo và giải trí, không thay cho lời khuyên chuyên môn.</p>
+  <p class="note">Nội dung thần số học do Lá Số Tử Vi biên soạn theo phương pháp Pythagoras (cách phổ biến ở Việt Nam hoặc cách quốc tế, chọn ở ô Trường phái tính), chỉ để tham khảo và giải trí, không thay cho lời khuyên chuyên môn.</p>
   <footer class="foot">
     <p class="foot-loi">Lá Số Tử Vi: tử vi phái Việt, chiêm tinh phương Tây, thần số học, Tarot và lịch vạn niên.</p>
     <nav aria-label="Chân trang"><a href="../../tuvivietnam/frontend/index.html">Trang chủ</a><a href="../../tuvivietnam/frontend/la-so.html">Lập lá số</a><a href="../../tuvivietnam/frontend/con-giap.html">12 con giáp</a><a href="../../xemngay/frontend/index.html">Xem ngày</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="index.html">Số chủ đạo</a><a href="../../tuvivietnam/frontend/bai-viet.html">Bài viết</a></nav>

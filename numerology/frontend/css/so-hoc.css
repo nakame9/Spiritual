@@ -104,3 +104,16 @@
   .luoi { grid-template-columns: repeat(3, 64px); grid-template-rows: repeat(3, 64px); }
   .dinh { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Sứ mệnh, quy tắc tên, 12 tháng cá nhân */
+.tieu-muc { margin: var(--space-md) 0 0; font-size: 15px; font-weight: 600; color: var(--soft); }
+.quy-tac-ten { margin-top: var(--space-md); }
+.quy-tac-ten summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 600; font-size: 14px; }
+.quy-tac-ten li { font-size: 14px; line-height: 1.6; }
+.thang-12 { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--space-xs); }
+.thang-12 > div { border: 1px solid var(--line); background: var(--paper); padding: var(--space-xs); text-align: center; display: flex; flex-direction: column; gap: 2px; }
+.thang-12 span, .thang-12 small { font-size: 12px; color: var(--soft); }
+.thang-12 b { font: 500 22px var(--f-display); color: var(--tu); }
+.thang-12 .nay { border: 2px solid var(--tu); background: var(--hl); }
+.nam-sau { border-left: var(--rule-bar) solid var(--color-gold); }
+@media (max-width: 640px) { .thang-12 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

@@ -24,16 +24,17 @@ const homNay = () => { const [y, m, d] = new Intl.DateTimeFormat('en-CA', { time
 const boc = fn => (req, res) => { try { res.json(fn(req)); } catch (e) { if (e instanceof Loi) res.status(400).json({ error: e.message }); else throw e; } };
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
-// Toàn bộ chỉ số: ?ngaySinh=1990-08-15&ten=Nguyễn Văn A&homNay=2026-10-24&truongPhai=sinhNhat (ten, homNay, truongPhai không bắt buộc)
+// Toàn bộ chỉ số: ?ngaySinh=1990-08-15&ten=Nguyễn Văn A&homNay=2026-10-24&truongPhai=sinhNhat&phai=quocTe (ten, homNay, truongPhai, phai không bắt buộc)
 app.get('/api/so-chu-dao', boc(req => {
-  const { ten, truongPhai } = req.query;
+  const { ten, truongPhai, phai } = req.query;
+  if (phai !== undefined && !Object.hasOwn(SoHoc.PHAI, phai)) throw new Loi(`phai chỉ nhận: ${Object.keys(SoHoc.PHAI).join(', ')}.`);
   if (ten !== undefined && (typeof ten !== 'string' || ten.length > 60)) throw new Loi('ten tối đa 60 ký tự.');
   if (truongPhai !== undefined && !Object.hasOwn(SoHoc.TRUONG_PHAI, truongPhai)) throw new Loi(`truongPhai chỉ nhận: ${Object.keys(SoHoc.TRUONG_PHAI).join(', ')}.`);
-  return SoHoc.tinh(docNgay(req.query.ngaySinh, 'ngaySinh'), req.query.homNay ? docNgay(req.query.homNay, 'homNay') : homNay(), ten, truongPhai);
+  return SoHoc.tinh(docNgay(req.query.ngaySinh, 'ngaySinh'), req.query.homNay ? docNgay(req.query.homNay, 'homNay') : homNay(), ten, truongPhai, phai);
 }));
-// So sánh hai số chủ đạo: ?a=6&b=9 (2–11 hoặc 22)
+// So sánh hai số chủ đạo: ?a=6&b=9 (1–11, 22 hoặc 33)
 app.get('/api/tuong-hop', boc(req => {
-  const so = k => { const v = req.query[k]; if (typeof v !== 'string' || !/^\d+$/.test(v) || !SoHoc.SO_CHU_DAO[v]) throw new Loi(`${k} là số chủ đạo 2–11 hoặc 22.`); return Number(v); };
+  const so = k => { const v = req.query[k]; if (typeof v !== 'string' || !/^\d+$/.test(v) || !SoHoc.SO_CHU_DAO[v]) throw new Loi(`${k} là số chủ đạo 1–11, 22 hoặc 33.`); return Number(v); };
   return SoHoc.tuongHop(so('a'), so('b'));
 }));
 // Ý nghĩa một số chủ đạo: 2–11 hoặc 22
