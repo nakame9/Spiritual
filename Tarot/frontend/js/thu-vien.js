@@ -4,7 +4,6 @@
   const $ = id => document.getElementById(id);
   const { theLa } = LaBai, B = Tarot.BO_BAI, ct = $('ct');
   const hoa = s => s.charAt(0).toUpperCase() + s.slice(1);
-  const CHU_DE = Object.entries(Tarot.CHU_DE).filter(([k]) => k !== 'tongquan');
   const NHOM = [
     ['anChinh', 'Ẩn Chính', '22 lá', 'Những bước ngoặt, bài học lớn và hành trình trưởng thành, từ Kẻ Khờ đến Thế Giới.'],
     ...Object.entries(Tarot.THONG_TIN_BO).map(([k, b]) => [k, `Bộ ${b.ten}`, `14 lá · ${b.nguyenTo}`, `${b.en}: ${hoa(b.chuDe)}.`]),
@@ -38,11 +37,14 @@
         <div class="ct-hinh">${theLa(c, false, 'static')}<button class="btn2" type="button" id="ct-xoay" aria-pressed="false">Xem chiều ngược</button></div>
         <div>
           <p class="eyebrow">${c.nhom === 'anChinh' ? `Ẩn Chính · lá số ${c.so}` : `Bộ ${b.ten} · ${b.nguyenTo} · ${b.chuDe}`}</p>
-          <h2 id="ct-ten">${c.ten}</h2><p class="muted">${c.tenEn}</p>
+          <h2 id="ct-ten">${c.ten}</h2><p class="muted">${c.tenEn} · ${c.nhom === 'anChinh' ? 'Ẩn Chính (Major Arcana)' : `Ẩn Phụ (Minor Arcana), bộ ${b.ten} (${b.en})`}</p>
+          <p class="tq"><b>Ý nghĩa tổng quát:</b> ${c.tongQuat}</p>
           <div class="ct-hai">${['xuoi', 'nguoc'].map(ch => `<section>
             <h3><span class="chip ${ch === 'xuoi' ? 'x' : 'n'}">${ch === 'xuoi' ? 'Xuôi' : 'Ngược'}</span></h3>
             <p class="kw">${hoa(c[ch].tuKhoa)}</p><p>${c[ch].y}</p>
-            <dl>${CHU_DE.map(([k, t]) => `<dt>${t.ten}</dt><dd>${c.chuDe[k][ch]}</dd>`).join('')}</dl></section>`).join('')}</div>
+            <dl><dt>Trong tình yêu</dt><dd>${c.chuDe.tinhyeu[ch]}</dd><dt>Trong công việc</dt><dd>${c.chuDe.sunghiep[ch]}</dd>
+              <dt>Trong tài chính</dt><dd>${c.chuDe.taichinh[ch]}</dd><dt>Lời khuyên</dt><dd>${c.loiKhuyen[ch]}</dd></dl></section>`).join('')}</div>
+          <p class="muted">Một lá có thể tích cực ở mặt này nhưng gợi ý thận trọng ở mặt khác; khi trải bài, lá được đọc theo vị trí và chủ đề.</p>
         </div>
       </div>
       <nav class="ct-nav" aria-label="Lá khác"><button class="btn2" type="button" data-di="-1">Lá trước: ${truoc.ten}</button><button class="btn2" type="button" data-di="1">Lá sau: ${sau.ten}</button></nav>`;

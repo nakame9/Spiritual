@@ -59,14 +59,14 @@ test('API tra bài và phục vụ trang', async () => {
   assert.strictEqual((await (await fetch(base + '/api/la-bai/0')).json()).ten, 'Kẻ Khờ');
   assert.strictEqual((await fetch(base + '/api/la-bai/78')).status, 404);
   assert.strictEqual((await fetch(base + '/api/la-bai/abc')).status, 404);
-  assert.deepStrictEqual(Object.keys(await (await fetch(base + '/api/kieu-trai')).json()), ['1la', '3la', 'tinhcam', '5la', '10la']);
+  assert.deepStrictEqual(Object.keys(await (await fetch(base + '/api/kieu-trai')).json()), ['1la', '3la', 'tinhcam', 'tinhyeu5', 'congviec', 'tienbac', '5la', '10la']);
   const home = await fetch(base + '/');
   assert.strictEqual(home.status, 200);
   assert.match(await home.text(), /Các kiểu trải bài/);
   const xem = await fetch(base + '/xem-bai.html');
   assert.strictEqual(xem.status, 200);
   assert.match(await xem.text(), /Xáo bài, rút và lật lá/);
-  for (const f of ['bo-bai.js', 'la-bai.js', 'app.js', 'y-nghia-chu-de.js']) assert.strictEqual((await fetch(base + '/js/' + f)).status, 200, f);
+  for (const f of ['bo-bai.js', 'la-bai.js', 'app.js', 'y-nghia-chu-de.js', 'lich-su.js', 'trang-lich-su.js']) assert.strictEqual((await fetch(base + '/js/' + f)).status, 200, f);
 });
 
 test('chủ đề: mỗi lá có 4 chủ đề × xuôi/ngược, không trùng nhau; đọc bài theo chủ đề', () => {
@@ -140,4 +140,44 @@ test('API thư viện và trang thư viện', async () => {
   assert.strictEqual(tv.status, 200);
   assert.match(await tv.text(), /Thư viện 78 lá Tarot/);
   assert.strictEqual((await fetch(base + '/js/thu-vien.js')).status, 200);
+});
+
+test('mỗi lá đủ nội dung: tên Việt, Anh, nhóm, tổng quát, xuôi, ngược, tình yêu, công việc, tài chính, lời khuyên', () => {
+  for (const l of Tarot.BO_BAI) {
+    assert.ok(l.ten && l.tenEn && l.nhom, l.id);
+    assert.ok(l.tongQuat.length > 40, `${l.ten} tổng quát`);
+    for (const ch of ['xuoi', 'nguoc']) {
+      for (const k of ['tinhyeu', 'sunghiep', 'taichinh']) assert.ok(l.chuDe[k][ch].length > 10, `${l.ten} ${k} ${ch}`);
+      assert.ok(l.loiKhuyen[ch].length > 10, `${l.ten} lời khuyên ${ch}`);
+    }
+  }
+  assert.match(Tarot.BO_BAI[0].tongQuat, /Ẩn Chính/);
+  assert.match(Tarot.BO_BAI[40].tongQuat, /bộ Cốc/);
+});
+
+test('trải bài tình yêu, công việc, tài chính 3–5 lá; câu hỏi vào phần tổng hợp', () => {
+  for (const [k, n, cd] of [['tinhcam', 3, 'tinhyeu'], ['tinhyeu5', 5, 'tinhyeu'], ['congviec', 5, 'sunghiep'], ['tienbac', 4, 'taichinh']]) {
+    assert.strictEqual(Tarot.KIEU_TRAI[k].viTri.length, n);
+    assert.strictEqual(Tarot.KIEU_TRAI[k].chuDe, cd);
+    const r = Tarot.docBai(k, Tarot.xaoBai().slice(0, n), cd, 'Mình nên làm gì?');
+    assert.ok(r.la.every(l => l.yTheoViTri && !l.yTheoViTri.includes('{k}') && l.loiKhuyen), k);
+    assert.match(r.luanGiai[0], /^Với câu hỏi “Mình nên làm gì\?”/);
+    assert.ok(r.luanGiai.length >= 3, k);
+  }
+  assert.strictEqual(Tarot.docBai('1la', [{ id: 1 }]).cauHoi, '');
+});
+
+test('so sánh hai lần trải bài', async () => {
+  const a = { kieu: '3la', chuDe: 'tongquan', chon: [{ id: 19, nguoc: false }, { id: 17, nguoc: false }, { id: 5, nguoc: true }] };
+  const b = { kieu: '3la', chuDe: 'tongquan', chon: [{ id: 16, nguoc: false }, { id: 18, nguoc: false }, { id: 5, nguoc: false }] };
+  const r = Tarot.soSanh(a, b);
+  assert.deepStrictEqual(r.lapLai.map(l => l.ten), ['Giáo Hoàng']);
+  assert.match(r.lapLai[0].chieu, /lần đầu ngược, lần sau xuôi/);
+  assert.match(r.nhanXet.join(' '), /nhiều thử thách hơn/);
+  const post = body => fetch(base + '/api/so-sanh', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  assert.strictEqual((await (await post({ a, b })).json()).lapLai.length, 1);
+  assert.strictEqual((await post({ a, b: { ...b, chon: [{ id: 1 }] } })).status, 400);
+  const rq = await (await fetch(base + '/api/rut-bai', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kieu: 'congviec', cauHoi: 'Có nên nhảy việc?' }) })).json();
+  assert.strictEqual(rq.cauHoi, 'Có nên nhảy việc?');
+  assert.strictEqual((await fetch(base + '/api/rut-bai', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cauHoi: 5 }) })).status, 400);
 });

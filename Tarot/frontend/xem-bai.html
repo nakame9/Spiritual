@@ -15,17 +15,18 @@
     <a class="brand" href="../../tuvivietnam/frontend/index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi</a>
     <nav aria-label="Menu chính"><a href="../../tuvivietnam/frontend/index.html">Trang chủ</a><a href="../../tuvivietnam/frontend/la-so.html">Lập lá số</a><a href="../../tuvivietnam/frontend/con-giap.html">12 con giáp</a><a href="../../xemngay/frontend/index.html">Xem ngày</a><a href="index.html" aria-current="page">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="../../numerology/frontend/index.html">Số chủ đạo</a><a href="../../tuvivietnam/frontend/bai-viet.html">Bài viết</a></nav>
   </header>
-  <nav class="subnav" aria-label="Tarot"><a href="index.html">Giới thiệu</a><a href="xem-bai.html" aria-current="page">Xem bài</a><a href="thu-vien.html">Thư viện 78 lá</a></nav>
+  <nav class="subnav" aria-label="Tarot"><a href="index.html">Giới thiệu</a><a href="xem-bai.html" aria-current="page">Xem bài</a><a href="thu-vien.html">Thư viện 78 lá</a><a href="lich-su.html">Lịch sử trải bài</a></nav>
 
   <section class="hero">
     <div>
       <h1>Xem bài Tarot</h1>
-      <p class="lede">Nghĩ về điều bạn muốn hỏi, chọn chủ đề và kiểu trải bài, rồi tự tay chọn lá từ bộ bài đã xáo. Mỗi lá có ý nghĩa xuôi và ngược, đọc theo chủ đề bạn chọn và theo vị trí của nó trong trải bài.</p>
+      <p class="lede">Chọn chủ đề, viết câu hỏi nếu muốn, chọn kiểu trải bài, rồi tự tay rút lá từ bộ bài đã xáo. Mỗi lá được giải nghĩa theo vị trí và chủ đề, cuối cùng là thông điệp chung của cả trải bài. Kết quả lưu lại được để xem lại, ghi chú và so sánh.</p>
+      <p class="luu-y-tarot">Tarot là công cụ chiêm nghiệm và giải trí, giúp bạn nhìn vấn đề từ nhiều phía. Đây không phải phương pháp dự đoán chắc chắn tương lai; quyết định cuối cùng luôn là của bạn.</p>
     </div>
   </section>
 
   <form class="panel" id="form" novalidate>
-    <h2><span class="step">Bước 1</span>Chọn chủ đề và kiểu trải bài</h2>
+    <h2><span class="step">Bước 1</span>Chủ đề, câu hỏi và kiểu trải bài</h2>
     <fieldset class="f" style="border:0;margin:0;padding:0"><legend>Chủ đề</legend>
       <div class="topics">
         <label><input type="radio" name="chude" value="tongquan" checked><span>Tổng quan</span></label>
@@ -35,7 +36,8 @@
         <label><input type="radio" name="chude" value="banthan"><span>Bản thân</span></label>
       </div>
     </fieldset>
-    <fieldset class="f" style="border:0;margin:0;padding:0"><legend>Kiểu trải bài: 1, 3, 5 hoặc 10 lá</legend>
+    <label class="f"><span>Câu hỏi của bạn (không bắt buộc)</span><textarea id="cau-hoi" rows="2" maxlength="200" placeholder="Ví dụ: Mình nên chuẩn bị gì cho công việc mới?"></textarea></label>
+    <fieldset class="f" style="border:0;margin:0;padding:0"><legend>Kiểu trải bài, từ đơn giản đến nâng cao</legend>
       <div class="spreads" id="spreads"></div>
     </fieldset>
     <div class="opts">
@@ -56,7 +58,11 @@
   <section class="panel" id="ket-qua" hidden aria-labelledby="kq-tieu-de">
     <h2><span class="step">Bước 3</span><span id="kq-tieu-de">Kết quả</span></h2>
     <div class="reading" id="reading"></div>
-    <div class="actions"><button class="go" type="button" id="rut-lai">Rút lại</button><button class="btn2" type="button" id="lam-lai">Đổi chủ đề hoặc kiểu trải</button></div>
+    <div class="luu-kq" id="luu-kq">
+      <label class="f"><span>Ghi chú cảm nhận (không bắt buộc)</span><textarea id="ghi-chu" rows="3" maxlength="1000" placeholder="Điều bạn nghĩ tới khi đọc trải bài này"></textarea></label>
+      <div class="actions"><button class="go" type="button" id="luu">Lưu kết quả</button><span class="muted" id="luu-tb" role="status"></span></div>
+    </div>
+    <div class="actions"><button class="btn2" type="button" id="rut-lai">Rút lại</button><button class="btn2" type="button" id="lam-lai">Đổi chủ đề hoặc kiểu trải</button><a class="btn2" href="lich-su.html">Xem lịch sử trải bài</a></div>
   </section>
 
   <p class="note">Bộ bài được xáo ngẫu nhiên ngay trên máy bạn. Ý nghĩa các lá do Lá Số Tử Vi biên soạn theo cách hiểu phổ biến của Tarot, dùng để suy ngẫm và tham khảo, không thay cho lời khuyên chuyên môn về sức khỏe, pháp lý hay tài chính.</p>
@@ -70,6 +76,7 @@
 <script src="js/y-nghia-chu-de.js"></script>
 <script src="js/bo-bai.js"></script>
 <script src="js/la-bai.js"></script>
+<script src="js/lich-su.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

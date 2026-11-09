@@ -217,3 +217,30 @@ body:has(dialog[open]) { overflow: hidden; }
   .ct { width: 100%; max-width: 100%; max-height: 100dvh; height: 100dvh; border-radius: 0; margin: 0; }
   .ct-nd { max-height: 100dvh; }
 }
+
+/* Câu hỏi, lưu kết quả, ý nghĩa đầy đủ, lịch sử, so sánh (thêm cho mục 5.2–5.4) */
+.luu-y-tarot { margin: var(--space-sm) 0 0; padding: var(--space-sm) var(--space-md); border-left: var(--rule-bar) solid var(--color-gold); background: var(--hl); font-size: 15px; line-height: 1.6; max-width: 70ch; }
+#cau-hoi, .luu-kq textarea, .ls textarea { width: 100%; font: 15px/1.5 var(--f-ui); padding: var(--space-xs) var(--space-sm); border: 1px solid var(--line); background: var(--paper); color: var(--ink); resize: vertical; }
+.spreads .hop-cd { display: none; font-style: normal; font-size: 12px; font-weight: 600; color: var(--moc); }
+.spreads label.goi-y .hop-cd { display: block; }
+.cau-hoi-kq { margin: 0 0 var(--space-sm); padding: var(--space-sm) var(--space-md); background: var(--hl); font-size: 15px; }
+.reading .lk { border-left: var(--rule-bar) solid var(--color-gold); padding-left: var(--space-sm); }
+.day-du summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-weight: 600; font-size: 14px; }
+.day-du dl, .ss-cot dl { margin: 0; display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: var(--space-2xs) var(--space-sm); font-size: 14px; line-height: 1.55; }
+.day-du dt, .ss-cot dt { color: var(--soft); font-weight: 600; }
+.day-du dd, .ss-cot dd { margin: 0; }
+.luu-kq { display: flex; flex-direction: column; gap: var(--space-sm); padding: var(--space-md); border: 1px dashed var(--line); margin-top: var(--space-md); }
+.tq { font-size: 15px; line-height: 1.6; }
+.ds-ls { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-md); }
+.ls { border: 1px solid var(--line); background: var(--paper); padding: var(--space-md); display: flex; flex-direction: column; gap: var(--space-sm); min-width: 0; }
+.ls-dau { display: flex; gap: var(--space-md); align-items: flex-start; }
+.ls-dau > div { display: flex; flex-direction: column; gap: var(--space-3xs); }
+.ls .mini { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.ls .mini > span { width: 46px; }
+.ls p { margin: 0; }
+.ls .xoa[data-chac="1"] { color: var(--hoa); border-color: var(--hoa); }
+.ss-hai { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); }
+.ss-cot { border-top: 2px solid var(--ink); padding: var(--space-md); background: var(--paper); display: flex; flex-direction: column; gap: var(--space-xs); }
+.ss-cot h3 { margin: 0; font-size: 16px; } .ss-cot p { margin: 0; font-size: 14px; }
+#ss h3 { font-size: 16px; margin: var(--space-md) 0 var(--space-xs); }
+@media (max-width: 640px) { .ss-hai { grid-template-columns: minmax(0, 1fr); } .day-du dl, .ss-cot dl { grid-template-columns: 100px minmax(0, 1fr); } }

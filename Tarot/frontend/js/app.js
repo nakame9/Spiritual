@@ -6,17 +6,25 @@
   const giam = matchMedia('(prefers-reduced-motion: reduce)');
   const co = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 
-  // Ô chọn kiểu trải, xếp theo số lá
-  $('spreads').innerHTML = Object.entries(Tarot.KIEU_TRAI).map(([k, t]) => `<label><input type="radio" name="kieu" id="kieu-${k}" value="${k}"${k === '3la' ? ' checked' : ''}>
-    <span><em class="so">${t.viTri.length}</em><b>${t.ten}</b><small>${t.viTri.length} lá · ${t.moTa}</small></span></label>`).join('');
+  // Ô chọn kiểu trải, từ đơn giản đến nâng cao; kiểu trải hợp chủ đề đang chọn có nhãn "Hợp chủ đề"
+  $('spreads').innerHTML = Object.entries(Tarot.KIEU_TRAI).map(([k, t]) => `<label data-cd="${t.chuDe || ''}"><input type="radio" name="kieu" id="kieu-${k}" value="${k}"${k === '3la' ? ' checked' : ''}>
+    <span><em class="so">${t.viTri.length}</em><b>${t.ten}</b><small>${t.viTri.length} lá · ${t.moTa}</small><i class="hop-cd">Hợp chủ đề</i></span></label>`).join('');
+  const goiY = () => { const cd = document.querySelector('input[name="chude"]:checked').value;
+    document.querySelectorAll('#spreads label').forEach(l => l.classList.toggle('goi-y', !!l.dataset.cd && l.dataset.cd === cd)); };
+  document.querySelectorAll('input[name="chude"]').forEach(r => r.addEventListener('change', () => {
+    goiY();
+    const dau = document.querySelector('#spreads label.goi-y input'); if (dau) dau.checked = true; // chọn sẵn kiểu trải hợp chủ đề
+  }));
 
   // Mở từ trang chủ với #3la, #10la, #tinhyeu… thì chọn sẵn kiểu trải hoặc chủ đề
   const h = decodeURIComponent(location.hash.slice(1));
   if (co(Tarot.KIEU_TRAI, h)) $('kieu-' + h).checked = true;
   if (co(Tarot.CHU_DE, h)) document.querySelector(`input[name="chude"][value="${h}"]`).checked = true;
+  goiY();
+  const esc = x => String(x).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   // pha: 'xao' đang xáo → 'rut' chọn lá úp → 'lat' lật từng lá → 'xong'. luot tăng mỗi lần xáo để bỏ các hẹn giờ của lượt cũ.
-  const st = { kieu: '3la', chuDe: 'tongquan', nguoc: true, xao: [], chon: [], pha: '', luot: 0, bay: [] };
+  const st = { kieu: '3la', chuDe: 'tongquan', cauHoi: '', nguoc: true, xao: [], chon: [], pha: '', luot: 0, bay: [], daLuu: null };
   const kieu = () => Tarot.KIEU_TRAI[st.kieu];
   const soLa = () => kieu().viTri.length;
   const ngang = i => !!(kieu().luoi && kieu().luoi.o[i][2]);
@@ -134,6 +142,7 @@
     st.kieu = document.querySelector('input[name="kieu"]:checked').value;
     st.chuDe = document.querySelector('input[name="chude"]:checked').value;
     st.nguoc = $('nguoc').checked;
+    st.cauHoi = $('cau-hoi').value.trim();
     $('chon-moTa').textContent = `Nghĩ về câu hỏi của bạn rồi rút ${soLa()} lá trong bộ bài đang úp. Rút đủ thì lật từng lá để xem.`;
     $('buoc2').hidden = false;
     xaoBai();
@@ -199,20 +208,20 @@
   }
 
   function docKetQua() {
-    const r = Tarot.docBai(st.kieu, st.chon, st.chuDe);
+    const r = Tarot.docBai(st.kieu, st.chon, st.chuDe, st.cauHoi);
+    st.daLuu = null; $('luu-tb').textContent = ''; $('ghi-chu').value = ''; $('luu').disabled = false;
     $('kq-tieu-de').textContent = `${r.tenKieu} · ${r.tenChuDe}`;
-    $('reading').innerHTML = `
-      ${r.la.map((l, i) => `<div class="item">${theLa(Tarot.BO_BAI[l.id], l.nguoc, 'static')}
-        <div><span class="step">${r.la.length > 1 ? `${i + 1}. ` : ''}${l.viTri}</span><h3>${l.ten}</h3>
-        <div class="meta"><span>${l.tenEn}</span><span class="chip ${l.nguoc ? 'n' : 'x'}">${l.nguoc ? 'Ngược' : 'Xuôi'}</span><a href="thu-vien.html#la-${l.id}" target="_blank" rel="noopener">Tra cứu lá này</a></div>
-        <p class="kw">${l.tuKhoa.charAt(0).toUpperCase() + l.tuKhoa.slice(1)}</p>
-        <p class="vt"><b>Ở vị trí ${l.viTri}:</b> ${l.yTheoViTri}</p>
-        <p><b>${r.chuDe === 'tongquan' ? 'Ý nghĩa' : `Về ${r.tenChuDe.toLowerCase()}`}:</b> ${l.y}</p>${l.yChung ? `<p class="hint">Ý nghĩa chung: ${l.yChung}</p>` : ''}</div></div>`).join('')}
-      <div class="sum"><h3>Tổng hợp luận giải</h3>${r.luanGiai.map(p => `<p>${p}</p>`).join('')}
-        <h4>Điểm đáng chú ý</h4><ul>${r.tongQuan.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+    $('reading').innerHTML = TarotLichSu.veKetQua(r);
     $('ket-qua').hidden = false;
     cuon($('ket-qua'));
   }
+  // Lưu kết quả vào lịch sử trên trình duyệt; bấm lại thì cập nhật ghi chú của lần đã lưu
+  $('luu').addEventListener('click', () => {
+    const ok = TarotLichSu.luu({ id: st.daLuu, kieu: st.kieu, chuDe: st.chuDe, cauHoi: st.cauHoi, chon: st.chon.map(c => ({ id: c.id, nguoc: !!c.nguoc })), ghiChu: $('ghi-chu').value.trim() });
+    if (!ok) { $('luu-tb').textContent = 'Trình duyệt không cho lưu (chế độ riêng tư hoặc bộ nhớ đầy).'; return; }
+    st.daLuu = ok; $('luu').textContent = 'Cập nhật ghi chú';
+    $('luu-tb').innerHTML = 'Đã lưu. <a href="lich-su.html">Xem lịch sử</a>';
+  });
 
   $('form').addEventListener('submit', e => { e.preventDefault(); batDau(); });
   $('deck').addEventListener('click', e => { const b = e.target.closest('button'); if (b) chon(Number(b.dataset.i)); });
@@ -225,7 +234,7 @@
       chon(con[Tarot.ngauNhien(con.length)], tre);
     }
   });
-  $('rut-lai').addEventListener('click', batDau);
+  $('rut-lai').addEventListener('click', () => { $('luu').textContent = 'Lưu kết quả'; batDau(); });
   $('lam-lai').addEventListener('click', () => {
     st.luot++; st.pha = ''; st.xao = []; st.chon = [];
     $('buoc2').hidden = true; $('ket-qua').hidden = true;

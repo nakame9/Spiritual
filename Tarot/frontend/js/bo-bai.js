@@ -110,6 +110,39 @@
       nhom: 'anPhu', bo: b.ma, so: h < 10 ? HANG_VI[h].replace('Át', 'A') : HANG_VI[h], hang: h + 1,
       xuoi: { tuKhoa: kx, y: yx }, nguoc: { tuKhoa: kn, y: yn } }))),
   ];
+  // Ý nghĩa tổng quát: Ẩn Chính viết riêng từng lá (chặng nào trên hành trình 22 lá); Ẩn Phụ ghép từ ý nghĩa của bậc và của bộ
+  const TONG_QUAT_CHINH = [
+    'Điểm xuất phát của hành trình 22 lá: tâm thế trong trẻo, dám bước vào điều chưa biết.',
+    'Chặng đầu tiên: ý chí và kỹ năng gặp nhau, biến ý tưởng thành việc làm cụ thể.',
+    'Mặt tĩnh của trí tuệ: hiểu biết đến từ trực giác, quan sát và những điều chưa nói ra.',
+    'Năng lượng của sự sinh sôi: nuôi dưỡng, sáng tạo và tận hưởng những gì mình vun đắp.',
+    'Năng lượng của trật tự: cấu trúc, kỷ luật và trách nhiệm của người đứng đầu.',
+    'Tri thức được truyền lại: truyền thống, người thầy, những giá trị chung của cộng đồng.',
+    'Bài học về lựa chọn: yêu thương và quyết định dựa trên giá trị thật của bản thân.',
+    'Bài học về làm chủ: dùng ý chí để giữ hướng đi giữa những lực kéo trái chiều.',
+    'Sức mạnh bên trong: kiên nhẫn và lòng trắc ẩn chế ngự được bản năng.',
+    'Chặng quay vào bên trong: tự vấn, tìm câu trả lời trong tĩnh lặng.',
+    'Bước ngoặt của vòng đời: mọi thứ vận động theo chu kỳ, có lên có xuống.',
+    'Luật nhân quả: sự thật, công bằng và trách nhiệm với lựa chọn của mình.',
+    'Chặng dừng lại: buông bỏ cách nhìn cũ để thấy lối ra mới.',
+    'Chuyển hóa: một giai đoạn khép lại để giai đoạn mới bắt đầu.',
+    'Sự hòa trộn: điều độ, kiên nhẫn dung hòa những điều đối lập.',
+    'Mặt tối cần nhận ra: những ràng buộc, cám dỗ và thói quen giam giữ mình.',
+    'Sự sụp đổ cần thiết: điều xây trên nền yếu buộc phải đổ để làm lại vững hơn.',
+    'Sau giông bão: hy vọng, chữa lành và niềm tin trở lại.',
+    'Vùng mơ hồ: cảm xúc, nỗi sợ và ảo giác cần được soi rõ.',
+    'Ánh sáng trọn vẹn: niềm vui, sự rõ ràng và sức sống.',
+    'Tiếng gọi thức tỉnh: nhìn lại, tha thứ và đứng dậy cho chặng mới.',
+    'Điểm kết của hành trình: hoàn thành, trọn vẹn, sẵn sàng cho vòng mới.',
+  ];
+  const BAC_Y = ['hạt giống, khởi đầu thuần khiết nhất của', 'lựa chọn và sự cân bằng đầu tiên trong', 'sự phát triển và hợp tác bước đầu trong', 'sự ổn định, nền móng của',
+    'xung đột, thử thách trong', 'sự hòa hợp trở lại, chuyển tiếp trong', 'sự đánh giá, kiên trì với', 'chuyển động và nỗ lực trong', 'độ chín, gần tới đích của',
+    'kết thúc một chu kỳ của', 'người học, tin tức mới về', 'người hành động, theo đuổi', 'người nuôi dưỡng, thấu hiểu', 'người làm chủ, dẫn dắt'];
+  BO_BAI.forEach(l => {
+    l.tongQuat = l.nhom === 'anChinh' ? `Lá số ${l.so} trong 22 lá Ẩn Chính. ${TONG_QUAT_CHINH[l.id]}`
+      : `${l.ten} là ${BAC_Y[l.hang - 1]} ${BO.find(b => b.ma === l.bo).chuDe} (bộ ${BO.find(b => b.ma === l.bo).ten}, nguyên tố ${BO.find(b => b.ma === l.bo).nguyenTo}). Xuôi nói về ${l.xuoi.tuKhoa}; ngược nói về ${l.nguoc.tuKhoa}.`;
+  });
+
   // Chủ đề: chỉ số trong y-nghia-chu-de.js và bộ bài khớp với chủ đề (để nhận xét tổng quan)
   const CHU_DE = {
     tongquan: { ten: 'Tổng quan', moTa: 'Cái nhìn chung về tình hình của bạn' },
@@ -118,13 +151,26 @@
     taichinh: { ten: 'Tài chính', moTa: 'Tiền bạc, đầu tư, chi tiêu', i: 4, bo: 'tien' },
     banthan: { ten: 'Bản thân', moTa: 'Cảm xúc, sức khỏe tinh thần, phát triển cá nhân', i: 6 },
   };
-  BO_BAI.forEach(l => { l.chuDe = Object.fromEntries(Object.entries(CHU_DE).filter(([, c]) => c.i !== undefined).map(([k, c]) => [k, { xuoi: Y[l.id][c.i], nguoc: Y[l.id][c.i + 1] }])); });
+  BO_BAI.forEach(l => {
+    l.chuDe = Object.fromEntries(Object.entries(CHU_DE).filter(([, c]) => c.i !== undefined).map(([k, c]) => [k, { xuoi: Y[l.id][c.i], nguoc: Y[l.id][c.i + 1] }]));
+    // Lời khuyên: lấy từ đoạn "Bản thân" (viết dạng lời khuyên); khi ngược, nói trạng thái hiện tại rồi tới lời khuyên
+    l.loiKhuyen = { xuoi: Y[l.id][6], nguoc: `${Y[l.id][7]} ${Y[l.id][6]}` };
+  });
   const THONG_TIN_BO = Object.fromEntries(BO.map(b => [b.ma, { ten: b.ten, en: b.en, nguyenTo: b.nguyenTo, chuDe: b.chuDe }]));
 
   const KIEU_TRAI = {
     '1la': { ten: 'Lá bài hôm nay', moTa: 'Một lá cho thông điệp bạn cần lúc này.', viTri: [['Thông điệp', 'Điều bạn cần lưu ý lúc này']] },
     '3la': { ten: 'Quá khứ, Hiện tại, Tương lai', moTa: 'Ba lá cho dòng chảy của một vấn đề.', viTri: [['Quá khứ', 'Điều đã dẫn tới tình huống hiện tại'], ['Hiện tại', 'Tình hình và năng lượng lúc này'], ['Tương lai', 'Hướng đi nếu mọi việc tiếp diễn như hiện tại']] },
-    'tinhcam': { ten: 'Tình cảm', moTa: 'Ba lá cho bạn, người ấy và mối quan hệ.', viTri: [['Bạn', 'Cảm xúc và mong muốn của bạn'], ['Người ấy', 'Cảm xúc và suy nghĩ của người kia'], ['Mối quan hệ', 'Hướng phát triển của mối quan hệ']] },
+    'tinhcam': { ten: 'Tình yêu 3 lá', moTa: 'Ba lá cho bạn, người ấy và mối quan hệ.', chuDe: 'tinhyeu', viTri: [['Bạn', 'Cảm xúc và mong muốn của bạn'], ['Người ấy', 'Cảm xúc và suy nghĩ của người kia'], ['Mối quan hệ', 'Hướng phát triển của mối quan hệ']] },
+    'tinhyeu5': { ten: 'Tình yêu 5 lá', moTa: 'Năm lá phân tích sâu một mối quan hệ.', chuDe: 'tinhyeu', viTri: [
+      ['Bạn', 'Cảm xúc và mong muốn của bạn'], ['Người ấy', 'Cảm xúc và suy nghĩ của người kia'], ['Điều gắn kết', 'Điều đang giữ hai người lại với nhau'],
+      ['Thử thách', 'Điều đang cản trở hoặc cần vượt qua'], ['Hướng phát triển', 'Mối quan hệ sẽ đi về đâu nếu tiếp tục như hiện tại']] },
+    'congviec': { ten: 'Công việc', moTa: 'Năm lá định hướng nghề nghiệp.', chuDe: 'sunghiep', viTri: [
+      ['Tình hình công việc', 'Công việc của bạn lúc này'], ['Điểm mạnh', 'Năng lực và lợi thế bạn đang có'], ['Trở ngại', 'Điều đang cản trở sự phát triển'],
+      ['Cơ hội', 'Cơ hội hoặc hướng mở ra phía trước'], ['Hướng đi', 'Lời khuyên cho bước tiếp theo trong nghề nghiệp']] },
+    'tienbac': { ten: 'Tài chính', moTa: 'Bốn lá về quan điểm và xu hướng tài chính.', chuDe: 'taichinh', viTri: [
+      ['Tình hình tài chính', 'Tiền bạc của bạn lúc này'], ['Quan điểm về tiền', 'Cách bạn đang nghĩ và hành xử với tiền'],
+      ['Xu hướng', 'Xu hướng tài chính trong thời gian tới'], ['Lời khuyên', 'Điều nên làm để tài chính vững hơn']] },
     // luoi: sơ đồ đặt lá trên lưới [hàng, cột, 'x' nếu lá nằm ngang]
     '5la': { ten: 'Năm lá chữ thập', moTa: 'Năm lá cho nguyên nhân, diễn biến và lời khuyên.', viTri: [
       ['Quá khứ', 'Điều đã dẫn tới tình huống hiện tại'], ['Hiện tại', 'Tình hình và năng lượng lúc này'], ['Tương lai', 'Hướng đi nếu mọi việc tiếp diễn'],
@@ -177,6 +223,16 @@
     'Bản thân': ['Cách bạn đang đối diện vấn đề mang tinh thần {k}.', 'Cách bạn nhìn vấn đề đang bị ảnh hưởng bởi {k}, nên có thể bạn chưa thấy hết bức tranh.'],
     'Môi trường': ['Người xung quanh và hoàn cảnh bên ngoài mang tới {k}.', 'Từ bên ngoài, bạn có thể gặp {k} từ người xung quanh hoặc hoàn cảnh.'],
     'Hy vọng và lo sợ': ['Điều bạn thầm mong là {k}, và cũng chính điều đó khiến bạn hồi hộp.', 'Điều bạn lo sợ là {k}. Gọi tên nỗi sợ là bước đầu để nó nhẹ đi.'],
+    'Điều gắn kết': ['Điều giữ hai người lại với nhau là {k}.', 'Sợi dây giữa hai người đang mang {k}, nên cần được vun đắp lại.'],
+    'Hướng phát triển': ['Nếu cứ như hiện tại, mối quan hệ đi theo hướng {k}.', 'Nếu không thay đổi, mối quan hệ có thể gặp {k}. Hai người vẫn có thể đổi hướng.'],
+    'Tình hình công việc': ['Công việc của bạn lúc này mang năng lượng {k}.', 'Công việc lúc này đang gặp {k}.'],
+    'Điểm mạnh': ['Lợi thế của bạn là {k}. Hãy dựa vào đó.', 'Điểm mạnh của bạn đang bị che bởi {k}; gỡ điều này ra thì năng lực sẽ lộ rõ.'],
+    'Trở ngại': ['Trở ngại là {k}, nhưng ở mức vượt qua được.', 'Trở ngại chính là {k}. Đây là điều cần xử lý trước.'],
+    'Cơ hội': ['Phía trước mở ra {k}.', 'Cơ hội có, nhưng đi kèm {k}; cần tỉnh táo khi nắm lấy.'],
+    'Hướng đi': ['Bước tiếp theo nên dựa vào {k}.', 'Bước tiếp theo, hãy tránh {k}.'],
+    'Tình hình tài chính': ['Tiền bạc lúc này mang dấu hiệu {k}.', 'Tài chính lúc này đang gặp {k}.'],
+    'Quan điểm về tiền': ['Cách bạn nghĩ về tiền đang nghiêng về {k}, một nền tảng tốt.', 'Cách bạn nghĩ và tiêu tiền đang bị {k} chi phối.'],
+    'Xu hướng': ['Thời gian tới tài chính đi theo hướng {k}.', 'Thời gian tới tài chính có thể gặp {k}; chuẩn bị dự phòng từ bây giờ.'],
     'Kết quả': ['Nếu mọi việc tiếp diễn như hiện tại, kết quả sẽ là {k}.', 'Nếu mọi việc tiếp diễn như hiện tại, kết quả có thể là {k}. Bạn vẫn đổi được điều này bằng những lựa chọn từ bây giờ.'],
   };
   function theoViTri(viTri, moTa, l) {
@@ -185,16 +241,20 @@
   }
 
   /** Ghép kết quả cho các lá đã chọn: chon = [{ id, nguoc }] theo thứ tự vị trí */
-  function docBai(kieu, chon, chuDe = 'tongquan') {
+  function docBai(kieu, chon, chuDe = 'tongquan', cauHoi = '') {
+    cauHoi = String(cauHoi || '').trim().slice(0, 200);
     const k = KIEU_TRAI[kieu], rieng = chuDe !== 'tongquan';
     const la = chon.map((c, i) => {
       const card = BO_BAI[c.id], chieu = c.nguoc ? 'nguoc' : 'xuoi', m = card[chieu];
       const l = { viTri: k.viTri[i][0], yViTri: k.viTri[i][1], id: card.id, ten: card.ten, tenEn: card.tenEn, so: card.so, nhom: card.nhom, bo: card.bo,
-        nguoc: !!c.nguoc, tuKhoa: m.tuKhoa, y: rieng ? card.chuDe[chuDe][chieu] : m.y, yChung: rieng ? m.y : null };
+        nguoc: !!c.nguoc, tuKhoa: m.tuKhoa, y: rieng ? card.chuDe[chuDe][chieu] : m.y, yChung: rieng ? m.y : null,
+        tongQuat: card.tongQuat, loiKhuyen: card.loiKhuyen[chieu] };
       l.yTheoViTri = theoViTri(l.viTri, l.yViTri, l);
       return l;
     });
-    return { kieu, tenKieu: k.ten, chuDe, tenChuDe: CHU_DE[chuDe].ten, la, luanGiai: luanGiai(kieu, la, chuDe), tongQuan: tongQuan(la, chuDe) };
+    const lg = luanGiai(kieu, la, chuDe);
+    if (cauHoi) lg[0] = `Với câu hỏi “${cauHoi}”: ${lg[0].charAt(0).toLowerCase()}${lg[0].slice(1)}`;
+    return { kieu, tenKieu: k.ten, chuDe, tenChuDe: CHU_DE[chuDe].ten, cauHoi, la, luanGiai: lg, tongQuan: tongQuan(la, chuDe) };
   }
 
   /** Bài đọc liền mạch: mở bài (sắc thái chung) → các đoạn nối lá theo cấu trúc kiểu trải → lời nhắn chung */
@@ -252,6 +312,20 @@
       const kq = L[9], mt = L[4];
       out.push(`Kết quả nếu mọi việc tiếp diễn là ${goi(kq)} (${k2(kq)}). ` + (thuan(kq) ? (thuan(mt) ? 'Kết quả khá gần với điều bạn mong muốn.' : 'Kết quả có thể tốt hơn bạn nghĩ, dù mục tiêu ban đầu còn lẫn băn khoăn.')
         : (thuan(mt) ? 'Kết quả chưa khớp với điều bạn mong, nên cần điều chỉnh, bắt đầu từ thử thách ở trung tâm.' : 'Kết quả và mục tiêu đều còn vướng, hãy xem lại mục tiêu trước khi dồn sức.')));
+    } else if (kieu === 'tinhyeu5') {
+      const [a, b, c, d, e] = L;
+      out.push(`Về phía bạn là ${goi(a)} (${k2(a)}), người ấy là ${goi(b)} (${k2(b)}). ${thuan(a) === thuan(b) ? (thuan(a) ? 'Hai người đang cùng nhịp, dễ hiểu nhau.' : 'Cả hai đều đang có vướng mắc riêng.') : 'Hai người đang ở hai trạng thái khác nhau, cần lắng nghe nhiều hơn.'}`);
+      out.push(`Điều gắn kết hai người là ${goi(c)} (${k2(c)}), ${noi(c, d)} thử thách ${goi(d)} (${k2(d)}). ${thuan(c) && !thuan(d) ? 'Sợi dây đủ bền để cùng vượt qua thử thách này.' : !thuan(c) && !thuan(d) ? 'Cả sợi dây lẫn thử thách đều cần được chăm chút, đừng để mọi thứ trôi đi.' : 'Thử thách ở mức vừa phải.'}`);
+      out.push(`Hướng phát triển: ${goi(e)} cho thấy ${thuan(e) ? `mối quan hệ đi về phía ${k2(e)}` : `nếu không thay đổi, có thể gặp ${k2(e)}`}.`);
+    } else if (kieu === 'congviec') {
+      const [a, b, c, d, e] = L;
+      out.push(`Công việc hiện tại mang màu sắc của ${goi(a)} (${k2(a)}). Điểm mạnh của bạn là ${goi(b)}: ${thuan(b) ? `hãy dựa vào ${k2(b)}` : `năng lực đang bị ${k2(b)} che khuất`}.`);
+      out.push(`Trở ngại là ${goi(c)} (${k2(c)}), ${thuan(c) ? 'vượt qua được nếu có kế hoạch' : 'đây là điều cần xử lý trước tiên'}. Cơ hội phía trước là ${goi(d)} (${k2(d)}).`);
+      out.push(`Hướng đi: ${goi(e)} gợi ý ${thuan(e) ? `bước tiếp theo nên dựa vào ${k2(e)}` : `hãy tránh ${k2(e)} khi chọn bước tiếp theo`}.`);
+    } else if (kieu === 'tienbac') {
+      const [a, b, c, d] = L;
+      out.push(`Tài chính hiện tại thể hiện qua ${goi(a)} (${k2(a)}), còn cách bạn nghĩ về tiền là ${goi(b)} (${k2(b)}). ${thuan(b) ? 'Quan điểm này là nền tảng tốt.' : 'Thói quen và suy nghĩ về tiền là điều nên xem lại trước.'}`);
+      out.push(`Xu hướng thời gian tới là ${goi(c)}: ${thuan(c) ? `nghiêng về ${k2(c)}` : `có thể gặp ${k2(c)}, nên giữ quỹ dự phòng`}. Lời khuyên từ ${goi(d)}: ${thuan(d) ? 'dựa vào' : 'cẩn thận với'} ${k2(d)}.`);
     } else out.push(L.map((l, i) => `${i ? noi(L[i - 1], l) + ' ' : ''}${goi(l)} ở vị trí ${l.viTri.toLowerCase()} (${k2(l)})`).join(', ') + '.');
 
     // Lời nhắn chung: dựa vào lá thuận đầu tiên và lá nghịch đầu tiên
@@ -300,6 +374,31 @@
     return out;
   }
 
-  const Tarot = { BO_BAI, KIEU_TRAI, CHU_DE, THONG_TIN_BO, NHOM, xaoBai, docBai, timLa, ngauNhien };
+  /** Sắc thái của một trải bài: số lá thuận, Ẩn Chính, ngược, bộ nổi bật */
+  function sacThai(chon) {
+    const la = chon.map(c => Object.assign({}, BO_BAI[c.id], { nguoc: !!c.nguoc })), n = la.length, dem = {};
+    la.forEach(l => { if (l.bo) dem[l.bo] = (dem[l.bo] || 0) + 1; });
+    const bo = Object.entries(dem).sort((x, y) => y[1] - x[1])[0];
+    const thuanSo = la.filter(thuan).length, tb = (2 * thuanSo - n) / n;
+    return { soLa: n, thuan: thuanSo, anChinh: la.filter(l => l.nhom === 'anChinh').length, nguoc: la.filter(l => l.nguoc).length,
+      boNoiBat: bo ? `${THONG_TIN_BO[bo[0]].ten} (${bo[1]} lá)` : 'không có', nhan: tb >= 0.5 ? 'khá thuận lợi' : tb <= -0.5 ? 'nhiều thử thách' : 'đan xen' };
+  }
+  /** So sánh hai lần trải bài a, b ({ kieu, chuDe, chon }): lá lặp lại, sắc thái, nhận xét */
+  function soSanh(a, b) {
+    const sa = sacThai(a.chon), sb = sacThai(b.chon);
+    const lap = a.chon.filter(x => b.chon.some(y => y.id === x.id)).map(x => {
+      const y = b.chon.find(z => z.id === x.id);
+      return { id: x.id, ten: BO_BAI[x.id].ten, chieu: x.nguoc === y.nguoc ? `cùng ${x.nguoc ? 'ngược' : 'xuôi'}` : `lần đầu ${x.nguoc ? 'ngược' : 'xuôi'}, lần sau ${y.nguoc ? 'ngược' : 'xuôi'}` };
+    });
+    const nx = [];
+    nx.push(lap.length ? `Có ${lap.length} lá xuất hiện ở cả hai lần (${lap.map(l => l.ten).join(', ')}): đây là chủ đề đang lặp lại, đáng để suy ngẫm kỹ.` : 'Không có lá nào lặp lại giữa hai lần trải bài.');
+    const ta = sa.thuan / sa.soLa, tbb = sb.thuan / sb.soLa;
+    nx.push(Math.abs(ta - tbb) < 0.2 ? `Sắc thái hai lần tương tự nhau (${sa.nhan} và ${sb.nhan}).` : tbb > ta ? `Lần sau thuận hơn lần trước (${Math.round(tbb * 100)}% so với ${Math.round(ta * 100)}% lá thuận).` : `Lần sau nhiều thử thách hơn lần trước (${Math.round(tbb * 100)}% so với ${Math.round(ta * 100)}% lá thuận).`);
+    if (a.chuDe !== b.chuDe) nx.push(`Hai lần hỏi về hai chủ đề khác nhau (${CHU_DE[a.chuDe].ten}, ${CHU_DE[b.chuDe].ten}), nên chỉ nên so sánh sắc thái chung.`);
+    if (a.kieu !== b.kieu) nx.push(`Hai kiểu trải khác nhau (${KIEU_TRAI[a.kieu].ten}; ${KIEU_TRAI[b.kieu].ten})${sa.soLa !== sb.soLa ? ', số lá khác nhau nên so theo tỉ lệ' : ', các vị trí mang nghĩa khác nhau'}.`);
+    return { a: sa, b: sb, lapLai: lap, nhanXet: nx };
+  }
+
+  const Tarot = { BO_BAI, KIEU_TRAI, CHU_DE, THONG_TIN_BO, NHOM, xaoBai, docBai, timLa, ngauNhien, sacThai, soSanh };
   if (typeof module !== 'undefined' && module.exports) module.exports = Tarot; else root.Tarot = Tarot;
 })(typeof window !== 'undefined' ? window : globalThis);

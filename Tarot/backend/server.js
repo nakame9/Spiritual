@@ -32,14 +32,23 @@ app.get('/api/la-bai/:id', (req, res) => {
 app.get('/api/kieu-trai', (req, res) => res.json(Tarot.KIEU_TRAI));
 app.get('/api/chu-de', (req, res) => res.json(Object.fromEntries(Object.entries(Tarot.CHU_DE).map(([k, c]) => [k, { ten: c.ten, moTa: c.moTa }]))));
 
-// Rút bài: máy chủ xáo cả bộ rồi lấy các lá trên cùng theo kiểu trải
+// Rút bài: máy chủ xáo cả bộ rồi lấy các lá trên cùng theo kiểu trải. cauHoi (không bắt buộc) được đưa vào phần tổng hợp
+// So sánh hai lần trải bài: { a: { kieu, chuDe, chon: [{ id, nguoc }] }, b: {...} }
+app.post('/api/so-sanh', (req, res) => {
+  const b = req.body || {}, hop = x => x && Tarot.KIEU_TRAI[x.kieu] && Object.prototype.hasOwnProperty.call(Tarot.CHU_DE, x.chuDe) && Array.isArray(x.chon)
+    && x.chon.length === Tarot.KIEU_TRAI[x.kieu].viTri.length && x.chon.every(c => c && Number.isInteger(c.id) && c.id >= 0 && c.id < 78)
+    && new Set(x.chon.map(c => c.id)).size === x.chon.length;
+  if (!hop(b.a) || !hop(b.b)) return res.status(400).json({ error: 'Cần a và b, mỗi bên { kieu, chuDe, chon: [{ id 0–77, nguoc }] } đủ số lá của kiểu trải, không trùng lá.' });
+  res.json(Tarot.soSanh(b.a, b.b));
+});
 app.post('/api/rut-bai', (req, res) => {
   const b = req.body || {}, kieu = b.kieu || '3la', chuDe = b.chuDe || 'tongquan';
   if (!Tarot.KIEU_TRAI[kieu]) return res.status(400).json({ error: `kieu cần là ${Object.keys(Tarot.KIEU_TRAI).join(', ')}.` });
   if (!Object.prototype.hasOwnProperty.call(Tarot.CHU_DE, chuDe)) return res.status(400).json({ error: `chuDe cần là ${Object.keys(Tarot.CHU_DE).join(', ')}.` });
   if (b.nguoc !== undefined && typeof b.nguoc !== 'boolean') return res.status(400).json({ error: 'nguoc cần là true hoặc false.' });
+  if (b.cauHoi !== undefined && (typeof b.cauHoi !== 'string' || b.cauHoi.length > 200)) return res.status(400).json({ error: 'cauHoi là chuỗi tối đa 200 ký tự.' });
   const n = Tarot.KIEU_TRAI[kieu].viTri.length;
-  const ketQua = Tarot.docBai(kieu, Tarot.xaoBai(b.nguoc !== false).slice(0, n), chuDe);
+  const ketQua = Tarot.docBai(kieu, Tarot.xaoBai(b.nguoc !== false).slice(0, n), chuDe, b.cauHoi);
   res.json(ketQua);
 });
 
