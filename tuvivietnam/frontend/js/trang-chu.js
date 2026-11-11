@@ -43,7 +43,7 @@
 
   function theMat(l) {
     const vm = l.ma === 'vanMay' ? `<p class="them"><b>Màu hợp:</b> ${l.mau}.<br><b>Số may mắn:</b> ${l.so.join(', ')}.<br><b>${l.ngayHop.replace(/:.*/, ':')}</b>${l.ngayHop.replace(/^[^:]*:/, '')}.</p>` : '';
-    return `<article class="lv-the ${l.muc}${l.ma === 'tongQuan' ? ' rong' : ''}" id="lv-${l.ma}">
+    return `<article class="lv-the ${l.muc}${l.ma === 'tongQuan' ? ' rong' : ''}">
       <header><h3>${l.ten}</h3><span class="diem">${l.phanTram}<small>%</small></span></header>
       <div class="thanh" aria-hidden="true"><i style="width:${l.phanTram}%"></i></div>
       <span class="muc-nhan">${l.nhan}</span>
@@ -67,28 +67,7 @@
     return `${d.nam}-${String(d.thang).padStart(2, '0')}-${String(d.ngay).padStart(2, '0')}`;
   }
 
-  // Vận trình hôm nay: bốn thẻ công việc, tài chính, tình cảm, sức khỏe
-  const BON = ['congViec', 'taiChinh', 'tinhCam', 'sucKhoe'];
-  const cauDau = s => (String(s).match(/^.*?[.!?](\s|$)/) || [s])[0].trim();
-  function veVanTrinh() {
-    const ds = kq.ky.ngay.linhVuc.filter(l => BON.includes(l.ma));
-    $('vt-ngay').textContent = `${kq.ngaySinh.duong}, ${kq.hoSo.tuVi.canChi}. Điểm tham khảo 0–100%, 50% là trung bình.`;
-    $('vt-the').innerHTML = `<div class="luoi-vt">${ds.map(l => `<article class="vt ${l.muc}">
-      <div class="vt-dau"><h3>${l.ten}</h3><span class="diem">${l.phanTram}<small>%</small></span></div>
-      <div class="thanh" role="img" aria-label="${l.ten}: ${l.phanTram} trên 100"><i style="width:${l.phanTram}%"></i></div>
-      <span class="muc">${l.nhan}</span>
-      <p>${cauDau(l.nhanDinh)}</p>
-      <a href="#lv-${l.ma}" data-mo="${l.ma}" aria-label="Xem chi tiết ${l.ten.toLowerCase()}">Xem chi tiết</a></article>`).join('')}</div>`;
-  }
-  function moChiTiet(ma) {
-    ky = 'ngay'; veKy(); $('kq').hidden = false;
-    const el = document.getElementById('lv-' + ma) || $('kq');
-    const d = el.querySelector && el.querySelector('details'); if (d) d.open = true;
-    el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
-  }
-  $('vt-the').addEventListener('click', e => { const a = e.target.closest('a[data-mo]'); if (a) { e.preventDefault(); moChiTiet(a.dataset.mo); } });
-
-  function show(cuon = true) {
+  function show() {
     let v;
     try {
       v = read();
@@ -104,20 +83,16 @@
     $('ho-so').innerHTML = `
       <a class="hs" href="la-so.html"><span class="nhan">Tử vi</span><b>${t.canChi}, tuổi ${t.con}</b><p>${t.tuoiAm} tuổi âm lịch năm ${HOM_NAY.y}</p><p>Mệnh ${t.banMenh}, ${t.cuc}</p>
         <p>Cung Mệnh tại ${t.menhChi}: ${t.menhChinh.length ? t.menhChinh.join(', ') : 'Vô chính diệu'}</p><span class="more">Xem lá số đầy đủ</span></a>
-      <a class="hs" href="../../zodiac/frontend/cung.html#${z.id}"><span class="nhan">Cung hoàng đạo</span><b>${z.ten} <span class="en">${z.en}</span></b>
+      <a class="hs" href="../../zodiac/frontend/cung.html#${z.id}"><span class="nhan">Cung hoàng đạo</span><b><span class="ky-zodiac" aria-hidden="true">${z.kyHieu}</span> ${z.ten} <span class="en">${z.en}</span></b>
         <p>Nguyên tố ${z.nguyenTo}: ${z.tuKhoa}</p><p>Mặt Trăng ở ${z.matTrang}</p>${z.giaoCung ? `<p>Sinh đúng ngày giao cung ${z.giaoCung}; đã tính theo giờ sinh.</p>` : ''}<span class="more">Tính cách, tình yêu, sự nghiệp</span></a>
       <a class="hs" href="../../numerology/frontend/index.html#ngay=${kq.ngaySinh.iso}"><span class="nhan">Số chủ đạo</span><b>Số ${s.hien}: ${s.ten}</b><p>${s.tuKhoa}</p>
         <p>Chỉ số ngày sinh ${s.ngaySinh}, chỉ số thái độ ${s.thaiDo}</p><p>Năm cá nhân ${HOM_NAY.y}: số ${s.namCaNhan.so} (${s.namCaNhan.ten})</p><span class="more">Xem đủ các chỉ số</span></a>`;
-    veKy(); veVanTrinh();
-    if (cuon) $('van-trinh').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    veKy();
+    $('kq').hidden = false;
+    $('kq').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
   }
 
   $('q-form').addEventListener('submit', e => { e.preventDefault(); show(); });
-  // Đã có hồ sơ trên máy: tính vận trình hôm nay ngay khi mở trang (hiện khung chờ trong lúc tính)
-  if (saved && saved.namSinh) {
-    $('vt-the').innerHTML = `<div class="luoi-vt" aria-busy="true">${BON.map(() => '<div class="vt dang-tai-the dang-tai"></div>').join('')}</div>`;
-    (window.requestIdleCallback || (f => setTimeout(f, 50)))(() => show(false));
-  }
   // Nút mở công cụ: kiểm tra ngày sinh, lưu, rồi mở trang đó với dữ liệu điền sẵn
   document.querySelector('.nut-phu').addEventListener('click', e => {
     const b = e.target.closest('button[data-di]'); if (!b) return;
@@ -130,19 +105,11 @@
   $('q-form').addEventListener('change', e => { if (e.target.name === 'q-lich') syncNhuan(); });
   $('ky-tab').addEventListener('click', e => { const b = e.target.closest('button'); if (b && kq) { ky = b.dataset.ky; veKy(); } });
 
-  // Lịch âm hôm nay (cùng cách tính với trang Xem ngày)
+  // Dải lịch trên cùng: hôm nay theo lịch vạn niên (cùng cách tính với trang Xem ngày)
   if (window.XemNgay) {
     const r = XemNgay.xemNgay(HOM_NAY.d, HOM_NAY.m, HOM_NAY.y);
-    $('lich-the').innerHTML = `<div class="lich-ngay"><span class="thu">${r.duong.thu}</span><span class="so">${HOM_NAY.d}</span><span class="thang">tháng ${HOM_NAY.m}, ${HOM_NAY.y}</span>
-        <span class="am">Âm lịch <b>${r.am.d}/${r.am.m}${r.am.nhuan ? ' nhuận' : ''}</b>, năm ${r.canChi.nam}</span></div>
-      <dl class="lich-tt">
-        <div><dt>Can chi</dt><dd>Ngày ${r.canChi.ngay}, tháng ${r.canChi.thang}</dd></div>
-        <div><dt>Ngày</dt><dd><span class="dau-ngay ${r.hoangDao.tot ? 'tot' : 'xau'}">${r.hoangDao.tot ? 'Hoàng đạo' : 'Hắc đạo'}</span> ${r.hoangDao.than}</dd></div>
-        <div><dt>Tiết khí</dt><dd>${r.tietKhi.ten}${r.tietKhi.batDau ? ' (bắt đầu hôm nay)' : ''}</dd></div>
-        <div><dt>Trực, sao</dt><dd>Trực ${r.truc.ten}, sao ${r.sao.ten}</dd></div>
-        <div class="rong"><dt>Giờ hoàng đạo</dt><dd><span class="gio-ds">${r.gioHoangDao.map(g => `<span>${g.chi} ${g.gio}</span>`).join('')}</span></dd></div>
-      </dl>`;
-  } else $('lich-the').innerHTML = '<p class="trong-rong">Không tải được lịch hôm nay. Mở trang <a href="../../xemngay/frontend/index.html">Lịch vạn niên</a>.</p>';
+    $('hom-nay').innerHTML = `${r.duong.thu}, ${r.duong.chu}, ngày ${r.am.d}/${r.am.m}${r.am.nhuan ? ' nhuận' : ''} âm lịch, ${r.canChi.ngay}, ${r.hoangDao.tot ? 'hoàng đạo' : 'hắc đạo'} ${r.hoangDao.than}. <a href="../../xemngay/frontend/index.html">Xem ngày hôm nay</a>`;
+  }
 
   // Thẻ xem trước công cụ: bấm hoặc dùng phím mũi tên để đổi màn hình
   const tabs = [...document.querySelectorAll('.mh-tab [role="tab"]')];

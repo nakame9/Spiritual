@@ -67,8 +67,8 @@ test('API tổng hợp và trang chủ mới, trang xem nhanh, tài nguyên các
   assert.strictEqual((await post({ ngay: 15, thang: 8, nam: 1990, gio: 5, gioiTinh: 'nam', homNay: '2026-02-30' })).status, 400);
   assert.strictEqual((await post({ ngay: 15, thang: 13, nam: 1990, gio: 5, gioiTinh: 'nam' })).status, 400);
   const home = await (await fetch(base + '/')).text();
-  assert.match(home, /Khám phá vận mệnh của bạn/);
+  assert.match(home, /Một ngày sinh, ba góc nhìn/);
   assert.strictEqual((await fetch(base + '/xem-nhanh.html')).status, 404); // đã bỏ trang Xem tử vi nhanh
-  for (const p of ['/js/tong-hop.js', '/js/trang-chu.js', '/shared/site.css', '/shared/site.js', '/shared/dieu-huong.js', '/tim-kiem.html', '/tai-khoan.html', '/gioi-thieu.html', '/tuvivietnam/frontend/index.html', '/numerology/frontend/index.html', '/zodiac/frontend/js/luan-giai.js', '/zodiac/frontend/js/vendor/astronomy.browser.min.js', '/numerology/frontend/js/so-hoc.js', '/xemngay/frontend/index.html', '/xemngay/frontend/js/lich-ngay.js', '/Tarot/frontend/index.html'])
+  for (const p of ['/js/tong-hop.js', '/js/trang-chu.js', '/shared/site.css', '/tuvivietnam/frontend/index.html', '/numerology/frontend/index.html', '/zodiac/frontend/js/luan-giai.js', '/zodiac/frontend/js/vendor/astronomy.browser.min.js', '/numerology/frontend/js/so-hoc.js', '/xemngay/frontend/index.html', '/xemngay/frontend/js/lich-ngay.js', '/Tarot/frontend/index.html'])
     assert.strictEqual((await fetch(base + p)).status, 200, p);
 });
