@@ -13,7 +13,7 @@ flowchart LR
     G["index.html ở gốc\n(chuyển hướng)"] --> TV
     subgraph TV["tuvivietnam/frontend"]
       home["index.html\nTrang chủ kết hợp 3 hệ"]
-      tvp["la-so · con-giap · bai-viet · admin"]
+      tvp["la-so · con-giap · bai-viet · tra-cuu · admin"]
     end
     TA["Tarot/frontend\nindex · xem-bai · thu-vien"]
     ZO["zodiac/frontend\nindex · cung · tu-vi · tuong-hop · ban-do-sao"]
@@ -87,7 +87,7 @@ Trang chủ nạp lõi của phần khác qua đường dẫn tương đối, v�
 
 | Máy chủ | Cổng | API chính |
 |---|---|---|
-| `tuvivietnam/backend` | 3000 | `POST /api/la-so`, `POST /api/tong-hop`, `GET /api/con-giap`, `GET /api/bai-viet`, `/api/admin/*` (đăng nhập). Phục vụ thêm `/shared`, `/Tarot/frontend`, `/zodiac/frontend`, `/numerology/frontend`, `/xemngay/frontend` nên chạy một máy chủ này là đủ cả site |
+| `tuvivietnam/backend` | 3000 | `POST /api/la-so`, `POST /api/tong-hop`, `GET /api/con-giap`, `GET /api/bai-viet`, `POST /api/tro-ly` (trợ lý AI, cần `ANTHROPIC_API_KEY`), `/api/admin/*` (đăng nhập). Phục vụ thêm `/shared`, `/Tarot/frontend`, `/zodiac/frontend`, `/numerology/frontend`, `/xemngay/frontend` nên chạy một máy chủ này là đủ cả site |
 | `Tarot/backend` | 3001 | `POST /api/rut-bai`, `GET /api/bo-bai?q=&nhom=`, `GET /api/la-bai/:id`, `GET /api/kieu-trai`, `GET /api/chu-de` |
 | `zodiac/backend` | 3002 | `GET /api/xac-dinh`, `GET /api/tu-vi/:cung`, `GET /api/tuong-hop`, `POST /api/ban-do-sao`, `GET /api/cung`, `GET /api/dia-diem` |
 | `numerology/backend` | 3003 | `GET /api/so-chu-dao`, `GET /api/tuong-hop`, `GET /api/y-nghia/:so`, `GET /api/chu-ky` |

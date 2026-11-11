@@ -17,13 +17,14 @@ const MENU = [
   ['Tarot/frontend/index.html', 'Tarot', 'Tarot/frontend/'],
   ['zodiac/frontend/index.html', 'Hoàng đạo', 'zodiac/frontend/'],
   ['numerology/frontend/index.html', 'Số chủ đạo', 'numerology/frontend/'],
+  ['tuvivietnam/frontend/tra-cuu/index.html', 'Tra cứu', 'tuvivietnam/frontend/tra-cuu/'],
   ['tuvivietnam/frontend/bai-viet.html', 'Bài viết', 'tuvivietnam/frontend/bai-viet'],
 ];
 const THE_NAV = /<nav aria-label="Menu chính">[\s\S]*?<\/nav>/;
 const THE_CHAN = /<nav aria-label="Chân trang">[\s\S]*?<\/nav>/;
 
 // Trang ở thư mục con của frontend cũng có menu (trang bài viết sinh bởi scripts/bai-viet.js)
-const THU_MUC_CON = ['tuvivietnam/frontend/bai-viet'];
+const THU_MUC_CON = ['tuvivietnam/frontend/bai-viet', 'tuvivietnam/frontend/tra-cuu'];
 function cacTrang() {
   const html = d => fs.existsSync(d) ? fs.readdirSync(d).filter(f => f.endsWith('.html')).map(f => path.join(d, f)) : [];
   return fs.readdirSync(GOC, { withFileTypes: true }).filter(d => d.isDirectory() && fs.existsSync(path.join(GOC, d.name, 'frontend')))

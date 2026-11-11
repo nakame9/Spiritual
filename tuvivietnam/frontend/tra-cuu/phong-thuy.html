@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Phong thủy cá nhân · Lá Số Tử Vi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Cung phi theo Bát trạch, 8 hướng tốt xấu, hướng nhà, hướng bàn làm việc, màu sắc, không gian sống và bố trí cơ bản. Ghi rõ phương pháp và dữ liệu đầu vào.">
+<link rel="stylesheet" href="../../../shared/site.css">
+<link rel="stylesheet" href="../css/tra-cuu.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="site">
+    <a class="brand" href="../index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi</a>
+    <nav aria-label="Menu chính"><a href="../index.html">Trang chủ</a><a href="../la-so.html">Lập lá số</a><a href="../con-giap.html">12 con giáp</a><a href="../../../xemngay/frontend/index.html">Xem ngày</a><a href="../../../Tarot/frontend/index.html">Tarot</a><a href="../../../zodiac/frontend/index.html">Hoàng đạo</a><a href="../../../numerology/frontend/index.html">Số chủ đạo</a><a href="index.html" aria-current="page">Tra cứu</a><a href="../bai-viet.html">Bài viết</a></nav>
+  </header>
+  <nav class="subnav" aria-label="Tra cứu"><a href="index.html">Tất cả</a><a href="ngu-hanh.html">Ngũ hành, bản mệnh</a><a href="hop-tuoi.html">Xem tuổi hai người</a><a href="phong-thuy.html" aria-current="page">Phong thủy cá nhân</a><a href="giai-mong.html">Giải mộng</a><a href="tro-ly.html">Trợ lý AI</a></nav>
+
+  <section class="hero">
+    <div>
+      <h1>Phong thủy cá nhân</h1>
+      <p class="lede">Gợi ý theo phong thủy Bát trạch: từ năm sinh và giới tính tính ra cung phi, rồi từ cung phi suy ra bốn hướng tốt, bốn hướng xấu. Trang ghi rõ dữ liệu nào được dùng và những gì Bát trạch không xét tới, để bạn không kết luận về ngôi nhà chỉ từ năm sinh.</p>
+    </div>
+    <form class="panel" id="form" novalidate>
+      <h2>Thông tin của bạn</h2>
+      <fieldset class="f"><legend>Ngày sinh dương lịch</legend><div class="date"><input type="text" inputmode="numeric" id="ad" maxlength="2" placeholder="Ngày" aria-label="Ngày"><i>/</i><input type="text" inputmode="numeric" id="am" maxlength="2" placeholder="Tháng" aria-label="Tháng"><i>/</i><input type="text" inputmode="numeric" class="y" id="ay" maxlength="4" placeholder="Năm" aria-label="Năm"></div></fieldset><fieldset class="f"><legend>Giới tính (bắt buộc với Bát trạch)</legend><div class="seg"><label><input type="radio" name="agt" value="nam" id="anam"><span>Nam</span></label><label><input type="radio" name="agt" value="nu" id="anu"><span>Nữ</span></label></div></fieldset><label class="f"><span>Đổi năm can chi</span><select id="quy-tac"><option value="tet">Theo Tết Nguyên đán (phổ biến ở Việt Nam)</option><option value="lapXuan">Theo tiết Lập xuân (Bát tự, sách Trung Hoa)</option></select></label>
+      <label class="f"><span>Hướng nhà đang ở (không bắt buộc)</span><select id="huong-nha"><option value="">Chưa biết hoặc không xét</option><option>Bắc</option><option>Đông Bắc</option><option>Đông</option><option>Đông Nam</option><option>Nam</option><option>Tây Nam</option><option>Tây</option><option>Tây Bắc</option></select></label>
+      <label class="f"><span>Hoặc số độ la bàn đo ở cửa chính, nhìn ra ngoài (0–359)</span><input type="text" inputmode="decimal" id="do" maxlength="5" placeholder="Ví dụ: 135"></label>
+      <p class="err" id="loi" role="alert" hidden></p>
+      <div class="row"><button class="go" type="submit">Xem phong thủy</button><span class="muted">Tính trên máy bạn.</span></div>
+    </form>
+  </section>
+  <div id="kq" class="kq" hidden aria-live="polite"></div>
+
+  <footer class="foot">
+    <p class="foot-loi">Lá Số Tử Vi: tử vi phái Việt, chiêm tinh phương Tây, thần số học, Tarot và lịch vạn niên.</p>
+    <nav aria-label="Chân trang"><a href="../index.html">Trang chủ</a><a href="../la-so.html">Lập lá số</a><a href="../con-giap.html">12 con giáp</a><a href="../../../xemngay/frontend/index.html">Xem ngày</a><a href="../../../Tarot/frontend/index.html">Tarot</a><a href="../../../zodiac/frontend/index.html">Hoàng đạo</a><a href="../../../numerology/frontend/index.html">Số chủ đạo</a><a href="index.html">Tra cứu</a><a href="../bai-viet.html">Bài viết</a></nav>
+    <p class="small">Kết quả tính theo phương pháp ghi rõ trên trang, chỉ để tham khảo.</p>
+  </footer>
+</div>
+<script src="../js/tuvi.js"></script>
+<script src="../js/congiap.js"></script>
+<script src="../js/ban-menh.js"></script>
+<script src="../js/tra-cuu.js"></script>
+<script src="../js/trang-phong-thuy.js"></script>
+</body>
+</html>

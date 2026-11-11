@@ -142,6 +142,7 @@ const muc = (b, goc) => `<li><a href="${goc}bai-viet/${b.slug}.html">${esc(b.tie
 function sitemap() {
   const tinh = fs.readdirSync(GOC, { withFileTypes: true }).filter(d => d.isDirectory() && fs.existsSync(path.join(GOC, d.name, 'frontend')))
     .flatMap(d => fs.readdirSync(path.join(GOC, d.name, 'frontend')).filter(f => f.endsWith('.html')).map(f => `${d.name}/frontend/${f}`))
+    .concat(fs.readdirSync(path.join(GOC, 'tuvivietnam/frontend/tra-cuu')).filter(f => f.endsWith('.html')).map(f => `tuvivietnam/frontend/tra-cuu/${f}`))
     .filter(p => !/noindex/.test(fs.readFileSync(path.join(GOC, p), 'utf8'))).sort();
   const dong = [...tinh.map(p => `  <url><loc>${url(p)}</loc></url>`),
     ...BAI.map(b => `  <url><loc>${url(`tuvivietnam/frontend/bai-viet/${b.slug}.html`)}</loc><lastmod>${b.capNhat}</lastmod></url>`)];

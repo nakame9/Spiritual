@@ -8,6 +8,7 @@ const ConGiap = require('../frontend/js/congiap.js');
 const ConGiapHoSo = require('../frontend/js/con-giap-ho-so.js');
 const Markdown = require('../frontend/js/markdown.js');
 const ThuVien = require('../frontend/js/thu-vien.js');
+const TroLy = require('../frontend/js/tro-ly.js');
 // Trang chủ kết hợp tử vi, cung hoàng đạo (../../zodiac) và số chủ đạo (../../numerology)
 const TongHop = require('../frontend/js/tong-hop.js');
 const { moKho } = require('./lib/kho');
@@ -124,6 +125,54 @@ app.post('/api/tong-hop', (req, res) => {
   } catch (e) {
     return res.status(400).json({ error: e.message });
   }
+});
+
+// ---------- Trợ lý AI huyền học ----------
+// Hệ thống tính dữ liệu bằng bộ quy tắc của site (TroLy.tinh); mô hình AI chỉ nhận dữ liệu đã tính để diễn giải.
+// Bật AI: đặt ANTHROPIC_API_KEY (tùy chọn ANTHROPIC_MODEL, ANTHROPIC_BASE_URL). Không có khóa thì trả lời theo mẫu.
+// ponytail: giới hạn lượt hỏi theo IP trong bộ nhớ một tiến trình; nhiều máy chủ thì chuyển sang kho chung (Redis)
+const luotHoi = new Map(), GIOI_HAN = Number(process.env.TRO_LY_GIOI_HAN || 20), CUA_SO = 10 * 60 * 1000;
+function quaGioiHan(ip) {
+  const now = Date.now(), ds = (luotHoi.get(ip) || []).filter(t => now - t < CUA_SO);
+  ds.push(now); luotHoi.set(ip, ds);
+  if (luotHoi.size > 5000) for (const [k, v] of luotHoi) if (!v.some(t => now - t < CUA_SO)) luotHoi.delete(k);
+  return ds.length > GIOI_HAN;
+}
+function docHoSo(h) {
+  if (h == null) return {};
+  if (typeof h !== 'object') throw new Error('hoSo cần là object.');
+  const out = {}, so = (k, min, max) => { if (h[k] === undefined || h[k] === null || h[k] === '') return; const v = Number(h[k]); if (!Number.isInteger(v) || v < min || v > max) throw new Error(`hoSo.${k} cần là số nguyên từ ${min} đến ${max}.`); out[k] = v; };
+  so('d', 1, 31); so('m', 1, 12); so('y', 1900, 2100); so('gio', 1, 12);
+  if (out.d && out.m && out.y && new Date(Date.UTC(out.y, out.m - 1, out.d)).getUTCDate() !== out.d) throw new Error('Ngày sinh không có trên lịch.');
+  if (h.gioiTinh !== undefined && h.gioiTinh !== '' && h.gioiTinh !== 'nam' && h.gioiTinh !== 'nu') throw new Error('hoSo.gioiTinh cần là "nam" hoặc "nu".');
+  if (h.gioiTinh) out.gioiTinh = h.gioiTinh;
+  if (h.ten !== undefined) { if (typeof h.ten !== 'string' || h.ten.length > 60) throw new Error('hoSo.ten tối đa 60 ký tự.'); out.ten = h.ten.trim(); }
+  return out;
+}
+async function hoiAI(cauHoi, kq) {
+  const p = TroLy.taoPrompt(cauHoi, kq), c = new AbortController(), t = setTimeout(() => c.abort(), 30000);
+  try {
+    const r = await fetch((process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com') + '/v1/messages', { method: 'POST', signal: c.signal,
+      headers: { 'content-type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({ model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-5-5', max_tokens: 900, system: p.system, messages: [{ role: 'user', content: p.user }] }) });
+    if (!r.ok) throw new Error(`AI trả mã ${r.status}`);
+    const j = await r.json(), text = (j.content || []).filter(x => x.type === 'text').map(x => x.text).join('\n').trim();
+    if (!text) throw new Error('AI không trả lời');
+    return text;
+  } finally { clearTimeout(t); }
+}
+app.post('/api/tro-ly', async (req, res) => {
+  const b = req.body || {}, cauHoi = typeof b.cauHoi === 'string' ? b.cauHoi.trim() : '';
+  if (!cauHoi || cauHoi.length > 500) return res.status(400).json({ error: 'cauHoi cần từ 1 đến 500 ký tự.' });
+  let hoSo; try { hoSo = docHoSo(b.hoSo); } catch (e) { return res.status(400).json({ error: e.message }); }
+  if (quaGioiHan(req.ip)) return res.status(429).json({ error: 'Bạn hỏi hơi nhanh, hãy thử lại sau ít phút.' });
+  const d = new Date(Date.now() + 7 * 3600 * 1000), homNay = { y: d.getUTCFullYear(), m: d.getUTCMonth() + 1, d: d.getUTCDate() };
+  const kq = TroLy.tinh(cauHoi, hoSo, homNay), mau = () => TroLy.traLoiMau(kq).join('\n\n');
+  const goc = { loai: kq.loai, thieu: kq.thieu, duLieu: TroLy.tomTat(kq), ai: !!process.env.ANTHROPIC_API_KEY };
+  // Thiếu đầu vào hoặc câu hỏi ngoài phạm vi: không cần gọi AI
+  if (!process.env.ANTHROPIC_API_KEY || (kq.thieu.length && !kq.duLieu) || kq.loai === 'khac') return res.json(Object.assign(goc, { traLoi: mau(), nguon: 'mau' }));
+  try { res.json(Object.assign(goc, { traLoi: await hoiAI(cauHoi, kq), nguon: 'ai' })); }
+  catch (e) { console.error('tro-ly:', e.message); res.json(Object.assign(goc, { traLoi: mau(), nguon: 'mau', ghiChu: 'Trợ lý AI tạm thời không phản hồi, đây là câu trả lời theo mẫu.' })); }
 });
 
 // Bài viết đã xuất bản và các đoạn luận giải đã sửa, cho web công khai

@@ -12,6 +12,7 @@ tuvivietnam/
 │   ├── bai-viet.html    Thư viện bài viết: tìm, lọc chuyên mục, mới nhất, phổ biến, yêu thích
 │   ├── bai-viet/        Mỗi bài một trang tĩnh, sinh bởi scripts/bai-viet.js (đừng sửa tay)
 │   ├── bai-viet-doc.html  Trang đọc bài đăng từ trang quản trị (cần backend)
+│   ├── tra-cuu/         Ngũ hành và bản mệnh, xem tuổi hai người, phong thủy cá nhân, giải mộng, trợ lý AI
 │   ├── admin/index.html Trang quản trị (chỉ chạy khi mở qua backend)
 │   └── js/
 │       ├── tuvi.js      Engine: lịch âm (Hồ Ngọc Đức) và an sao
@@ -158,6 +159,7 @@ Máy chủ này cũng phục vụ `/zodiac/frontend`, `/numerology/frontend`, `/
 
 - `GET /api/bai-viet`: danh sách bài đã xuất bản (mới nhất trước), không kèm nội dung.
 - `GET /api/bai-viet/:slug`: một bài, có `html` đã chuyển từ Markdown.
+- `POST /api/tro-ly` `{ cauHoi, hoSo: { d, m, y, gio, gioiTinh, ten } }`: trợ lý huyền học. Trả `{ traLoi, nguon: 'ai' | 'mau', loai, duLieu, thieu }`. Giới hạn 20 câu hỏi mỗi 10 phút cho một IP (`TRO_LY_GIOI_HAN`).
 - `POST /api/bai-viet/:slug/xem`: ghi một lượt đọc (bài trong thư viện hoặc bài đã xuất bản). `GET /api/bai-viet/luot-xem`: `{ slug: số lượt }`, dùng cho mục Phổ biến.
 - `GET /api/luan-giai/ghi-de`: các đoạn luận giải đã sửa, dạng `{ "cung.Mệnh": "...", "chinh.1.tinh": "..." }`.
 
@@ -182,3 +184,31 @@ Thêm hoặc sửa bài: sửa file dữ liệu rồi chạy `npm run bai-viet` 
 - **Phổ biến**: theo lượt đọc backend ghi nhận; không có backend (GitHub Pages) thì theo thứ tự biên tập (`noiBat`).
 - **Yêu thích**: lưu trong trình duyệt (localStorage), không gửi đi.
 - Link cũ `bai-viet.html#tu-vi-la-gi`, `#doc-la-so`, `#dai-han-tieu-han` tự chuyển sang trang riêng của bài.
+
+## Tra cứu (`frontend/tra-cuu/`)
+
+| Trang | Nội dung | Dữ liệu cần |
+|---|---|---|
+| `ngu-hanh.html` | Can chi năm sinh, ngũ hành nạp âm, tương sinh, tương khắc, màu, phương hướng theo trường phái chọn (ngũ hành phương vị hoặc Bát trạch), quan hệ hai bản mệnh. Bảng "đừng đánh đồng" đặt cạnh nhau năm loại hành: nạp âm, can năm, chi năm, nhật chủ (Bát tự), cung phi | Ngày sinh; giới tính nếu xem cung phi |
+| `hop-tuoi.html` | Báo cáo tương hợp hai người: tuổi, can chi, nạp âm, cung phi; địa chi, thiên can, nạp âm, du niên cung phi; đánh giá theo mục đích (dùng `ConGiapHoSo.hopTuoi`); Kim lâu nếu nhập năm cưới. In được, có đường dẫn báo cáo | Ngày sinh, giới tính hai người |
+| `phong-thuy.html` | Bát trạch: cung phi, la bàn 8 hướng, hướng nhà (so cả cách xét hướng cửa và cách xét tọa), hướng bàn làm việc, bố trí phòng, màu theo nạp âm và theo cung phi. Ghi rõ dữ liệu đầu vào và những gì Bát trạch không xét | Ngày sinh và giới tính (bắt buộc); hướng nhà hoặc số độ la bàn (không bắt buộc) |
+| `giai-mong.html` | 26 biểu tượng: diễn giải phổ biến, ý nghĩa biểu tượng, góc nhìn tâm lý, câu hỏi tự chiêm nghiệm. Không đưa con số, không khẳng định điềm báo | Mô tả hoặc từ khóa |
+| `tro-ly.html` | Trợ lý AI: `js/tro-ly.js` phân loại câu hỏi, tính dữ liệu bằng các module có sẵn, rồi AI chỉ diễn giải | Hồ sơ ngày giờ sinh |
+
+Cách tính trong `js/ban-menh.js`:
+
+- **Năm can chi**: đổi năm vào Tết (mặc định) hoặc Lập xuân (khi kinh độ Mặt Trời đạt 315°). Sinh đúng ngày Lập xuân thì báo cần giờ sinh.
+- **Cung phi**: nam `(11 − năm mod 9) mod 9`, nữ `(năm mod 9 + 4) mod 9`, 0 thành 9; số 5 nam đổi Khôn, nữ đổi Cấn. 1 Khảm, 2 Khôn, 3 Chấn, 4 Tốn, 6 Càn, 7 Đoài, 8 Cấn, 9 Ly.
+- **Du niên**: bảng Bát trạch Minh cảnh (Sinh Khí, Thiên Y, Diên Niên, Phục Vị tốt; Họa Hại, Ngũ Quỷ, Lục Sát, Tuyệt Mệnh xấu). Test kiểm tra bảng đối xứng và Đông, Tây tứ mệnh.
+- **Kim lâu**: tuổi mụ năm cưới chia 9 dư 1, 3, 6, 8.
+
+### Bật trợ lý AI
+
+Đặt biến môi trường cho backend:
+
+```bash
+ANTHROPIC_API_KEY=...            # bắt buộc để bật AI
+ANTHROPIC_MODEL=claude-sonnet-5-5 # tùy chọn
+```
+
+Không có khóa (hoặc AI lỗi, hoặc trang chạy trên GitHub Pages không có backend) thì trợ lý trả lời theo mẫu ghép từ cùng dữ liệu đã tính. Câu hỏi thiếu dữ liệu (ví dụ hỏi cung Quan Lộc mà chưa có giờ sinh) không được gửi cho AI. Lời nhắc hệ thống cấm AI tự tính hay thêm sao, cung, con số không có trong dữ liệu; người dùng luôn xem được dữ liệu AI đã nhận.
