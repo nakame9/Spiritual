@@ -9,7 +9,9 @@ tuvivietnam/
 │   ├── la-so.html       Lập lá số 12 cung; luận giải 6 phần từng cung; đại hạn, tiểu hạn, lưu niên, lưu nguyệt, lưu nhật theo năm chọn; báo cáo in PDF; hồ sơ đã lưu
 │   ├── con-giap.html    12 con giáp: trang riêng từng tuổi (#ty … #hoi) với năm sinh, can, nạp âm, tính cách, khía cạnh cuộc sống,
 │   │                    tử vi ngày, tuần, tháng, năm; công cụ tra tuổi hợp, tuổi xung theo 5 mục đích
-│   ├── bai-viet.html    Bài viết
+│   ├── bai-viet.html    Thư viện bài viết: tìm, lọc chuyên mục, mới nhất, phổ biến, yêu thích
+│   ├── bai-viet/        Mỗi bài một trang tĩnh, sinh bởi scripts/bai-viet.js (đừng sửa tay)
+│   ├── bai-viet-doc.html  Trang đọc bài đăng từ trang quản trị (cần backend)
 │   ├── admin/index.html Trang quản trị (chỉ chạy khi mở qua backend)
 │   └── js/
 │       ├── tuvi.js      Engine: lịch âm (Hồ Ngọc Đức) và an sao
@@ -156,6 +158,7 @@ Máy chủ này cũng phục vụ `/zodiac/frontend`, `/numerology/frontend`, `/
 
 - `GET /api/bai-viet`: danh sách bài đã xuất bản (mới nhất trước), không kèm nội dung.
 - `GET /api/bai-viet/:slug`: một bài, có `html` đã chuyển từ Markdown.
+- `POST /api/bai-viet/:slug/xem`: ghi một lượt đọc (bài trong thư viện hoặc bài đã xuất bản). `GET /api/bai-viet/luot-xem`: `{ slug: số lượt }`, dùng cho mục Phổ biến.
 - `GET /api/luan-giai/ghi-de`: các đoạn luận giải đã sửa, dạng `{ "cung.Mệnh": "...", "chinh.1.tinh": "..." }`.
 
 Các API công khai cho phép gọi từ trang khác (CORS). API quản trị nằm dưới `/api/admin` và cần đăng nhập.
@@ -167,3 +170,15 @@ Trả `{ "ok": true }` khi máy chủ đang chạy.
 ## GitHub Pages
 
 GitHub Pages của kho đang phục vụ từ thư mục gốc. Các file `index.html`, `la-so.html`, `bai-viet.html` ở gốc kho chỉ chuyển hướng vào `tuvivietnam/frontend/`, để link cũ vẫn mở được.
+
+## Thư viện bài viết
+
+Nội dung nằm ở `frontend/js/thu-vien-du-lieu.js`: 8 chuyên mục (Tử vi, 12 con giáp, Phong thủy, Chiêm tinh, Thần số học, Tarot, Lịch vạn niên, Kiến thức) và các bài. Mỗi bài có tiêu đề, mô tả ngắn, ảnh đại diện (SVG vẽ theo chuyên mục), mục lục, nội dung, ví dụ minh họa, câu hỏi thường gặp, bài liên quan, nguồn tham khảo, ngày đăng và ngày cập nhật.
+
+Thêm hoặc sửa bài: sửa file dữ liệu rồi chạy `npm run bai-viet` ở gốc kho. Lệnh này sinh `frontend/bai-viet/<slug>.html` (có thẻ canonical, Open Graph và dữ liệu có cấu trúc Article, FAQPage, BreadcrumbList cho máy tìm kiếm), cập nhật danh sách trong `bai-viet.html`, mục "Bài viết mới" ở trang chủ và `sitemap.xml`. `npm test` báo lỗi nếu quên chạy.
+
+- **Tìm kiếm**: không phân biệt dấu, mọi từ đều phải có; xếp theo độ khớp (tiêu đề, từ khóa, mô tả, nội dung).
+- **Bài liên quan**: từ khóa chung, cùng chuyên mục và độ giống nội dung (cosine trên tần suất từ).
+- **Phổ biến**: theo lượt đọc backend ghi nhận; không có backend (GitHub Pages) thì theo thứ tự biên tập (`noiBat`).
+- **Yêu thích**: lưu trong trình duyệt (localStorage), không gửi đi.
+- Link cũ `bai-viet.html#tu-vi-la-gi`, `#doc-la-so`, `#dai-han-tieu-han` tự chuyển sang trang riêng của bài.

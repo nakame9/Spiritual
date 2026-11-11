@@ -7,6 +7,7 @@ const LuanGiai = require('../frontend/js/luangiai.js');
 const ConGiap = require('../frontend/js/congiap.js');
 const ConGiapHoSo = require('../frontend/js/con-giap-ho-so.js');
 const Markdown = require('../frontend/js/markdown.js');
+const ThuVien = require('../frontend/js/thu-vien.js');
 // Trang chủ kết hợp tử vi, cung hoàng đạo (../../zodiac) và số chủ đạo (../../numerology)
 const TongHop = require('../frontend/js/tong-hop.js');
 const { moKho } = require('./lib/kho');
@@ -128,6 +129,15 @@ app.post('/api/tong-hop', (req, res) => {
 // Bài viết đã xuất bản và các đoạn luận giải đã sửa, cho web công khai
 const daXuatBan = () => kho.data.baiViet.filter(b => b.trangThai === 'xuatban').sort((a, b) => b.taoLuc.localeCompare(a.taoLuc));
 app.get('/api/bai-viet', (req, res) => res.json(daXuatBan().map(({ slug, tieuDe, chuyenMuc, tomTat, phutDoc, tacGia, taoLuc }) => ({ slug, tieuDe, chuyenMuc, tomTat, phutDoc, tacGia, taoLuc }))));
+// Lượt đọc cho mục "Phổ biến" của thư viện: chỉ nhận bài có thật (thư viện tĩnh hoặc bài đã xuất bản)
+// ponytail: không chống bấm lặp phía máy chủ (trình duyệt chỉ gửi một lần mỗi phiên); cần thì thêm giới hạn theo IP
+app.get('/api/bai-viet/luot-xem', (req, res) => res.json(kho.data.luotXem || {}));
+app.post('/api/bai-viet/:slug/xem', (req, res) => {
+  const slug = req.params.slug;
+  if (!ThuVien.BAI.some(b => b.slug === slug) && !daXuatBan().some(b => b.slug === slug)) return res.status(404).json({ error: 'Không tìm thấy bài viết.' });
+  const luot = kho.sua(d => { d.luotXem = d.luotXem || {}; return (d.luotXem[slug] = (d.luotXem[slug] || 0) + 1); });
+  res.json({ slug, luot });
+});
 app.get('/api/bai-viet/:slug', (req, res) => {
   const b = daXuatBan().find(x => x.slug === req.params.slug);
   if (!b) return res.status(404).json({ error: 'Không tìm thấy bài viết.' });

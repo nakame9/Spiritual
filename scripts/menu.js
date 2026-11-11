@@ -17,14 +17,17 @@ const MENU = [
   ['Tarot/frontend/index.html', 'Tarot', 'Tarot/frontend/'],
   ['zodiac/frontend/index.html', 'Hoàng đạo', 'zodiac/frontend/'],
   ['numerology/frontend/index.html', 'Số chủ đạo', 'numerology/frontend/'],
-  ['tuvivietnam/frontend/bai-viet.html', 'Bài viết'],
+  ['tuvivietnam/frontend/bai-viet.html', 'Bài viết', 'tuvivietnam/frontend/bai-viet'],
 ];
 const THE_NAV = /<nav aria-label="Menu chính">[\s\S]*?<\/nav>/;
 const THE_CHAN = /<nav aria-label="Chân trang">[\s\S]*?<\/nav>/;
 
+// Trang ở thư mục con của frontend cũng có menu (trang bài viết sinh bởi scripts/bai-viet.js)
+const THU_MUC_CON = ['tuvivietnam/frontend/bai-viet'];
 function cacTrang() {
+  const html = d => fs.existsSync(d) ? fs.readdirSync(d).filter(f => f.endsWith('.html')).map(f => path.join(d, f)) : [];
   return fs.readdirSync(GOC, { withFileTypes: true }).filter(d => d.isDirectory() && fs.existsSync(path.join(GOC, d.name, 'frontend')))
-    .flatMap(d => fs.readdirSync(path.join(GOC, d.name, 'frontend')).filter(f => f.endsWith('.html')).map(f => path.join(GOC, d.name, 'frontend', f)));
+    .flatMap(d => html(path.join(GOC, d.name, 'frontend'))).concat(THU_MUC_CON.flatMap(d => html(path.join(GOC, d))));
 }
 function menuCho(trang, nhan = 'Menu chính') {
   const tuGoc = path.relative(GOC, trang).split(path.sep).join('/'), thuMuc = path.dirname(trang);
@@ -34,6 +37,9 @@ function menuCho(trang, nhan = 'Menu chính') {
   });
   return `<nav aria-label="${nhan}">${links.join('')}</nav>`;
 }
+
+module.exports = { menuCho, MENU, GOC };
+if (require.main !== module) return;
 
 const kiemTra = process.argv.includes('--kiem-tra'), lech = [];
 for (const trang of cacTrang()) {

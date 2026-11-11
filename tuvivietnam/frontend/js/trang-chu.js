@@ -125,10 +125,12 @@
     });
   });
 
-  // Có backend thì "Bài viết mới" lấy 3 bài mới nhất từ trang quản trị
+  // Có backend và trang quản trị có bài mới hơn thư viện thì "Bài viết mới" lấy 3 bài mới nhất từ đó (bỏ bài trùng với thư viện tĩnh)
   layApi('/api/bai-viet').then(ds => {
+    const tinh = [...document.querySelectorAll('.posts a')].map(a => a.getAttribute('href'));
+    ds = ds.filter(b => !tinh.includes(`bai-viet/${b.slug}.html`) && !['tu-vi-la-gi', 'doc-la-so', 'dai-han-tieu-han'].includes(b.slug));
     if (!ds.length) return;
-    document.querySelector('.posts').innerHTML = ds.slice(0, 3).map(b => `<li><a class="post" href="bai-viet.html#${escHtml(b.slug)}">
+    document.querySelector('.posts').innerHTML = ds.slice(0, 3).map(b => `<li><a class="post" href="bai-viet-doc.html#${encodeURIComponent(b.slug)}">
       <h3>${escHtml(b.tieuDe)}</h3><p>${escHtml(b.tomTat)}</p><span class="meta">${escHtml(b.chuyenMuc)}, ${b.phutDoc} phút đọc</span></a></li>`).join('');
   }).catch(() => {});
 })();
