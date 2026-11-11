@@ -46,10 +46,11 @@ Spiritual/
 ├── README.md               Tài liệu này
 ├── package.json            Lệnh chung: cai-dat, test, menu, start
 ├── index.html, la-so.html, bai-viet.html   Chuyển hướng vào tuvivietnam/frontend (giữ link cũ)
-├── design.md               Hệ giao diện đã khóa (Solstice): màu, chữ, nút, quy tắc. Trang mới đọc file này trước
+├── DESIGN.md, PRODUCT.md    Hệ giao diện "Đêm và ngày" (theo đặc tả giao diện v1.0) và bối cảnh sản phẩm. Trang mới đọc DESIGN.md trước
 ├── shared/site.css         Hệ giao diện dùng chung: khung trang, menu, chân trang, nút, ô nhập, sáng/tối. Một bản cho cả site
-├── shared/tokens.css, base.css, fonts.css, fonts/   Token màu và khoảng cách, quy tắc nền, phông tự lưu (Yeseva One, Archivo, Archivo Narrow)
-├── scripts/menu.js         Menu chính khai báo một chỗ, ghi vào mọi trang và kiểm tra lệch
+├── shared/tokens.css, base.css, fonts.css, fonts/   Token màu và khoảng cách, quy tắc nền, phông tự lưu (Playfair Display, Be Vietnam Pro)
+├── shared/site.css, site.js, dieu-huong.js        Thành phần dùng chung; hành vi header (menu nhóm, drawer, tìm kiếm); dữ liệu điều hướng
+├── scripts/menu.js         Sinh header và chân trang từ shared/dieu-huong.js vào mọi trang, kiểm tra lệch
 ├── tuvivietnam/            Tử vi + trang chủ          (frontend, backend, README)
 ├── xemngay/                Xem ngày tốt xấu           (frontend, backend, README)
 ├── Tarot/                  Tarot 78 lá                (frontend, backend, README)
@@ -101,7 +102,7 @@ Mọi máy chủ đều có `GET /api/health`. API công khai cho phép CORS. D�
 npm run cai-dat     # cài thư viện cho cả 5 backend
 npm test            # kiểm tra menu + chạy test của cả 5 phần
 npm start           # chạy cả site ở http://localhost:3000 (backend tử vi)
-npm run menu        # sau khi sửa scripts/menu.js: ghi lại menu vào mọi trang
+npm run menu        # sau khi sửa shared/dieu-huong.js: ghi lại header và chân trang vào mọi trang
 ```
 
 Mỗi phần vẫn chạy riêng được: `cd zodiac/backend && npm install && npm start`.
@@ -110,12 +111,12 @@ Mỗi phần vẫn chạy riêng được: `cd zodiac/backend && npm install && 
 
 | Việc | Sửa ở đâu |
 |---|---|
-| Đổi màu, chữ, kiểu nút, menu cho cả site | Token trong `shared/tokens.css`, thành phần trong `shared/site.css`; ghi lại thay đổi trong `design.md` |
+| Đổi màu, chữ, kiểu nút, menu cho cả site | Token trong `shared/tokens.css`, thành phần trong `shared/site.css`; ghi lại thay đổi trong `DESIGN.md` |
 | Đổi ảnh | Ảnh Wikimedia Commons là thẻ `<img>` trong từng trang, ghi công ở chân trang (`data-credits`). Ảnh chụp công cụ ở `tuvivietnam/frontend/img/cong-cu/` |
-| Thêm, bớt, đổi tên mục menu | `MENU` trong `scripts/menu.js`, rồi chạy `npm run menu` (ghi cả menu chính và menu chân trang) |
+| Thêm, bớt, đổi tên mục menu | `NHOM` trong `shared/dieu-huong.js`, rồi chạy `npm run menu` (ghi header, drawer trên điện thoại, chân trang; trang tìm kiếm đọc cùng dữ liệu) |
 | Thêm trang mới trong một phần | Tạo `frontend/<trang>.html`, đặt `<nav aria-label="Menu chính"></nav>` và link `../../shared/site.css`, rồi chạy `npm run menu` |
-| Thêm một phần mới | Tạo `<phần>/frontend` và `<phần>/backend` theo khuôn trên. Thêm lệnh vào `package.json` gốc, thêm mục vào `scripts/menu.js`. Nếu muốn `npm start` phục vụ luôn phần mới thì thêm tên thư mục vào vòng lặp phục vụ tĩnh trong `tuvivietnam/backend/server.js` |
+| Thêm một phần mới | Tạo `<phần>/frontend` và `<phần>/backend` theo khuôn trên. Thêm lệnh vào `package.json` gốc, thêm mục vào `shared/dieu-huong.js`. Nếu muốn `npm start` phục vụ luôn phần mới thì thêm tên thư mục vào vòng lặp phục vụ tĩnh trong `tuvivietnam/backend/server.js` |
 | Sửa nội dung luận giải | Tử vi: trang quản trị (khi chạy backend) hoặc `tuvivietnam/frontend/js/luangiai.js`. Tarot: `bo-bai.js`, `y-nghia-chu-de.js`. Hoàng đạo: `cung-hoang-dao.js`, `luan-giai.js`. Số chủ đạo: `so-hoc.js`. Xem ngày: `xemngay/frontend/js/lich-ngay.js` (trực, sao, ngày kỵ, hướng, cách chấm điểm) |
 | Đổi cách chấm điểm trang chủ | `tuvivietnam/frontend/js/tong-hop.js` (trọng số 40/60 cho tử vi, trung bình ba hệ) |
 
-`npm test` sẽ báo lỗi nếu menu trên trang nào lệch khỏi `scripts/menu.js`, nên quên chạy `npm run menu` cũng bị phát hiện.
+`npm test` sẽ báo lỗi nếu header, chân trang trên trang nào lệch khỏi `shared/dieu-huong.js`, nên quên chạy `npm run menu` cũng bị phát hiện.

@@ -1,64 +1,113 @@
 <!doctype html>
 <html lang="vi">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Lá Số Tử Vi · Tử vi, cung hoàng đạo, số chủ đạo</title>
+<title>Lá Số Tử Vi · Khám phá vận mệnh: tử vi, chiêm tinh, thần số học</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Nhập ngày giờ sinh một lần để xem tổng quan vận trình theo tử vi phái Việt, cung hoàng đạo và số chủ đạo: công việc, tài chính, tình cảm, sức khỏe, vận may hôm nay, tuần này, tháng này, năm nay.">
+<meta name="description" content="Nhập ngày giờ sinh một lần để có hồ sơ vận mệnh theo tử vi phái Việt, chiêm tinh và thần số học: vận trình hôm nay, lá số 12 cung, bản đồ sao, lịch âm, Tarot và thư viện kiến thức.">
+<link rel="canonical" href="https://nakame9.github.io/Spiritual/tuvivietnam/frontend/index.html">
 <link rel="stylesheet" href="../../shared/site.css">
+<script src="../../shared/site.js" defer></script>
 <link rel="stylesheet" href="css/trang-chu.css">
-
+</head>
+<body>
 <div class="wrap">
-  <p class="banner" id="hom-nay"></p>
   <header class="site">
-    <a class="brand" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi</a>
-    <nav aria-label="Menu chính"><a href="index.html" aria-current="page">Trang chủ</a><a href="la-so.html">Lập lá số</a><a href="con-giap.html">12 con giáp</a><a href="../../xemngay/frontend/index.html">Xem ngày</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="../../numerology/frontend/index.html">Số chủ đạo</a><a href="tra-cuu/index.html">Tra cứu</a><a href="bai-viet.html">Bài viết</a></nav>
+    <div class="site-in">
+      <a class="brand" href="index.html"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="20" cy="20" r="12.5" fill="none" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="32.50" y1="20.00" x2="37.50" y2="20.00" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="30.83" y1="26.25" x2="35.16" y2="28.75" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="26.25" y1="30.83" x2="28.75" y2="35.16" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="20.00" y1="32.50" x2="20.00" y2="37.50" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="13.75" y1="30.83" x2="11.25" y2="35.16" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="9.17" y1="26.25" x2="4.84" y2="28.75" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="7.50" y1="20.00" x2="2.50" y2="20.00" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="9.17" y1="13.75" x2="4.84" y2="11.25" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="13.75" y1="9.17" x2="11.25" y2="4.84" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="20.00" y1="7.50" x2="20.00" y2="2.50" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="26.25" y1="9.17" x2="28.75" y2="4.84" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="30.83" y1="13.75" x2="35.16" y2="11.25" stroke="currentColor" stroke-width="0.9" opacity=".7"/><path d="M20 11.5l1.9 6.6 6.6 1.9-6.6 1.9L20 28.5l-1.9-6.6-6.6-1.9 6.6-1.9z" fill="currentColor"/></svg><span class="brand-chu"><span class="brand-ten">Lá Số Tử Vi</span><span class="brand-phu">Tử vi, chiêm tinh, thần số học</span></span></a>
+      <nav class="menu" id="menu-chinh" aria-label="Menu chính">
+        <div class="menu-dau"><span>Lá Số Tử Vi</span><button type="button" class="nut-tron dong-menu" aria-label="Đóng menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button></div>
+        <ul><li class="menu-muc dang-o"><a href="index.html" aria-current="page">Trang chủ</a></li><li class="menu-muc"><button type="button" aria-expanded="false" aria-controls="tha-tu-vi">Tử vi<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="tha" id="tha-tu-vi"><ul><li><a href="la-so.html"><b>Lập lá số</b><span>12 cung, luận giải, đại hạn, tiểu hạn</span></a></li><li><a href="con-giap.html"><b>12 con giáp</b><span>Tuổi, bản mệnh, vận trình theo ngày, tháng, năm</span></a></li><li><a href="tra-cuu/hop-tuoi.html"><b>Xem tuổi hợp</b><span>Kết hôn, làm ăn, báo cáo hai người</span></a></li></ul></div></li><li class="menu-muc"><button type="button" aria-expanded="false" aria-controls="tha-lich">Lịch & phong thủy<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="tha" id="tha-lich"><ul><li><a href="../../xemngay/frontend/index.html"><b>Lịch vạn niên</b><span>Lịch tháng âm dương, xem ngày tốt xấu</span></a></li><li><a href="../../xemngay/frontend/chon-ngay.html"><b>Chọn ngày theo việc</b><span>Khai trương, cưới hỏi, động thổ, nhập trạch</span></a></li><li><a href="tra-cuu/ngu-hanh.html"><b>Ngũ hành, bản mệnh</b><span>Nạp âm, tương sinh, màu sắc, phương hướng</span></a></li><li><a href="tra-cuu/phong-thuy.html"><b>Phong thủy cá nhân</b><span>Cung phi, hướng nhà, bàn làm việc</span></a></li></ul></div></li><li class="menu-muc"><button type="button" aria-expanded="false" aria-controls="tha-chiem-tinh">Chiêm tinh<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="tha" id="tha-chiem-tinh"><ul><li><a href="../../zodiac/frontend/index.html"><b>12 cung hoàng đạo</b><span>Xác định cung, tính cách, nguyên tố</span></a></li><li><a href="../../zodiac/frontend/tu-vi.html"><b>Tử vi theo cung</b><span>Ngày, tuần, tháng, năm</span></a></li><li><a href="../../zodiac/frontend/ban-do-sao.html"><b>Bản đồ sao</b><span>Hành tinh, 12 nhà, góc chiếu, luận giải</span></a></li><li><a href="../../zodiac/frontend/tuong-hop.html"><b>Độ tương hợp</b><span>Hai cung hoàng đạo hợp nhau thế nào</span></a></li><li><a href="../../zodiac/frontend/hop-doi.html"><b>Hợp đôi</b><span>Đối chiếu hai bản đồ sao</span></a></li></ul></div></li><li class="menu-muc"><button type="button" aria-expanded="false" aria-controls="tha-than-so">Thần số học<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="tha" id="tha-than-so"><ul><li><a href="../../numerology/frontend/index.html"><b>Số chủ đạo</b><span>Chỉ số cá nhân, năm, tháng, ngày cá nhân</span></a></li><li><a href="../../numerology/frontend/tuong-hop.html"><b>So sánh hai số</b><span>Tương hợp hai số chủ đạo</span></a></li></ul></div></li><li class="menu-muc"><button type="button" aria-expanded="false" aria-controls="tha-kham-pha">Khám phá<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="tha" id="tha-kham-pha"><ul><li><a href="../../Tarot/frontend/index.html"><b>Tarot</b><span>Chọn chủ đề, trải bài, lật bài</span></a></li><li><a href="../../Tarot/frontend/thu-vien.html"><b>Thư viện lá bài</b><span>78 lá, ý nghĩa xuôi và ngược</span></a></li><li><a href="tra-cuu/giai-mong.html"><b>Giải mộng</b><span>Biểu tượng và góc nhìn tâm lý</span></a></li><li><a href="tra-cuu/tro-ly.html"><b>Trợ lý AI</b><span>Hỏi về kết quả đã tính</span></a></li></ul></div></li><li class="menu-muc"><button type="button" aria-expanded="false" aria-controls="tha-kien-thuc">Kiến thức<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="tha" id="tha-kien-thuc"><ul><li><a href="bai-viet.html"><b>Bài viết</b><span>Thư viện kiến thức huyền học</span></a></li><li><a href="bai-viet/thuat-ngu-huyen-hoc.html"><b>Từ điển huyền học</b><span>Thuật ngữ thường gặp</span></a></li><li><a href="bai-viet/doc-huyen-hoc-tinh-tao.html"><b>Hướng dẫn đọc kết quả</b><span>Phương pháp luận, đọc cho tỉnh táo</span></a></li><li><a href="gioi-thieu.html"><b>Giới thiệu và phương pháp</b><span>Cách tính, nguồn dữ liệu, liên hệ</span></a></li></ul></div></li></ul>
+      </nav>
+      <div class="site-phai">
+        <a class="nut-tron mo-tim" href="tim-kiem.html" aria-label="Tìm kiếm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15.5 15.5 20.5 20.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+        <a class="nut-tron" href="tai-khoan.html" aria-label="Hồ sơ của tôi"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 20c1.2-3.6 4-5.4 7.5-5.4s6.3 1.8 7.5 5.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+        <button type="button" class="nut-tron mo-menu" aria-label="Mở menu" aria-controls="menu-chinh" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+      </div>
+      <div class="o-tim" hidden><form action="tim-kiem.html" role="search"><label class="visually-hidden" for="o-tim-q">Tìm công cụ hoặc bài viết</label><input type="search" id="o-tim-q" name="q" placeholder="Tìm công cụ, bài viết" autocomplete="off"><button class="go" type="submit">Tìm</button></form></div>
+      <button type="button" class="menu-dong" tabindex="-1" aria-hidden="true"></button>
+    </div>
   </header>
 
-  <section class="hero-tc" aria-labelledby="h-hero">
-    <div class="hero-chu">
-      <h1 id="h-hero">Một ngày sinh, ba góc nhìn</h1>
-      <p class="lead">Nhập ngày giờ sinh một lần, rồi xem tổng quan vận trình, lá số, bản đồ sao hay số chủ đạo.</p>
-    </div>
-    <div class="quick">
-      <form id="q-form" novalidate aria-label="Xem dự đoán của bạn">
-        <fieldset class="f"><legend>Giới tính</legend>
-          <div class="seg">
-            <label><input type="radio" name="q-gt" id="q-nam" checked><span>Nam</span></label>
-            <label><input type="radio" name="q-gt" id="q-nu"><span>Nữ</span></label>
-          </div>
-        </fieldset>
-        <fieldset class="f"><legend>Lịch</legend>
-          <div class="seg">
-            <label><input type="radio" name="q-lich" id="q-duong" checked><span>Dương</span></label>
-            <label><input type="radio" name="q-lich" id="q-am"><span>Âm</span></label>
-          </div>
-        </fieldset>
+  <section class="hero-dem dem bleed" aria-labelledby="h-hero">
+    <svg class="vong-nen" viewBox="0 0 640 640" aria-hidden="true" focusable="false"><circle cx="320" cy="320" r="310" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.55"/><circle cx="320" cy="320" r="262" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.4"/><circle cx="320" cy="320" r="200" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.3"/><circle cx="320" cy="320" r="120" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.25"/><line x1="320.0" y1="200.0" x2="320.0" y2="10.0" stroke="currentColor" stroke-width=".7" opacity=".3"/><circle cx="394.0" cy="43.7" r="3" fill="currentColor" opacity=".55"/><line x1="380.0" y1="216.1" x2="475.0" y2="51.5" stroke="currentColor" stroke-width=".7" opacity=".3"/><circle cx="522.2" cy="117.8" r="3" fill="currentColor" opacity=".55"/><line x1="423.9" y1="260.0" x2="588.5" y2="165.0" stroke="currentColor" stroke-width=".7" opacity=".3"/><circle cx="596.3" cy="246.0" r="3" fill="currentColor" opacity=".55"/><line x1="440.0" y1="320.0" x2="630.0" y2="320.0" stroke="currentColor" stroke-width=".7" opacity=".3"/><circle cx="596.3" cy="394.0" r="3" fill="currentColor" opacity=".55"/><line x1="423.9" y1="380.0" x2="588.5" y2="475.0" stroke="currentColor" stroke-width=".7" opacity=".3"/><circle cx="522.2" cy="522.2" r="3" fill="currentColor" opacity=".55"/><line x1="380.0" y1="423.9" x2="475.0" y2="588.5" stroke="currentColor" stroke-width=".7" opacity=".3"/><circle cx="394.0" cy="596.3" r="3" fill="currentColor" opacity=".55"/><line x1="320.0" y1="440.0" x2="320.0" y2="630.0" stroke="currentColor" stroke-width=".7" opacity=".3"/><circle cx="246.0" cy="596.3" r="3" fill="currentColor" opacity=".55"/><line x1="260.0" y1="423.9" x2="165.0" y2="588.5" stroke="currentColor" stroke-width=".7" opacity=".3"/><circle cx="117.8" cy="522.2" r="3" fill="currentColor" opacity=".55"/><line x1="216.1" y1="380.0" x2="51.5" y2="475.0" stroke="currentColor" stroke-width=".7" opacity=".3"/><circle cx="43.7" cy="394.0" r="3" fill="currentColor" opacity=".55"/><line x1="200.0" y1="320.0" x2="10.0" y2="320.0" stroke="currentColor" stroke-width=".7" opacity=".3"/><circle cx="43.7" cy="246.0" r="3" fill="currentColor" opacity=".55"/><line x1="216.1" y1="260.0" x2="51.5" y2="165.0" stroke="currentColor" stroke-width=".7" opacity=".3"/><circle cx="117.8" cy="117.8" r="3" fill="currentColor" opacity=".55"/><line x1="260.0" y1="216.1" x2="165.0" y2="51.5" stroke="currentColor" stroke-width=".7" opacity=".3"/><circle cx="246.0" cy="43.7" r="3" fill="currentColor" opacity=".55"/><line x1="630.0" y1="320.0" x2="618.0" y2="320.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="628.8" y1="347.0" x2="622.8" y2="346.5" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="625.3" y1="373.8" x2="619.4" y2="372.8" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="619.4" y1="400.2" x2="613.6" y2="398.7" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="611.3" y1="426.0" x2="605.7" y2="424.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="601.0" y1="451.0" x2="595.5" y2="448.5" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="588.5" y1="475.0" x2="578.1" y2="469.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="573.9" y1="497.8" x2="569.0" y2="494.4" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="557.5" y1="519.3" x2="552.9" y2="515.4" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="539.2" y1="539.2" x2="535.0" y2="535.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="519.3" y1="557.5" x2="515.4" y2="552.9" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="497.8" y1="573.9" x2="494.4" y2="569.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="475.0" y1="588.5" x2="469.0" y2="578.1" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="451.0" y1="601.0" x2="448.5" y2="595.5" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="426.0" y1="611.3" x2="424.0" y2="605.7" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="400.2" y1="619.4" x2="398.7" y2="613.6" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="373.8" y1="625.3" x2="372.8" y2="619.4" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="347.0" y1="628.8" x2="346.5" y2="622.8" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="320.0" y1="630.0" x2="320.0" y2="618.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="293.0" y1="628.8" x2="293.5" y2="622.8" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="266.2" y1="625.3" x2="267.2" y2="619.4" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="239.8" y1="619.4" x2="241.3" y2="613.6" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="214.0" y1="611.3" x2="216.0" y2="605.7" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="189.0" y1="601.0" x2="191.5" y2="595.5" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="165.0" y1="588.5" x2="171.0" y2="578.1" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="142.2" y1="573.9" x2="145.6" y2="569.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="120.7" y1="557.5" x2="124.6" y2="552.9" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="100.8" y1="539.2" x2="105.0" y2="535.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="82.5" y1="519.3" x2="87.1" y2="515.4" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="66.1" y1="497.8" x2="71.0" y2="494.4" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="51.5" y1="475.0" x2="61.9" y2="469.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="39.0" y1="451.0" x2="44.5" y2="448.5" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="28.7" y1="426.0" x2="34.3" y2="424.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="20.6" y1="400.2" x2="26.4" y2="398.7" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="14.7" y1="373.8" x2="20.6" y2="372.8" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="11.2" y1="347.0" x2="17.2" y2="346.5" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="10.0" y1="320.0" x2="22.0" y2="320.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="11.2" y1="293.0" x2="17.2" y2="293.5" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="14.7" y1="266.2" x2="20.6" y2="267.2" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="20.6" y1="239.8" x2="26.4" y2="241.3" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="28.7" y1="214.0" x2="34.3" y2="216.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="39.0" y1="189.0" x2="44.5" y2="191.5" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="51.5" y1="165.0" x2="61.9" y2="171.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="66.1" y1="142.2" x2="71.0" y2="145.6" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="82.5" y1="120.7" x2="87.1" y2="124.6" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="100.8" y1="100.8" x2="105.0" y2="105.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="120.7" y1="82.5" x2="124.6" y2="87.1" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="142.2" y1="66.1" x2="145.6" y2="71.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="165.0" y1="51.5" x2="171.0" y2="61.9" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="189.0" y1="39.0" x2="191.5" y2="44.5" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="214.0" y1="28.7" x2="216.0" y2="34.3" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="239.8" y1="20.6" x2="241.3" y2="26.4" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="266.2" y1="14.7" x2="267.2" y2="20.6" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="293.0" y1="11.2" x2="293.5" y2="17.2" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="320.0" y1="10.0" x2="320.0" y2="22.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="347.0" y1="11.2" x2="346.5" y2="17.2" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="373.8" y1="14.7" x2="372.8" y2="20.6" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="400.2" y1="20.6" x2="398.7" y2="26.4" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="426.0" y1="28.7" x2="424.0" y2="34.3" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="451.0" y1="39.0" x2="448.5" y2="44.5" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="475.0" y1="51.5" x2="469.0" y2="61.9" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="497.8" y1="66.1" x2="494.4" y2="71.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="519.3" y1="82.5" x2="515.4" y2="87.1" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="539.2" y1="100.8" x2="535.0" y2="105.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="557.5" y1="120.7" x2="552.9" y2="124.6" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="573.9" y1="142.2" x2="569.0" y2="145.6" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="588.5" y1="165.0" x2="578.1" y2="171.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="601.0" y1="189.0" x2="595.5" y2="191.5" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="611.3" y1="214.0" x2="605.7" y2="216.0" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="619.4" y1="239.8" x2="613.6" y2="241.3" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="625.3" y1="266.2" x2="619.4" y2="267.2" stroke="currentColor" stroke-width=".7" opacity=".45"/><line x1="628.8" y1="293.0" x2="622.8" y2="293.5" stroke="currentColor" stroke-width=".7" opacity=".45"/><polyline points="445.8,142.3 462.6,159.4 482.9,163.5 495.2,169.0" fill="none" stroke="currentColor" stroke-width=".6" opacity=".45"/><circle cx="445.8" cy="142.3" r="1.8" fill="currentColor" opacity=".8"/><circle cx="462.6" cy="159.4" r="1.8" fill="currentColor" opacity=".8"/><circle cx="482.9" cy="163.5" r="1.8" fill="currentColor" opacity=".8"/><circle cx="495.2" cy="169.0" r="1.8" fill="currentColor" opacity=".8"/><polyline points="509.1,448.3 486.8,456.4 490.0,494.2 463.2,487.6" fill="none" stroke="currentColor" stroke-width=".6" opacity=".45"/><circle cx="509.1" cy="448.3" r="1.8" fill="currentColor" opacity=".8"/><circle cx="486.8" cy="456.4" r="1.8" fill="currentColor" opacity=".8"/><circle cx="490.0" cy="494.2" r="1.8" fill="currentColor" opacity=".8"/><circle cx="463.2" cy="487.6" r="1.8" fill="currentColor" opacity=".8"/><polyline points="172.4,519.3 170.1,490.6 161.4,463.3 143.2,456.0" fill="none" stroke="currentColor" stroke-width=".6" opacity=".45"/><circle cx="172.4" cy="519.3" r="1.8" fill="currentColor" opacity=".8"/><circle cx="170.1" cy="490.6" r="1.8" fill="currentColor" opacity=".8"/><circle cx="161.4" cy="463.3" r="1.8" fill="currentColor" opacity=".8"/><circle cx="143.2" cy="456.0" r="1.8" fill="currentColor" opacity=".8"/><polyline points="141.8,197.1 134.5,163.0 153.7,155.3 179.4,142.9" fill="none" stroke="currentColor" stroke-width=".6" opacity=".45"/><circle cx="141.8" cy="197.1" r="1.8" fill="currentColor" opacity=".8"/><circle cx="134.5" cy="163.0" r="1.8" fill="currentColor" opacity=".8"/><circle cx="153.7" cy="155.3" r="1.8" fill="currentColor" opacity=".8"/><circle cx="179.4" cy="142.9" r="1.8" fill="currentColor" opacity=".8"/><path d="M320 280l7 26 26 7-26 7-7 26-7-26-26-7 26-7z" fill="currentColor" opacity=".5"/></svg>
+    <div class="hero-in">
+      <div class="hero-chu">
+        <h1 id="h-hero">Khám phá vận mệnh của bạn</h1>
+        <p class="lead">Tử vi phái Việt, chiêm tinh phương Tây và thần số học trong một hồ sơ. Nhập ngày giờ sinh một lần để xem vận trình hôm nay, lá số 12 cung, bản đồ sao và số chủ đạo.</p>
+        <ul class="hero-ba">
+          <li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l1.6 4.9 4.9 1.6-4.9 1.6L8 14.5l-1.6-4.9L1.5 8l4.9-1.6z" fill="currentColor"/></svg>Âm lịch theo thuật toán Hồ Ngọc Đức, an sao phái Việt</li>
+          <li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l1.6 4.9 4.9 1.6-4.9 1.6L8 14.5l-1.6-4.9L1.5 8l4.9-1.6z" fill="currentColor"/></svg>Vị trí hành tinh tính thật bằng thiên văn học</li>
+          <li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l1.6 4.9 4.9 1.6-4.9 1.6L8 14.5l-1.6-4.9L1.5 8l4.9-1.6z" fill="currentColor"/></svg>Tính ngay trên máy bạn, không gửi ngày sinh đi đâu</li>
+        </ul>
+      </div>
+      <form class="hero-form" id="q-form" novalidate aria-labelledby="h-form">
+        <h2 id="h-form">Hồ sơ vận mệnh</h2>
         <fieldset class="f"><legend>Ngày sinh</legend>
-          <div class="date">
-            <input type="number" id="q-ngay" inputmode="numeric" min="1" max="31" aria-label="Ngày" placeholder="Ngày">
-            <i>/</i><input type="number" id="q-thang" inputmode="numeric" min="1" max="12" aria-label="Tháng" placeholder="Tháng">
-            <i>/</i><input type="number" id="q-namsinh" class="y" inputmode="numeric" min="1900" max="2100" aria-label="Năm" placeholder="Năm">
-            <label class="nhuan" id="q-nhuan-wrap" hidden><input type="checkbox" id="q-nhuan">Nhuận</label>
+          <div class="ngay-lich">
+            <div class="date">
+              <input type="number" id="q-ngay" inputmode="numeric" min="1" max="31" aria-label="Ngày" placeholder="Ngày">
+              <i>/</i><input type="number" id="q-thang" inputmode="numeric" min="1" max="12" aria-label="Tháng" placeholder="Tháng">
+              <i>/</i><input type="number" id="q-namsinh" class="y" inputmode="numeric" min="1900" max="2100" aria-label="Năm" placeholder="Năm">
+            </div>
+            <div class="seg" role="radiogroup" aria-label="Loại lịch">
+              <label><input type="radio" name="q-lich" id="q-duong" checked><span>Dương lịch</span></label>
+              <label><input type="radio" name="q-lich" id="q-am"><span>Âm lịch</span></label>
+            </div>
+            <label class="nhuan" id="q-nhuan-wrap" hidden><input type="checkbox" id="q-nhuan">Tháng nhuận</label>
           </div>
         </fieldset>
-        <label class="f f-gio"><span>Giờ sinh</span><select id="q-gio"></select></label>
-        <label class="f f-noi"><span>Nơi sinh</span><select id="q-noi"></select></label>
-        <label class="f f-tz"><span>Múi giờ</span><select id="q-tz"></select></label>
-        <button class="go" type="submit">Xem tổng quan vận mệnh</button>
-        <div class="nut-phu" role="group" aria-label="Mở công cụ với ngày sinh này">
-          <button type="button" class="btn2" data-di="la-so">Lập lá số tử vi</button>
-          <button type="button" class="btn2" data-di="ban-do">Xem bản đồ sao</button>
-          <button type="button" class="btn2" data-di="so-hoc">Tính số chủ đạo</button>
+        <div class="hai-o">
+          <label class="f"><span>Giờ sinh</span><select id="q-gio"></select></label>
+          <fieldset class="f"><legend>Giới tính</legend>
+            <div class="seg">
+              <label><input type="radio" name="q-gt" id="q-nam" checked><span>Nam</span></label>
+              <label><input type="radio" name="q-gt" id="q-nu"><span>Nữ</span></label>
+            </div>
+          </fieldset>
+        </div>
+        <label class="f"><span>Nơi sinh</span><select id="q-noi"></select></label>
+        <details class="nang-cao"><summary>Múi giờ nơi sinh</summary>
+          <label class="f"><span>Múi giờ</span><select id="q-tz"></select></label>
+        </details>
+        <p class="goi-y">Giờ sinh quyết định cung Mệnh trong tử vi và cung Mọc trong chiêm tinh. Không chắc giờ, hãy chọn canh giờ gần nhất. Âm lịch dùng khi bạn chỉ biết ngày âm.</p>
+        <p class="err" id="q-err" role="alert" hidden></p>
+        <button class="go" type="submit">Lập hồ sơ vận mệnh</button>
+        <div class="nut-phu" role="group" aria-label="Mở thẳng một công cụ với ngày sinh này">
+          <span>Hoặc mở thẳng:</span>
+          <button type="button" class="link-nho" data-di="la-so">Lá số tử vi</button>
+          <button type="button" class="link-nho" data-di="ban-do">Bản đồ sao</button>
+          <button type="button" class="link-nho" data-di="so-hoc">Số chủ đạo</button>
         </div>
       </form>
-      <p class="ghi-chu">Nơi sinh và múi giờ chỉ dùng cho chiêm tinh phương Tây. Tử vi tính theo giờ Việt Nam, số chủ đạo chỉ cần ngày sinh.</p>
-      <p class="err" id="q-err" role="alert" hidden></p>
+    </div>
+  </section>
+
+  <section class="khoi" aria-labelledby="h-cn">
+    <div class="khoi-dau"><h2 id="h-cn">Các chức năng nổi bật</h2><a class="link-xem" href="tim-kiem.html">Tất cả công cụ</a></div>
+    <ul class="luoi-cn">
+      <li><a class="cn" href="la-so.html"><span class="cn-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="4" width="24" height="24" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 10h24M4 16h6M22 16h6M4 22h24M10 4v24M16 4v6M16 22v6M22 4v24" stroke="currentColor" stroke-width="1.2"/><rect x="10" y="10" width="12" height="12" fill="currentColor" opacity=".18"/></svg></span><h3>Lập lá số tử vi</h3><p>Khám phá 12 cung và vận hạn</p><span class="cn-xem">Xem chi tiết</span></a></li>
+      <li><a class="cn" href="con-giap.html"><span class="cn-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="11" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="27.0" cy="16.0" r="1.3" fill="currentColor"/><circle cx="25.5" cy="21.5" r="2.2" fill="currentColor"/><circle cx="21.5" cy="25.5" r="1.3" fill="currentColor"/><circle cx="16.0" cy="27.0" r="1.3" fill="currentColor"/><circle cx="10.5" cy="25.5" r="1.3" fill="currentColor"/><circle cx="6.5" cy="21.5" r="2.2" fill="currentColor"/><circle cx="5.0" cy="16.0" r="1.3" fill="currentColor"/><circle cx="6.5" cy="10.5" r="1.3" fill="currentColor"/><circle cx="10.5" cy="6.5" r="1.3" fill="currentColor"/><circle cx="16.0" cy="5.0" r="2.2" fill="currentColor"/><circle cx="21.5" cy="6.5" r="1.3" fill="currentColor"/><circle cx="25.5" cy="10.5" r="1.3" fill="currentColor"/><path d="M25.5 21.5 L6.5 21.5 L16.0 5.0Z" fill="none" stroke="currentColor" stroke-width="1.1"/></svg></span><h3>12 con giáp</h3><p>Tra cứu tuổi, bản mệnh và vận trình</p><span class="cn-xem">Xem chi tiết</span></a></li>
+      <li><a class="cn" href="../../zodiac/frontend/ban-do-sao.html"><span class="cn-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="1.1"/><path d="M16 4v4.5M16 23.5V28M4 16h4.5M23.5 16H28" stroke="currentColor" stroke-width="1.1"/><path d="M11 13.5 20.5 19" stroke="currentColor" stroke-width="1.1"/><circle cx="11" cy="13.5" r="2" fill="currentColor"/><circle cx="20.5" cy="19" r="1.6" fill="currentColor"/></svg></span><h3>Bản đồ sao</h3><p>Khám phá chiêm tinh cá nhân</p><span class="cn-xem">Xem chi tiết</span></a></li>
+      <li><a class="cn" href="../../numerology/frontend/index.html"><span class="cn-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="5" width="22" height="22" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12.3 5v22M19.7 5v22M5 12.3h22M5 19.7h22" stroke="currentColor" stroke-width="1.1"/><circle cx="8.7" cy="23.3" r="1.7" fill="currentColor"/><circle cx="16" cy="16" r="1.7" fill="currentColor"/><circle cx="23.3" cy="8.7" r="1.7" fill="currentColor"/><path d="M8.7 23.3 23.3 8.7" stroke="currentColor" stroke-width="1.1"/></svg></span><h3>Thần số học</h3><p>Tìm hiểu các chỉ số cá nhân</p><span class="cn-xem">Xem chi tiết</span></a></li>
+      <li><a class="cn" href="../../Tarot/frontend/index.html"><span class="cn-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="6" y="7" width="13" height="20" rx="2" transform="rotate(-10 12.5 17)" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".6"/><rect x="12" y="5" width="13" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M18.5 10.5l1.2 3.3 3.3 1.2-3.3 1.2-1.2 3.3-1.2-3.3-3.3-1.2 3.3-1.2z" fill="currentColor"/></svg></span><h3>Tarot</h3><p>Trải bài và đọc thông điệp</p><span class="cn-xem">Xem chi tiết</span></a></li>
+      <li><a class="cn" href="../../xemngay/frontend/index.html"><span class="cn-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="7" width="22" height="20" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5 12.5h22M11 4.5v5M21 4.5v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M19.5 15.5a4.5 4.5 0 1 0 0 8a3.6 3.6 0 1 1 0-8z" fill="currentColor"/><circle cx="10" cy="17" r="1.2" fill="currentColor"/><circle cx="10" cy="22" r="1.2" fill="currentColor"/><circle cx="14" cy="17" r="1.2" fill="currentColor"/></svg></span><h3>Lịch vạn niên</h3><p>Tra cứu ngày âm và thông tin ngày</p><span class="cn-xem">Xem chi tiết</span></a></li>
+    </ul>
+  </section>
+
+  <section class="khoi" id="van-trinh" aria-labelledby="h-vt">
+    <div class="khoi-dau"><h2 id="h-vt">Vận trình hôm nay</h2><p class="muted" id="vt-ngay"></p></div>
+    <div id="vt-the" aria-live="polite">
+      <div class="trong-rong vt-trong" id="vt-trong">
+        <p>Bạn chưa có hồ sơ vận mệnh. Nhập ngày giờ sinh ở đầu trang để xem công việc, tài chính, tình cảm và sức khỏe hôm nay, mỗi mặt có điểm tham khảo và nhận định ngắn.</p>
+        <a class="btn primary" href="#q-form">Lập hồ sơ</a>
+      </div>
     </div>
   </section>
 
   <section class="kq" id="kq" hidden aria-labelledby="h-kq">
-    <h2 id="h-kq">Tổng quan vận trình của bạn</h2>
+    <h2 id="h-kq">Báo cáo vận trình chi tiết</h2>
     <p class="ky-info" id="sinh"></p>
     <div class="ho-so" id="ho-so"></div>
     <div class="ky-tab" id="ky-tab" role="group" aria-label="Mốc thời gian"><button type="button" data-ky="ngay" aria-pressed="true">Hôm nay</button><button type="button" data-ky="tuan" aria-pressed="false">Tuần này</button><button type="button" data-ky="thang" aria-pressed="false">Tháng này</button><button type="button" data-ky="nam" aria-pressed="false">Năm nay</button></div>
@@ -68,94 +117,44 @@
     <p class="cach-tinh"><b>Lưu ý:</b> điểm số chỉ là chỉ số tham khảo theo quan niệm của từng hệ, không phải kết quả khoa học hay xác suất chắc chắn.</p>
   </section>
 
-  <section class="ban-do" aria-labelledby="h-map">
-    <div class="map-dau">
-      <h2 id="h-map">Bạn mang đến điều gì?</h2>
-      <p class="lead">Một ngày sinh, một ngày bất kỳ hay một câu hỏi. Mỗi thứ có công cụ đọc riêng.</p>
-    </div>
-    <div class="map" role="list">
-      <div class="nhom" role="listitem">
-        <p class="vao">Ngày giờ sinh</p>
-        <ul class="nhanh">
-          <li><a href="#q-form">Tổng quan vận trình</a><span>công việc, tài chính, tình cảm, sức khỏe, vận may theo ngày, tuần, tháng, năm</span></li>
-          <li><a href="la-so.html">Lập lá số tử vi</a><span>12 cung, chính tinh, đại hạn và tiểu hạn</span></li>
-          <li><a href="con-giap.html">Tử vi 12 con giáp</a><span>vận theo tuổi, giờ hoàng đạo</span></li>
-          <li><a href="../../zodiac/frontend/index.html">Cung hoàng đạo</a><span>tính cách, độ tương hợp, bản đồ sao</span></li>
-          <li><a href="../../numerology/frontend/index.html">Số chủ đạo</a><span>biểu đồ ngày sinh, năm cá nhân, bốn đỉnh cao</span></li>
-        </ul>
-      </div>
-      <div class="nhom" role="listitem">
-        <p class="vao">Một ngày</p>
-        <ul class="nhanh">
-          <li><a href="../../xemngay/frontend/index.html">Xem ngày tốt xấu</a><span>hoàng đạo, trực, sao, giờ tốt, chọn ngày theo việc</span></li>
-        </ul>
-      </div>
-      <div class="nhom" role="listitem">
-        <p class="vao">Một câu hỏi</p>
-        <ul class="nhanh">
-          <li><a href="../../Tarot/frontend/index.html">Xem bài Tarot</a><span>ý nghĩa xuôi, ngược của từng lá theo vị trí</span></li>
-        </ul>
-      </div>
+  <section class="khoi" aria-labelledby="h-lich">
+    <div class="khoi-dau"><h2 id="h-lich">Lịch âm hôm nay</h2><a class="link-xem" href="../../xemngay/frontend/index.html">Xem lịch tháng</a></div>
+    <div class="lich-the" id="lich-the"><span class="dang-tai" style="height: 160px"></span></div>
+  </section>
+
+  <section class="tarot-nhanh dem" aria-labelledby="h-tarot">
+    <div class="tn-bai" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="tn-chu">
+      <h2 id="h-tarot">Một câu hỏi, một lá bài</h2>
+      <p>Nghĩ về điều đang làm bạn bận tâm rồi tự tay rút từ bộ 78 lá đã xáo. Lá bài chỉ được lật khi bạn bắt đầu, kèm ý nghĩa theo vị trí và gợi ý chiêm nghiệm.</p>
+      <div class="row"><a class="btn primary" href="../../Tarot/frontend/index.html#1la">Rút một lá</a><a class="btn" href="../../Tarot/frontend/index.html#3la">Trải ba lá</a></div>
     </div>
   </section>
 
-  <section class="man-hinh" aria-labelledby="h-mh">
-    <h2 id="h-mh">Bốn màn hình thật</h2>
-    <div class="mh-tab" role="tablist" aria-label="Chọn công cụ">
-      <button type="button" role="tab" id="t-laso" aria-controls="p-laso" aria-selected="true">Lá số 12 cung</button>
-      <button type="button" role="tab" id="t-sao" aria-controls="p-sao" aria-selected="false" tabindex="-1">Bản đồ sao</button>
-      <button type="button" role="tab" id="t-tarot" aria-controls="p-tarot" aria-selected="false" tabindex="-1">Trải bài Tarot</button>
-      <button type="button" role="tab" id="t-lich" aria-controls="p-lich" aria-selected="false" tabindex="-1">Lịch tháng</button>
-    </div>
-    <div class="mh-panel" role="tabpanel" id="p-laso" aria-labelledby="t-laso">
-      <figure class="chup" data-slot="laso" data-kind="product" data-alt="Lá số 12 cung của một ngày sinh mẫu"><picture><source media="(max-width: 40rem)" srcset="img/cong-cu/la-so-dt.webp" width="720" height="514"><img src="img/cong-cu/la-so.webp" width="1440" height="1027" alt="Lá số 12 cung lập cho ngày sinh mẫu 15/8/1990, giờ Thìn" loading="lazy"></picture></figure>
-      <div class="mh-chu"><p>Lá số 12 cung đầy đủ kèm luận giải từng cung: Mệnh, Tài Bạch, Quan Lộc, Phu Thê và các cung còn lại.</p><a class="btn2" href="la-so.html">Lập lá số</a></div>
-    </div>
-    <div class="mh-panel" role="tabpanel" id="p-sao" aria-labelledby="t-sao" hidden>
-      <figure class="chup" data-slot="sao" data-kind="product" data-alt="Bản đồ sao của một ngày sinh mẫu"><picture><source media="(max-width: 40rem)" srcset="img/cong-cu/ban-do-sao-dt.webp" width="720" height="720"><img src="img/cong-cu/ban-do-sao.webp" width="1440" height="730" alt="Bản đồ sao với vị trí 10 hành tinh cho ngày sinh mẫu" loading="lazy"></picture></figure>
-      <div class="mh-chu"><p>Vị trí 10 hành tinh lúc bạn sinh ra, cung Mọc, cung Mặt Trăng và các góc chiếu chính.</p><a class="btn2" href="../../zodiac/frontend/ban-do-sao.html">Vẽ bản đồ sao</a></div>
-    </div>
-    <div class="mh-panel" role="tabpanel" id="p-tarot" aria-labelledby="t-tarot" hidden>
-      <figure class="chup" data-slot="tarot" data-kind="product" data-alt="Một trải bài Tarot ba lá đã lật"><picture><source media="(max-width: 40rem)" srcset="img/cong-cu/tarot-dt.webp" width="720" height="498"><img src="img/cong-cu/tarot.webp" width="1440" height="588" alt="Trải bài Tarot ba lá đã lật, kèm vị trí và chiều xuôi ngược" loading="lazy"></picture></figure>
-      <div class="mh-chu"><p>Tự chọn lá từ bộ 78 lá đã xáo, lật từng lá và đọc ý nghĩa xuôi ngược cho từng vị trí.</p><a class="btn2" href="../../Tarot/frontend/xem-bai.html">Rút bài</a></div>
-    </div>
-    <div class="mh-panel" role="tabpanel" id="p-lich" aria-labelledby="t-lich" hidden>
-      <figure class="chup" data-slot="lich" data-kind="product" data-alt="Lịch tháng tô màu theo ngày tốt xấu"><picture><source media="(max-width: 40rem)" srcset="img/cong-cu/lich-thang-dt.webp" width="720" height="352"><img src="img/cong-cu/lich-thang.webp" width="1440" height="727" alt="Lịch tháng với ngày âm lịch và mức tốt xấu của từng ngày" loading="lazy"></picture></figure>
-      <div class="mh-chu"><p>Lịch âm, ngày hoàng đạo, trực, sao, giờ tốt và chọn ngày cho cưới hỏi, khai trương, động thổ.</p><a class="btn2" href="../../xemngay/frontend/index.html">Xem ngày</a></div>
-    </div>
-  </section>
-
-  <section class="ba-ba" aria-labelledby="h-ba">
-    <figure class="anh anh-nen">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Candle_light_projected_through_a_glass_orb.jpg/1280px-Candle_light_projected_through_a_glass_orb.jpg" srcset="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Candle_light_projected_through_a_glass_orb.jpg/960px-Candle_light_projected_through_a_glass_orb.jpg 960w, https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Candle_light_projected_through_a_glass_orb.jpg/1280px-Candle_light_projected_through_a_glass_orb.jpg 1280w, https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Candle_light_projected_through_a_glass_orb.jpg/1920px-Candle_light_projected_through_a_glass_orb.jpg 1920w" sizes="(max-width: 60rem) 100vw, 58vw" width="4724" height="2657" alt="Ngọn nến trong chân đèn đồng bên quả cầu thủy tinh, ánh sáng hắt qua quả cầu" loading="lazy" onerror="this.closest('figure').hidden = true">
-    </figure>
-    <div class="ba-chu">
-      <h2 id="h-ba">Ba&nbsp;hệ, sáu&nbsp;mặt, bốn&nbsp;mốc</h2>
-      <dl class="so-ba">
-        <div><dt>Ba hệ</dt><dd>tử vi phái Việt, chiêm tinh phương Tây, thần số học</dd></div>
-        <div><dt>Sáu mặt</dt><dd>tổng quan, công việc, tài chính, tình cảm, sức khỏe, vận may</dd></div>
-        <div><dt>Bốn mốc</dt><dd>hôm nay, tuần này, tháng này, năm nay</dd></div>
-      </dl>
-      <p>Mỗi hệ cho một điểm riêng; khi cả ba cùng thuận hoặc cùng nghịch, tín hiệu càng rõ ràng.</p>
-    </div>
-  </section>
-
-  <section class="bai dai-muc" aria-labelledby="h-posts">
-    <div class="bai-dau"><h2 id="h-posts">Bài viết mới</h2><a class="btn2" href="bai-viet.html">Tất cả bài viết</a></div>
-    <ol class="posts">
+  <section class="khoi" aria-labelledby="h-bv">
+    <div class="khoi-dau"><h2 id="h-bv">Bài viết nổi bật</h2><a class="link-xem" href="bai-viet.html">Thư viện kiến thức</a></div>
+    <ul class="luoi-bv">
       <!-- bai-moi:bat-dau -->
-      <li><a class="post" href="bai-viet/thien-can-dia-chi.html"><h3>Thiên can và địa chi là gì?</h3><p>10 thiên can, 12 địa chi, vòng 60 năm Lục thập hoa giáp, cách tính can chi năm sinh và can chi của tháng, ngày, giờ.</p><span class="meta">Lịch vạn niên, 4 phút đọc</span></a></li>
-      <li><a class="post" href="bai-viet/ngu-hanh-tuong-sinh-tuong-khac.html"><h3>Ngũ hành tương sinh, tương khắc</h3><p>Kim, Mộc, Thủy, Hỏa, Thổ sinh và khắc nhau theo vòng nào, phản sinh và phản khắc là gì, và cách đọc &quot;mệnh hợp, mệnh khắc&quot; cho đúng.</p><span class="meta">Phong thủy, 4 phút đọc</span></a></li>
-      <li><a class="post" href="bai-viet/ban-do-sao-ca-nhan.html"><h3>Bản đồ sao cá nhân là gì?</h3><p>Bản đồ sao ghi vị trí Mặt Trời, Mặt Trăng và các hành tinh lúc bạn sinh ra. Cách đọc hành tinh, cung, nhà, góc chiếu và bộ ba Mặt Trời, Mặt Trăng, cung Mọc.</p><span class="meta">Chiêm tinh, 4 phút đọc</span></a></li>
+      <li><a class="bv" href="bai-viet/tu-vi-la-gi.html"><figure class="anh"><svg class="anh-bia" viewBox="0 0 640 360" role="img" aria-label="Ảnh minh họa chuyên mục Tử vi" preserveAspectRatio="xMidYMid slice"><rect width="640" height="360" class="nen"/><g class="sao"><circle cx="176.3" cy="141.4" r="2.7"/><circle cx="189.8" cy="128.6" r="2.1"/><circle cx="144.6" cy="83.5" r="3"/><circle cx="182.8" cy="321.4" r="3.1"/><circle cx="245.9" cy="100.1" r="1.7"/><circle cx="102.9" cy="144.3" r="1.3"/><circle cx="132.1" cy="34.3" r="1.1"/><circle cx="63.5" cy="145.7" r="2.1"/><circle cx="314.6" cy="303.5" r="1.3"/><circle cx="111.9" cy="103.6" r="2.2"/><circle cx="126.6" cy="224.4" r="2"/><circle cx="56.7" cy="226.6" r="1.4"/><circle cx="116.7" cy="130.2" r="2.8"/><circle cx="169.8" cy="145.7" r="1.5"/></g><circle cx="484" cy="180" r="140" class="quang"/><rect x="392" y="226" width="46" height="46" class="net"/><rect x="392" y="180" width="46" height="46" class="net"/><rect x="392" y="134" width="46" height="46" class="net"/><rect x="392" y="88" width="46" height="46" class="net"/><rect x="438" y="88" width="46" height="46" class="net"/><rect x="484" y="88" width="46" height="46" class="net"/><rect x="530" y="88" width="46" height="46" class="net"/><rect x="530" y="134" width="46" height="46" class="net"/><rect x="530" y="180" width="46" height="46" class="net"/><rect x="530" y="226" width="46" height="46" class="net"/><rect x="484" y="226" width="46" height="46" class="nhan"/><rect x="438" y="226" width="46" height="46" class="net"/><rect x="438" y="134" width="92" height="92" class="net"/><circle cx="484" cy="180" r="10" class="vang"/></svg></figure><h3>Tử vi đẩu số là gì?</h3><span class="meta">Tử vi, 5 phút đọc</span></a></li>
+      <li><a class="bv" href="bai-viet/thien-can-dia-chi.html"><figure class="anh"><svg class="anh-bia" viewBox="0 0 640 360" role="img" aria-label="Ảnh minh họa chuyên mục Lịch vạn niên" preserveAspectRatio="xMidYMid slice"><rect width="640" height="360" class="nen"/><g class="sao"><circle cx="167.5" cy="252.2" r="1.7"/><circle cx="42.8" cy="88.4" r="1.9"/><circle cx="191.8" cy="62.7" r="3"/><circle cx="287.8" cy="196.4" r="1.4"/><circle cx="73.4" cy="62.7" r="1.3"/><circle cx="181.9" cy="284.9" r="1"/><circle cx="295" cy="261" r="2.9"/><circle cx="74.1" cy="300.8" r="2"/><circle cx="183.3" cy="190.8" r="1.1"/><circle cx="256.8" cy="73.8" r="3.1"/><circle cx="51.6" cy="92.5" r="1.1"/><circle cx="182.2" cy="155" r="1.4"/><circle cx="302.2" cy="203.2" r="2.7"/><circle cx="126.2" cy="202" r="2.1"/></g><circle cx="484" cy="180" r="140" class="quang"/><circle cx="470" cy="180" r="40" class="vang"/><line x1="520" y1="180" x2="550" y2="180" class="net"/><line x1="518.3" y1="192.9" x2="533.8" y2="197.1" class="net"/><line x1="513.3" y1="205" x2="539.3" y2="220" class="net"/><line x1="505.4" y1="215.4" x2="516.7" y2="226.7" class="net"/><line x1="495" y1="223.3" x2="510" y2="249.3" class="net"/><line x1="482.9" y1="228.3" x2="487.1" y2="243.8" class="net"/><line x1="470" y1="230" x2="470" y2="260" class="net"/><line x1="457.1" y1="228.3" x2="452.9" y2="243.8" class="net"/><line x1="445" y1="223.3" x2="430" y2="249.3" class="net"/><line x1="434.6" y1="215.4" x2="423.3" y2="226.7" class="net"/><line x1="426.7" y1="205" x2="400.7" y2="220" class="net"/><line x1="421.7" y1="192.9" x2="406.2" y2="197.1" class="net"/><line x1="420" y1="180" x2="390" y2="180" class="net"/><line x1="421.7" y1="167.1" x2="406.2" y2="162.9" class="net"/><line x1="426.7" y1="155" x2="400.7" y2="140" class="net"/><line x1="434.6" y1="144.6" x2="423.3" y2="133.3" class="net"/><line x1="445" y1="136.7" x2="430" y2="110.7" class="net"/><line x1="457.1" y1="131.7" x2="452.9" y2="116.2" class="net"/><line x1="470" y1="130" x2="470" y2="100" class="net"/><line x1="482.9" y1="131.7" x2="487.1" y2="116.2" class="net"/><line x1="495" y1="136.7" x2="510" y2="110.7" class="net"/><line x1="505.4" y1="144.6" x2="516.7" y2="133.3" class="net"/><line x1="513.3" y1="155" x2="539.3" y2="140" class="net"/><line x1="518.3" y1="167.1" x2="533.8" y2="162.9" class="net"/><path d="M575 126.7a26 26 0 1 0 0 52a20 20 0 1 1 0-52z" class="nhan"/></svg></figure><h3>Thiên can và địa chi là gì?</h3><span class="meta">Lịch vạn niên, 4 phút đọc</span></a></li>
+      <li><a class="bv" href="bai-viet/ngu-hanh-tuong-sinh-tuong-khac.html"><figure class="anh"><svg class="anh-bia" viewBox="0 0 640 360" role="img" aria-label="Ảnh minh họa chuyên mục Phong thủy" preserveAspectRatio="xMidYMid slice"><rect width="640" height="360" class="nen"/><g class="sao"><circle cx="171.7" cy="166.3" r="2.8"/><circle cx="291" cy="199.6" r="1.7"/><circle cx="190.6" cy="208.4" r="2.5"/><circle cx="204.7" cy="110.1" r="1.4"/><circle cx="70.8" cy="222.1" r="2.2"/><circle cx="118.3" cy="280.2" r="2.3"/><circle cx="260.8" cy="275.8" r="1.9"/><circle cx="316.8" cy="152.5" r="3"/><circle cx="237.4" cy="202.9" r="1.1"/><circle cx="238.8" cy="98" r="1.6"/><circle cx="186" cy="38.5" r="1.3"/><circle cx="237.9" cy="200.3" r="1.1"/><circle cx="139.2" cy="228.9" r="2.4"/><circle cx="229.4" cy="108.3" r="2.3"/></g><circle cx="484" cy="180" r="140" class="quang"/><polygon points="551.5,117.5 564.3,224.9 466.1,270.2 392.6,190.9 445.4,96.5" class="duong"/><polygon points="551.5,117.5 466.1,270.2 445.4,96.5 564.3,224.9 392.6,190.9" class="net gach"/><circle cx="551.5" cy="117.5" r="15" class="nhan"/><circle cx="564.3" cy="224.9" r="15" class="nen-net"/><circle cx="466.1" cy="270.2" r="15" class="nen-net"/><circle cx="392.6" cy="190.9" r="15" class="nen-net"/><circle cx="445.4" cy="96.5" r="15" class="nen-net"/></svg></figure><h3>Ngũ hành tương sinh, tương khắc</h3><span class="meta">Phong thủy, 4 phút đọc</span></a></li>
+      <li><a class="bv" href="bai-viet/ban-do-sao-ca-nhan.html"><figure class="anh"><svg class="anh-bia" viewBox="0 0 640 360" role="img" aria-label="Ảnh minh họa chuyên mục Chiêm tinh" preserveAspectRatio="xMidYMid slice"><rect width="640" height="360" class="nen"/><g class="sao"><circle cx="290.7" cy="35.8" r="1.8"/><circle cx="234.6" cy="167.9" r="2.4"/><circle cx="269.9" cy="78.1" r="2.4"/><circle cx="136.3" cy="199.8" r="2.7"/><circle cx="274.3" cy="36.2" r="2.8"/><circle cx="42.8" cy="266" r="1.4"/><circle cx="30" cy="209.9" r="2.7"/><circle cx="164.7" cy="97" r="2.6"/><circle cx="304.7" cy="63.6" r="2.7"/><circle cx="83.3" cy="257.6" r="3.1"/><circle cx="287.5" cy="250.8" r="1.1"/><circle cx="167.3" cy="218" r="2.5"/><circle cx="196.2" cy="319.5" r="2.2"/><circle cx="237.6" cy="108.6" r="3"/></g><circle cx="484" cy="180" r="140" class="quang"/><circle cx="484" cy="180" r="100" class="net"/><circle cx="484" cy="180" r="76" class="net"/><circle cx="484" cy="180" r="28" class="net"/><line x1="560" y1="180" x2="584" y2="180" class="net"/><line x1="549.8" y1="218" x2="570.6" y2="230" class="net"/><line x1="522" y1="245.8" x2="534" y2="266.6" class="net"/><line x1="484" y1="256" x2="484" y2="280" class="net"/><line x1="446" y1="245.8" x2="434" y2="266.6" class="net"/><line x1="418.2" y1="218" x2="397.4" y2="230" class="net"/><line x1="408" y1="180" x2="384" y2="180" class="net"/><line x1="418.2" y1="142" x2="397.4" y2="130" class="net"/><line x1="446" y1="114.2" x2="434" y2="93.4" class="net"/><line x1="484" y1="104" x2="484" y2="80" class="net"/><line x1="522" y1="114.2" x2="534" y2="93.4" class="net"/><line x1="549.8" y1="142" x2="570.6" y2="130" class="net"/><circle cx="444" cy="213.3" r="8" class="nhan"/><circle cx="527.4" cy="208.6" r="5" class="vang"/><circle cx="485.7" cy="128" r="5" class="vang"/><circle cx="484.4" cy="232" r="5" class="vang"/><line x1="444" y1="213.3" x2="527.4" y2="208.6" class="duong"/></svg></figure><h3>Bản đồ sao cá nhân là gì?</h3><span class="meta">Chiêm tinh, 4 phút đọc</span></a></li>
       <!-- bai-moi:ket-thuc -->
-    </ol>
+    </ul>
   </section>
 
   <footer class="foot">
-    <p class="foot-loi">Lá Số Tử Vi: tử vi phái Việt, chiêm tinh phương Tây, thần số học, Tarot và lịch vạn niên.</p>
-    <nav aria-label="Chân trang"><a href="index.html">Trang chủ</a><a href="la-so.html">Lập lá số</a><a href="con-giap.html">12 con giáp</a><a href="../../xemngay/frontend/index.html">Xem ngày</a><a href="../../Tarot/frontend/index.html">Tarot</a><a href="../../zodiac/frontend/index.html">Hoàng đạo</a><a href="../../numerology/frontend/index.html">Số chủ đạo</a><a href="tra-cuu/index.html">Tra cứu</a><a href="bai-viet.html">Bài viết</a></nav>
-    <p class="small">Nội dung chỉ để tham khảo.</p>
-    <p class="small" data-credits>Ảnh: <a href="https://commons.wikimedia.org/wiki/File:Candle_light_projected_through_a_glass_orb.jpg">W.carter</a> (CC BY-SA 4.0, Wikimedia Commons).</p>
+    <div class="foot-in">
+      <div class="foot-gioi-thieu">
+        <a class="brand" href="index.html"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="20" cy="20" r="12.5" fill="none" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="32.50" y1="20.00" x2="37.50" y2="20.00" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="30.83" y1="26.25" x2="35.16" y2="28.75" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="26.25" y1="30.83" x2="28.75" y2="35.16" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="20.00" y1="32.50" x2="20.00" y2="37.50" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="13.75" y1="30.83" x2="11.25" y2="35.16" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="9.17" y1="26.25" x2="4.84" y2="28.75" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="7.50" y1="20.00" x2="2.50" y2="20.00" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="9.17" y1="13.75" x2="4.84" y2="11.25" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="13.75" y1="9.17" x2="11.25" y2="4.84" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="20.00" y1="7.50" x2="20.00" y2="2.50" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="26.25" y1="9.17" x2="28.75" y2="4.84" stroke="currentColor" stroke-width="0.9" opacity=".7"/><line x1="30.83" y1="13.75" x2="35.16" y2="11.25" stroke="currentColor" stroke-width="0.9" opacity=".7"/><path d="M20 11.5l1.9 6.6 6.6 1.9-6.6 1.9L20 28.5l-1.9-6.6-6.6-1.9 6.6-1.9z" fill="currentColor"/></svg><span class="brand-chu"><span class="brand-ten">Lá Số Tử Vi</span><span class="brand-phu">Tử vi, chiêm tinh, thần số học</span></span></a>
+        <p>Nền tảng huyền học tổng hợp: tử vi phái Việt, lịch vạn niên, chiêm tinh phương Tây, thần số học và Tarot. Mỗi hệ tính theo phương pháp công khai, ngay trên máy bạn.</p>
+      </div>
+      <nav class="foot-cot-ds" aria-label="Chân trang"><div class="foot-cot"><h2>Tử vi</h2><ul><li><a href="la-so.html">Lập lá số</a></li><li><a href="con-giap.html">12 con giáp</a></li><li><a href="tra-cuu/hop-tuoi.html">Xem tuổi hợp</a></li></ul></div><div class="foot-cot"><h2>Lịch & phong thủy</h2><ul><li><a href="../../xemngay/frontend/index.html">Lịch vạn niên</a></li><li><a href="../../xemngay/frontend/chon-ngay.html">Chọn ngày theo việc</a></li><li><a href="tra-cuu/ngu-hanh.html">Ngũ hành, bản mệnh</a></li><li><a href="tra-cuu/phong-thuy.html">Phong thủy cá nhân</a></li></ul></div><div class="foot-cot"><h2>Chiêm tinh</h2><ul><li><a href="../../zodiac/frontend/index.html">12 cung hoàng đạo</a></li><li><a href="../../zodiac/frontend/tu-vi.html">Tử vi theo cung</a></li><li><a href="../../zodiac/frontend/ban-do-sao.html">Bản đồ sao</a></li><li><a href="../../zodiac/frontend/tuong-hop.html">Độ tương hợp</a></li><li><a href="../../zodiac/frontend/hop-doi.html">Hợp đôi</a></li></ul></div><div class="foot-cot"><h2>Thần số học</h2><ul><li><a href="../../numerology/frontend/index.html">Số chủ đạo</a></li><li><a href="../../numerology/frontend/tuong-hop.html">So sánh hai số</a></li></ul></div><div class="foot-cot"><h2>Khám phá</h2><ul><li><a href="../../Tarot/frontend/index.html">Tarot</a></li><li><a href="../../Tarot/frontend/thu-vien.html">Thư viện lá bài</a></li><li><a href="tra-cuu/giai-mong.html">Giải mộng</a></li><li><a href="tra-cuu/tro-ly.html">Trợ lý AI</a></li></ul></div><div class="foot-cot"><h2>Kiến thức</h2><ul><li><a href="bai-viet.html">Bài viết</a></li><li><a href="bai-viet/thuat-ngu-huyen-hoc.html">Từ điển huyền học</a></li><li><a href="bai-viet/doc-huyen-hoc-tinh-tao.html">Hướng dẫn đọc kết quả</a></li><li><a href="gioi-thieu.html">Giới thiệu và phương pháp</a></li></ul></div><div class="foot-cot"><h2>Thông tin</h2><ul><li><a href="gioi-thieu.html">Giới thiệu và phương pháp</a></li><li><a href="chinh-sach.html">Chính sách riêng tư</a></li><li><a href="dieu-khoan.html">Điều khoản sử dụng</a></li><li><a href="gioi-thieu.html#lien-he">Liên hệ</a></li><li><a href="tai-khoan.html">Hồ sơ của tôi</a></li></ul></div></nav>
+    </div>
+    <div class="foot-duoi">
+      <p class="tuyen-bo">Nội dung huyền học trên trang chỉ mang tính tham khảo, không thay thế tư vấn y tế, pháp lý hoặc tài chính chuyên môn.</p>
+      
+    </div>
   </footer>
 </div>
 
@@ -171,4 +170,5 @@
 <script src="../../numerology/frontend/js/so-hoc.js"></script>
 <script src="js/tong-hop.js"></script>
 <script src="js/trang-chu.js"></script>
+</body>
 </html>
