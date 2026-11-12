@@ -105,32 +105,30 @@
   $('q-form').addEventListener('change', e => { if (e.target.name === 'q-lich') syncNhuan(); });
   $('ky-tab').addEventListener('click', e => { const b = e.target.closest('button'); if (b && kq) { ky = b.dataset.ky; veKy(); } });
 
-  // Dải lịch trên cùng: hôm nay theo lịch vạn niên (cùng cách tính với trang Xem ngày)
+  // Ô "Hôm nay": lịch vạn niên (cùng cách tính với trang Xem ngày) và vận trình hôm nay nếu đã có ngày sinh lưu trên máy
   if (window.XemNgay) {
     const r = XemNgay.xemNgay(HOM_NAY.d, HOM_NAY.m, HOM_NAY.y);
-    $('hom-nay').innerHTML = `${r.duong.thu}, ${r.duong.chu}, ngày ${r.am.d}/${r.am.m}${r.am.nhuan ? ' nhuận' : ''} âm lịch, ${r.canChi.ngay}, ${r.hoangDao.tot ? 'hoàng đạo' : 'hắc đạo'} ${r.hoangDao.than}. <a href="../../xemngay/frontend/index.html">Xem ngày hôm nay</a>`;
+    $('hn-duong').textContent = `${r.duong.thu}, ${r.duong.chu}`;
+    $('hn-am').innerHTML = `<b>${r.am.d}</b><span>tháng ${r.am.m}${r.am.nhuan ? ' nhuận' : ''} âm lịch</span>`;
+    $('hn-ds').innerHTML = [['Can chi', `Ngày ${r.canChi.ngay}, tháng ${r.canChi.thang}, năm ${r.canChi.nam}`],
+      ['Hoàng đạo', `${r.hoangDao.tot ? 'Hoàng đạo' : 'Hắc đạo'} ${r.hoangDao.than}, trực ${r.truc.ten}`],
+      ['Giờ tốt', r.gioHoangDao.map(g => g.chi).join(', ')], ['Tiết khí', r.tietKhi.ten]]
+      .map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
   }
-
-  // Thẻ xem trước công cụ: bấm hoặc dùng phím mũi tên để đổi màn hình
-  const tabs = [...document.querySelectorAll('.mh-tab [role="tab"]')];
-  function chonTab(t, focus) {
-    tabs.forEach(x => { const on = x === t; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; $(x.getAttribute('aria-controls')).hidden = !on; });
-    if (focus) t.focus();
+  if (saved && saved.namSinh) {
+    try {
+      const v = read(), l = TongHop.duDoan({ ngay: v.ngay, thang: v.thang, nam: v.namSinh, amLich: v.am, nhuan: v.nhuan, gio: v.gio, namGioi: v.nam,
+        noi: Object.assign(noiCua(v.noi), { tz: v.tz }) }, HOM_NAY).ky.ngay.linhVuc.find(x => x.ma === 'tongQuan');
+      $('hn-van').innerHTML = `<p class="hn-diem"><b>${l.phanTram}<small>%</small></b><span>Vận trình hôm nay của bạn: ${l.nhan.toLowerCase()}</span></p><p>${l.loiKhuyen}</p>`;
+    } catch (e) { /* ngày sinh đã lưu không hợp lệ: giữ lời nhắc */ }
   }
-  tabs.forEach((t, i) => {
-    t.addEventListener('click', () => chonTab(t));
-    t.addEventListener('keydown', e => {
-      const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
-      if (k) { e.preventDefault(); chonTab(tabs[(i + k + tabs.length) % tabs.length], true); }
-    });
-  });
 
   // Có backend và trang quản trị có bài mới hơn thư viện thì "Bài viết mới" lấy 3 bài mới nhất từ đó (bỏ bài trùng với thư viện tĩnh)
   layApi('/api/bai-viet').then(ds => {
-    const tinh = [...document.querySelectorAll('.posts a')].map(a => a.getAttribute('href'));
+    const tinh = [...document.querySelectorAll('.bv-ds a')].map(a => a.getAttribute('href'));
     ds = ds.filter(b => !tinh.includes(`bai-viet/${b.slug}.html`) && !['tu-vi-la-gi', 'doc-la-so', 'dai-han-tieu-han'].includes(b.slug));
     if (!ds.length) return;
-    document.querySelector('.posts').innerHTML = ds.slice(0, 3).map(b => `<li><a class="post" href="bai-viet-doc.html#${encodeURIComponent(b.slug)}">
-      <h3>${escHtml(b.tieuDe)}</h3><p>${escHtml(b.tomTat)}</p><span class="meta">${escHtml(b.chuyenMuc)}, ${b.phutDoc} phút đọc</span></a></li>`).join('');
+    document.querySelector('.bv-ds').innerHTML = ds.slice(0, 3).map(b => `<li><a class="bv" href="bai-viet-doc.html#${encodeURIComponent(b.slug)}">
+      <h3>${escHtml(b.tieuDe)}</h3><span class="meta">${escHtml(b.chuyenMuc)}, ${b.phutDoc} phút đọc</span></a></li>`).join('');
   }).catch(() => {});
 })();

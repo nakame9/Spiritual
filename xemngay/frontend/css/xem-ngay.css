@@ -10,7 +10,7 @@ input[type="date"] { width: 100%; }
 
 /* Chi tiết một ngày */
 .ngay-dau { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-lg); align-items: center; }
-.ngay-dau .to { width: 132px; padding: var(--space-sm) var(--space-xs); border-radius: 0; border: 2px solid var(--mau); text-align: center; display: flex; flex-direction: column; gap: var(--space-3xs); background: var(--paper); }
+.ngay-dau .to { width: 132px; padding: var(--space-sm) var(--space-xs); border-radius: var(--radius-sm); border: 2px solid var(--mau); text-align: center; display: flex; flex-direction: column; gap: var(--space-3xs); background: var(--paper); }
 .ngay-dau .to b { font: 500 54px/1 var(--f-display); color: var(--mau); }
 .ngay-dau .to span { font-size: 13px; color: var(--soft); }
 .tom { display: flex; flex-direction: column; gap: var(--space-xs); min-width: 0; }
@@ -21,7 +21,7 @@ input[type="date"] { width: 100%; }
 .thanh { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; max-width: 420px; }
 .thanh i { display: block; height: 100%; border-radius: 99px; background: var(--mau); }
 .luoi-o { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-sm); }
-.luoi-o .o { padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-radius: 0; background: var(--paper); display: flex; flex-direction: column; gap: var(--space-2xs); min-width: 0; }
+.luoi-o .o { padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--paper); display: flex; flex-direction: column; gap: var(--space-2xs); min-width: 0; }
 .luoi-o .o.xau { border-top: var(--rule-bar) solid var(--xau); }
 .luoi-o .nhan { font-size: 12px; font-weight: 600; color: var(--soft); }
 .luoi-o b { font-size: 15.5px; }
@@ -40,7 +40,7 @@ input[type="date"] { width: 100%; }
 .lich-dau .btn2 { width: 44px; font-size: 20px; padding: 0; }
 .lich { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--space-xs); }
 .lich .thu { text-align: center; font-size: 12px; font-weight: 600; color: var(--soft); padding: var(--space-2xs) 0; }
-.lich .ngay { position: relative; min-height: 64px; padding: var(--space-xs) var(--space-2xs) var(--space-md); border: 1px solid var(--line); border-radius: 0; background: var(--paper); color: var(--ink); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: var(--space-3xs); font-family: var(--f-ui); }
+.lich .ngay { position: relative; min-height: 64px; padding: var(--space-xs) var(--space-2xs) var(--space-md); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--paper); color: var(--ink); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: var(--space-3xs); font-family: var(--f-ui); }
 .lich .ngay:hover { border-color: var(--tu); }
 .lich .ngay b { font: 500 18px var(--f-display); }
 .lich .ngay small { font-size: 12px; color: var(--soft); }
@@ -53,7 +53,7 @@ input[type="date"] { width: 100%; }
 
 /* Danh sách ngày tốt */
 .ds-ngay { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-sm); counter-reset: n; }
-.ds-ngay > li { padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-top: var(--rule-bar) solid var(--mau); border-radius: 0; background: var(--paper); display: flex; flex-direction: column; gap: var(--space-xs); }
+.ds-ngay > li { padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-top: var(--rule-bar) solid var(--mau); border-radius: var(--radius-sm); background: var(--paper); display: flex; flex-direction: column; gap: var(--space-xs); }
 .ds-dau { display: flex; justify-content: space-between; gap: var(--space-sm); align-items: flex-start; }
 .ds-dau > div { display: flex; flex-direction: column; gap: var(--space-3xs); min-width: 0; }
 .ds-dau b { font-size: 16px; }
@@ -120,7 +120,7 @@ input[type="date"] { width: 100%; }
   .ngay-dau .to { width: 100%; flex-direction: row; justify-content: center; align-items: baseline; gap: var(--space-sm); }
   .ngay-dau .to b { font-size: 40px; }
   .lich { gap: var(--space-2xs); }
-  .lich .ngay { min-height: 54px; padding: var(--space-2xs) var(--space-3xs) var(--space-sm); border-radius: 0; }
+  .lich .ngay { min-height: 54px; padding: var(--space-2xs) var(--space-3xs) var(--space-sm); border-radius: var(--radius-sm); }
   .lich .ngay b { font-size: 15px; }
   .lich .ngay small { font-size: 12px; }
   .hai { grid-template-columns: minmax(0, 1fr); }

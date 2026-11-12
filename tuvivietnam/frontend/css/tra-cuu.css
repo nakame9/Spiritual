@@ -10,13 +10,13 @@
 .o { background: var(--color-paper); border: var(--rule-hair) solid var(--color-rule); padding: var(--space-md); display: flex; flex-direction: column; gap: var(--space-xs); min-width: 0; }
 .o .nhan { font: 600 var(--text-sm)/1.3 var(--font-outlier); color: var(--color-muted); }
 .o .lon { font: 400 clamp(1.5rem, 1.5vw + 1rem, 2rem)/1.15 var(--font-display); }
-.o.tot { border-left: var(--rule-bar) solid var(--moc); }
-.o.xau { border-left: var(--rule-bar) solid var(--color-accent); }
-.o.vua { border-left: var(--rule-bar) solid var(--color-gold); }
+.o.tot { border-top: 2px solid var(--forest); }
+.o.xau { border-top: 2px solid var(--burgundy); }
+.o.vua { border-top: 2px solid var(--gold); }
 .dau-kq { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-md) var(--space-lg); align-items: center; }
 .dau-kq .chu-lon { font: 400 clamp(3rem, 5vw + 1rem, 5rem)/1 var(--font-display); color: var(--color-accent-strong); }
 @media (max-width: 40rem) { .dau-kq { grid-template-columns: minmax(0, 1fr); } }
-.canh-bao { padding: var(--space-sm) var(--space-md); border-left: var(--rule-bar) solid var(--color-gold); background: var(--color-paper); }
+.canh-bao { padding: var(--space-sm) var(--space-md); border: 1px solid var(--gold-soft); border-radius: var(--radius-sm); background: var(--color-paper-2); }
 .bang { border-collapse: collapse; width: 100%; font-size: 0.9375rem; font-variant-numeric: tabular-nums; }
 .bang th, .bang td { text-align: left; padding: var(--space-xs) var(--space-md) var(--space-xs) 0; border-bottom: var(--rule-hair) solid var(--color-rule); vertical-align: top; }
 .bang th { font: 600 var(--text-sm)/1.3 var(--font-outlier); color: var(--color-muted); }
@@ -103,5 +103,5 @@ fieldset.nguoi legend { font-weight: 600; padding: 0 var(--space-2xs); }
 .tin dd { margin: 0; overflow-wrap: anywhere; }
 @media (max-width: 40rem) { .tin dl { grid-template-columns: minmax(0, 1fr); } .tin dd { margin-bottom: var(--space-xs); } }
 .o-hoi textarea { width: 100%; box-sizing: border-box; }
-textarea { width: 100%; box-sizing: border-box; border: var(--rule-hair) solid var(--color-line-strong); border-radius: 0; background: var(--color-paper-2); color: var(--color-ink); font: 400 var(--text-md)/1.5 var(--font-body); padding: var(--space-xs) var(--space-sm); resize: vertical; }
+textarea { width: 100%; box-sizing: border-box; border: var(--rule-hair) solid var(--color-line-strong); border-radius: var(--radius-sm); background: var(--color-paper-2); color: var(--color-ink); font: 400 var(--text-md)/1.5 var(--font-body); padding: var(--space-xs) var(--space-sm); resize: vertical; }
 textarea:hover { border-color: var(--color-ink); }

@@ -1,10 +1,10 @@
 /* Trang Tarot: hero có 3 lá mẫu → bước 1 chọn chủ đề, kiểu trải → bước 2 chọn lá từ hàng bài úp → bước 3 lật bài và đọc.
    Màu theo bộ: Gậy = lửa, Cốc = nước, Kiếm = khí, Tiền = đất, Ẩn Chính = tím của site. */
 :root {
-  --face: var(--color-paper-2); --face-line: var(--color-rule); --back: var(--color-ink); --back-2: oklch(38% 0.07 45); --back-star: var(--color-gold);
+  --face: var(--color-paper-2); --face-line: var(--color-rule); --back: #263746; --back-2: #4A5C6D; --back-star: var(--color-gold);
   --s-anChinh: var(--color-ink); --s-gay: var(--color-accent); --s-coc: var(--thuy); --s-kiem: var(--kim); --s-tien: var(--tho);
   --fan-overlap: -34px; --glow-w: 300px; --glow-h: 220px;
-  --card-shadow: 6px 6px 0 var(--color-paper-3); --card-shadow-lift: 10px 12px 0 var(--color-paper-3);
+  --card-shadow: 0 10px 24px -14px rgb(41 37 31 / 0.45); --card-shadow-lift: 0 18px 32px -16px rgb(41 37 31 / 0.5);
   --backdrop: oklch(20% 0.04 45 / 0.6);
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --back: oklch(18% 0.03 40); --back-2: oklch(30% 0.05 45); } }
@@ -17,18 +17,18 @@
 .fan .card:nth-child(2) { margin-left: var(--fan-overlap); z-index: 1; }
 .fan .card:nth-child(3) { margin-left: var(--fan-overlap); transform: rotate(10deg) translateY(10px); }
 
-.panel h2 { margin: 0; font-family: var(--f-display); font-weight: 500; font-size: 22px; display: flex; align-items: baseline; gap: var(--space-sm); }
-.step { display: block; font: 400 var(--text-sm)/1.2 var(--font-body); }
+.panel h2 { margin: 0; font-family: var(--f-display); font-weight: 600; font-size: 28px; line-height: 1.15; display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2xs) var(--space-sm); }
+.step { flex-basis: 100%; font: 600 var(--text-sm)/1.2 var(--font-body); color: var(--color-gold-2); }
 .spreads input:focus-visible + span, .deck button:focus-visible, button:focus-visible { outline: 2px solid var(--tu); outline-offset: 2px; }
 .f { width: 100%; }
 
 .spreads { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-sm); }
 .spreads label { cursor: pointer; }
 .spreads input { position: absolute; opacity: 0; pointer-events: none; }
-.spreads span { display: flex; flex-direction: column; gap: var(--space-xs); height: 100%; border: 1px solid var(--line); border-radius: 0; padding: var(--space-sm) var(--space-md); }
+.spreads span { display: flex; flex-direction: column; gap: var(--space-xs); height: 100%; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: var(--space-sm) var(--space-md); }
 .spreads b { font-size: 15px; }
 .spreads small { color: var(--soft); font-size: 13px; }
-.spreads .so { font-style: normal; font-family: var(--f-display); font-weight: 500; font-size: 30px; line-height: 1; color: var(--tu); }
+.spreads .so { font-style: normal; font-family: var(--f-display); font-weight: 600; font-size: 30px; line-height: 1; color: var(--tu); }
 .spreads input:checked + span { border-color: var(--tu); box-shadow: inset 0 0 0 1px var(--tu); background: var(--hl); }
 .topics { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
 .topics label { cursor: pointer; }
@@ -43,7 +43,7 @@
 .count { font-weight: 500; color: var(--tu); font-variant-numeric: tabular-nums; }
 .deck { display: flex; flex-direction: column; gap: var(--space-sm); align-items: center; padding: var(--space-xs) 0 var(--space-2xs); }
 .deck .row { display: flex; }
-.deck button { width: 56px; padding: 0; border: 0; background: none; cursor: pointer; transition: transform .15s; border-radius: 0; }
+.deck button { width: 56px; padding: 0; border: 0; background: none; cursor: pointer; transition: transform .15s; border-radius: var(--radius-sm); }
 .deck button + button { margin-left: calc(-1 * calc(var(--space-md) * 2)); }
 .deck button:hover, .deck button:focus-visible { transform: translateY(-10px); }
 .deck button:disabled { visibility: hidden; }
@@ -51,7 +51,7 @@
 .dang-xao { margin: 0; text-align: center; font-weight: 600; color: var(--tu); min-height: 1.5em; }
 .stage { position: relative; height: 230px; }
 .stage .sc { position: absolute; width: 104px; left: calc(50% - 52px); top: 22px; transform: translateY(calc(var(--i) * -0.7px)); }
-.stage .sc .card { box-shadow: var(--card-shadow); border-radius: 0; }
+.stage .sc .card { box-shadow: var(--card-shadow); border-radius: var(--radius-sm); }
 /* Vài ngôi sao vàng lấp lánh quanh sân xáo */
 .stage .sao { position: absolute; width: 14px; height: 14px; color: var(--color-gold); opacity: 0; animation: lap 1.8s ease-in-out infinite; pointer-events: none; }
 @keyframes lap { 50% { opacity: .85; scale: 1.25; rotate: 45deg; } }
@@ -65,15 +65,15 @@
 .chu-giai li::before { content: counter(vt) ". "; font-weight: 500; color: var(--tu); }
 .slot { display: flex; flex-direction: column; align-items: center; gap: var(--space-xs); text-align: center; min-width: 0; }
 .slot .pos { font-size: 12px; font-weight: 600; color: var(--soft); }
-.slot .empty { width: 100%; aspect-ratio: 3 / 5; max-width: 100%; border: 1.5px dashed var(--line); border-radius: 0; }
+.slot .empty { width: 100%; aspect-ratio: 3 / 5; max-width: 100%; border: 1.5px dashed var(--line); border-radius: var(--radius-sm); }
 /* Rút: lá bay vào ô. Lật: lá úp phát sáng mời chạm, khi lật thì nhấc lên rồi xoay mặt, tên và chiều lá hiện dần bên dưới. */
 .sodo .o.dang-bay { position: relative; z-index: 5; }
-.slot .lat { display: block; width: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; border-radius: 0; }
+.slot .lat { display: block; width: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; border-radius: var(--radius-sm); }
 .slot .lat:not(:disabled) { cursor: pointer; }
-.slot .lat:not(:disabled) .card { border-radius: 0; outline: 2px solid transparent; outline-offset: 3px; animation: moi 1.6s ease-in-out infinite; transition: translate var(--dur-short) var(--ease-out); }
+.slot .lat:not(:disabled) .card { border-radius: var(--radius-sm); outline: 2px solid transparent; outline-offset: 3px; animation: moi 1.6s ease-in-out infinite; transition: translate var(--dur-short) var(--ease-out); }
 .slot .lat:not(:disabled):hover .card, .slot .lat:focus-visible .card { translate: 0 -6px; }
 @keyframes moi { 50% { outline-color: var(--color-gold); } }
-.card.nhac { animation: nhac .75s cubic-bezier(.3, .7, .3, 1); border-radius: 0; }
+.card.nhac { animation: nhac .75s cubic-bezier(.3, .7, .3, 1); border-radius: var(--radius-sm); }
 @keyframes nhac { 45% { translate: 0 -10px; scale: 1.06; box-shadow: var(--card-shadow-lift); } }
 .slot .ten, .chu-giai .ten { display: flex; flex-direction: column; align-items: center; gap: var(--space-2xs); font-size: 13.5px; line-height: 1.3; color: var(--ink); animation: hien .45s .4s both; }
 .slot .ten b { overflow-wrap: anywhere; }
@@ -84,7 +84,7 @@
 .card { width: 100%; aspect-ratio: 3 / 5; max-width: 100%; display: block; perspective: 900px; }
 .card .in { position: relative; width: 100%; height: 100%; transition: transform .7s cubic-bezier(.3, .7, .3, 1); transform-style: preserve-3d; }
 .card.up .in { transform: rotateY(180deg); }
-.card .face, .card .back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 0; overflow: hidden; }
+.card .face, .card .back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: var(--radius-sm); overflow: hidden; }
 .card .face { transform: rotateY(180deg); }
 .card .face svg, .card .back svg { width: 100%; height: 100%; display: block; }
 .card .face.rev svg { transform: rotate(180deg); }
@@ -100,9 +100,9 @@
 .item .kw { margin: 0 0 var(--space-xs); font-weight: 600; }
 .item p { margin: 0; font-size: 15px; line-height: 1.65; }
 .item .hint { color: var(--soft); font-size: 13.5px; margin-top: var(--space-xs); }
-.item .vt { margin: 0 0 var(--space-xs); padding: var(--space-xs) var(--space-sm); background: var(--hl); border-radius: 0; }
+.item .vt { margin: 0 0 var(--space-xs); padding: var(--space-xs) var(--space-sm); background: var(--hl); border-radius: var(--radius-sm); }
 .item .meta a { color: var(--tu); font-weight: 500; }
-.sum { margin: 0; padding: var(--space-md) var(--space-lg); border: 1px solid var(--line); border-radius: 0; background: var(--hl); }
+.sum { margin: 0; padding: var(--space-md) var(--space-lg); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--hl); }
 .sum h3 { margin: 0 0 var(--space-sm); font-family: var(--f-display); font-size: 21px; font-weight: 500; color: var(--ink); }
 .sum p { margin: 0 0 var(--space-sm); font-size: 15.5px; line-height: 1.75; max-width: 75ch; }
 .sum p:last-of-type { font-weight: 600; }
@@ -123,16 +123,16 @@
 /* ---------- Trang chủ Tarot: các bước, kiểu trải bài, chủ đề, bộ bài ---------- */
 .cta { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-lg); }
 
-.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); counter-reset: buoc; }
-.steps li { counter-increment: buoc; display: flex; flex-direction: column; gap: var(--space-xs); padding: var(--space-md); border: 1px solid var(--line); border-radius: 0; background: var(--cell); }
-.steps li::before { content: counter(buoc); font-family: var(--f-display); font-weight: 500; font-size: 22px; color: var(--tu); line-height: 1; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-md); counter-reset: buoc; }
+.steps li { counter-increment: buoc; display: flex; flex-direction: column; gap: var(--space-xs); padding: var(--space-md); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--cell); }
+.steps li::before { content: counter(buoc); font-family: var(--f-display); font-weight: 600; font-size: 22px; color: var(--tu); line-height: 1; }
 .steps b { font-size: 15.5px; }
 .steps span { color: var(--soft); font-size: 14px; }
 
 .spread-list { display: flex; flex-direction: column; gap: var(--space-sm); }
-.spread { display: grid; grid-template-columns: 300px minmax(0, 1fr) auto; gap: var(--space-md) var(--space-lg); align-items: center; padding: var(--space-md); border: 1px solid var(--line); border-radius: 0; background: var(--cell); min-width: 0; }
-.spread .layout { display: flex; justify-content: center; padding: var(--space-md) var(--space-sm); background: var(--hl); border-radius: 0; }
-.spread .so { font-family: var(--f-display); font-weight: 500; color: var(--tu); margin-right: var(--space-xs); }
+.spread { display: grid; grid-template-columns: 300px minmax(0, 1fr) auto; gap: var(--space-md) var(--space-lg); align-items: center; padding: var(--space-md); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--cell); min-width: 0; }
+.spread .layout { display: flex; justify-content: center; padding: var(--space-md) var(--space-sm); background: var(--hl); border-radius: var(--radius-sm); }
+.spread .so { font-family: var(--f-display); font-weight: 600; color: var(--tu); margin-right: var(--space-xs); }
 .spread h3 { margin: 0 0 var(--space-3xs); font-family: var(--f-display); font-size: 19px; }
 .spread ol { margin: var(--space-xs) 0 0; padding-left: var(--space-lg); font-size: 14px; columns: 2; column-gap: var(--space-lg); }
 .spread ol li { break-inside: avoid; margin-bottom: var(--space-2xs); }
@@ -141,20 +141,20 @@
 .pos-card span { position: relative; z-index: 3; padding-inline: var(--space-2xs); background: var(--color-paper-3); font-size: 12px; font-weight: 500; color: var(--color-muted); line-height: 1.2; }
 
 .topic-list { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-sm); }
-.topic { display: flex; flex-direction: column; gap: var(--space-2xs); padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-radius: 0; background: var(--cell); color: var(--ink); text-decoration: none; min-width: 0; }
+.topic { display: flex; flex-direction: column; gap: var(--space-2xs); padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--cell); color: var(--ink); text-decoration: none; min-width: 0; }
 .topic:hover { border-color: var(--tu); }
 .topic b { font-size: 15.5px; }
 .topic span { color: var(--soft); font-size: 13.5px; }
 
 .suit-list { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-md); }
-.suit { display: flex; flex-direction: column; gap: var(--space-sm); min-width: 0; color: var(--ink); text-decoration: none; padding: var(--space-sm); margin: calc(-1 * var(--space-sm)); border-radius: 0; }
+.suit { display: flex; flex-direction: column; gap: var(--space-sm); min-width: 0; color: var(--ink); text-decoration: none; padding: var(--space-sm); margin: calc(-1 * var(--space-sm)); border-radius: var(--radius-sm); }
 .suit:hover { background: var(--hl); }
 .suit .card { width: 100px; }
 .suit h3 { margin: 0; font-family: var(--f-display); font-size: 18px; }
 .suit p { margin: var(--space-3xs) 0 0; font-size: 14px; }
 
 /* ---------- Thư viện 78 lá ---------- */
-input[type="search"] { height: 42px; border: 1px solid var(--line); border-radius: 0; background: var(--paper); color: var(--ink); font: 400 15px var(--f-ui); padding: 0 var(--space-sm); width: 100%; }
+input[type="search"] { height: 42px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--paper); color: var(--ink); font: 400 15px var(--f-ui); padding: 0 var(--space-sm); width: 100%; }
 .topics small { font-size: 12px; opacity: .7; margin-left: var(--space-2xs); }
 .so-kq { margin: 0; color: var(--soft); font-size: 14px; }
 .lib { display: flex; flex-direction: column; gap: var(--space-lg); }
@@ -162,7 +162,7 @@ input[type="search"] { height: 42px; border: 1px solid var(--line); border-radiu
 .nhom h2 small { font-family: var(--f-ui); font-size: 13px; font-weight: 500; color: var(--soft); margin-left: var(--space-xs); }
 .nhom > .muted { margin: var(--space-3xs) 0 var(--space-sm); }
 .lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: var(--space-md) var(--space-sm); }
-.tile { display: flex; flex-direction: column; align-items: center; gap: var(--space-xs); text-align: center; color: var(--ink); text-decoration: none; padding: var(--space-xs) var(--space-xs) var(--space-sm); border-radius: 0; min-width: 0; }
+.tile { display: flex; flex-direction: column; align-items: center; gap: var(--space-xs); text-align: center; color: var(--ink); text-decoration: none; padding: var(--space-xs) var(--space-xs) var(--space-sm); border-radius: var(--radius-sm); min-width: 0; }
 .tile .card { width: 92px; transition: translate .15s; }
 .tile:hover { background: var(--hl); }
 .tile:hover .card, .tile:focus-visible .card { translate: 0 -4px; }
@@ -171,7 +171,7 @@ input[type="search"] { height: 42px; border: 1px solid var(--line); border-radiu
 .tile small { font-size: 12px; color: var(--soft); }
 
 body:has(dialog[open]) { overflow: hidden; }
-.ct { width: min(980px, calc(100% - 32px)); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--line); border-radius: 0; background: var(--cell); color: var(--ink); overflow: hidden; }
+.ct { width: min(980px, calc(100% - 32px)); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--cell); color: var(--ink); overflow: hidden; }
 .ct::backdrop { background: var(--backdrop); }
 .ct-nd { position: relative; max-height: calc(100dvh - 34px); overflow-y: auto; padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-md); }
 .ct-dong { position: absolute; top: 10px; right: 12px; width: 38px; height: 38px; border: 0; border-radius: var(--radius-pill); background: var(--hl); color: var(--ink); font: 400 24px/1 var(--f-ui); cursor: pointer; }
@@ -181,7 +181,7 @@ body:has(dialog[open]) { overflow: hidden; }
 .ct-hinh .face svg { transition: transform .5s cubic-bezier(.3, .7, .3, 1); }
 .ct h2 { margin: var(--space-xs) calc(var(--space-lg) * 2) 0 0; font-family: var(--f-display); font-size: 30px; line-height: 1.15; }
 .ct-hai { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); margin-top: var(--space-md); }
-.ct-hai section { padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-radius: 0; }
+.ct-hai section { padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-radius: var(--radius-sm); }
 .ct-hai h3 { margin: 0 0 var(--space-xs); }
 .ct-hai p { margin: 0 0 var(--space-xs); font-size: 14.5px; line-height: 1.65; }
 .ct-hai .kw { font-weight: 600; }
@@ -214,17 +214,17 @@ body:has(dialog[open]) { overflow: hidden; }
   .steps, .topic-list { grid-template-columns: minmax(0, 1fr); }
   .lib-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-sm) var(--space-xs); }
   .tile .card { width: 100%; max-width: 92px; }
-  .ct { width: 100%; max-width: 100%; max-height: 100dvh; height: 100dvh; border-radius: 0; margin: 0; }
+  .ct { width: 100%; max-width: 100%; max-height: 100dvh; height: 100dvh; border-radius: var(--radius-sm); margin: 0; }
   .ct-nd { max-height: 100dvh; }
 }
 
 /* Câu hỏi, lưu kết quả, ý nghĩa đầy đủ, lịch sử, so sánh (thêm cho mục 5.2–5.4) */
-.luu-y-tarot { margin: var(--space-sm) 0 0; padding: var(--space-sm) var(--space-md); border-left: var(--rule-bar) solid var(--color-gold); background: var(--hl); font-size: 15px; line-height: 1.6; max-width: 70ch; }
+.luu-y-tarot { margin: var(--space-sm) 0 0; padding: var(--space-sm) var(--space-md); border: 1px solid var(--gold-soft); border-radius: var(--radius-sm); background: var(--color-paper-2); font-size: 15px; line-height: 1.6; max-width: 70ch; }
 #cau-hoi, .luu-kq textarea, .ls textarea { width: 100%; font: 15px/1.5 var(--f-ui); padding: var(--space-xs) var(--space-sm); border: 1px solid var(--line); background: var(--paper); color: var(--ink); resize: vertical; }
 .spreads .hop-cd { display: none; font-style: normal; font-size: 12px; font-weight: 600; color: var(--moc); }
 .spreads label.goi-y .hop-cd { display: block; }
 .cau-hoi-kq { margin: 0 0 var(--space-sm); padding: var(--space-sm) var(--space-md); background: var(--hl); font-size: 15px; }
-.reading .lk { border-left: var(--rule-bar) solid var(--color-gold); padding-left: var(--space-sm); }
+.reading .lk { padding: var(--space-sm); background: var(--color-paper); border-radius: var(--radius-sm); }
 .day-du summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-weight: 600; font-size: 14px; }
 .day-du dl, .ss-cot dl { margin: 0; display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: var(--space-2xs) var(--space-sm); font-size: 14px; line-height: 1.55; }
 .day-du dt, .ss-cot dt { color: var(--soft); font-weight: 600; }

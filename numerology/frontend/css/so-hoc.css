@@ -6,14 +6,14 @@
 .doan { font-size: 15.5px; line-height: 1.75; margin: 0; max-width: 78ch; }
 .hai-cot { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); }
 .ba-cot { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-md); }
-.o-nho { padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-radius: 0; background: var(--paper); min-width: 0; }
+.o-nho { padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--paper); min-width: 0; }
 .o-nho h3 { margin: 0 0 var(--space-xs); font-size: 13px; font-weight: 600; color: var(--tu); }
 .o-nho p { margin: 0; font-size: 14.5px; line-height: 1.7; }
 .o-nho ul { margin: 0; padding-left: var(--space-md); font-size: 14.5px; line-height: 1.75; }
 .o-nho.manh { border-top: var(--rule-bar) solid var(--xanh); } .o-nho.yeu { border-top: var(--rule-bar) solid var(--do); }
 .nghe { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
 .nghe span { padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-pill); background: var(--hl); font-size: 13.5px; font-weight: 500; }
-.ket { margin: 0; padding: var(--space-md) var(--space-md); border-radius: 0; background: var(--hl); font-size: 15px; line-height: 1.7; }
+.ket { margin: 0; padding: var(--space-md) var(--space-md); border-radius: var(--radius-sm); background: var(--hl); font-size: 15px; line-height: 1.7; }
 
 /* Số lớn */
 .so-lon { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-2xs) var(--space-lg); align-items: center; }
@@ -24,7 +24,7 @@
 .so-lon p { margin: 0; }
 .cach-tinh { font-variant-numeric: tabular-nums; font-size: 13.5px; color: var(--soft); }
 .chi-so { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: var(--space-sm); }
-.chi-so > div { padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-radius: 0; background: var(--paper); display: flex; flex-direction: column; gap: var(--space-2xs); }
+.chi-so > div { padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--paper); display: flex; flex-direction: column; gap: var(--space-2xs); }
 .chi-so .nhan { font-size: 12px; font-weight: 600; color: var(--soft); }
 .chi-so b { font: 500 28px/1.1 var(--f-display); color: var(--tu); }
 .chi-so small { font-size: 13px; color: var(--soft); }
@@ -32,21 +32,21 @@
 
 /* Biểu đồ ngày sinh */
 .bd-wrap { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-lg); align-items: start; }
-.luoi { display: grid; grid-template-columns: repeat(3, 76px); grid-template-rows: repeat(3, 76px); border: 2px solid var(--tu); border-radius: 0; overflow: hidden; }
+.luoi { display: grid; grid-template-columns: repeat(3, 76px); grid-template-rows: repeat(3, 76px); border: 2px solid var(--tu); border-radius: var(--radius-sm); overflow: hidden; }
 .luoi div { display: grid; place-items: center; border: 1px solid var(--line); font: 500 22px var(--f-display); color: var(--tu); position: relative; }
 .luoi div.trong { color: var(--line); font-weight: 500; font-size: 16px; }
 .luoi div span { position: absolute; top: 4px; left: 6px; font: 600 12px var(--f-ui); color: var(--soft); letter-spacing: 0; }
 .mui-ten { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-sm); }
-.mui-ten li { font-size: 14.5px; line-height: 1.6; padding: var(--space-sm) var(--space-md); border-radius: 0; border: 1px solid var(--line); background: var(--paper); }
+.mui-ten li { font-size: 14.5px; line-height: 1.6; padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--paper); }
 .mui-ten li.manh { border-top: var(--rule-bar) solid var(--xanh); } .mui-ten li.trong { border-top: var(--rule-bar) solid var(--do); }
 
 /* Chu kỳ cá nhân */
 .chu-ky { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: var(--space-xs); }
-.chu-ky div { text-align: center; padding: var(--space-sm) var(--space-2xs); border-radius: 0; border: 1px solid var(--line); background: var(--paper); font-size: 12.5px; }
+.chu-ky div { text-align: center; padding: var(--space-sm) var(--space-2xs); border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--paper); font-size: 12.5px; }
 .chu-ky div b { display: block; font: 500 22px var(--f-display); color: var(--tu); }
 .chu-ky div.nay { background: var(--tu); border-color: var(--tu); color: var(--cell); }
 .chu-ky div.nay b { color: var(--cell); }
-.lv { padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-radius: 0; background: var(--paper); }
+.lv { padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--paper); }
 .lv-dau { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs); }
 .lv p { margin: 0; font-size: 14.5px; line-height: 1.65; }
 .sao-diem { color: var(--vang); white-space: nowrap; }
@@ -62,7 +62,7 @@
 
 /* Bốn đỉnh cao */
 .dinh { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-sm); }
-.dinh > div { padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-radius: 0; background: var(--paper); display: flex; flex-direction: column; gap: var(--space-2xs); }
+.dinh > div { padding: var(--space-md) var(--space-md); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--paper); display: flex; flex-direction: column; gap: var(--space-2xs); }
 .dinh > div.toi { border: 2px solid var(--tu); background: var(--hl); }
 .dinh .nhan { font-size: 12px; font-weight: 600; color: var(--soft); }
 .dinh b { font: 500 32px/1.1 var(--f-display); color: var(--tu); }
@@ -115,5 +115,5 @@
 .thang-12 span, .thang-12 small { font-size: 12px; color: var(--soft); }
 .thang-12 b { font: 500 22px var(--f-display); color: var(--tu); }
 .thang-12 .nay { border: 2px solid var(--tu); background: var(--hl); }
-.nam-sau { border-left: var(--rule-bar) solid var(--color-gold); }
+.nam-sau { border: 1px solid var(--gold-soft); border-radius: var(--radius-sm); }
 @media (max-width: 640px) { .thang-12 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

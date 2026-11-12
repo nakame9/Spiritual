@@ -7,7 +7,7 @@
  *   node scripts/bai-viet.js --kiem-tra báo lỗi nếu tệp nào chưa cập nhật (npm test ở gốc kho chạy lệnh này) */
 const fs = require('fs');
 const path = require('path');
-const { menuCho, GOC } = require('./menu.js');
+const { apDung, GOC } = require('./menu.js');
 const TV = require('../tuvivietnam/frontend/js/thu-vien.js');
 const Markdown = require('../tuvivietnam/frontend/js/markdown.js');
 
@@ -33,7 +33,6 @@ function trangBai(b) {
       { '@type': 'ListItem', position: 2, name: cm.ten, item: url(`tuvivietnam/frontend/bai-viet.html#cm=${cm.id}`) },
       { '@type': 'ListItem', position: 3, name: b.tieuDe, item: dauTrang }] },
   ];
-  const trangPath = path.join(THU_MUC, b.slug + '.html');
   return `<!doctype html>
 <html lang="vi">
 <head>
@@ -60,10 +59,7 @@ function trangBai(b) {
 <body>
 <!-- Trang sinh tự động bởi scripts/bai-viet.js từ js/thu-vien-du-lieu.js. Sửa nội dung ở đó rồi chạy lại lệnh, đừng sửa tệp này. -->
 <div class="wrap">
-  <header class="site">
-    <a class="brand" href="../index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>Lá Số Tử Vi</a>
-    ${menuCho(trangPath)}
-  </header>
+  <header class="site"></header>
 
   <nav class="duong-dan" aria-label="Đường dẫn"><a href="../bai-viet.html">Bài viết</a><span aria-hidden="true">/</span><a href="../bai-viet.html#cm=${cm.id}">${esc(cm.ten)}</a></nav>
   <header class="dau-bai mot-bai">
@@ -118,11 +114,7 @@ ${lq.map(x => '          ' + TV.theBai(x, '../')).join('\n')}
     </div>
   </div>
 
-  <footer class="foot">
-    <p class="foot-loi">Lá Số Tử Vi: tử vi phái Việt, chiêm tinh phương Tây, thần số học, Tarot và lịch vạn niên.</p>
-    ${menuCho(trangPath, 'Chân trang')}
-    <p class="small">Nội dung chỉ để tham khảo.</p>
-  </footer>
+  <footer class="foot"></footer>
 </div>
 <script src="../js/api.js"></script>
 <script src="../js/yeu-thich.js"></script>
@@ -150,14 +142,14 @@ function sitemap() {
 }
 
 const tep = new Map();
-for (const b of BAI) tep.set(path.join(THU_MUC, b.slug + '.html'), trangBai(b));
+for (const b of BAI) { const f = path.join(THU_MUC, b.slug + '.html'); tep.set(f, apDung(trangBai(b), f)); }
 const tv = path.join(FE, 'bai-viet.html'), tc = path.join(FE, 'index.html');
 tep.set(tv, [['danh-sach', TV.moiNhat(BAI).map(b => '        ' + TV.theBai(b)).join('\n')],
   ['moi-nhat', TV.moiNhat(BAI).slice(0, 5).map(b => '          ' + muc(b, '')).join('\n')],
   ['pho-bien', TV.phoBien(BAI).slice(0, 5).map(b => '          ' + muc(b, '')).join('\n')]]
   .reduce((s, [ten, moi]) => giua(s, ten, moi), fs.readFileSync(tv, 'utf8')));
-tep.set(tc, giua(fs.readFileSync(tc, 'utf8'), 'bai-moi', TV.moiNhat(BAI).slice(0, 3).map(b =>
-  `      <li><a class="post" href="bai-viet/${b.slug}.html"><h3>${esc(b.tieuDe)}</h3><p>${esc(b.moTa)}</p><span class="meta">${esc(CM[b.chuyenMuc].ten)}, ${b.phutDoc} phút đọc</span></a></li>`).join('\n')));
+tep.set(tc, giua(fs.readFileSync(tc, 'utf8'), 'bai-moi', [...BAI].sort((a, b) => a.noiBat - b.noiBat).filter((b, i, ds) => ds.findIndex(x => x.chuyenMuc === b.chuyenMuc) === i).slice(0, 4).map(b =>
+  `      <li><a class="bv" href="bai-viet/${b.slug}.html"><h3>${esc(b.tieuDe)}</h3><span class="meta">${esc(CM[b.chuyenMuc].ten)}, ${b.phutDoc} phút đọc</span></a></li>`).join('\n')));
 tep.set(path.join(GOC, 'sitemap.xml'), sitemap());
 
 const kiemTra = process.argv.includes('--kiem-tra'), lech = [];
