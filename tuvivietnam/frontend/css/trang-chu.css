@@ -82,17 +82,29 @@
 /* Sáu công cụ */
 .cong-cu { padding-top: var(--section-gap); display: flex; flex-direction: column; gap: var(--space-xl); scroll-margin-top: var(--header-h); }
 .cc-ds { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap-columns); }
-.cc { height: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: var(--space-sm); padding: var(--space-lg) var(--space-lg) var(--space-md);
+.cc { height: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: var(--space-sm); padding: 0 0 var(--space-md); overflow: hidden;
   background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: var(--radius-card); color: var(--color-ink); text-decoration: none;
   transition: border-color var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out); }
 .cc:hover { border-color: var(--gold); transform: translateY(-2px); }
 .cc:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
-.cc-icon { display: inline-grid; place-items: center; width: 56px; height: 56px; border: 1px solid var(--gold-soft); border-radius: 50%; color: var(--color-gold-2); margin-bottom: var(--space-xs); }
-.cc-icon svg { width: 34px; height: 34px; fill: none; stroke: currentColor; stroke-width: 1.3; }
+.cc-hinh { margin: 0 0 var(--space-xs); border-bottom: 1px solid var(--color-rule); background: #ECE3D2; }
+.cc-hinh img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; transition: transform var(--dur-long) var(--ease-out); }
+.cc:hover .cc-hinh img { transform: scale(1.03); }
 .cc h3 { font: 600 var(--text-2xl)/1.15 var(--font-display); margin: 0; }
-.cc p { margin: 0; color: var(--color-ink-2); font-size: var(--text-sm); line-height: 1.6; }
+.cc h3, .cc p, .cc-di { margin-inline: var(--space-lg); }
+.cc p { margin-block: 0; color: var(--color-ink-2); font-size: var(--text-sm); line-height: 1.6; }
 .cc-di { margin-top: auto; padding-top: var(--space-sm); border-top: 1px solid var(--color-rule); color: var(--color-accent); font-size: var(--text-sm); font-weight: 600; }
 .cc-di::after { content: " →"; }
+
+/* Tra cứu nhanh: dải năm thẻ ảnh */
+.tra-nhanh { padding-top: var(--section-gap-s); display: flex; flex-direction: column; gap: var(--space-lg); }
+.tra-nhanh h2 { margin: 0; font-size: clamp(1.75rem, 1vw + 1.3rem, 2.25rem); }
+.tn-ds { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-md); }
+.tn-ds a { display: flex; flex-direction: column; height: 100%; border: 1px solid var(--color-rule); border-radius: var(--radius-card); overflow: hidden; background: var(--color-paper-2); color: var(--color-ink); text-decoration: none; transition: border-color var(--dur-short) var(--ease-out); }
+.tn-ds a:hover { border-color: var(--gold); }
+.tn-ds a:hover span { color: var(--color-accent); }
+.tn-ds img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-bottom: 1px solid var(--color-rule); }
+.tn-ds span { padding: var(--space-sm) var(--space-md); font: 600 var(--text-xl)/1.2 var(--font-display); }
 
 /* Hôm nay, bài viết mới, hướng dẫn */
 .noi-bat { padding-top: var(--section-gap); display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 4fr) minmax(0, 3fr); gap: var(--gap-columns); align-items: stretch; }
@@ -154,6 +166,7 @@
   .lap-dau { position: static; }
   .ho-so, .du-doan, .pp-ds { grid-template-columns: minmax(0, 1fr); }
   .cc-ds { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .tn-ds { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .cong-cu, .noi-bat { padding-top: var(--section-gap-s); }
   .phuong-phap { margin-top: var(--section-gap-s); }
 }
@@ -165,8 +178,9 @@
   .quick .date input { width: 64px; } .quick .date input.y { width: 84px; }
   .quick .nut-phu .btn2 { flex: 1 1 100%; }
   .cc-ds, .noi-bat, .huong-dan ol { grid-template-columns: minmax(0, 1fr); }
-  .cc { display: grid; grid-template-columns: 44px minmax(0, 1fr); column-gap: var(--space-sm); row-gap: var(--space-xs); align-items: center; padding: var(--space-md); }
-  .cc-icon { width: 44px; height: 44px; margin: 0; } .cc-icon svg { width: 26px; height: 26px; }
-  .cc p, .cc-di { grid-column: 1 / -1; }
+  .cc h3, .cc p, .cc-di { margin-inline: var(--space-md); }
+  .cc-hinh img { aspect-ratio: 2 / 1; }
+  .tn-ds { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-sm); }
+  .tn-ds span { font-size: var(--text-lg); padding: var(--space-xs) var(--space-sm); }
   .hn-am b { font-size: 3.25rem; }
 }

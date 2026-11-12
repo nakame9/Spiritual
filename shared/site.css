@@ -300,3 +300,15 @@ dialog.modal::backdrop { background: rgb(41 37 31 / 0.4); }
 @keyframes dang-tai { from { background-position: 100% 0; } to { background-position: 0 0; } }
 .trong-rong { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-sm); padding: var(--space-lg); border: 1px dashed var(--color-line-strong); border-radius: var(--radius-card); color: var(--color-ink-2); }
 .thanh-cong { color: var(--color-success); font-weight: 500; }
+
+/* ---------- Hình minh họa nét vàng cho từng chức năng (shared/minh-hoa/*.svg, 16:9) ---------- */
+.minh-hoa { margin: 0; border-radius: var(--radius-card); overflow: hidden; background: #ECE3D2; border: 1px solid var(--color-rule); }
+.minh-hoa img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.hero > .minh-hoa:not(.anh-hero) { align-self: center; }
+header.dau-cong-cu, section.dau-cong-cu { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-2xl); align-items: center; max-width: none; padding-top: var(--space-lg); }
+.dau-chu { display: flex; flex-direction: column; min-width: 0; }
+@media (max-width: 60rem) {
+  header.dau-cong-cu, section.dau-cong-cu { grid-template-columns: minmax(0, 1fr); gap: var(--space-lg); }
+  .dau-cong-cu .minh-hoa, .hero > .minh-hoa { max-width: 520px; }
+  .dau-cong-cu .minh-hoa img, .hero > .minh-hoa img { aspect-ratio: 2 / 1; }
+}

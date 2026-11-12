@@ -44,8 +44,10 @@ fieldset.nguoi legend { font-weight: 600; padding: 0 var(--space-2xs); }
 
 /* Hub */
 .o-cong-cu { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: var(--space-lg); }
-.o-cong-cu a { display: flex; flex-direction: column; gap: var(--space-sm); height: 100%; box-sizing: border-box; padding: var(--space-lg); background: var(--color-paper-2); border: var(--rule-hair) solid var(--color-rule); color: inherit; text-decoration: none; }
-.o-cong-cu a:hover { border-color: var(--color-ink); }
+.o-cong-cu a { display: flex; flex-direction: column; gap: var(--space-sm); height: 100%; box-sizing: border-box; padding: var(--space-lg); background: var(--color-paper-2); border: var(--rule-hair) solid var(--color-rule); color: inherit; text-decoration: none; border-radius: var(--radius-card); overflow: hidden; }
+.o-cong-cu a:hover { border-color: var(--gold); }
+.o-cong-cu .o-hinh { margin: calc(-1 * var(--space-lg)) calc(-1 * var(--space-lg)) var(--space-xs); border-bottom: 1px solid var(--color-rule); background: #ECE3D2; }
+.o-cong-cu .o-hinh img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
 .o-cong-cu a:hover h2 { text-decoration: underline; text-decoration-color: var(--color-accent); text-underline-offset: 4px; }
 .o-cong-cu h2 { font-size: 1.6rem; margin: 0; }
 .o-cong-cu p { margin: 0; color: var(--color-ink-2); line-height: 1.55; }

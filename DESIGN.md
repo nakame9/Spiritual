@@ -34,3 +34,8 @@ Huyền học phương Đông hiện đại: huyền bí nhưng không tối. N�
 
 ## Trang chủ
 Hero (tiêu đề, hai nút, vòng 12 địa chi và Bát quái vẽ nét) → Lập lá số nhanh → kết quả ba hệ → sáu công cụ → Hôm nay, bài viết mới, hướng dẫn → Cách chúng tôi tính → chân trang.
+
+## Hình minh họa
+- `shared/minh-hoa/*.svg` (480×270, 16:9): tranh nét vàng trên nền be, quầng sáng tròn, sao bốn cánh; điểm nhấn đỏ đô, xanh mực, màu ngũ hành.
+- Mỗi chức năng một hình: la-so (bàn 12 cung, Bắc Đẩu), con-giap (vòng 12 chi, mèo tuổi Mão), xem-ngay (tờ lịch, tuần trăng), chiem-tinh (quả cầu thiên văn), hop-doi (hai vòng mặt trời, mặt trăng), than-so (tam giác mười chấm, biểu đồ 3×3), tarot (ba lá xòe), ngu-hanh, hop-tuoi (nhẫn và chỉ hồng), la-ban (la bàn Bát quái), giai-mong, tro-ly, sach.
+- Dùng: thẻ công cụ và dải "Tra cứu nhanh" ở trang chủ, thẻ trang Tra cứu, đầu trang công cụ (`.dau-cong-cu`, hoặc `.anh-hero` dưới đoạn dẫn khi đầu trang có biểu mẫu). Lớp chung: `.minh-hoa`.
