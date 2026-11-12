@@ -11,7 +11,7 @@ const { apDung, GOC } = require('./menu.js');
 const TV = require('../tuvivietnam/frontend/js/thu-vien.js');
 const Markdown = require('../tuvivietnam/frontend/js/markdown.js');
 
-const SITE = 'https://nakame9.github.io/Spiritual';
+const SITE = 'https://spiritualvn.id.vn';
 const FE = path.join(GOC, 'tuvivietnam/frontend'), THU_MUC = path.join(FE, 'bai-viet');
 const { esc, CM, ngayVN } = TV;
 const BAI = TV.BAI.map(b => Object.assign({}, b, { phutDoc: TV.phutDoc(b) }));

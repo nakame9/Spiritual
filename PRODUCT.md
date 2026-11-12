@@ -20,7 +20,7 @@ Mọi kết quả được tính bằng bộ quy tắc công khai riêng cho t�
 
 ## Operating Context
 
-Trang tĩnh trên GitHub Pages (https://nakame9.github.io/Spiritual/), mỗi phần có backend Node/Express tùy chọn (bài viết từ trang quản trị, lượt đọc, trợ lý AI). Không có tài khoản người dùng trên máy chủ: hồ sơ, lịch sử, yêu thích lưu trong trình duyệt (đã xác nhận với chủ dự án).
+Trang tĩnh trên GitHub Pages (https://spiritualvn.id.vn/), mỗi phần có backend Node/Express tùy chọn (bài viết từ trang quản trị, lượt đọc, trợ lý AI). Không có tài khoản người dùng trên máy chủ: hồ sơ, lịch sử, yêu thích lưu trong trình duyệt (đã xác nhận với chủ dự án).
 
 ## Capabilities and Constraints
 
