@@ -33,9 +33,12 @@ app.get('/api/kieu-trai', (req, res) => res.json(Tarot.KIEU_TRAI));
 app.get('/api/chu-de', (req, res) => res.json(Object.fromEntries(Object.entries(Tarot.CHU_DE).map(([k, c]) => [k, { ten: c.ten, moTa: c.moTa }]))));
 
 // Rút bài: máy chủ xáo cả bộ rồi lấy các lá trên cùng theo kiểu trải. cauHoi (không bắt buộc) được đưa vào phần tổng hợp
+// Kiểu trải phải là khóa riêng của KIEU_TRAI: "toString", "constructor" có giá trị (kế thừa từ Object) nên trước đây lọt qua rồi ném lỗi 500
+const laKieu = k => typeof k === 'string' && Object.prototype.hasOwnProperty.call(Tarot.KIEU_TRAI, k);
+
 // So sánh hai lần trải bài: { a: { kieu, chuDe, chon: [{ id, nguoc }] }, b: {...} }
 app.post('/api/so-sanh', (req, res) => {
-  const b = req.body || {}, hop = x => x && Tarot.KIEU_TRAI[x.kieu] && Object.prototype.hasOwnProperty.call(Tarot.CHU_DE, x.chuDe) && Array.isArray(x.chon)
+  const b = req.body || {}, hop = x => x && laKieu(x.kieu) && Object.prototype.hasOwnProperty.call(Tarot.CHU_DE, x.chuDe) && Array.isArray(x.chon)
     && x.chon.length === Tarot.KIEU_TRAI[x.kieu].viTri.length && x.chon.every(c => c && Number.isInteger(c.id) && c.id >= 0 && c.id < 78)
     && new Set(x.chon.map(c => c.id)).size === x.chon.length;
   if (!hop(b.a) || !hop(b.b)) return res.status(400).json({ error: 'Cần a và b, mỗi bên { kieu, chuDe, chon: [{ id 0–77, nguoc }] } đủ số lá của kiểu trải, không trùng lá.' });
@@ -43,7 +46,7 @@ app.post('/api/so-sanh', (req, res) => {
 });
 app.post('/api/rut-bai', (req, res) => {
   const b = req.body || {}, kieu = b.kieu || '3la', chuDe = b.chuDe || 'tongquan';
-  if (!Tarot.KIEU_TRAI[kieu]) return res.status(400).json({ error: `kieu cần là ${Object.keys(Tarot.KIEU_TRAI).join(', ')}.` });
+  if (!laKieu(kieu)) return res.status(400).json({ error: `kieu cần là ${Object.keys(Tarot.KIEU_TRAI).join(', ')}.` });
   if (!Object.prototype.hasOwnProperty.call(Tarot.CHU_DE, chuDe)) return res.status(400).json({ error: `chuDe cần là ${Object.keys(Tarot.CHU_DE).join(', ')}.` });
   if (b.nguoc !== undefined && typeof b.nguoc !== 'boolean') return res.status(400).json({ error: 'nguoc cần là true hoặc false.' });
   if (b.cauHoi !== undefined && (typeof b.cauHoi !== 'string' || b.cauHoi.length > 200)) return res.status(400).json({ error: 'cauHoi là chuỗi tối đa 200 ký tự.' });
@@ -58,6 +61,8 @@ app.use('/shared', express.static(path.join(__dirname, '..', '..', 'shared'))); 
 
 app.use((err, req, res, next) => {
   if (err.type === 'entity.parse.failed') return res.status(400).json({ error: 'Dữ liệu gửi lên không phải JSON hợp lệ.' });
+  // Lỗi 4xx của body-parser (413 quá lớn…): trả đúng mã, không ghi stack
+  if (err.expose && err.status >= 400 && err.status < 500) return res.status(err.status).json({ error: err.status === 413 ? 'Dữ liệu gửi lên quá lớn.' : 'Yêu cầu không hợp lệ.' });
   console.error(err);
   res.status(500).json({ error: 'Máy chủ gặp lỗi.' });
 });

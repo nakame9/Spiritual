@@ -91,6 +91,8 @@ app.use('/shared', express.static(path.join(__dirname, '..', '..', 'shared'))); 
 
 app.use((err, req, res, next) => {
   if (err.type === 'entity.parse.failed') return res.status(400).json({ error: 'Dữ liệu gửi lên không phải JSON hợp lệ.' });
+  // Lỗi 4xx của body-parser (413 quá lớn…): trả đúng mã, không ghi stack
+  if (err.expose && err.status >= 400 && err.status < 500) return res.status(err.status).json({ error: err.status === 413 ? 'Dữ liệu gửi lên quá lớn.' : 'Yêu cầu không hợp lệ.' });
   console.error(err);
   res.status(500).json({ error: 'Máy chủ gặp lỗi.' });
 });

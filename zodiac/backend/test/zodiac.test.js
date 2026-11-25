@@ -114,6 +114,14 @@ test('API', async () => {
   assert.strictEqual((await get('/api/xac-dinh?ngay=1990-04-10'))[1].cung, 'bach-duong');
   assert.strictEqual((await get('/api/xac-dinh?ngay=2026-03-20'))[1].giaoCung.luc, '21:45');
   assert.strictEqual((await get('/api/xac-dinh?ngay=1990-02-30'))[0], 400);
+  // Tên múi giờ viết hoa thường lẫn lộn vẫn đúng; bộ nhớ đệm định dạng không lớn mãi (tối đa 200)
+  const chuan = (await get('/api/xac-dinh?ngay=1990-04-10&tz=Asia/Ho_Chi_Minh'))[1];
+  for (let i = 0; i < 260; i++) {
+    const tz = [...'asia/ho_chi_minh'].map((c, j) => (i >> (j % 9)) & 1 ? c.toUpperCase() : c).join('');
+    TV.doLech(tz, Date.UTC(1990, 3, 10));
+  }
+  assert.ok(TV.soBoDinhDang() <= 200, String(TV.soBoDinhDang()));
+  assert.deepStrictEqual((await get('/api/xac-dinh?ngay=1990-04-10&tz=aSiA/hO_cHi_MiNh'))[1].cung, chuan.cung);
   assert.strictEqual((await get('/api/tu-vi/bo-cap?ky=tuan&ngay=2026-10-24'))[1].tu, '19/10/2026');
   assert.strictEqual((await get('/api/tu-vi/bo-cap'))[1].loai, 'ngay');
   assert.strictEqual((await get('/api/tu-vi/bo-cap?ky=gio'))[0], 400);

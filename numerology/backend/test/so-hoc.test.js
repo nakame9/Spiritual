@@ -99,6 +99,12 @@ test('API', async () => {
   assert.strictEqual((await get('/api/so-chu-dao?ngaySinh=1990-12-15&homNay=2026-10-24&truongPhai=sinhNhat'))[1].namCaNhan.nam, 2025);
   assert.strictEqual((await get('/api/so-chu-dao?ngaySinh=1990-12-15&truongPhai=abc'))[0], 400);
   assert.strictEqual((await get('/api/so-chu-dao?ngaySinh=1990-12-15&truongPhai=toString'))[0], 400);
+  // Tham số dạng mảng: trước đây ?truongPhai[]=sinhNhat qua được kiểm tra nhưng lại tính theo dương lịch
+  for (const q of ['truongPhai[]=sinhNhat', 'phai[]=quocTe', 'phai=vn&phai=quocTe']) assert.strictEqual((await get('/api/so-chu-dao?ngaySinh=1990-12-15&' + q))[0], 400, q);
+  // Không truyền homNay: lấy hôm nay theo giờ Việt Nam
+  const [s3, r3] = await get('/api/so-chu-dao?ngaySinh=1990-12-15');
+  assert.strictEqual(s3, 200); assert.ok(Number.isInteger(r3.namCaNhan.nam) && r3.namCaNhan.nam >= 2025, JSON.stringify(r3.namCaNhan.nam));
+  assert.match((await get('/api/y-nghia/44'))[1].error, /1–11, 22 và 33/);
   const [s2, th] = await get('/api/tuong-hop?a=6&b=9');
   assert.strictEqual(s2, 200); assert.strictEqual(th.phanTram, 85);
   for (const q of ['a=12&b=9', 'a=6', 'a=6&b=x', 'a=06&b=9']) assert.strictEqual((await get('/api/tuong-hop?' + q))[0], 400, q);

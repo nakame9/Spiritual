@@ -91,6 +91,13 @@ test('API theo chủ đề', async () => {
   r.la.forEach(l => assert.strictEqual(l.y, Tarot.BO_BAI[l.id].chuDe.taichinh[l.nguoc ? 'nguoc' : 'xuoi']));
   assert.strictEqual((await post({ chuDe: 'suckhoe' })).status, 400);
   assert.strictEqual((await post({ chuDe: 'toString' })).status, 400);
+  // Khóa kế thừa của Object: trước đây trả 500
+  for (const kieu of ['toString', 'constructor', '__proto__', ['3la']]) assert.strictEqual((await post({ kieu })).status, 400, String(kieu));
+  const ss = await fetch(base + '/api/so-sanh', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ a: { kieu: 'toString', chuDe: 'tongquan', chon: [] }, b: { kieu: 'toString', chuDe: 'tongquan', chon: [] } }) });
+  assert.strictEqual(ss.status, 400);
+  // Body quá giới hạn 10kb: 413, không phải 500
+  assert.strictEqual((await post({ cauHoi: 'x'.repeat(11000) })).status, 413);
   assert.deepStrictEqual(Object.keys(await (await fetch(base + '/api/chu-de')).json()), ['tongquan', 'tinhyeu', 'sunghiep', 'taichinh', 'banthan']);
 });
 
@@ -99,8 +106,13 @@ test('ý nghĩa theo vị trí: theo chiều thuận/nghịch của lá, ghép t
   assert.match(r.la[0].yTheoViTri, /^Chuyện đã qua để lại biến động bất ngờ, sụp đổ và thức tỉnh\./); // Tòa Tháp xuôi: nghịch
   assert.match(r.la[1].yTheoViTri, /^Lúc này, năng lượng chính quanh vấn đề là hồi phục/); // 3 Kiếm ngược: thuận
   assert.match(r.la[2].yTheoViTri, /phía trước là niềm vui, thành công và sức sống\.$/);
-  const viTri = new Set(Object.values(Tarot.KIEU_TRAI).flatMap(k => k.viTri.map(v => v[0])));
-  for (const v of viTri) assert.doesNotMatch(Tarot.docBai('1la', [{ id: 0 }]).la[0].yTheoViTri, /\{k\}/, v);
+  // Mọi vị trí của mọi kiểu trải đều thay hết chỗ trống {k} (trước đây vòng lặp chỉ kiểm tra đi kiểm tra lại một lá của kiểu 1 lá)
+  for (const [kieu, k] of Object.entries(Tarot.KIEU_TRAI))
+    for (const nguoc of [false, true]) {
+      const r = Tarot.docBai(kieu, k.viTri.map((_, i) => ({ id: (i * 7 + (nguoc ? 3 : 0)) % 78, nguoc })));
+      assert.strictEqual(r.la.length, k.viTri.length, kieu);
+      r.la.forEach((l, i) => assert.doesNotMatch(l.yTheoViTri, /\{k\}/, `${kieu} vị trí ${i + 1}`));
+    }
 });
 
 test('tổng hợp luận giải: bài đọc liền mạch cho mọi kiểu trải và chủ đề, nhắc đủ các lá', () => {

@@ -43,10 +43,17 @@
   }
 
   // ---------- Giờ địa phương ↔ UTC theo múi giờ IANA ----------
-  const boDinhDang = {};
+  // Bộ định dạng theo từng chuỗi tz. Giới hạn kích thước: tên IANA không phân biệt hoa thường nên API nhận vô số cách viết
+  // ("aSiA/hO_cHi_MiNh"…), không giới hạn thì gọi lặp với cách viết mới làm bộ nhớ máy chủ tăng mãi
+  const boDinhDang = new Map(), TOI_DA_DINH_DANG = 200;
   /** Độ lệch (phút) của múi giờ tz so với UTC tại thời điểm utcMs */
   function doLech(tz, utcMs) {
-    const f = boDinhDang[tz] || (boDinhDang[tz] = new Intl.DateTimeFormat('en-US', { timeZone: tz, hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', era: 'short' }));
+    let f = boDinhDang.get(tz);
+    if (!f) {
+      if (boDinhDang.size >= TOI_DA_DINH_DANG) boDinhDang.clear();
+      f = new Intl.DateTimeFormat('en-US', { timeZone: tz, hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', era: 'short' });
+      boDinhDang.set(tz, f);
+    }
     const p = {}; f.formatToParts(new Date(utcMs)).forEach(x => { p[x.type] = x.value; });
     const y = p.era === 'BC' || p.era === 'B' ? 1 - Number(p.year) : Number(p.year);
     const d = new Date(0); d.setUTCFullYear(y, Number(p.month) - 1, Number(p.day)); d.setUTCHours(Number(p.hour) % 24, Number(p.minute), Number(p.second), 0);
@@ -127,6 +134,7 @@
     return null;
   }
 
-  const ThienVan = { THIEN_THE, chuan, kinhDo, tocDo, cungCua, viTriCacSao, truc, doLech, sangUTC, ngayTai, timGiaoCung, timNghichHanh, timTuanTrang, timThuc, gocChieu };
+  const soBoDinhDang = () => boDinhDang.size; // cho test kiểm tra bộ nhớ đệm không lớn mãi
+  const ThienVan = { THIEN_THE, chuan, kinhDo, tocDo, cungCua, viTriCacSao, truc, doLech, soBoDinhDang, sangUTC, ngayTai, timGiaoCung, timNghichHanh, timTuanTrang, timThuc, gocChieu };
   if (typeof module !== 'undefined' && module.exports) module.exports = ThienVan; else root.ThienVan = ThienVan;
 })(typeof window !== 'undefined' ? window : globalThis);

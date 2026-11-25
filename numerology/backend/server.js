@@ -20,16 +20,23 @@ function docNgay(s, ten) {
   if (!m || y < 1900 || y > 2100 || mo < 1 || mo > 12 || new Date(Date.UTC(y, mo - 1, d)).getUTCDate() !== d) throw new Loi(`${ten} cần dạng YYYY-MM-DD, năm 1900–2100.`);
   return { y, m: mo, d };
 }
-const homNay = () => { const [y, m, d] = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date()).split('-').map(Number); return { y, m, d }; };
+// Hôm nay theo giờ Việt Nam; formatToParts thay vì tách chuỗi định dạng en-CA (định dạng của locale có thể đổi theo bản ICU)
+const homNay = () => {
+  const p = {};
+  new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: 'numeric', day: 'numeric' }).formatToParts(new Date()).forEach(x => { p[x.type] = Number(x.value); });
+  return { y: p.year, m: p.month, d: p.day };
+};
+// Tham số chọn một trong danh sách: phải là chuỗi (?phai[]=vn cho ra mảng, Object.hasOwn vẫn nhận vì ép mảng thành chuỗi)
+const laKhoa = (o, v) => typeof v === 'string' && Object.hasOwn(o, v);
 const boc = fn => (req, res) => { try { res.json(fn(req)); } catch (e) { if (e instanceof Loi) res.status(400).json({ error: e.message }); else throw e; } };
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 // Toàn bộ chỉ số: ?ngaySinh=1990-08-15&ten=Nguyễn Văn A&homNay=2026-10-24&truongPhai=sinhNhat&phai=quocTe (ten, homNay, truongPhai, phai không bắt buộc)
 app.get('/api/so-chu-dao', boc(req => {
   const { ten, truongPhai, phai } = req.query;
-  if (phai !== undefined && !Object.hasOwn(SoHoc.PHAI, phai)) throw new Loi(`phai chỉ nhận: ${Object.keys(SoHoc.PHAI).join(', ')}.`);
+  if (phai !== undefined && !laKhoa(SoHoc.PHAI, phai)) throw new Loi(`phai chỉ nhận: ${Object.keys(SoHoc.PHAI).join(', ')}.`);
   if (ten !== undefined && (typeof ten !== 'string' || ten.length > 60)) throw new Loi('ten tối đa 60 ký tự.');
-  if (truongPhai !== undefined && !Object.hasOwn(SoHoc.TRUONG_PHAI, truongPhai)) throw new Loi(`truongPhai chỉ nhận: ${Object.keys(SoHoc.TRUONG_PHAI).join(', ')}.`);
+  if (truongPhai !== undefined && !laKhoa(SoHoc.TRUONG_PHAI, truongPhai)) throw new Loi(`truongPhai chỉ nhận: ${Object.keys(SoHoc.TRUONG_PHAI).join(', ')}.`);
   return SoHoc.tinh(docNgay(req.query.ngaySinh, 'ngaySinh'), req.query.homNay ? docNgay(req.query.homNay, 'homNay') : homNay(), ten, truongPhai, phai);
 }));
 // So sánh hai số chủ đạo: ?a=6&b=9 (1–11, 22 hoặc 33)
@@ -37,10 +44,10 @@ app.get('/api/tuong-hop', boc(req => {
   const so = k => { const v = req.query[k]; if (typeof v !== 'string' || !/^\d+$/.test(v) || !SoHoc.SO_CHU_DAO[v]) throw new Loi(`${k} là số chủ đạo 1–11, 22 hoặc 33.`); return Number(v); };
   return SoHoc.tuongHop(so('a'), so('b'));
 }));
-// Ý nghĩa một số chủ đạo: 2–11 hoặc 22
+// Ý nghĩa một số chủ đạo: 1–11, 22 hoặc 33
 app.get('/api/y-nghia/:so', (req, res) => {
   const c = SoHoc.SO_CHU_DAO[req.params.so];
-  if (!c || !/^\d+$/.test(req.params.so)) return res.status(404).json({ error: 'Số chủ đạo chỉ gồm 2–11 và 22.' });
+  if (!c || !/^\d+$/.test(req.params.so)) return res.status(404).json({ error: 'Số chủ đạo chỉ gồm 1–11, 22 và 33.' });
   res.json(Object.assign({ so: Number(req.params.so), hien: SoHoc.hienSo(Number(req.params.so)) }, c));
 });
 // Chu kỳ năm cá nhân 1–9
@@ -51,6 +58,8 @@ app.use(express.static(path.join(__dirname, '..', 'frontend')));
 app.use('/shared', express.static(path.join(__dirname, '..', '..', 'shared'))); // CSS dùng chung của cả site
 app.use((err, req, res, next) => {
   if (err.type === 'entity.parse.failed') return res.status(400).json({ error: 'Dữ liệu gửi lên không phải JSON hợp lệ.' });
+  // Lỗi 4xx của body-parser (413 quá lớn…): trả đúng mã, không ghi stack
+  if (err.expose && err.status >= 400 && err.status < 500) return res.status(err.status).json({ error: err.status === 413 ? 'Dữ liệu gửi lên quá lớn.' : 'Yêu cầu không hợp lệ.' });
   console.error(err);
   res.status(500).json({ error: 'Máy chủ gặp lỗi.' });
 });
