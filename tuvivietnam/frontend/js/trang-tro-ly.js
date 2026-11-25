@@ -10,7 +10,7 @@
 
   // Hồ sơ: điền lại từ máy, lưu mỗi khi đổi
   const hs = hoSo.doc() || {};
-  dienNgay('a', hs); if (hs.gio) $('gio').value = hs.gio; if (hs.gioiTinh) $('a' + hs.gioiTinh).checked = true; if (hs.ten) $('ten').value = hs.ten;
+  dienNgay('a', hs); if (hs.gio) $('gio').value = hs.gio; if (hs.gioiTinh === 'nam' || hs.gioiTinh === 'nu') $('a' + hs.gioiTinh).checked = true; if (hs.ten) $('ten').value = hs.ten;
   function docHoSo() {
     const so = id => { const v = $(id).value.trim(); return v ? Number(v) : undefined; };
     const h = { d: so('ad'), m: so('am'), y: so('ay'), gio: $('gio').value ? Number($('gio').value) : undefined,

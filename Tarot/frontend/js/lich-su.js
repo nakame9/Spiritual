@@ -35,8 +35,10 @@
     try {
       const ds = JSON.parse(localStorage.getItem(KEY)) || [];
       const T = root.Tarot;
-      // Bỏ bản ghi hỏng hoặc không còn khớp bộ bài
-      return Array.isArray(ds) ? ds.filter(x => x && T.KIEU_TRAI[x.kieu] && T.CHU_DE[x.chuDe] && Array.isArray(x.chon)
+      // Bỏ bản ghi hỏng hoặc không còn khớp bộ bài. id được ghi vào thuộc tính HTML, luc được định dạng ngày: kiểm tra cả hai
+      const co = (o, k) => typeof k === 'string' && Object.prototype.hasOwnProperty.call(o, k);
+      return Array.isArray(ds) ? ds.filter(x => x && typeof x.id === 'string' && /^[a-z0-9]{1,40}$/.test(x.id) && !isNaN(Date.parse(x.luc))
+        && co(T.KIEU_TRAI, x.kieu) && co(T.CHU_DE, x.chuDe) && Array.isArray(x.chon)
         && x.chon.length === T.KIEU_TRAI[x.kieu].viTri.length && x.chon.every(c => Number.isInteger(c.id) && c.id >= 0 && c.id < 78)) : [];
     } catch (e) { return []; }
   }

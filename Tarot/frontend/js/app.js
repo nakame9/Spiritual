@@ -17,7 +17,7 @@
   }));
 
   // Mở từ trang chủ với #3la, #10la, #tinhyeu… thì chọn sẵn kiểu trải hoặc chủ đề
-  const h = decodeURIComponent(location.hash.slice(1));
+  let h = ''; try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) { /* hash hỏng như #% : bỏ qua thay vì làm chết cả trang */ }
   if (co(Tarot.KIEU_TRAI, h)) $('kieu-' + h).checked = true;
   if (co(Tarot.CHU_DE, h)) document.querySelector(`input[name="chude"][value="${h}"]`).checked = true;
   goiY();

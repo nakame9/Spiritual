@@ -13,8 +13,8 @@
     $('dem').textContent = ds.length ? `${ds.length} lần trải bài đã lưu.` : '';
     $('ds').innerHTML = ds.map(x => {
       const st = T.sacThai(x.chon), k = T.KIEU_TRAI[x.kieu];
-      return `<li class="ls" data-id="${x.id}">
-        <div class="ls-dau"><label class="check"><input type="checkbox" class="ss" value="${x.id}"${chonSS.includes(x.id) ? ' checked' : ''}${!chonSS.includes(x.id) && chonSS.length >= 2 ? ' disabled' : ''}>So sánh</label>
+      return `<li class="ls" data-id="${esc(x.id)}">
+        <div class="ls-dau"><label class="check"><input type="checkbox" class="ss" value="${esc(x.id)}"${chonSS.includes(x.id) ? ' checked' : ''}${!chonSS.includes(x.id) && chonSS.length >= 2 ? ' disabled' : ''}>So sánh</label>
           <div><b>${k.ten} · ${T.CHU_DE[x.chuDe].ten}</b><span class="muted">${ngayGio(x.luc)} · ${st.nhan}, ${st.thuan}/${st.soLa} lá thuận</span></div></div>
         ${x.cauHoi ? `<p class="cau-hoi-kq"><b>Câu hỏi:</b> ${esc(x.cauHoi)}</p>` : ''}
         <div class="mini">${x.chon.map(c => `<span title="${T.BO_BAI[c.id].ten}${c.nguoc ? ' (ngược)' : ''}">${theLa(T.BO_BAI[c.id], c.nguoc, 'static')}</span>`).join('')}</div>

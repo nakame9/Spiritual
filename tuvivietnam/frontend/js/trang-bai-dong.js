@@ -2,7 +2,7 @@
 (function () {
   'use strict';
   const $ = id => document.getElementById(id), { esc, CM, CHUYEN_MUC, slugHoa } = ThuVien;
-  const slug = decodeURIComponent(location.hash.slice(1));
+  let slug = ''; try { slug = decodeURIComponent(location.hash.slice(1)); } catch (e) { /* hash hỏng như #% : báo thiếu tên bài bên dưới */ }
   const tinh = ThuVien.BAI.find(b => b.slug === slug || (b.cu || []).includes(slug));
   if (tinh) { location.replace(`bai-viet/${tinh.slug}.html`); return; }
   const loi = t => { $('tieu-de').textContent = 'Không mở được bài viết'; $('mo-ta').textContent = t; document.querySelector('.layout').hidden = true; };

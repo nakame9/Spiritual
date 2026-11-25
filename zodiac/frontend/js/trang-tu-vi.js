@@ -4,7 +4,8 @@
   const { $, CUNG, theoId, sao, ky, nt, homNay } = UI;
   const KY = ['ngay', 'tuan', 'thang', 'nam'];
   const hai = n => String(n).padStart(2, '0');
-  const [h1, h2] = decodeURIComponent(location.hash.slice(1)).split('/');
+  let hash = ''; try { hash = decodeURIComponent(location.hash.slice(1)); } catch (e) { /* hash hỏng như #% : dùng mặc định */ }
+  const [h1, h2] = hash.split('/');
   const st = { cung: theoId[h1] ? h1 : 'bach-duong', ky: KY.includes(h2) ? h2 : 'ngay', ngay: homNay() };
 
   $('chon').innerHTML = CUNG.map(c => `<label class="${nt(c)}"><input type="radio" name="cung" value="${c.id}"><span>${ky(c)}${c.ten}</span></label>`).join('');

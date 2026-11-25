@@ -4,7 +4,8 @@
   const { CUNG, HANH_TINH, NGUYEN_TO, TINH_CHAT } = root.HoangDao;
   const $ = id => document.getElementById(id);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const theoId = Object.fromEntries(CUNG.map(c => [c.id, c]));
+  // Không có prototype: theoId['constructor'], theoId['toString'] là undefined, nên link như cung.html#constructor không làm sập trang
+  const theoId = Object.assign(Object.create(null), Object.fromEntries(CUNG.map(c => [c.id, c])));
   const sao = n => `<span class="sao-diem" role="img" aria-label="${n} trên 5 sao">${'★'.repeat(n)}<i>${'★'.repeat(5 - n)}</i></span>`;
   const ngayNgan = c => `${c.tu[1]}/${c.tu[0]} – ${c.den[1]}/${c.den[0]}`;
   const chuTinh = c => c.chuTinh.length > 1 ? `${HANH_TINH[c.chuTinh[0]].ten} (hiện đại), ${HANH_TINH[c.chuTinh[1]].ten} (cổ điển)` : HANH_TINH[c.chuTinh[0]].ten;

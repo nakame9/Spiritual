@@ -9,7 +9,8 @@
 
   // Link cũ bai-viet.html#tu-vi-la-gi (khi ba bài đầu còn chung một trang): chuyển sang trang riêng của bài
   const chuyenCu = () => {
-    const h = decodeURIComponent(location.hash.slice(1)), cu = h && !h.includes('=') && ds.find(b => b.slug === h || (b.cu || []).includes(h));
+    let h = ''; try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) { /* hash hỏng như #% : coi như không có */ }
+    const cu = h && !h.includes('=') && ds.find(b => b.slug === h || (b.cu || []).includes(h));
     if (cu) location.replace(`bai-viet/${cu.slug}.html`);
     return !!cu;
   };
@@ -17,7 +18,7 @@
 
   function docHash() {
     const p = new URLSearchParams(location.hash.slice(1));
-    st.q = p.get('q') || ''; st.cm = CM[p.get('cm')] ? p.get('cm') : ''; st.yt = p.get('yt') === '1';
+    st.q = p.get('q') || ''; st.cm = Object.prototype.hasOwnProperty.call(CM, p.get('cm')) ? p.get('cm') : ''; st.yt = p.get('yt') === '1';
     st.sap = ['moi', 'pho-bien', 'khop'].includes(p.get('sap')) ? p.get('sap') : (st.q ? 'khop' : 'moi');
     $('q').value = st.q; $('sap').value = st.sap;
   }

@@ -5,7 +5,8 @@
   const CAC_SO = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 22];
   const opt = CAC_SO.map(n => `<option value="${n}">Số ${SoHoc.hienSo(n)}: ${SoHoc.SO_CHU_DAO[n].ten}</option>`).join('');
   $('a').innerHTML = opt; $('b').innerHTML = opt;
-  const docHash = () => { const q = new URLSearchParams(location.hash.slice(1)); for (const k of ['a', 'b']) if (SoHoc.SO_CHU_DAO[q.get(k)]) $(k).value = q.get(k); };
+  // Chỉ nhận số có trong ô chọn: #a=1, #a=33 hay #a=constructor trước đây làm ô chọn rỗng rồi sập trang
+  const docHash = () => { const q = new URLSearchParams(location.hash.slice(1)); for (const k of ['a', 'b']) if (/^\d+$/.test(q.get(k) || '') && CAC_SO.includes(Number(q.get(k)))) $(k).value = q.get(k); };
   $('a').value = '6'; $('b').value = '9'; docHash();
 
   function ve() {

@@ -79,5 +79,5 @@
     $('aten').value = p.get('ta') || ''; $('bten').value = p.get('tb') || ''; $('nam-cuoi').value = p.get('cuoi') || '';
     $('o-cuoi').hidden = $('muc-dich').value === 'lamAn';
     xem();
-  } else { const hs = hoSo.doc(); if (hs && hs.y) { dienNgay('a', hs); if (hs.gioiTinh) $('a' + hs.gioiTinh).checked = true; } }
+  } else { const hs = hoSo.doc(); if (hs && hs.y) { dienNgay('a', hs); if (hs.gioiTinh === 'nam' || hs.gioiTinh === 'nu') $('a' + hs.gioiTinh).checked = true; } }
 })();

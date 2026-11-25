@@ -71,5 +71,5 @@
   }
   $('form').addEventListener('submit', xem);
   const hs = hoSo.doc();
-  if (hs && hs.y) { dienNgay('a', hs); if (hs.gioiTinh) { $('a' + hs.gioiTinh).checked = true; xem(); } }
+  if (hs && hs.y) { dienNgay('a', hs); if (hs.gioiTinh === 'nam' || hs.gioiTinh === 'nu') { $('a' + hs.gioiTinh).checked = true; xem(); } }
 })();

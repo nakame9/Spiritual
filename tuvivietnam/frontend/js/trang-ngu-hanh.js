@@ -90,5 +90,5 @@
   $('form').addEventListener('submit', tra);
   $('phai-huong').addEventListener('change', () => { if (!$('kq').hidden) tra(); });
   const hs = hoSo.doc();
-  if (hs && hs.y) { dienNgay('a', hs); if (hs.gioiTinh) $('a' + hs.gioiTinh).checked = true; tra(); }
+  if (hs && hs.y) { dienNgay('a', hs); if (hs.gioiTinh === 'nam' || hs.gioiTinh === 'nu') $('a' + hs.gioiTinh).checked = true; tra(); }
 })();
