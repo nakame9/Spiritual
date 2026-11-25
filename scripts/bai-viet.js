@@ -153,9 +153,11 @@ tep.set(tc, giua(fs.readFileSync(tc, 'utf8'), 'bai-moi', [...BAI].sort((a, b) =>
 tep.set(path.join(GOC, 'sitemap.xml'), sitemap());
 
 const kiemTra = process.argv.includes('--kiem-tra'), lech = [];
-const thua = fs.existsSync(THU_MUC) ? fs.readdirSync(THU_MUC).map(f => path.join(THU_MUC, f)).filter(f => !tep.has(f)) : [];
+// Chỉ xét trang .html do script này sinh ra: ảnh, .gitkeep hay thư mục con người khác đặt vào bai-viet/ được giữ nguyên
+const thua = fs.existsSync(THU_MUC) ? fs.readdirSync(THU_MUC, { withFileTypes: true }).filter(d => d.isFile() && d.name.endsWith('.html'))
+  .map(d => path.join(THU_MUC, d.name)).filter(f => !tep.has(f)) : [];
 for (const f of thua) { if (kiemTra) lech.push(`${path.relative(GOC, f)}: không còn bài tương ứng`); else { fs.unlinkSync(f); console.log(`Đã xóa ${path.relative(GOC, f)}`); } }
-fs.mkdirSync(THU_MUC, { recursive: true });
+if (!kiemTra) fs.mkdirSync(THU_MUC, { recursive: true }); // chế độ kiểm tra không ghi gì xuống đĩa
 for (const [f, s] of tep) {
   if (fs.existsSync(f) && fs.readFileSync(f, 'utf8') === s) continue;
   if (kiemTra) lech.push(`${path.relative(GOC, f)}: chưa cập nhật`);

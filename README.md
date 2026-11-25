@@ -46,10 +46,13 @@ Spiritual/
 ├── README.md               Tài liệu này
 ├── package.json            Lệnh chung: cai-dat, test, menu, start
 ├── index.html, la-so.html, bai-viet.html   Chuyển hướng vào tuvivietnam/frontend (giữ link cũ)
-├── design.md               Hệ giao diện đã khóa (Solstice): màu, chữ, nút, quy tắc. Trang mới đọc file này trước
+├── DESIGN.md               Hệ giao diện "Oriental Modern": màu, chữ, nút, quy tắc. Trang mới đọc file này trước
+├── PRODUCT.md              Người dùng, mục đích, ràng buộc thương hiệu
 ├── shared/site.css         Hệ giao diện dùng chung: khung trang, menu, chân trang, nút, ô nhập, sáng/tối. Một bản cho cả site
-├── shared/tokens.css, base.css, fonts.css, fonts/   Token màu và khoảng cách, quy tắc nền, phông tự lưu (Yeseva One, Archivo, Archivo Narrow)
-├── scripts/menu.js         Menu chính khai báo một chỗ, ghi vào mọi trang và kiểm tra lệch
+├── shared/tokens.css, base.css, fonts.css, fonts/   Token màu và khoảng cách, quy tắc nền, phông tự lưu (Cormorant Garamond, Be Vietnam Pro)
+├── shared/dieu-huong.js    Menu và chân trang của cả site khai báo một chỗ (dùng cho cả trang tìm kiếm)
+├── scripts/menu.js         Ghi header, chân trang từ shared/dieu-huong.js vào mọi trang và kiểm tra lệch
+├── scripts/bai-viet.js     Sinh trang tĩnh cho 16 bài viết và sitemap.xml, kiểm tra lệch
 ├── tuvivietnam/            Tử vi + trang chủ          (frontend, backend, README)
 ├── xemngay/                Xem ngày tốt xấu           (frontend, backend, README)
 ├── Tarot/                  Tarot 78 lá                (frontend, backend, README)
@@ -87,15 +90,15 @@ Trang chủ nạp lõi của phần khác qua đường dẫn tương đối, v�
 
 | Máy chủ | Cổng | API chính |
 |---|---|---|
-| `tuvivietnam/backend` | 3000 | `POST /api/la-so`, `POST /api/tong-hop`, `GET /api/con-giap`, `GET /api/bai-viet`, `POST /api/tro-ly` (trợ lý AI, cần `ANTHROPIC_API_KEY`), `/api/admin/*` (đăng nhập). Phục vụ thêm `/shared`, `/Tarot/frontend`, `/zodiac/frontend`, `/numerology/frontend`, `/xemngay/frontend` nên chạy một máy chủ này là đủ cả site |
-| `Tarot/backend` | 3001 | `POST /api/rut-bai`, `GET /api/bo-bai?q=&nhom=`, `GET /api/la-bai/:id`, `GET /api/kieu-trai`, `GET /api/chu-de` |
-| `zodiac/backend` | 3002 | `GET /api/xac-dinh`, `GET /api/tu-vi/:cung`, `GET /api/tuong-hop`, `POST /api/ban-do-sao`, `GET /api/cung`, `GET /api/dia-diem` |
+| `tuvivietnam/backend` | 3000 | `POST /api/la-so`, `POST /api/tong-hop`, `GET /api/con-giap`, `GET /api/con-giap/ho-so`, `GET /api/tuoi-hop`, `GET /api/bai-viet`, `GET /api/bai-viet/:slug`, `POST /api/bai-viet/:slug/xem`, `GET /api/bai-viet/luot-xem`, `GET /api/luan-giai/ghi-de`, `POST /api/tro-ly` (trợ lý AI, cần `ANTHROPIC_API_KEY`), `/api/admin/*` (đăng nhập). Phục vụ thêm `/shared`, `/Tarot/frontend`, `/zodiac/frontend`, `/numerology/frontend`, `/xemngay/frontend` nên chạy một máy chủ này là đủ cả site |
+| `Tarot/backend` | 3001 | `POST /api/rut-bai`, `POST /api/so-sanh`, `GET /api/bo-bai?q=&nhom=`, `GET /api/la-bai/:id`, `GET /api/kieu-trai`, `GET /api/chu-de` |
+| `zodiac/backend` | 3002 | `GET /api/xac-dinh`, `GET /api/tu-vi/:cung`, `GET /api/tuong-hop`, `POST /api/hop-doi`, `POST /api/ban-do-sao`, `GET /api/cung`, `GET /api/cung/:id`, `GET /api/tong-quan`, `GET /api/dia-diem` |
 | `numerology/backend` | 3003 | `GET /api/so-chu-dao`, `GET /api/tuong-hop`, `GET /api/y-nghia/:so`, `GET /api/chu-ky` |
-| `xemngay/backend` | 3004 | `GET /api/ngay`, `GET /api/thang`, `GET /api/chon-ngay`, `GET /api/viec` |
+| `xemngay/backend` | 3004 | `GET /api/ngay`, `GET /api/viec-ngay`, `GET /api/thang`, `GET /api/chon-ngay`, `GET /api/viec` |
 
 Mọi máy chủ đều có `GET /api/health`. API công khai cho phép CORS. Dữ liệu sai trả mã 400 kèm lỗi tiếng Việt. Chi tiết từng API nằm trong README của từng phần.
 
-## Lệnh thường dùng (ở gốc kho, Node.js 18+)
+## Lệnh thường dùng (ở gốc kho, Node.js 22+)
 
 ```bash
 npm run cai-dat     # cài thư viện cho cả 5 backend
@@ -110,12 +113,12 @@ Mỗi phần vẫn chạy riêng được: `cd zodiac/backend && npm install && 
 
 | Việc | Sửa ở đâu |
 |---|---|
-| Đổi màu, chữ, kiểu nút, menu cho cả site | Token trong `shared/tokens.css`, thành phần trong `shared/site.css`; ghi lại thay đổi trong `design.md` |
+| Đổi màu, chữ, kiểu nút, menu cho cả site | Token trong `shared/tokens.css`, thành phần trong `shared/site.css`; ghi lại thay đổi trong `DESIGN.md` |
 | Đổi ảnh | Ảnh Wikimedia Commons là thẻ `<img>` trong từng trang, ghi công ở chân trang (`data-credits`). Ảnh chụp công cụ ở `tuvivietnam/frontend/img/cong-cu/` |
-| Thêm, bớt, đổi tên mục menu | `MENU` trong `scripts/menu.js`, rồi chạy `npm run menu` (ghi cả menu chính và menu chân trang) |
-| Thêm trang mới trong một phần | Tạo `frontend/<trang>.html`, đặt `<nav aria-label="Menu chính"></nav>` và link `../../shared/site.css`, rồi chạy `npm run menu` |
-| Thêm một phần mới | Tạo `<phần>/frontend` và `<phần>/backend` theo khuôn trên. Thêm lệnh vào `package.json` gốc, thêm mục vào `scripts/menu.js`. Nếu muốn `npm start` phục vụ luôn phần mới thì thêm tên thư mục vào vòng lặp phục vụ tĩnh trong `tuvivietnam/backend/server.js` |
+| Thêm, bớt, đổi tên mục menu | `NHOM` (và `THONG_TIN` cho chân trang) trong `shared/dieu-huong.js`, rồi chạy `npm run menu` (ghi cả menu chính và menu chân trang) |
+| Thêm trang mới trong một phần | Tạo `frontend/<trang>.html` có `<header class="site"></header>`, `<footer class="foot"></footer>` và link `../../shared/site.css`, rồi chạy `npm run menu` |
+| Thêm một phần mới | Tạo `<phần>/frontend` và `<phần>/backend` theo khuôn trên (`scripts/menu.js` tự tìm mọi thư mục `*/frontend`). Thêm lệnh vào `package.json` gốc và vào `.github/workflows/test.yml`, thêm mục menu vào `shared/dieu-huong.js`. Nếu muốn `npm start` phục vụ luôn phần mới thì thêm tên thư mục vào vòng lặp phục vụ tĩnh trong `tuvivietnam/backend/server.js` |
 | Sửa nội dung luận giải | Tử vi: trang quản trị (khi chạy backend) hoặc `tuvivietnam/frontend/js/luangiai.js`. Tarot: `bo-bai.js`, `y-nghia-chu-de.js`. Hoàng đạo: `cung-hoang-dao.js`, `luan-giai.js`. Số chủ đạo: `so-hoc.js`. Xem ngày: `xemngay/frontend/js/lich-ngay.js` (trực, sao, ngày kỵ, hướng, cách chấm điểm) |
 | Đổi cách chấm điểm trang chủ | `tuvivietnam/frontend/js/tong-hop.js` (trọng số 40/60 cho tử vi, trung bình ba hệ) |
 
-`npm test` sẽ báo lỗi nếu menu trên trang nào lệch khỏi `scripts/menu.js`, nên quên chạy `npm run menu` cũng bị phát hiện.
+`npm test` sẽ báo lỗi nếu menu trên trang nào lệch khỏi `shared/dieu-huong.js`, nên quên chạy `npm run menu` cũng bị phát hiện. GitHub Actions (`.github/workflows/test.yml`) chạy `npm test` trên Node 22 và 24 mỗi lần push và mỗi pull request.

@@ -54,7 +54,7 @@ Backend dùng chung các file trong `frontend/js`, nên API và trang web luôn 
 
 ## Chạy trên máy
 
-Cần Node.js 18 trở lên (có ICU đầy đủ, bản cài thông thường đều có).
+Cần Node.js 22 trở lên (có ICU đầy đủ, bản cài thông thường đều có).
 
 ```bash
 cd zodiac/backend

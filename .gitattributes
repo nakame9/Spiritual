@@ -1,0 +1,7 @@
+# Giữ LF cho mọi file chữ, kể cả khi clone trên Windows (core.autocrlf=true):
+# scripts/menu.js --kiem-tra và scripts/bai-viet.js --kiem-tra so sánh từng byte, CRLF làm npm test báo lệch
+* text=auto eol=lf
+*.woff2 binary
+*.webp binary
+*.png binary
+*.jpg binary

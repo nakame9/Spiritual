@@ -1,0 +1,26 @@
+# Chạy toàn bộ test (menu, bài viết, 5 backend) mỗi lần push và mỗi pull request
+name: test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Cài thư viện cho 5 backend (đúng phiên bản trong package-lock.json)
+        run: for p in tuvivietnam Tarot zodiac numerology xemngay; do npm ci --prefix "$p/backend" --ignore-scripts --no-audit --no-fund; done
+      - name: Chạy test
+        run: npm test

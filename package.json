@@ -9,5 +9,5 @@
     "bai-viet": "node scripts/bai-viet.js",
     "start": "npm start --prefix tuvivietnam/backend"
   },
-  "engines": { "node": ">=18" }
+  "engines": { "node": ">=22" }
 }

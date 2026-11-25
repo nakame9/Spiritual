@@ -51,7 +51,7 @@ Backend dùng chung `frontend/js/bo-bai.js`, nên API ra cùng nội dung với 
 
 ## Chạy trên máy
 
-Cần Node.js 18 trở lên.
+Cần Node.js 22 trở lên.
 
 ```bash
 cd Tarot/backend

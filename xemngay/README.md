@@ -61,8 +61,8 @@ npm test
 | `GET` | `/api/thang?nam=2026&thang=10&namSinh=1990&tz=7` | Cả tháng dương lịch |
 | `GET` | `/api/chon-ngay?viec=khaiTruong&tu=2026-11-01&den=2026-12-31&namSinh=1990&tz=7` | `ngay`: ngày tốt theo tiêu chí xếp từ tốt nhất; `tatCa`: mọi ngày theo lịch kèm `loai`, `danhGia`, `noiDung`. Tối đa 190 ngày |
 | `GET` | `/api/viec` | Danh sách việc: `khaiTruong`, `cuoiHoi`, `dongTho`, `nhapTrach`, `xuatHanh`, `kyKet`, `khoiCong` |
-
-`tz` nhận: 7 (mặc định), 8, 9, 10, 12, 0, 1, 3, −5, −6, −8.
 | `GET` | `/api/health` | `{ "ok": true }` |
+
+`tz` nhận: 7 (mặc định), 8, 9, 10, 12, 0, 1, 3, -5, -6, -8 (dấu trừ thường, ví dụ `tz=-5`).
 
 Nội dung do Lá Số Tử Vi tự biên soạn, chỉ để tham khảo.

@@ -41,7 +41,7 @@ Backend dùng chung `frontend/js/tuvi.js` và `frontend/js/luangiai.js`, nên AP
 
 ## Chạy trên máy
 
-Cần Node.js 18 trở lên.
+Cần Node.js 22 trở lên.
 
 ```bash
 cd tuvivietnam/backend
@@ -57,6 +57,11 @@ Biến môi trường:
 | `PORT` | Cổng chạy, mặc định 3000 |
 | `DATA_DIR` | Thư mục lưu dữ liệu (bài viết, tài khoản, luận giải đã sửa). Mặc định `backend/data` |
 | `ADMIN_USER`, `ADMIN_PASSWORD` | Tạo quản trị viên đầu tiên khi chưa có tài khoản nào. Mật khẩu ít nhất 8 ký tự |
+| `TRUST_PROXY` | Proxy nào được tin để lấy IP thật từ `X-Forwarded-For` (chặn đoán mật khẩu, giới hạn trợ lý AI đều tính theo IP) và bật cookie `Secure`. Cú pháp của Express: số lớp proxy (`1`), `true`/`false`, hoặc dải IP (`loopback, uniquelocal`). Không đặt: trên Render, Railway, Heroku, Fly tin đúng 1 lớp proxy của nền tảng; nơi khác chỉ tin proxy chạy cùng máy (nginx). Đứng sau Cloudflare rồi tới nền tảng thì đặt `2` |
+| `CORS_ORIGIN` | Trang được gọi API công khai từ trình duyệt, ví dụ `https://spiritualvn.id.vn`. Không đặt: mọi trang (`*`) |
+| `TRO_LY_GIOI_HAN` | Số câu hỏi trợ lý AI mỗi IP trong 10 phút, mặc định 20 |
+| `TRO_LY_TRAN_NGAY` | Số lượt gọi AI tối đa của cả máy chủ trong một ngày (giờ Việt Nam), mặc định 300. Hết lượt thì trả lời theo mẫu |
+| `LUOT_XEM_GIOI_HAN` | Số lượt đọc bài mỗi IP được ghi trong 10 phút, mặc định 60 |
 
 ## Trang quản trị
 
@@ -83,6 +88,8 @@ Trang quản trị cần backend chạy trên một máy chủ (Render, Railway,
 - Chọn gói có **ổ đĩa bền vững** và đặt `DATA_DIR` vào đó. Ổ đĩa mặc định của các gói miễn phí bị xóa mỗi lần khởi động lại, mất hết bài viết và tài khoản.
 - Đặt `ADMIN_USER`, `ADMIN_PASSWORD` cho lần chạy đầu, đăng nhập, đổi mật khẩu, rồi xóa hai biến đó.
 - Phiên đăng nhập lưu trong bộ nhớ: khởi động lại máy chủ thì phải đăng nhập lại. Chỉ chạy **một** tiến trình máy chủ.
+- Kiểm tra `TRUST_PROXY` (bảng trên) khớp với cách triển khai. Tin nhầm proxy thì ai cũng giả được IP để đoán mật khẩu không giới hạn; không tin proxy thật thì mọi người chung một IP, một người sai 5 lần là khóa đăng nhập của tất cả.
+- Lượt đọc bài được gom lại, ghi xuống đĩa vài giây một lần và khi máy chủ tắt (SIGTERM, Ctrl+C); máy chủ chết đột ngột thì mất vài giây lượt đọc cuối.
 - Khi web công khai vẫn đặt ở GitHub Pages, sửa `frontend/js/api.js`: điền địa chỉ backend vào `TUVI_API` để trang Bài viết, trang chủ và luận giải lấy nội dung từ trang quản trị. Để trống thì GitHub Pages dùng nội dung có sẵn trong file HTML.
 
 ## API
@@ -211,4 +218,4 @@ ANTHROPIC_API_KEY=...            # bắt buộc để bật AI
 ANTHROPIC_MODEL=claude-sonnet-5-5 # tùy chọn
 ```
 
-Không có khóa (hoặc AI lỗi, hoặc trang chạy trên GitHub Pages không có backend) thì trợ lý trả lời theo mẫu ghép từ cùng dữ liệu đã tính. Câu hỏi thiếu dữ liệu (ví dụ hỏi cung Quan Lộc mà chưa có giờ sinh) không được gửi cho AI. Lời nhắc hệ thống cấm AI tự tính hay thêm sao, cung, con số không có trong dữ liệu; người dùng luôn xem được dữ liệu AI đã nhận.
+Không có khóa (hoặc AI lỗi, hết `TRO_LY_TRAN_NGAY` lượt của ngày, hoặc trang chạy trên GitHub Pages không có backend) thì trợ lý trả lời theo mẫu ghép từ cùng dữ liệu đã tính. Câu hỏi thiếu dữ liệu (ví dụ hỏi cung Quan Lộc mà chưa có giờ sinh) không được gửi cho AI. Lời nhắc hệ thống cấm AI tự tính hay thêm sao, cung, con số không có trong dữ liệu; người dùng luôn xem được dữ liệu AI đã nhận.
