@@ -30,7 +30,8 @@ function docTz(q) {
   if (!/^-?\d{1,2}$/.test(String(q)) || !XemNgay.MUI_GIO.some(x => x[0] === t)) throw new Loi(`tz chỉ nhận: ${XemNgay.MUI_GIO.map(x => x[0]).join(', ')}.`);
   return t;
 }
-const docViec = v => { if (v !== undefined && !Object.hasOwn(XemNgay.VIEC, v)) throw new Loi(`viec chỉ nhận: ${Object.keys(XemNgay.VIEC).join(', ')}.`); return v; };
+// typeof: query ?viec[]=cuoiHoi thành mảng ['cuoiHoi'], Object.hasOwn vẫn nhận vì ép mảng thành chuỗi
+const docViec = v => { if (v !== undefined && (typeof v !== 'string' || !Object.hasOwn(XemNgay.VIEC, v))) throw new Loi(`viec chỉ nhận: ${Object.keys(XemNgay.VIEC).join(', ')}.`); return v; };
 const boc = fn => (req, res) => { try { res.json(fn(req)); } catch (e) { if (e instanceof Loi) res.status(400).json({ error: e.message }); else throw e; } };
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
@@ -48,7 +49,8 @@ app.get('/api/thang', boc(req => {
 app.get('/api/chon-ngay', boc(req => {
   if (req.query.viec === undefined) throw new Loi('Cần viec.');
   try { return XemNgay.chonNgay(docViec(req.query.viec), docNgay(req.query.tu, 'tu'), docNgay(req.query.den, 'den'), docNam(req.query.namSinh, 'namSinh'), docTz(req.query.tz)); }
-  catch (e) { throw e instanceof Loi ? e : new Loi(e.message); }
+  // chonNgay báo khoảng ngày sai bằng Error thường: đó là lỗi đầu vào (400). TypeError… là lỗi code, để thành 500
+  catch (e) { throw e instanceof Loi || !e || e.constructor !== Error ? e : new Loi(e.message); }
 }));
 app.get('/api/viec', (req, res) => res.json(XemNgay.VIEC));
 

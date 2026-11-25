@@ -11,6 +11,8 @@
 
   const VIEC = { khaiTruong: 'Khai trương, mở hàng', cuoiHoi: 'Cưới hỏi', dongTho: 'Động thổ, xây sửa nhà', nhapTrach: 'Nhập trạch (về nhà mới)',
     xuatHanh: 'Xuất hành, đi xa', kyKet: 'Ký kết, giao dịch', khoiCong: 'Khởi công, bắt đầu việc lớn' };
+  // Chỉ nhận đúng mã việc (chuỗi, khóa riêng của VIEC): chặn "constructor", "toString" và mảng ['cuoiHoi'] từ query
+  const laViec = v => typeof v === 'string' && Object.prototype.hasOwnProperty.call(VIEC, v);
 
   // Thập nhị trực: [tên, tốt/bình/xấu nói chung, việc nên (mã), việc kỵ (mã), nên làm, nên tránh]
   const TRUC = [
@@ -106,7 +108,8 @@
     // Tháng theo tiết khí (Dần bắt đầu từ Lập xuân, 315°), xét lúc hết ngày nên ngày giao tiết đã thuộc tháng mới
     const L = TuVi.kinhDoMatTroi(jd + 1, tz), L0 = TuVi.kinhDoMatTroi(jd, tz);
     const chiThangTiet = (Math.floor(((L - 315 + 360) % 360) / 30) + 2) % 12 + 1;
-    const truc = TRUC[(n.chiNgay - chiThangTiet + 12) % 12], tu = TU[(jd - TU_GOC) % 28];
+    // % của JS giữ dấu số bị chia: ngày trước TU_GOC cho số âm, nên cộng 28 rồi lấy dư lần nữa
+    const truc = TRUC[(n.chiNgay - chiThangTiet + 12) % 12], tu = TU[((jd - TU_GOC) % 28 + 28) % 28];
     const tiet = Math.floor(L / 15) % 24, batDauTiet = Math.floor(L0 / 15) % 24 !== tiet;
     const ky = [];
     if (TAM_NUONG.includes(ad)) ky.push({ ten: 'Tam nương', loi: 'kỵ cưới hỏi, khai trương, xuất hành, khởi công', diem: -2 });
@@ -115,7 +118,7 @@
     const thanSat = THAN_SAT.filter(t => t[5][am - 1] === (t[5][am - 1][0] === 'c' ? 'c' + n.canNgay : 'k' + n.chiNgay));
 
     // Chấm điểm: hoàng đạo ±2, trực (theo việc nếu có), sao ±1, ngày kỵ, quan hệ với tuổi
-    const ly = [], viec = VIEC[opts.viec] ? opts.viec : null;
+    const ly = [], viec = laViec(opts.viec) ? opts.viec : null;
     let diem = 0, kyViec = false;
     const them = (x, text, chung) => { diem += x; ly.push({ tot: x > 0, xau: x < 0, text, ...(chung ? { chung: true } : {}) }); };
     them(n.hoangDao ? 2 : -2, `Ngày ${n.than} ${n.hoangDao ? 'hoàng đạo' : 'hắc đạo'}.`);
@@ -200,7 +203,7 @@
    *  ngay: ngày tốt theo tiêu chí (hoàng đạo, không phạm ngày kỵ, trực, sao, thần sát không kỵ việc đó, điểm từ 55%), xếp từ tốt nhất.
    *  tatCa: mọi ngày theo thứ tự lịch, mỗi ngày có loai (tot | vua | luuY), danhGia và noiDung. */
   function chonNgay(viec, tu, den, namSinh, tz) {
-    if (!VIEC[viec]) throw new Error('Việc không hợp lệ.');
+    if (!laViec(viec)) throw new Error('Việc không hợp lệ.');
     const a = TuVi.jdFromDate(tu.d, tu.m, tu.y), b = TuVi.jdFromDate(den.d, den.m, den.y);
     if (b < a) throw new Error('Ngày kết thúc phải sau ngày bắt đầu.');
     if (b - a > 189) throw new Error('Chỉ chọn trong khoảng tối đa 190 ngày.');

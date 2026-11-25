@@ -2,6 +2,7 @@
 const { test, before, after } = require('node:test');
 const assert = require('node:assert');
 const X = require('../../frontend/js/lich-ngay.js');
+const TuVi = require('../../../tuvivietnam/frontend/js/tuvi.js');
 const app = require('../server.js');
 
 let server, base;
@@ -74,7 +75,8 @@ test('đánh giá 7 việc và phân loại khi chọn ngày', () => {
   const c = X.chonNgay('cuoiHoi', { d: 1, m: 11, y: 2026 }, { d: 31, m: 12, y: 2026 }, 1990);
   assert.strictEqual(c.tatCa.length, 61);
   assert.strictEqual(c.soNgayTot + c.soNgayVua + c.soNgayLuuY, 61);
-  assert.ok(c.tatCa.every((r, i) => !i || r.duong.d !== c.tatCa[i - 1].duong.d || r.duong.m !== c.tatCa[i - 1].duong.m)); // theo thứ tự lịch
+  const jd = r => TuVi.jdFromDate(r.duong.d, r.duong.m, r.duong.y);
+  assert.ok(c.tatCa.every((r, i) => !i || jd(r) === jd(c.tatCa[i - 1]) + 1)); // theo thứ tự lịch, mỗi ngày đúng một lần
   assert.ok(c.tatCa.filter(r => r.loai === 'luuY').every(r => r.viec.ky || r.ngayKy.length || r.phanTram < 40));
   // Thụ Tử kỵ mọi việc lớn
   const tt = X.lichThang(2026, 11).find(r => r.thanSat.some(t => t.ten === 'Thụ Tử'));
@@ -85,6 +87,35 @@ test('múi giờ: lịch âm tính lại theo múi giờ đã chọn', () => {
   assert.strictEqual(X.xemNgay(20, 1, 2026).am.chu, '2/12/2025');
   assert.strictEqual(X.xemNgay(20, 1, 2026, { tz: -8 }).am.chu, '3/12/2025');
   assert.strictEqual(X.xemNgay(20, 1, 2026, { tz: 99 }).tz, 7); // múi giờ lạ thì về UTC+7
+});
+
+test('mọi ngày 1900–2100 đều xem được (trước đây ngày trước 12/12/2024 lỗi vì % âm)', () => {
+  const loi = [];
+  for (let jd = TuVi.jdFromDate(1, 1, 1900); jd <= TuVi.jdFromDate(31, 12, 2100) && loi.length < 5; jd++) {
+    const [d, m, y] = TuVi.jdToDate(jd);
+    try { if (!X.xemNgay(d, m, y).sao.ten) loi.push(`${d}/${m}/${y}: thiếu sao`); } catch (e) { loi.push(`${d}/${m}/${y}: ${e.message}`); }
+  }
+  assert.deepStrictEqual(loi, []);
+  assert.strictEqual(X.lichThang(2024, 12).length, 31);
+  // Nhị thập bát tú xoay vòng 28 ngày, liền mạch qua mốc 12/12/2024 (sao Giác)
+  assert.strictEqual(X.xemNgay(11, 12, 2024).sao.ten, X.TU[27][0]);
+  assert.strictEqual(X.xemNgay(12, 12, 2024).sao.ten, X.TU[0][0]);
+  assert.strictEqual(X.xemNgay(14, 11, 2024).sao.ten, X.TU[0][0]); // 28 ngày trước đó
+});
+
+test('mã việc lạ không làm hỏng chấm điểm', () => {
+  for (const v of ['constructor', 'toString', ['cuoiHoi']]) assert.strictEqual(X.xemNgay(1, 1, 2025, { viec: v }).viec, null, String(v));
+  assert.throws(() => X.chonNgay('constructor', { d: 1, m: 1, y: 2025 }, { d: 2, m: 1, y: 2025 }), /Việc không hợp lệ/);
+});
+
+test('API: ngày trước 2025, mã việc dạng mảng', async () => {
+  const get = async u => { const r = await fetch(base + u); return [r.status, await r.json()]; };
+  assert.strictEqual((await get('/api/ngay?ngay=2024-06-01'))[0], 200);
+  assert.strictEqual((await get('/api/thang?nam=2024&thang=12'))[1].length, 31);
+  const [s, c] = await get('/api/chon-ngay?viec=cuoiHoi&tu=2024-01-01&den=2024-01-31');
+  assert.strictEqual(s, 200); assert.strictEqual(c.soNgay, 31);
+  for (const u of ['/api/ngay?ngay=2025-01-01&viec[]=cuoiHoi', '/api/ngay?ngay=2025-01-01&viec=cuoiHoi&viec=dongTho', '/api/chon-ngay?viec[]=cuoiHoi&tu=2026-01-01&den=2026-01-31'])
+    assert.strictEqual((await get(u))[0], 400, u);
 });
 
 test('API', async () => {
