@@ -59,6 +59,7 @@ module.exports = function quanTri({ kho, LuanGiai }) {
   function docBai(b, cu) {
     if (!chuoi(b.tieuDe, 1, 200)) throw new Error('Tiêu đề cần từ 1 đến 200 ký tự.');
     if (typeof b.noiDung !== 'string' || b.noiDung.length > 100000) throw new Error('Nội dung tối đa 100.000 ký tự.');
+    if (b.slug !== undefined && typeof b.slug !== 'string') throw new Error('Đường dẫn bài viết cần là chuỗi.');
     const slug = taoSlug(b.slug || b.tieuDe);
     if (!slug) throw new Error('Đường dẫn bài viết chỉ gồm chữ không dấu, số và dấu gạch ngang.');
     if (kho.data.baiViet.some(x => x.slug === slug && x !== cu)) throw new Error(`Đường dẫn "${slug}" đã có bài khác dùng.`);
@@ -122,13 +123,15 @@ module.exports = function quanTri({ kho, LuanGiai }) {
     if (b.tenHienThi !== undefined && !chuoi(b.tenHienThi, 1, 60)) return loi(res, 400, 'Tên hiển thị cần từ 1 đến 60 ký tự.');
     if (b.vaiTro !== undefined && !VAI_TRO.includes(b.vaiTro)) return loi(res, 400, 'Vai trò không hợp lệ.');
     if (b.matKhau !== undefined) { const e = X.kiemMatKhau(b.matKhau); if (e) return loi(res, 400, e); }
+    // Chỉ nhận đúng true/false: trước đây { khoa: 1 } lọt qua hai lớp chặn bên dưới (vốn so === true) nhưng vẫn khóa tài khoản
+    if (b.khoa !== undefined && typeof b.khoa !== 'boolean') return loi(res, 400, 'khoa cần là true hoặc false.');
     const haQuyen = (b.vaiTro && b.vaiTro !== 'admin') || b.khoa === true;
     if (laMinh && haQuyen) return loi(res, 400, 'Bạn không thể tự khóa hoặc tự bỏ quyền quản trị của mình.');
     if (haQuyen && u.vaiTro === 'admin' && !u.khoa && conAdmin().length <= 1) return loi(res, 400, 'Cần giữ ít nhất một quản trị viên đang hoạt động.');
     kho.sua(() => {
       if (b.tenHienThi !== undefined) u.tenHienThi = b.tenHienThi.trim();
       if (b.vaiTro !== undefined) u.vaiTro = b.vaiTro;
-      if (b.khoa !== undefined) u.khoa = !!b.khoa;
+      if (b.khoa !== undefined) u.khoa = b.khoa;
       if (b.matKhau !== undefined) u.matKhau = X.bamMatKhau(b.matKhau);
     });
     if (u.khoa || b.matKhau !== undefined) X.xoaPhienCua(u.id);

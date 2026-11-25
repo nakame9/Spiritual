@@ -62,6 +62,8 @@ test('bài viết: nháp không hiện ra ngoài, xuất bản thì hiện, nộ
   assert.ok(!html.includes('href="javascript'));
   assert.match(html, /<h3>Mở đầu<\/h3>/); assert.match(html, /<b>đậm<\/b>/); assert.match(html, /<a href="la-so.html">tốt<\/a>/);
   assert.strictEqual((await b('POST', '/api/admin/bai-viet', { tieuDe: 'Sao tử vi ở cung Mệnh!', noiDung: 'x', trangThai: 'nhap' })).status, 400); // trùng đường dẫn
+  const slugSo = await b('POST', '/api/admin/bai-viet', { tieuDe: 'Bài thử', slug: 123, noiDung: 'x', trangThai: 'nhap' });
+  assert.strictEqual(slugSo.status, 400); assert.match(slugSo.body.error, /Đường dẫn bài viết cần là chuỗi/);
   assert.strictEqual((await b('DELETE', `/api/admin/bai-viet/${tao.body.id}`)).status, 200);
   assert.strictEqual((await pub()).length, 3);
 });
@@ -98,6 +100,9 @@ test('người dùng: biên tập viên không quản lý người dùng; không
 
   assert.strictEqual((await ad('PUT', `/api/admin/nguoi-dung/${me.id}`, { vaiTro: 'bientap' })).status, 400);
   assert.strictEqual((await ad('PUT', `/api/admin/nguoi-dung/${me.id}`, { khoa: true })).status, 400);
+  // khoa phải là boolean: trước đây { khoa: 1 } vượt qua lớp chặn "không tự khóa" và khóa luôn admin cuối cùng
+  for (const khoa of [1, 'yes', 'true', {}]) assert.strictEqual((await ad('PUT', `/api/admin/nguoi-dung/${me.id}`, { khoa })).status, 400, JSON.stringify(khoa));
+  assert.strictEqual((await ad('GET', '/api/admin/toi')).status, 200); // vẫn đăng nhập, chưa bị khóa
   assert.strictEqual((await ad('DELETE', `/api/admin/nguoi-dung/${me.id}`)).status, 400);
 
   assert.strictEqual((await ad('PUT', `/api/admin/nguoi-dung/${bt.id}`, { khoa: true })).status, 200);

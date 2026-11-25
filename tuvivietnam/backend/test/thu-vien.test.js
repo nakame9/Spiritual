@@ -1,5 +1,6 @@
 // Thư viện bài viết: dữ liệu đủ cấu trúc, tìm kiếm, bài liên quan, lượt đọc
 process.env.DATA_DIR = require('fs').mkdtempSync(require('path').join(require('os').tmpdir(), 'tuvi-tv-'));
+process.env.LUOT_XEM_GIOI_HAN = '3';
 const { test, before, after } = require('node:test');
 const assert = require('node:assert');
 const fs = require('fs');
@@ -73,6 +74,22 @@ test('API lượt đọc: đếm bài có thật, 404 bài không có', async ()
   assert.strictEqual((await (await xem('24-tiet-khi')).json()).luot, 2);
   assert.strictEqual((await xem('khong-co-bai-nay')).status, 404);
   assert.deepStrictEqual(await (await fetch(base + '/api/bai-viet/luot-xem')).json(), { '24-tiet-khi': 2 });
+  // Giới hạn theo IP (LUOT_XEM_GIOI_HAN = 3 ở đầu file): lượt thứ 4 trong 10 phút bị từ chối, không cộng
+  assert.strictEqual((await xem('24-tiet-khi')).status, 200);
+  assert.strictEqual((await xem('24-tiet-khi')).status, 429);
+  assert.deepStrictEqual(await (await fetch(base + '/api/bai-viet/luot-xem')).json(), { '24-tiet-khi': 3 });
+});
+
+test('kho: suaSau gom lượt đọc lại, ghi xuống đĩa một lần (hoặc ngay khi tắt máy)', () => {
+  const { moKho } = require('../lib/kho');
+  const thuMuc = fs.mkdtempSync(path.join(require('os').tmpdir(), 'tuvi-kho-')), file = path.join(thuMuc, 'du-lieu.json');
+  const kho = moKho(thuMuc), docFile = () => JSON.parse(fs.readFileSync(file, 'utf8')).luotXem;
+  for (let i = 0; i < 3; i++) kho.suaSau(d => { d.luotXem = d.luotXem || {}; d.luotXem.a = (d.luotXem.a || 0) + 1; }, 60000);
+  assert.strictEqual(kho.data.luotXem.a, 3); // đọc ngay được trong bộ nhớ
+  assert.strictEqual(docFile(), undefined); // chưa ghi đĩa
+  kho.ghiNgay();
+  assert.deepStrictEqual(docFile(), { a: 3 });
+  fs.rmSync(thuMuc, { recursive: true, force: true });
 });
 
 test('trang bài sinh ra có mục lục, dữ liệu có cấu trúc và link hợp lệ', () => {

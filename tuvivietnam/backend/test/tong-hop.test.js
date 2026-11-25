@@ -1,4 +1,6 @@
 // Trang chủ kết hợp tử vi, cung hoàng đạo, số chủ đạo: npm test
+// Kho dữ liệu riêng cho test, không ghi vào backend/data của người đang phát triển
+process.env.DATA_DIR = require('fs').mkdtempSync(require('path').join(require('os').tmpdir(), 'tuvi-th-'));
 const { test, before, after } = require('node:test');
 const assert = require('node:assert');
 const TongHop = require('../../frontend/js/tong-hop.js');
@@ -6,7 +8,7 @@ const app = require('../server.js');
 
 let server, base;
 before(() => new Promise(ok => { server = app.listen(0, () => { base = `http://localhost:${server.address().port}`; ok(); }); }));
-after(() => server.close());
+after(() => { server.close(); require('fs').rmSync(process.env.DATA_DIR, { recursive: true, force: true }); });
 const HOM_NAY = { y: 2026, m: 10, d: 24 };
 
 test('hồ sơ ba hệ đúng: Canh Ngọ, Sư Tử, số chủ đạo 6', () => {
@@ -66,6 +68,15 @@ test('API tổng hợp và trang chủ mới, trang xem nhanh, tài nguyên các
   assert.strictEqual(r.ky.nam.linhVuc.length, 6);
   assert.strictEqual((await post({ ngay: 15, thang: 8, nam: 1990, gio: 5, gioiTinh: 'nam', homNay: '2026-02-30' })).status, 400);
   assert.strictEqual((await post({ ngay: 15, thang: 13, nam: 1990, gio: 5, gioiTinh: 'nam' })).status, 400);
+  // homNay sai kiểu hoặc tháng 13: 400 kèm lời báo tiếng Việt, không lộ lỗi nội bộ ("split is not a function")
+  for (const homNay of [20261024, '2026-13-01', ['2026-10-24']]) {
+    const s = await post({ ngay: 15, thang: 8, nam: 1990, gio: 5, gioiTinh: 'nam', homNay });
+    assert.strictEqual(s.status, 400, JSON.stringify(homNay)); assert.match((await s.json()).error, /homNay cần dạng YYYY-MM-DD/);
+  }
+  // Ngày âm lịch không có thật vẫn là lỗi đầu vào (400), không phải lỗi máy chủ
+  assert.strictEqual((await post({ ngay: 30, thang: 1, nam: 2024, gio: 5, gioiTinh: 'nam', amLich: true, nhuan: true })).status, 400);
+  // Body quá giới hạn 300kb: 413, không phải 500
+  assert.strictEqual((await post({ ngay: 15, thang: 8, nam: 1990, gio: 5, gioiTinh: 'nam', ten: 'x'.repeat(400000) })).status, 413);
   const home = await (await fetch(base + '/')).text();
   assert.match(home, /Khám phá bản thân qua những góc nhìn huyền học/);
   assert.strictEqual((await fetch(base + '/xem-nhanh.html')).status, 404); // đã bỏ trang Xem tử vi nhanh

@@ -19,10 +19,23 @@ function moKho(thuMuc) {
     fs.renameSync(tam, file); // ghi file tạm rồi đổi tên, tránh hỏng dữ liệu nếu máy chủ tắt giữa chừng
   };
   luu();
+  let hen = null; // hẹn ghi của suaSau
+  const huyHen = () => { if (hen) { clearTimeout(hen); hen = null; } };
   return {
     get data() { return data; },
     /** Sửa dữ liệu trong fn rồi lưu xuống đĩa */
-    sua(fn) { const kq = fn(data); luu(); return kq; },
+    sua(fn) { const kq = fn(data); huyHen(); luu(); return kq; },
+    /** Sửa dữ liệu ít quan trọng (lượt đọc) và gom lại ghi một lần sau ms mili giây; tắt máy đột ngột thì mất phần chưa ghi */
+    suaSau(fn, ms = 5000) {
+      const kq = fn(data);
+      if (!hen) {
+        hen = setTimeout(() => { hen = null; try { luu(); } catch (e) { console.error('Không ghi được kho:', e.message); } }, ms);
+        if (hen.unref) hen.unref(); // không giữ tiến trình sống chỉ vì lần ghi đang hẹn
+      }
+      return kq;
+    },
+    /** Ghi ngay phần đang hẹn (khi tắt máy chủ) */
+    ghiNgay() { if (hen) { huyHen(); luu(); } },
   };
 }
 
